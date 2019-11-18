@@ -2,17 +2,19 @@ services:
   - docker
 
 env:
-  - DOCKER_COMPOSE_VERSION=1.4.2
-  - BUILD_NPROC=8
-  - BUILD_PERLPROC=20
-  - COMPOSE_ENV=test
-  - COMPOSE_HTTP_TIMEOUT=120
-  - COMPOSE_INTERACTIVE_NO_CLI=1
-  - DOCKER_WEB_HOSTNAME=infocmdb.local
-  - IMAGE_TAG=ci
-  - COMPOSE_ENV_PHP_VERSION=7.1
-  - COMPOSE_ENV_PHP_VERSION=7.3
-  - COMPOSE_ENV_PHP_VERSION=7
+  global:
+    - DOCKER_COMPOSE_VERSION=1.4.2
+    - BUILD_NPROC=8
+    - BUILD_PERLPROC=20
+    - COMPOSE_ENV=test
+    - COMPOSE_HTTP_TIMEOUT=120
+    - COMPOSE_INTERACTIVE_NO_CLI=1
+    - DOCKER_WEB_HOSTNAME=infocmdb.local
+    - IMAGE_TAG=ci
+  jobs:
+    - COMPOSE_ENV_PHP_VERSION=7.1
+    - COMPOSE_ENV_PHP_VERSION=7.3
+    - COMPOSE_ENV_PHP_VERSION=7
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
@@ -20,11 +22,9 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
-before_script:
-  - ./run setup
-
 jobs:
   include:
+    - script: ./run setup
     - stage: "build images"
       script: ./run build
     - script: ./run up
