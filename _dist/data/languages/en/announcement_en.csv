@@ -1,0 +1,70 @@
+﻿# This is the language file for user interaction.
+
+# General
+overview;			        "Overview"
+announcementDeleteCheck;	"Are you sure you want to delete this announcement?"
+
+
+# Index Page
+announcements;		"Announcements"
+id;                 "ID"
+titleDe;			"German title"
+messageDe;		    "German message"
+titleEn;			"English title"
+messageEn;		    "English message"
+name;	            "Name"
+showFromDate;		"Show from"
+showToDate;		    "Show until"
+searchlist;			"Searchlist"
+wildcardAllowed;	"Wildcard-Search allowed"
+valid;				"Valid"
+active;				"active"
+inactive;			"inactive"
+numberOfResults;	"Number of Results:"
+
+# Create/Update Page
+type;               "Type"
+reConfirmation;     "User have to re-confirm announcement"
+information;        "Information"
+question;           "Question"
+agreement;          "Agreement"
+
+
+announcementCreate;	"Create Announcement"
+announcementEdit;	"Edit Announcement"
+
+createAnnouncement;	"General"
+
+save;				"Save"
+cancel;				"Cancel"
+duplicate;			"Duplicate"
+
+
+# Messages
+announcementInsertSuccess;	        "Announcement created successfully!"
+announcementInsertFailed;	        "Couldn't create Announcement!"
+
+announcementUpdateSuccess;	        "Announcement updated successfully!"
+announcementUpdateFailed;           "Couldn't update Announcement!"
+
+announcementDeleteSuccess;	        "Announcement deleted successfully!"
+announcementDeleteFailed;	        "Couldn't delete announcement!"
+
+announcementDeactivationSuccess;    "Announcement deactivated successfully!"
+announcementActivateCheck;          "Do you really want to activate this Announcement?"
+
+announcementActivateSuccess;        "Announcement activated successfully!"
+
+noAnnouncementFound;                "No entries found!"
+
+# Display to User
+accept;                     "Accept"
+decline;                    "Decline"
+understood;                 "Understood"
+areYouSure;                 "Are you sure you want to decline?"
+iamSure;                    "Yes, decline"
+cancel;                     "Cancel"
+explainLogout;              "If you decline you will be logged out."
+explainDeactivateAccount;   "If you decline you will be logged out and your account deactivated. Please contact support, if you would like to reactivate it."
+takeNote;                   "I have read the text and understood it"
+necessary;                  "Please confirm first, that you have understood the text"

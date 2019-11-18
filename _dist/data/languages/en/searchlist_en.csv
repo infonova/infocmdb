@@ -1,0 +1,35 @@
+# Translation file
+
+name;					"Name"
+description;			"Description"
+note;					"Note"
+valid;					"Valid"
+active;					"active"
+inactive;				"inactive"
+position;				"Position "
+
+overview;				"Overview"
+back;					"Back"
+save;					"Save"
+change;					"Change"
+delete;					"Delete"
+
+width;					"Width"
+type;					"Type"
+searchList;				"List View"
+searchtemplates;		"Searchtemplates"
+searchtemplatesCreate;	"Create Searchtemplates"
+searchListCreateForCiType;	"List View for CI Type:"
+
+
+# search list child list page
+container;				"Container "
+searchlistDefault;		"Default Searchliste"
+
+
+searchlistChildIndexOff;		"Use Default/Parent Searchliste"
+searchlistChildIndexOn;			"Use custom Searchlist for given CI Type"
+searchlistAddChild;				"Add Searchlist for Ci Type: "
+
+searchListCreateForContainer;	"Create Searchlist for Container: "
+

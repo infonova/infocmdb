@@ -1,0 +1,73 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        searchUserFunction();
+    });
+
+    function searchUserFunction(optionChanged) {
+        if (optionChanged === 1) {
+            $("#searchStringUser").val('');
+        }                      // clear        #searchStringUser if the selected option is changed
+        var searchedUserName = $("#searchStringUser").val().toLowerCase();          // get          user input string
+        var selectedOption = parseInt($('#selectBoxUser option:selected').val());   // get          selected option
+        if (searchedUserName !== "") {                                                  // switch       to option 'all users' if filter is set
+            selectedOption = 2;
+            $('#selectBoxUser').val(2);
+            $(".userTitle").parent().addClass('disabled'); // grey
+            $(".userTitle:contains(" + searchedUserName + ")").parent().removeClass('disabled');
+        } else {
+            $(".userTitle:contains('" + searchedUserName + "')").each(function (index, element) {
+                var checkBox = $(element).parent().find('input:checked').val();
+                var user_div = $(element).parent().addClass('disabled');
+                switch (selectedOption) {
+                    case 0:
+                        if (checkBox == undefined) {
+                            user_div.removeClass('disabled');
+                        }
+                        break;                //  if option "User has not Role"   set color black to username if checkBox is not checked
+                    case 1:
+                        if (checkBox == 1) {
+                            user_div.removeClass('disabled');
+                        }
+                        break;                //  if option "user has role"       set color black to username if checkBox is checked
+                    case 2:
+                        user_div.removeClass('disabled');
+                        break;                //  if option "all Users"           set color black to all usernames
+                    default:
+                        console.log("user-filter: invalid option selected");
+                }
+            });
+        }
+
+        //sort and insert
+        $(sortDivs($('.parentUsers').find('div.child:not(.flexboxspacer)'))).each(function () {
+            $(this).insertBefore($('.parentUsers').find('div:first'));
+        });
+
+        divCounter();
+    }
+
+</script>
+
+<fieldset>
+    <h1 data-sorting="">Filter</h1>
+    <label for="userFilter"><?php echo $this->translate('setRoles'); ?></label>
+    <select id="selectBoxUser" onchange="searchUserFunction(1);">
+        <?php foreach ($this->dropdown_options_user as $key => $value) : ?>
+            <option value="<?php echo $key; ?>"
+                <?php echo ($this->default_option_user == $key) ? 'selected="selected"' : ''; ?>>
+                <?php echo $value; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <br>
+    <br>
+    <div id="filterUsers">
+        <div class="filter-box">
+            <label for="searchFilterUser"><?php echo $this->translate('setUserFilter'); ?></label>
+            <input id="searchStringUser" type="text">
+            <button type='button' id="filterUserButton" onclick="searchUserFunction()">Filtern</button>
+        </div>
+    </div>
+    <br>
+    <h1><?php echo $this->translate('result'); ?></h1>
+</fieldset>

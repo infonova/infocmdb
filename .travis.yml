@@ -1,0 +1,40 @@
+services:
+  - docker
+
+env:
+  - DOCKER_COMPOSE_VERSION=1.4.2
+  - BUILD_NPROC=8
+  - BUILD_PERLPROC=20
+  - COMPOSE_ENV=test
+  - COMPOSE_HTTP_TIMEOUT=120
+  - COMPOSE_INTERACTIVE_NO_CLI=1
+  - DOCKER_WEB_HOSTNAME=infocmdb.local
+  - IMAGE_TAG=ci
+  - COMPOSE_ENV_PHP_VERSION=7.1
+  - COMPOSE_ENV_PHP_VERSION=7.3
+  - COMPOSE_ENV_PHP_VERSION=7
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+before_script:
+  - ./run setup
+
+jobs:
+  include:
+    - stage: "build images"
+      script: ./run build
+    - script: ./run up
+    - stage: "Run unit tests"
+      script: ./run execute_tests unit --steps
+    - stage: "Run apiV1 tests"
+      script: ./run execute_tests api --steps
+    - stage: "Run apiV2 tests"
+      script: ./run execute_tests apiV2 --steps
+    - stage: "Run functional tests"
+      script: ./run execute_tests functional --steps
+    - stage: "Run acceptance tests"
+      script: ./run execute_tests acceptance --steps

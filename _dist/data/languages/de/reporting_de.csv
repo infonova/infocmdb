@@ -1,0 +1,153 @@
+reporting;					"Reporting"
+reportCreate;				"Report anlegen"
+general;					"Allgemein"
+scriptUpload;				"Script hochladen"
+edit;						"Bearbeiten"
+execute;					"Ausführen"
+delete;						"Löschen"
+
+overview;					"Übersicht"
+
+name;						"Name"
+input;						"Datenquelle"
+output;						"Datenausgabe"
+transport;					"Versand"
+trigger;					"Trigger"
+active;						"Aktiv"
+content;					"Inhalt"
+filename;					"Dateiname"
+filepath;					"Dateipfad"
+mailaddresses;				"Mailadressen"
+mail_content;                           "Mailtext"
+archive;					"Archiv"
+noReportingFound;			"Keine Ergebnisse"
+
+
+name_desc;					"Name des Reporting (CMDB intern)"
+description_desc;			"Beschreibung des Reports"
+note_desc;					"Hier wird der Dateinamen des vom Report generierten Files angegeben"
+input_desc;					"Hier wird festgelegt woraus der Report generiert wird (Skript, SQL etc..)"
+output_desc;				"Hier wird festgelegt welche Art von Ausgabe der Report erzeugt"
+transport_desc;				"Hier wird festgelegt wie bzw. ob der Report versendet wird oder lokal gespeichert"
+trigger_desc;				"Hier kann ein Event oder ein zeitlicher Intervall eingestellt werden um den Report zu starten"
+
+
+
+
+reportingNameTitle;			"Geben sie bitte den Namen des Reports an"
+reportingDescriptionTitle;	"Hier muss noch eine Beschreibung des Reports angegeben werden"
+reportingNoteTitle;			"Geben sie hier den Filenamen an"
+reportingInputTitle;		"Geben sie hier an wie sie die Daten beziehen wollen"
+reportingOutputTitle;		"Geben sie an wo die Daten gespeichert werden"
+reportingTransportTitle;	"Geben sie an wie die Daten Ã¼bertragen werden soll"
+reportingTriggerTitle;		"Wann soll der Report ausgelÃ¶st werden"
+reportingMailTitle;			"Geben sie die Mailadresse an, an die die Daten gesendet werden sollen"
+reportingTimeTriggerTitle;	"Zeitgesteuert"
+reportingSqlTitle;			"Geben sie hier ihr SQL Statement an"
+reportingScriptTitle;		"Script"
+reportingNameContentTitle;	"Inhalt"
+reportingFileContentTitle;	"Dateiinhalt"
+reportingFileNameTitle;		"Dateiname"
+reportingLinkTitle;			"Link"
+
+
+reportingNameExample;		""
+reportingDescriptionExample;""
+reportingNoteExample;		""
+reportingInputExample;		""
+reportingOutputExample;		""
+reportingTransportExample;	""
+reportingTriggerExample;	""
+reportingInputSQLExample;	""
+reportingOutputMailExample;	""
+reportingTriggerTimeExample;""
+
+
+
+reportingDeactivationSuccess; "Report in Verwendung => erfolgreich deaktiviert!"
+reportingActivateSuccess;	  "Report erfolgreich aktiviert!"
+
+
+reportingInputExtendedSQLExample;		"Entry"
+reportingInputExtendedScriptExample;	"Entry"
+
+description;				"Beschreibung"
+note;						"Filename"
+
+numberOfResults;	"Anzahl der Ergebnisse:"
+
+save;					"Speichern"
+next;						"Weiter"
+back;						"Zurück"
+abort;						"Abbrechen"
+
+sql;						"SQL"
+cql;						"CQL"
+
+noFile;						"Kein File"
+
+# Form
+
+inputSql;					"SQL"
+inputCql;					"CQL"
+inputScriptold;				"externes Reporting Modul"
+inputScript;				"externes Script"
+inputExtended;				"erweitertes Script"
+inputGui;					"manuelle Auswahl"
+
+outputNone;					"Keine"
+outputXls;					"Excel File"
+outputCsv;					"CSV File"
+outputMailbody;				"Mailbody"
+
+
+transportNone;				"Keiner"
+transportMail;				"Mail Versand"
+transportFtp;				"FTP Versand"
+
+triggerTime;				"Zeitgesteuert"
+triggerManual;				"Manuell"
+
+assignSource;				"Datenquelle zuweisen"
+
+executionTime;				"Ausführungszeitpunkt"
+scheduledExecution;			"Geplante Ausführung"
+
+minutes;					"Minuten"
+everyMinute;				"Jede Minute"
+hours;						"Stunden"
+everyHour;					"Jede Stunde"
+days;						"Tage"
+everyDay;					"Jeden Tag"
+months;						"Monate"
+everyMonth;					"Jedes Monat"
+weekdays;					"Wochentage"
+everyWeekday;				"Jeden Wochentag"
+pleaseChose;				"Bitte wählen"
+
+atMinute;                   "Bei Minute"
+everyXMinutes;              "Jede x. Minute"
+atHour;                     "Bei Stunde"
+everyXHours;                "Jede x. Stunde"
+atDay;                      "Bei Tag"
+everyXDays;                 "Jeden x. Tag"
+atMonth;                    "Bei Monat"
+everyXMonths;               "Jeden x. Monat"
+atWeekday;                  "Bei Wochentag"
+
+archiveCreated;				"Erstellt"
+archiveUser;				"Benutzer"
+archiveFilename;			"Report"
+archiveNote;				"Notiz"
+archiveEmpty;				"Keine Einträge"
+summary;				"Zusammenfassung"
+reportingExecutionTimeUpdateCancled;    "Ausführungszeitpunkt Update fehlgeschlagen"
+reportingCreateSuccess;			"Report erfolgreich erstellt"
+reportingDeleteSuccess;                 "Report erfolgreich gelöscht"
+reportingUpdateSuccess;                 "Report Anpassung erfolgreich"
+
+reportStartSuccess;			"Report erfolgreich gestartet!"
+
+areYouSureDelete;			"Wollen Sie das Reporting wirklich löschen?"
+areYouSureReset;			"Wollen Sie das Reporting wirklich zurücksetzen?"
+areYouSureActivate;			"Wollen Sie das Reporting wirklich aktivieren?"

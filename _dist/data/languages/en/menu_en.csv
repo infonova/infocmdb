@@ -1,0 +1,19 @@
+name;				"Name"
+description;		"Description"
+note;				"Note"
+sortingAbbreviated;	"Order"
+order;				"Ordernumber"
+save;				"Save"
+cancel;				"Cancel"
+overview;			"Overview"
+editMenu;			"Edit Menu"
+
+areYouSureDeactivate; "Do you really want to deactivate this Menu?"
+areYouSureActivate; "Do you really want to activate this Menu?"
+menuDeactivateSuccess; "Menu deactivated successfully!"
+menuActivateSuccess; "Menu activated successfully!"
+
+numberOfResults;	"Number of Results:"
+
+menuUpdateSuccess; 	"Menüpunkt wurde erfolgreich bearbeitet."
+menuUpdateFailed; 	"Menüpunkt konnte nicht bearbeitet werden."

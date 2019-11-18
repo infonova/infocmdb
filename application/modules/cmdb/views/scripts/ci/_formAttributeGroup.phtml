@@ -1,0 +1,151 @@
+<?php foreach ($this->attributeList as $attributeGroup) : ?>
+
+    <?php if ($this->tabs) : ?>
+        <div id="fragment-<?php echo $attributeGroup['name']; ?>">
+    <?php else : ?>
+        <fieldset class="detail_fieldset" style="margin-bottom: 15px;"
+        id='<?php echo $attributeGroup['description'] ?>'>
+        <legend><strong><?php echo $attributeGroup['description'] ?></strong></legend>
+
+    <?php endif; ?>
+
+    <?php
+    if ($attributeGroup['attributes']) {
+        $columns   = $attributeGroup['columns'];
+        $addButton = $attributeGroup['name'] . 'add';
+        if ($this->form->$addButton) {
+            echo '<p align="right">' . $this->form->$addButton->setDecorators(array('ViewHelper')) . '</p>';
+        }
+
+        ?>
+        <table class="list list_detail" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <?php if ($columns > 1) : ?>
+                <th colspan="3" width="50%"></th>
+                <th colspan="3" width="50%"></th>
+            </tr>
+            <tr>
+                <th width="20%"></th>
+                <th colspan="2"></th>
+                <?php endif; ?>
+                <th width="20%"></th>
+                <th colspan="2"></th>
+            </tr>
+
+
+            <?php foreach ($attributeGroup['attributes'] as $attribute) : ?>
+
+                <?php if ($columns > 1) : ?>
+                    <tr>
+                <?php endif; ?>
+
+                <?php if (!$attribute[0]) : ?>
+
+                    <td></td>
+                    <td></td>
+                    <?php if ($columns > 1) : ?>
+                        <td class="border_right"></td>
+                    <?php else: ?>
+                        <td></td>
+                    <?php endif; ?>
+
+                <?php else : // standard case ?>
+
+                    <?php
+                    $class             = Util_AttributeType_Factory::get($attribute[0]['type']);
+                    $attributeFormElem = $class->getString($this->form, $attribute[0]);
+                    $deleteName        = $attribute[0]['genId'] . 'delete';
+                    ?>
+
+                    <?php if ($attributeFormElem) : ?>
+
+                        <?php if ($columns < 2) : ?>
+                            <tr
+                            data-ciattributeid="<?php echo $attribute[0]['ciAttributeId'] ?>"
+                            data-attributename="<?php echo $attribute[0][Db_Attribute::NAME] ?>"
+                            data-attributetypename="<?php echo $attribute[0]['attributeTypeName'] ?>"
+                            class="attributeType attributeType<?php echo ucfirst($attribute[0]['attributeTypeName']) ?>"
+                            >
+                        <?php endif; ?>
+
+
+                        <!-- Attribute Form Element -->
+                        <?php echo $attributeFormElem; ?>
+
+
+                        <?php if ($this->form->$deleteName) : ?>
+
+                            <?php if ($columns < 2) : ?>
+                                <td style="width: 10px; text-align: right;">
+                            <?php else : ?>
+                                <td class="border_right" style="width: 10px; text-align: right;">
+                            <?php endif; ?>
+
+                            <!-- Attribute Delete Button -->
+                            <?php echo $this->form->$deleteName->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>')))); ?>
+
+                            </td>
+
+                        <?php else : ?>
+
+                            <?php if ($columns < 2) : ?>
+                                <td>
+                            <?php else: ?>
+                                <td class="border_right">
+                            <?php endif; ?>
+
+                            </td>
+                        <?php endif; ?>
+
+                        <?php if ($columns < 2) : ?>
+                            </tr>
+                        <?php endif; ?>
+
+                    <?php endif; ?>
+                <?php endif; ?>
+
+                <?php if ($columns > 1) : ?>
+
+                    <?php if (!$attribute[1]) : ?>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    <?php else : ?>
+                        <?php
+                        $class      = Util_AttributeType_Factory::get($attribute[1]['type']);
+                        $deleteName = $attribute[1]['genId'] . 'delete';
+                        ?>
+
+                        <?php echo $class->getString($this->form, $attribute[1]); ?>
+
+                        <?php if ($this->form->$deleteName) : ?>
+                            <td style="width: 10px; text-align: right;">
+                                <?php echo $this->form->$deleteName->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>')))); ?>
+                            </td>
+                        <?php else : ?>
+                            <td></td>
+                        <?php endif; ?>
+
+                    <?php endif; ?>
+                <?php endif; ?>
+
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+
+        <?php
+    }
+
+    if (is_array($attributeGroup['children'])) {
+        echo $this->partial('ci/_formAttributeGroup.phtml', array('attributeList' => $attributeGroup['children'], 'form' => $this->form, 'tabs' => false));
+    }
+    ?>
+
+    <?php if ($this->tabs) : ?>
+        </div>
+    <?php else : ?>
+        </fieldset>
+    <?php endif; ?>
+
+<?php endforeach; ?>

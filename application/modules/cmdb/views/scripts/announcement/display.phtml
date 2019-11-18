@@ -1,0 +1,89 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/jquery/jquery.validate-1.17.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/jquery/additional-methods-1.17.min.js"></script>
+<link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>js/jquery/css/jquery-validation.css" type="text/css" media="screen" />
+
+
+<script type="text/javascript">
+
+    function validateCheckbox(buttontype) {
+        $("#announcementButtonrow").validate({
+            errorElement: 'div',
+            rules: {
+                announcementCheckbox: "required"
+            },
+            messages: {
+                announcementCheckbox: "<?php echo $this->translate('necessary'); ?>"
+            }
+        });
+
+        if ($("#announcementButtonrow").valid()) {
+            if (buttontype === 'accept') {
+                acceptAnnouncement();
+            } else {
+                declineAnnouncement();
+            }
+        }
+    }
+
+    function acceptAnnouncement() {
+        $('#announcementAccepted').val('1');
+        $('#announcementButtonrow').submit();
+    }
+
+    function declineAnnouncement() {
+        <?php $type = $this->result[Db_Announcement::TYPE];
+        if ($type === 'question'):
+            $explain = 'explainLogout';
+        elseif ($type === 'agreement'):
+            $explain = 'explainDeactivateAccount';
+        else:
+            $explain = '';
+        endif; ?>
+
+        showInfocmdbDialog("<?php echo $this->translate('areYouSure'); ?>", "<?php echo $this->translate($explain); ?>", {
+            height: "auto",
+            width: 400,
+            modal: true,
+            draggable: false,
+            resizable: false,
+            buttons: {
+                "<?php echo $this->translate('iamSure'); ?>": function () {
+                    $('#announcementAccepted').val('0');
+                    $('#announcementButtonrow').submit();
+                },
+                "<?php echo $this->translate('cancel'); ?>": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    }
+
+</script>
+<div id=login_background></div>
+<div class="announcement_wrapper">
+    <div class="announcement_content">
+        <div class="announcement_title"><?php echo $this->result['title']; ?></div>
+        <div class="announcement_text"><?php echo $this->result['message']; ?></div>
+    </div>
+    <div class="announcement_bottom">
+        <form id="announcementButtonrow" method="POST">
+            <?php if ($this->result[Db_Announcement::TYPE] !== 'information'): ?>
+                <div>
+                    <label for="announcementCheckbox" class="announcement_take_note">
+                        <?php echo $this->translate('takeNote'); ?>
+                        <input type="checkbox" id="announcementCheckbox" name="announcementCheckbox">
+                    </label>
+                </div>
+                <br>
+            <?php endif; ?>
+            <?php if ($this->result[Db_Announcement::TYPE] === 'information'): ?>
+                <input type="button" id="announcementAccept" value="<?php echo $this->translate('understood'); ?>" onclick="acceptAnnouncement()">
+            <?php else: ?>
+                <input type="button" id="announcementAccept" value="<?php echo $this->translate('accept'); ?>" onclick="validateCheckbox('accept')">
+                <input type="button" id="announcementDecline" value="<?php echo $this->translate('decline'); ?>" onclick="validateCheckbox('decline')">
+            <?php endif; ?>
+            <input type="hidden" id="announcementAccepted" name="announcementAccepted" value="">
+            <input type="hidden" id="announcementId" name="announcementId" value="<?php echo $this->result[Db_Announcement::ID]; ?>">
+        </form>
+    </div>
+</div>

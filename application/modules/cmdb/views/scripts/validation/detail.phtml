@@ -1,0 +1,150 @@
+<script type="text/javascript">
+
+    function confirmMatch() {
+        if (confirm('<?php echo $this->translate('checkMatchValidation') ?>')) {
+            return true;
+        }
+        return false;
+    }
+
+    function confirmDelete() {
+        if (confirm('<?php echo $this->translate('checkDeleteValidation') ?>')) {
+            return true;
+        }
+        return false;
+    }
+
+    function checkAll() {
+        $("input[type=checkbox]").each(
+            function () {
+                // Insert code here
+                $(this).prop('checked', true);
+            }
+        );
+
+        return false;
+    }
+
+    function uncheckAll() {
+        $("input[type=checkbox]").each(
+            function () {
+                // Insert code here
+                $(this).prop('checked', false);
+            }
+        );
+        return false;
+    }
+
+    function checkAllCi(id) {
+        $("input[type=checkbox]").each(
+            function () {
+                if ($(this).hasClass(id)) {
+                    $(this).prop('checked', true);
+                }
+            }
+        );
+        return false;
+    }
+
+    function checkAllNew() {
+
+        $("input[type=checkbox]").each(
+            function () {
+                if ($(this).attr('id') == 'new') {
+                    // Insert code here
+                    $(this).prop('checked', true);
+                }
+            }
+        );
+
+        return false;
+
+    }
+
+    function checkViaRow(tr_object) {
+        var checkbox = $(tr_object).find('td').find('div.rfloater').find('input');
+        if (checkbox.prop('checked') == true) {
+            checkbox.prop('checked', false);
+        } else {
+            checkbox.prop('checked', true);
+        }
+    }
+
+</script>
+
+
+<div class="button_row">
+    <a href="<?php echo APPLICATION_URL ?>validation/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('validationDetail') ?></h1>
+
+<?php if (count($this->ciList)):
+    ?>
+
+    <form action="<?php echo APPLICATION_URL; ?>validation/detail/type/update/validationId/<?php echo $this->validationId; ?>" method="POST">
+        <fieldset style="margin-bottom: 20px; border: 1px solid #ccc;">
+            <input type="button" class="standard_button" onclick="javascript:checkAll()" value="<?php echo $this->translate('checkAll') ?>">
+            <input type="button" class="standard_button" onclick="javascript:uncheckAll()" value="<?php echo $this->translate('uncheckAll') ?>">
+            <input type="button" class="standard_button" onclick="javascript:checkAllNew()" value="<?php echo $this->translate('checkAllnew') ?>">
+            <table class="list" cellpadding="0" cellspacing="0" width="100%">
+                <tr class="headline">
+                    <th width="100px">
+                        <a href="<?php echo APPLICATION_URL ?>validation/detail/validationId/<?php echo $this->validationId ?>/type/update/orderBy/ciid/direction/<?php echo $this->dir; ?>"><span><?php echo $this->escape($this->translate('ciId')); ?></span></a>
+                    </th>
+                    <th>
+                        <a href="<?php echo APPLICATION_URL ?>validation/detail/validationId/<?php echo $this->validationId ?>/type/update/orderBy/attribute/direction/<?php echo $this->dir; ?>"><span><?php echo $this->escape($this->translate('attribute')) ?></span></a>
+                    </th>
+                    <th>
+                        <a href="<?php echo APPLICATION_URL ?>validation/detail/validationId/<?php echo $this->validationId ?>/type/update/orderBy/valuenew/direction/<?php echo $this->dir; ?>"><span><?php echo $this->escape($this->translate('newValue')) ?></span></a>
+                    </th>
+                    <th>
+                        <a href="<?php echo APPLICATION_URL ?>validation/detail/validationId/<?php echo $this->validationId ?>/type/update/orderBy/valueold/direction/<?php echo $this->dir; ?>"><span><?php echo $this->escape($this->translate('currentValue')) ?></span></a>
+                    </th>
+                    <th><span><?php echo $this->escape($this->translate('note')) ?></span></th>
+                    <th style="width:50px;">&nbsp;</th>
+                </tr>
+                <?php
+                $row_count = 0;
+
+
+                foreach ($this->ciList as $item):
+
+                    $preparedOutput = $item[Db_CiAttribute::VALUE_TEXT];
+
+
+                    $ghostClass = null;
+                    if ($item[Db_ImportFileValidationAttributes::STATUS] !== 'idle') {
+                        $ghostClass = "ghost ";
+
+                    } ?>
+
+                    <tr onclick="checkViaRow(this)">
+                        <td>
+                            <a href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->escape($item[Db_ImportFileValidationAttributes::CI_ID]); ?>"><?php echo $this->escape($item[Db_ImportFileValidationAttributes::CI_ID]); ?></a>
+                        </td>
+                        <td><?php echo $this->escape($item[Db_Attribute::DESCRIPTION]); ?></td>
+                        <td><?php echo $this->escape($item[Db_ImportFileValidationAttributes::VALUE]); ?></td>
+                        <td>
+                            <span id="<?php echo $this->escape($item[Db_ImportFileValidationAttributes::CI_ID]); ?>"><?php echo $this->escape($preparedOutput); ?></span>
+                        </td>
+                        <td><?php echo $this->escape($item[Db_ImportFileValidationAttributes::NOTE]); ?></td>
+                        <td>
+                            <div class="rfloater">
+                                <input type="checkbox" onclick="checkViaRow(this.parentNode.parentNode.parentNode)" class="<?php echo $this->escape($item[Db_ImportFileValidationAttributes::CI_ID]); ?>" name="<?php echo $this->escape($item[Db_ImportFileValidationAttributes::ID]); ?>" value="<?php echo $this->escape($item[Db_ImportFileValidationAttributes::ID]); ?>" ondblclick="javascript:checkAllCi(<?php echo $this->escape($item[Db_ImportFileValidationAttributes::CI_ID]); ?>)" id="<?php if ($this->escape($preparedOutput) == '' || $this->escape($preparedOutput) == ' ') echo 'new'; ?>">
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+
+            <input type="submit" class="standard_button" name="match" value="<?php echo $this->translate('buttonMatch') ?>" onclick="return confirmMatch();">
+            <input type="submit" class="standard_button" name="delete" value="<?php echo $this->translate('buttonDelete') ?>" onclick="return confirmDelete();">
+
+        </fieldset>
+    </form>
+<?php else: ?>
+    <div class="empty_message">
+        <?php echo $this->translate('noValidationAttributesFound') ?>
+    </div>
+<?php endif; ?>
+<?php echo $this->paginator; ?>

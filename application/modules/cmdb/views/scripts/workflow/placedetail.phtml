@@ -1,0 +1,41 @@
+<div class="button_row">
+    <a class="link button" href="<?php echo APPLICATION_URL ?>workflow/detail/workflowId/<?php echo $this->workflowId; ?>"><?php echo $this->translate('back'); ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('placeDetail'); ?></h1>
+
+<fieldset class="create_form">
+    <table>
+        <tr>
+            <td><?php echo $this->translate('placeId'); ?></td>
+            <td><?php echo $this->place[Db_WorkflowPlace::ID] ?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate('name'); ?></td>
+            <td><?php echo $this->place[Db_WorkflowPlace::NAME] ?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate('description'); ?></td>
+            <td><?php echo $this->place[Db_WorkflowPlace::DESCRIPTION] ?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate('note'); ?></td>
+            <td><?php echo $this->place[Db_WorkflowPlace::NOTE] ?></td>
+        </tr>
+
+        <tr>
+            <td><?php echo $this->translate('type'); ?></td>
+            <td><?php switch ($this->place[Db_WorkflowPlace::TYPE]) {
+                    case '1':
+                        echo 'START';
+                        break;
+                    case '9':
+                        echo 'END';
+                        break;
+                    default:
+                        echo 'default';
+                        break;
+                } ?></td>
+        </tr>
+    </table>
+
+</fieldset>

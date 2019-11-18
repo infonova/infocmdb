@@ -1,0 +1,22 @@
+parameters:
+    level: 6
+    paths: 
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        # Interface should probably be changed to add this method (bc break)
+        - '#Call to an undefined method Zend_Wildfire_Channel_Interface::getProtocol\(\)\.#'
+        -
+            message: '#Result of && is always false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Wildfire/Channel/HttpHeaders.php
+        -
+            message: '#Negated boolean expression is always false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Wildfire/Channel/HttpHeaders.php
+        -
+            message: '#Result of \|\| is always true\.#'
+            path: %currentWorkingDirectory%/src/Zend/Wildfire/Plugin/FirePhp.php
+        -
+            message: '#Offset .Label. does not exist on array\(.Type. => string\|null, \?.Label. => mixed, \?.Collapsed. => .false.\|.true., \?.File. => mixed, \?.Line. => mixed\)\.#'
+            path: %currentWorkingDirectory%/src/Zend/Wildfire/Plugin/FirePhp.php

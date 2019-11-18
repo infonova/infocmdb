@@ -1,0 +1,415 @@
+<script src="/js/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo APPLICATION_URL ?>js/combobox.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+    function cancel() {
+
+        window.location.href = '<?php echo APPLICATION_URL . 'citype/index'; ?>';
+    }
+
+    function submitForm() {
+        queryToggle('');//activate all form elements on submit
+        document.forms['create'].submit();
+    }
+
+    $(function () {
+        $("#tabs").tabs();
+    });
+
+    function changeDIVElement(divElement) {
+        $("#tabs").tabs({active: $(divElement).index()});
+    };
+
+    $(document).ready(function () {
+        $('.attributeSelect').combobox({
+            source: "<?php echo APPLICATION_URL . 'attribute/autocompleteactive';?>"
+        });
+
+        $("form#create input").keypress(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                var selected = $("#tabs").tabs("option", "active");
+                changeDIVElement(selected + 1);
+                return false;
+            }
+        });
+        $("form#create select").keypress(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                var selected = $("#tabs").tabs("option", "active");
+                changeDIVElement(selected + 1);
+                return false;
+            }
+        });
+
+        inception();
+
+        queryToggle($('#query').val());
+
+        //editor
+        var editor = initAceEditor('#query', 'mysql');
+        editor.getSession().on('change', function () {
+            queryToggle($('#query').val());
+        });
+    })
+
+    function visible_div1() {
+
+        div = document.getElementById("add_attribute_2");
+        div.style.visibility = "visible";
+
+
+    }
+
+    function visible_div2() {
+
+        div = document.getElementById("add_attribute_3");
+        div.style.visibility = "visible";
+
+
+    }
+
+    function inception() {
+        $("select").change(function () {
+            if ($(this).get(0).id == 'parentCiType') {
+                var field = $(this);
+                var parentId = $(this).get(0).value;
+                $.post("<?php echo $this->url(array('action' => 'updateformforparent')); ?>/parent/" + parentId + '/count/1',
+                    function (response) {
+                        $("td#childrenContainer").html(response);
+                        inception();
+                    },
+                    "html"
+                );
+            } else if ($(this).get(0).id.search(/child_/) == 0) {
+                var field = $(this);
+                var parentId = $(this).get(0).value;
+                var counter = $(this).get(0).id.substr(('child_').length);
+                $.post("<?php echo $this->url(array('action' => 'updateformforparent')); ?>/parent/" + parentId + '/count/' + (counter + 1),
+                    function (response) {
+                        $("td#childrenContainer").append(response);
+                        inception();
+                    },
+                    "html"
+                );
+            }
+        });
+    }
+
+    function queryToggle(query) {
+        if (query == '') {
+            $("#defaultProject").prop("disabled", false);
+            $("#defaultSortAttribute").prop("disabled", false);
+            $("#defaultAttribute").prop("disabled", false);
+            $("#isDefaultSortAsc").prop("disabled", false);
+            $("#allowCiAttach").prop("disabled", false);
+            $("#allowAttributeAttach").prop("disabled", false);
+            $("#createButtonDescription").prop("disabled", false);
+            $("#xml").prop("disabled", false);
+            $("#ticketEnabled").prop("disabled", false);
+            $("#eventEnabled").prop("disabled", false);
+            $("#icon").prop("disabled", false);
+            $("#tabs").tabs("option", "disabled", []);
+        } else {
+            $("#defaultProject").prop("disabled", true);
+            $("#defaultSortAttribute").prop("disabled", true);
+            $("#defaultAttribute").prop("disabled", true);
+            $("#isDefaultSortAsc").prop("disabled", true);
+            $("#allowCiAttach").prop("disabled", true);
+            $("#allowAttributeAttach").prop("disabled", true);
+            $("#createButtonDescription").prop("disabled", true);
+            $("#xml").prop("disabled", true);
+            $("#ticketEnabled").prop("disabled", true);
+            $("#eventEnabled").prop("disabled", true);
+            $("#icon").prop("disabled", true);
+            $("#tabs").tabs("option", "disabled", [2, 3, 4]);
+        }
+    }
+
+    function chooseExistingCiTypeIcon(elem) {
+        $.get('<?php echo APPLICATION_URL . 'citype/chooseicon' ?>', function (content) {
+            showInfocmdbDialog('<?php echo $this->translate('iconsInStock'); ?>', content, {height: 600, width: 540});
+        });
+
+    }
+</script>
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>citype/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('ciTypeCreate') ?></h1>
+
+<?php $step = 1; ?>
+<div id="tabs">
+    <ul>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('general') ?></span></a></li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('optional') ?></span></a></li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('addAttributes') ?></span></a>
+        </li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('listview') ?></span></a></li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('addRelations') ?></span></a>
+        </li>
+    </ul>
+
+    <fieldset class="create_form steps">
+        <form widgetid="create" id="create" enctype="multipart/form-data" method="post" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
+            <div id="fragment-1">
+                <fieldset class="lordVader">
+                    <table>
+                        <?php
+                        echo $this->form->parentCiType;
+                        ?>
+                        <tr>
+                            <td></td>
+                            <td id="childrenContainer"></td>
+                        </tr>
+                        <?php
+                        echo $this->form->defaultProject;
+                        echo $this->form->defaultAttribute;
+                        echo $this->form->defaultSortAttribute;
+                        echo $this->form->isDefaultSortAsc;
+                        echo $this->form->name;
+                        echo $this->form->description;
+                        echo $this->form->note;
+                        echo $this->form->orderNumber;
+                        echo $this->form->allowCiAttach;
+                        echo $this->form->allowAttributeAttach;
+                        ?>
+                    </table>
+                </fieldset>
+                <div class="buttonCon">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
+                </div>
+            </div>
+            <div id="fragment-2">
+                <fieldset class="lordVader">
+                    <table>
+                        <tbody>
+                        <?php
+                        echo $this->form->createButtonDescription;
+                        echo $this->form->xml;
+                        echo $this->form->ticketEnabled;
+                        echo $this->form->eventEnabled;
+                        echo $this->form->icon;
+                        ?>
+                        <tr>
+                            <td style="height:20px">
+                                <a href="#" onclick="chooseExistingCiTypeIcon(this)">
+                                    <?php echo $this->translate('iconsInStock') ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div id="stored_icon_name">
+                                    <?php echo $this->storedIcon ?>
+                                </div>
+                                <input type="hidden" id="storedIcon" name="storedIcon" value="<?php echo $this->storedIcon ?>" />
+                            </td>
+                        </tr>
+                        <?php echo $this->form->query; ?>
+                        </tbody>
+                    </table>
+                </fieldset>
+                <div class="buttonCon">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-1'); return false;">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-3'); return false;">
+                </div>
+            </div>
+            <div id="fragment-3">
+                <fieldset class="lordVader">
+                    <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;table-layout:fixed;">
+                        <tr>
+                            <td>
+                                <table border="0" cellpadding="0" cellspacing="1">
+                                    <tr>
+                                        <th>
+                                        <?php echo $this->translate('attribute') ?></td>
+                                        <th>
+                                        <?php echo $this->translate('ismandatory'); ?></td>
+                                    </tr>
+
+                                    <?php
+                                    for ($i = 0; $i < 80; $i++) {
+                                        ?>
+
+                                        <tr>
+                                            <td><?php $addAttribute = 'addAttribute_' . $i;
+                                                echo $this->form->$addAttribute ?></td>
+                                            <td><?php $ismandatory = 'ismandatory_' . $i;
+                                                echo $this->form->$ismandatory ?></td>
+                                        </tr>
+
+                                        <?php
+
+                                    }
+                                    ?>
+
+
+                                </table>
+                            </td>
+                            <td>
+                                <div style="visibility:hidden;" id="add_attribute_2">
+                                    <table border="0" cellpadding="0" cellspacing="1">
+                                        <tr>
+                                            <th>
+                                            <?php echo $this->translate('attribute') ?></td>
+                                            <th>
+                                            <?php echo $this->translate('ismandatory'); ?></td>
+                                        </tr>
+
+                                        <?php
+                                        for ($i = 80; $i < 160; $i++) {
+                                            ?>
+
+                                            <tr>
+                                                <td><?php $addAttribute = 'addAttribute_' . $i;
+                                                    echo $this->form->$addAttribute ?></td>
+                                                <td><?php $ismandatory = 'ismandatory_' . $i;
+                                                    echo $this->form->$ismandatory ?></td>
+                                            </tr>
+
+                                            <?php
+
+                                        }
+                                        ?>
+
+
+                                    </table>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="visibility:hidden;" id="add_attribute_3">
+                                    <table border="0" cellpadding="0" cellspacing="1">
+                                        <tr>
+                                            <th>
+                                            <?php echo $this->translate('attribute') ?></td>
+                                            <th>
+                                            <?php echo $this->translate('ismandatory'); ?></td>
+                                        </tr>
+
+                                        <?php
+                                        for ($i = 160; $i < 240; $i++) {
+                                            ?>
+
+                                            <tr>
+                                                <td><?php $addAttribute = 'addAttribute_' . $i;
+                                                    echo $this->form->$addAttribute ?></td>
+                                                <td><?php $ismandatory = 'ismandatory_' . $i;
+                                                    echo $this->form->$ismandatory ?></td>
+                                            </tr>
+
+                                            <?php
+
+                                        }
+                                        ?>
+
+
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <div class="buttonCon">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel()">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-4'); return false;">
+                </div>
+            </div>
+            <div id="fragment-4">
+                <fieldset class="lordVader">
+                    <div style="position:absolute; right:20%;">
+                        <label><?php echo $this->translate('scrollable') ?>
+                            :&nbsp;&nbsp;&nbsp;</label><?php echo $this->form->scrollable ?>
+                    </div>
+                    <table border="0" cellpadding="0" cellspacing="0" style="width:70%;">
+                        <tr>
+                            <th style="text-align:left;">
+                            <?php echo $this->translate('position') ?></td>
+                            <th style="text-align:left;">
+                            <?php echo $this->translate('attribute') ?></td>
+                            <th style="text-align:left;">
+                            <?php echo $this->translate('width'); ?></td>
+                        </tr>
+                        <?php
+
+                        $maxElements = $this->maxElements;
+                        if (!$maxElements)
+                            $maxElements = 20;
+
+                        for ($i = 1; $i <= $maxElements; $i++) { ?>
+                            <tr>
+                                <td><?php echo $this->translate('position') ?> <?php echo $i ?>:</td>
+                                <td><?php $elem = 'create_' . $i;
+                                    echo $this->form->$elem ?></td>
+                                <td><?php $elem = 'width_' . $i;
+                                    echo $this->form->$elem ?></td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </fieldset>
+                <div class="buttonCon">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-3'); return false;">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel()">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-5'); return false;">
+                </div>
+            </div>
+            <div id="fragment-5">
+                <fieldset class="lordVader">
+                    <table style="padding-right:0px;width:70%">
+                        <tr>
+                            <th style="text-align:left;">
+                                <span title="<?php echo $this->translate('relationTypeName') ?>"><?php echo $this->translate('relation') ?></span>
+                            </th>
+                            <th style="text-align:left;">
+                                <span title="<?php echo $this->translate('relationTypeActivateCheck') ?>"><?php echo $this->translate('active') ?></span>
+                            </th>
+                            <th style="text-align:left;">
+                                <span title="<?php echo $this->translate('ordernumber') ?>"><?php echo $this->translate('ordernumber') ?></span>
+                            </th>
+                            <th style="text-align:left;">
+                                <span title="<?php echo $this->translate('maxRelationsDescription') ?>"><?php echo $this->translate('maxRelations') ?></span>
+                            </th>
+                        </tr>
+                        <?php foreach ($this->relations as $relation) {
+                            ?>
+                            <tr>
+                                <td>
+                                    <span title="<?php echo $relation[Db_CiRelationType::DESCRIPTION] ?>"><?php echo $relation[Db_CiRelationType::NAME] ?></span>
+                                </td>
+                                <td><?php $checkField = 'relationId_' . $relation[Db_CiRelationType::ID];
+                                    echo $this->form->$checkField ?></td>
+                                <td><?php $order = 'relationId_' . $relation[Db_CiRelationType::ID] . '_order';
+                                    echo $this->form->$order; ?></td>
+                                <td><?php $numberField = 'relationId_' . $relation[Db_CiRelationType::ID] . '_limit';
+                                    echo $this->form->$numberField; ?></td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </fieldset>
+                <div class="buttonCon">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-4'); return false;">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel()">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                </div>
+            </div>
+        </form>
+    </fieldset>
+</div>
+

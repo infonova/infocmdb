@@ -1,0 +1,8 @@
+parameters:
+    level: 6
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:

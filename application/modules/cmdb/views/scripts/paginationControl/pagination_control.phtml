@@ -1,0 +1,164 @@
+<?php
+
+$itemCountPerPageSession = new Zend_Session_Namespace('itemCountPerPage');
+$itemsCountPerPageArray  = $itemCountPerPageSession->itemCountPerPage;
+$itemPerPageOptionsArray = $itemCountPerPageSession->itemPerPageOptions;
+$execution_class         = $itemsCountPerPageArray['options']['execution_class'];
+$typeId                  = (isset($itemsCountPerPageArray['options']['typeId'])) ? $itemsCountPerPageArray['options']['typeId'] : null;
+$options                 = (isset($itemPerPageOptionsArray[$execution_class])) ? $itemPerPageOptionsArray[$execution_class] : array();
+if ($typeId != null) {
+    $rowCount = $itemsCountPerPageArray[$execution_class][$typeId];
+} else {
+    $rowCount = $itemsCountPerPageArray[$execution_class];
+}
+$itemCountPerPageSession->itemCountPerPage['options']['typeId']          = null;
+$itemCountPerPageSession->itemCountPerPage['options']['execution_class'] = null;
+
+$showICPP = false;
+if ($execution_class != null) {
+    $showICPP = true;
+}
+?>
+
+<script>
+    var colorPickerOpen = 0;
+    if (typeof updatePage != 'function') {
+        // dummy function --> can be overwritten in every template --> fallback load url defined in a-element
+        function updatePage(page) {
+        }
+    }
+    $(document).ready(function () {
+
+        $("#itemsPerPageChange").click(function () {
+            if (colorPickerOpen == 0) {
+                var colorPickerId = $(this).attr('id');
+                $("#itemsPerPageList").fadeOut("fast");
+                $("#itemsPerPageList").fadeIn('fast', function () {
+                    colorPickerOpen = 1;
+                });
+            } else {
+                $("#itemsPerPageList").fadeOut("fast", function () {
+                    colorPickerOpen = 0;
+                });
+            }
+        });
+
+        $(".itemsPerPageOption").click(function () {
+            var rowCount = $(this).text();
+            var url = "<?php echo APPLICATION_URL . $execution_class?>/itemsperpage";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    'rowCount': rowCount,
+                    <?php if ($typeId != null): echo "'typeId':'" . $typeId . "'"; endif; ?>
+                },
+                success: function () {
+                    window.location = window.location.href.split("#")[0];
+                }
+            });
+        });
+    });
+</script>
+
+<?php if ($this->pageCount): ?>
+    <div class="paginationControl">
+
+        <!-- Erster Seitenlink -->
+        <?php if (isset($this->first) && isset($this->previous)): ?>
+            <a style="margin-right: 10px;"
+               class="link pageButton"
+               href="<?php echo $this->url(array('page' => $this->first)); ?>"
+               onClick="return updatePage(<?php echo $this->first ?>)">
+                &lt; <?php echo $this->escape($this->translate('paginationFirst')); ?>
+            </a>
+        <?php else: ?>
+            <span style="margin-right: 10px;"
+                  class="disabled">&lt; <?php echo $this->escape($this->translate('paginationFirst')); ?></span>
+        <?php endif; ?>
+
+
+        <!-- Vorheriger Seitenlink -->
+        <?php if (isset($this->previous)): ?>
+            <a style="margin-right: 10px;"
+               class="link pageButton"
+               href="<?php echo $this->url(array('page' => $this->previous)); ?>"
+               onClick="return updatePage(<?php echo $this->previous ?>)">
+                &lt; <?php echo $this->escape($this->translate('paginationPrevious')); ?>
+            </a>
+        <?php else: ?>
+            <span style="margin-right: 30px;"
+                  class="disabled"> &lt; <?php echo $this->escape($this->translate('paginationPrevious')); ?></span>
+        <?php endif; ?>
+
+
+        <!-- Anzahl an Seitenlinks -->
+        <?php
+        $amountNav = count($this->pagesInRange);
+        $curAmNav  = 0;
+
+        foreach ($this->pagesInRange as $page):
+            $curAmNav++; ?>
+            <a style="margin-right: 3px;"
+               class="link <?php echo ($page == $this->current) ? 'actualPageButton' : 'pageButton' ?>"
+               href="<?php echo $this->url(array('page' => $page)); ?>"
+               onclick="return updatePage(<?php echo $page ?>);">
+                <?php echo $page; ?>
+            </a>
+            <?php if ($curAmNav != $amountNav): ?>
+            |
+        <?php endif; ?>
+        <?php endforeach; ?>
+
+        <!-- Nächster Seitenlink -->
+        <?php if (isset($this->next)): ?>
+            <a style="margin: 0 10px 0 30px;"
+               class="link pageButton"
+               href="<?php echo $this->url(array('page' => $this->next)); ?>"
+               onClick="return updatePage(<?php echo $this->next ?>)">
+                <?php echo $this->escape($this->translate('paginationNext')); ?>
+                &gt;</a>
+        <?php else: ?>
+            <span style="margin: 0 10px 0 30px;" class="disabled"><?php echo $this->translate('paginationNext') ?>
+                &gt;</span>
+        <?php endif; ?>
+
+        <!-- Letzter Seitenlink -->
+        <?php if (isset($this->last) && isset($this->next)): ?>
+            <a class="link pageButton"
+               href="<?php echo $this->url(array('page' => $this->last)); ?>"
+               onClick="return updatePage(<?php echo $this->last ?>)"><?php echo $this->escape($this->translate('paginationLast')); ?>
+                &gt;</a>
+        <?php else: ?>
+            <span class="disabled"><?php echo $this->escape($this->translate('paginationLast')); ?>&gt;</span>
+        <?php endif; ?>
+
+
+        <?php if ($showICPP == true): ?>
+            <div id="itemsPerPageWrapper" style="float: right">
+                <!-- Item Count Per Page -->
+                <span class="disabled"><?php echo $this->translate('paginationItemsPerPage'); ?>:</span>
+
+                <div class="dropdown" style="position:relative; display:inline-block; white-space:nowrap;">
+                    <span id="itemsPerPageChange"><?php echo $rowCount; ?></span>
+
+                    <ul id="itemsPerPageList" class="itemsPerPageList" style="position:absolute; white-space:nowrap;">
+                        <?php
+                        foreach ($options as $option) {
+                            if ($rowCount == $option) {
+                                $class = 'itemsPerPageOptionDisabled';
+                            } else {
+                                $class = 'itemsPerPageOption';
+                            }
+
+                            echo "<li class='" . $class . "'>" . $option . "</li>";
+                        }
+                        ?>
+                    </ul>
+                </div>
+            </div>
+        <?php endif; ?>
+
+
+    </div>
+<?php endif; ?>

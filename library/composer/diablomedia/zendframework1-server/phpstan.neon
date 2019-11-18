@@ -1,0 +1,34 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        # ZF seems to believe that the getName method on ReflectionFunction may return "null", doesn't seem to unless given parameters
+        - '#Strict comparison using === between null and string will always evaluate to false\.#'
+        # This seems intentional, they're close but not quite the same
+        - '#Zend_Server_Reflection_Method::__construct\(\) does not call parent constructor from Zend_Server_Reflection_Function_Abstract\.#'
+        # This might be a bug, I didn't look at all of the code above it, but $_reflection could be ReflectionFunction or ReflectionMethod
+        # only ReflectionMethod has this method on it
+        - '#Call to an undefined method ReflectionFunction\|ReflectionMethod::getDeclaringClass\(\)\.#'
+        -
+            message: '#Parameter \#1 \$function of function call_user_func_array expects callable\(\): .+ given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Server/Abstract.php
+        -
+            message: '#Parameter \#1 \$function of function call_user_func_array expects callable\(\): .+ given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Server/Reflection/Class.php
+        -
+            message: '#Parameter \#1 \$function of function call_user_func_array expects callable\(\): .+ given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Server/Reflection/Function/Abstract.php
+        -
+            message: '#Parameter \#1 \$function of function call_user_func_array expects callable\(\): .+ given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Server/Reflection/Parameter.php
+        # $dispatch is checked for `false` just above this
+        -
+            message: '#Parameter \#1 \$variable_representation of function unserialize expects string, string\|false given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Server/Cache.php
+        # Defensive coding, can't be enforced by PHP typehints
+        - '#Result of && is always false\.#'
+        - '#Strict comparison using !== between null and null will always evaluate to false\.#'

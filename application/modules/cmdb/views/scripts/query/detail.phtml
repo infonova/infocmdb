@@ -1,0 +1,125 @@
+<script src="/js/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        jQuery.ajaxSetup({
+            beforeSend: function () {
+                $('#loader').show();
+            },
+            complete: function () {
+                $('#loader').hide();
+            },
+            success: function () {
+            }
+        });
+
+
+        $("#testButton").click(function () {
+            $('#resultContent').html("");
+            var searchstring = $('#value').val();
+            var headerMap = {};
+            headerMap['test'] = searchstring;
+
+            var url = "<?php echo APPLICATION_URL?>/query/test/queryId/<?php echo $this->queryId?>";
+            $.ajax({
+                type: "POST",
+                dataType: "text",
+                data: headerMap,
+                url: url,
+                success: function (result) {
+                    $('#resultContent').show();
+                    $('#resultContent').html(result);
+                }
+            });
+
+
+            return false;
+        });
+
+        //editor
+        var editor = initAceEditor('#query', 'mysql');
+        editor.setReadOnly(true);
+    });
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>query/index"><?php echo $this->translate('overview') ?></a>
+    <?php if (!$this->query[Db_StoredQuery::IS_DEFAULT]) { ?>
+        |
+        <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>query/edit/queryId/<?php echo $this->queryId ?>"><?php echo $this->translate('queryEdit') ?></a>
+    <?php } ?>
+</div>
+<h1 class="pageName"><?php echo $this->translate('queryDetail'); ?></h1>
+
+<fieldset class="lordVader">
+    <table>
+        <tr>
+            <td width="100%">
+                <table>
+                    <tr>
+                        <td><strong><?php echo $this->translate('queryName'); ?></strong></td>
+                        <td><?php echo $this->query[Db_StoredQuery::NAME] ?></td>
+                        <td width="50%"></td>
+                    </tr>
+                    <tr>
+                        <td><strong><?php echo $this->translate('queryDescription'); ?></strong></td>
+                        <td>
+                            <div style="border: 1px dotted black; width: 382px; min-height: 50px;"><?php echo $this->query[Db_StoredQuery::NOTE] ?></div>
+                        </td>
+                        <td width="50%"></td>
+                    </tr>
+                    <tr>
+                        <td><strong><?php echo $this->translate('queryQuery'); ?></strong></td>
+                        <td>
+                            <textarea id="query" cols="57" rows="10" readonly="readonly" disabled="disabled"><?php echo $this->query[Db_StoredQuery::QUERY] ?></textarea>
+                        </td>
+                        <td width="50%"><em><?php echo $this->translate('xmlinfo') ?></em></td>
+                    </tr>
+                    <tr>
+                        <td><strong><?php echo $this->translate('queryApiUrl'); ?></strong></td>
+                        <td>
+                            <input id="value" type="text" value="<?php echo $this->apiCall ?>" size="60"></input>
+                            <input id="testButton" class="testButton" type="button" value="<?php echo $this->translate('queryButtonTest'); ?>" />
+                            <br /><em><?php echo $this->translate('testButtonHintExtended') ?></em>
+                        </td>
+                        <td width="50%"></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <?php
+                $icon    = null;
+                $isError = false;
+                if ($this->query[Db_StoredQuery::STATUS]) {
+                    $icon = 'accept_16.png';
+                } else if (!$this->query[Db_StoredQuery::STATUS_MESSAGE]) {
+                    $icon = 'info_yellow.png';
+                } else {
+                    $icon    = 'info_red.png';
+                    $isError = true;
+                }
+                ?>
+                <?php echo $this->translate('queryStatus'); ?>: <?php if ($isError) {
+                    echo "<a href='" . APPLICATION_URL . "/query/error/queryId/" . $this->queryId . "/'>";
+                } ?>
+                <img width="15" height="15" src="<?php echo APPLICATION_URL . '/images/icon/' . $icon; ?>" /><?php if ($isError) {
+                    echo "</a>";
+                } ?>
+            </td>
+        </tr>
+
+    </table>
+</fieldset>
+<div id="loader" class="loader" style="display:none;">
+    <img src="<?php echo APPLICATION_URL ?>images/icon/loading.gif" alt="loading" />
+</div>
+<div style="display:none" id="resultContent" class="resultContent"></div>

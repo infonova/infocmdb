@@ -1,0 +1,155 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/tooltip/wz_tooltip.js"></script>
+<script type="text/javascript">
+    function delete_ci_relation(id) {
+        if (confirm('<?php echo $this->translate('relationAreYouSureDelete'); ?>')) {
+            var url = '<?php echo APPLICATION_URL?>/relation/delete/relationId/' + id;
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (result) {
+                    if (result == 'finished') {
+                        location.reload();
+                    }
+                }
+            });
+        }
+    }
+</script>
+
+<div class="button_row">
+    <a class="link" href="<?php echo APPLICATION_URL ?>relation/create/ciid/<?php echo $this->ciId ?>">
+        <?php echo $this->translate('relationCreate') ?>
+    </a>
+    |
+    <a class="link" href="<?php echo APPLICATION_URL ?>relation/visualize/ciid/<?php echo $this->ciId ?>">
+        <?php echo $this->translate('visualize') ?>
+    </a>
+</div>
+
+
+<h1 class="pageName">
+    <?php echo $this->translate('relationsFromCi') ?>
+    <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->ciId ?>">
+        <?php echo $this->ciDisplayValue ?>
+    </a>
+</h1>
+
+
+<div class="relations">
+    <?php foreach ($this->relations as $ciRelationTypeId => $ciRelationArray) : ?>
+        <?php if ($ciRelationTypeId !== 'counter'): ?>
+
+            <div class="relationList slidebox slidebox-open">
+                <h3 class="header slidebox-header" title="<?php echo $this->ciRelationTypes[$ciRelationTypeId]['name'] ?>" data-cirelationtypeid="<?php echo $ciRelationTypeId ?>">
+                    <?php echo $this->translate('relationType') ?>:&nbsp;
+                    <span class="subheader">
+						<?php echo $this->ciRelationTypes[$ciRelationTypeId]['description'] ?>
+                        <?php
+                        if (!empty($this->ciRelationTypes[$ciRelationTypeId]['description_optional'])) {
+                            echo "&nbsp;<i class='fa fa-arrows-h'></i>&nbsp; " . $this->ciRelationTypes[$ciRelationTypeId]['description_optional'];
+                        } ?>
+					</span>
+                </h3>
+
+                <?php foreach ($ciRelationArray['citypes'] as $ciTypeId => $ciTypeArray) : ?>
+
+                    <?php if ($ciTypeId !== 'counter'): ?>
+
+                        <div class="ci_type slidebox-content" data-citypeid="<?php echo $ciTypeId ?>">
+
+                            <div class="breadcrumbs_row">
+								<span class="header">
+									<?php echo $this->translate('ciType') ?>:
+
+                                    <?php
+                                    // only show full breadcrumb if the text for citype is used multiple times for different citypes
+                                    if (isset($this->showCiBreadcrumbs[$ciTypeId])) {
+                                        echo $this->ciBreadcrumb($this->ciTypes[$ciTypeId]['breadcrumb'], $this->breadcrumbDepth);
+                                    } else { // only show last element of breadcrumb
+                                        $lastCiTypeElement = end($this->ciTypes[$ciTypeId]['breadcrumb']);
+                                        echo $this->ciBreadcrumb(array($lastCiTypeElement));
+                                    }
+                                    ?>
+								</span>
+
+                                <div class="button_row exportButtons">
+                                    <?php $exportLink = $this->url(array(
+                                        'controller'       => 'ci',
+                                        'action'           => 'export',
+                                        'type'             => 'xlsx',
+                                        'all'              => 1,
+                                        'typeid'           => $ciTypeId,
+                                        'sourceCiid'       => $this->ciId,
+                                        'ciRelationTypeId' => $ciRelationTypeId,
+                                    )); ?>
+                                    <a class="exportCiList relationButtons header" href="<?php echo $exportLink ?>" target="_blank">
+                                        <?php echo $this->translate('exportCiRelated') ?>
+                                    </a>
+                                </div>
+                            </div>
+
+
+                            <div class="ciList">
+                                <table id="<?php echo "relation_table_" . $ciRelationTypeId . "_" . $ciTypeId ?>" class="hoverTable ciRelationListTable">
+                                    <thead>
+                                    <th class="user-actions"></th>
+                                    <th class="relation-direction"><?php echo $this->translate('reltionDirectonHeader') ?></th>
+                                    <th><?php echo $this->translate('relationId'); ?></th>
+                                    <?php foreach ($this->ciTypes[$ciTypeId]['attributes'] as $attribute) : ?>
+                                        <th>
+                                            <?php echo $attribute['description'] ?>
+                                        </th>
+                                    <?php endforeach; ?>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($ciTypeArray['ciData'] as $resolvedCi) : ?>
+                                        <tr>
+                                            <td class="user-actions small-icons">
+                                                    <span onmouseover="Tip('<?php echo $this->translate('deleteRelation') ?>');" onmouseout="UnTip();">
+                                                        <a class="buttonLink" href="javascript:delete_ci_relation(<?php echo $resolvedCi['ci_relation_id']; ?>);">
+                                                            <i class="fa fa-chain-broken" aria-hidden="true"></i>
+                                                        </a>
+                                                    </span>
+                                            </td>
+                                            <td class="relation-direction">
+                                                <?php echo $this->relationDirection($resolvedCi, $this->ciRelationTypes[$ciRelationTypeId]) ?>
+                                            </td>
+                                            <td>
+                                                <a href="<?php echo APPLICATION_URL; ?>ci/detail/ciid/<?php echo $resolvedCi['id']; ?>"><?php echo $resolvedCi['id']; ?></a>
+                                            </td>
+                                            <?php foreach ($this->ciTypes[$ciTypeId]['attributes'] as $attribute) : ?>
+                                                <td>
+                                                    <?php echo $resolvedCi[$attribute['name']] ?>
+                                                </td>
+                                            <?php endforeach; ?>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                                <div class="relationCounterMessage">
+                                    <?php echo $this->translate('numberOfShownRelations') ?>
+                                    : <?php echo count($ciTypeArray['ciData']) ?> <?php echo $this->translate('of') ?> <?php echo $ciTypeArray['counter'] ?>
+                                    <?php $listLink = $this->url(array(
+                                        'controller'       => 'ci',
+                                        'action'           => 'index',
+                                        'typeid'           => $ciTypeId,
+                                        'ciRelationTypeId' => $ciRelationTypeId,
+                                        'sourceCiid'       => $this->ciId,
+                                    ), null, true); ?>
+                                    <a href="<?php echo $listLink ?>">
+                                        <?php echo $this->translate('showAllRelations') ?>
+                                    </a>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+            </div>
+        <?php endif; ?>
+
+    <?php endforeach; ?>
+</div>

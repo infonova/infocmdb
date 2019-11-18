@@ -1,0 +1,14 @@
+<div class="definition-list">
+    <table>
+        <?php foreach ($this->list as $term => $definition) : ?>
+            <tr>
+                <td class="bold">
+                    <?php echo $term; ?>
+                </td>
+                <td>
+                    <?php echo $definition; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>

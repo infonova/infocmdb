@@ -1,0 +1,13 @@
+parameters:
+    level: 4
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        - '#Call to an undefined method Zend_View_Interface::.+\(\)\.#'
+        - '#Strict comparison using === between null and string will always evaluate to false\.#'
+        -
+            message: '#If condition is always true.#'
+            path: %currentWorkingDirectory%/src/Zend/Dojo/BuildLayer.php

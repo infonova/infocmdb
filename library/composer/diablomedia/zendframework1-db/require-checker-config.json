@@ -1,0 +1,22 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "PDO", "PDOException",
+    "db2_prepare", "db2_stmt_errormsg", "db2_stmt_error", "DB2_PARAM_IN", "DB2_CHAR", "db2_bind_param", "db2_free_stmt",
+    "db2_num_fields", "db2_execute", "db2_field_name", "db2_fetch_array", "db2_fetch_assoc", "db2_fetch_both", "db2_fetch_object", "db2_num_rows",
+    "DB2_AUTOCOMMIT_ON", "DB2_CASE_NATURAL", "DB2_CASE_UPPER", "DB2_CASE_LOWER", "DB2_I5_NAMING_ON", "DB2_I5_NAMING_OFF",
+    "db2_conn_errormsg", "db2_conn_error", "db2_close", "DB2_AUTOCOMMIT_OFF", "db2_autocommit", "db2_escape_string",
+    "db2_server_info", "db2_tables", "db2_commit", "db2_rollback",
+    "oci_parse", "oci_error", "SQLT_CHR", "oci_bind_by_name", "oci_free_statement", "oci_num_fields", "oci_execute", "oci_field_name",
+    "OCI_RETURN_LOBS", "oci_fetch_array", "OCI_NUM", "OCI_RETURN_NULLS", "OCI_ASSOC", "OCI_BOTH", "oci_fetch_object",
+    "OCI_FETCHSTATEMENT_BY_ROW", "OCI_FETCHSTATEMENT_BY_COLUMN", "oci_fetch_all", "oci_fetch", "oci_result", "oci_num_rows",
+    "OCI_COMMIT_ON_SUCCESS", "oci_close", "OCI_DEFAULT", "oci_commit", "oci_rollback", "OCI_DESCRIBE_ONLY", "oci_server_version",
+    "sqlsrv_prepare", "sqlsrv_errors", "sqlsrv_free_stmt", "sqlsrv_num_fields", "sqlsrv_query", "sqlsrv_fetch_array",
+    "SQLSRV_FETCH_ASSOC", "sqlsrv_fetch", "sqlsrv_get_field", "sqlsrv_fetch_object", "sqlsrv_field_metadata", "sqlsrv_next_result",
+    "sqlsrv_rows_affected", "sqlsrv_connect", "SQLSRV_TXN_READ_COMMITTED", "SQLSRV_TXN_READ_UNCOMMITTED", "SQLSRV_TXN_REPEATABLE_READ",
+    "SQLSRV_TXN_SNAPSHOT", "SQLSRV_TXN_SERIALIZABLE", "sqlsrv_close", "sqlsrv_begin_transaction", "sqlsrv_commit", "sqlsrv_rollback", "sqlsrv_server_info",
+    "mysqli_init", "mysqli_options", "mysqli_real_connect", "mysqli_connect_errno", "mysqli_connect_error", "mysqli_set_charset", "mysqli"
+  ]
+}

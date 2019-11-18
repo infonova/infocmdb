@@ -1,0 +1,15 @@
+<script type="text/javascript">
+    function finalizeFileUpload(filename, filenameValue, descr, descrValue, identifier) {
+        parent.document.getElementById(filename).value = filenameValue;
+        parent.document.getElementById(descr).value = descrValue;
+        parent.document.getElementById(filename + "upload").innerHTML = "<?php echo $this->translate('currentDocument'); ?>: <strong>" + descrValue + "</strong> " + filenameValue;
+    }
+</script>
+
+<body onLoad="<?php echo $this->onLoad ?>">
+
+</body>
+
+<div class='fileupload'>
+    <?php echo $this->form ?>
+</div>

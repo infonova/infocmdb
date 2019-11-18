@@ -1,0 +1,54 @@
+<script src="<?php echo APPLICATION_URL ?>js/combobox.js" type="text/javascript" id="testcombo"
+        charset="utf-8"></script>
+<script type="text/javascript">
+
+    function submitAttributeForm(elem) {
+        elem.disabled = true;   // indicates user that something is happening
+
+        $.ajax({
+            url: "<?php echo APPLICATION_URL?>attribute/addattributeform/sessionID/<?php
+                echo $this->sessionID ?>/ciid/<?php echo $this->ciid?>",
+            method: "POST",
+            data: $("#attributeAddForm").serializeArray(),
+            cache: false
+        })
+            .done(function (content) {
+                if (content === 'successful') {
+                    <?php if(!empty($this->ciid)) : ?>
+                    var merge = "<?php echo APPLICATION_URL . 'ci/edit/ciid/' . $this->ciid . '/isRefresh/1/sessionID/' . $this->sessionID?>";
+                    <?php else : ?>
+                    var merge = "<?php echo APPLICATION_URL . 'ci/create/isRefresh/1/validate/1/sessionID/' . $this->sessionID?>";
+                    <?php endif; ?>
+
+                    $('#CreateForm').attr("action", merge);
+                    $('#CreateForm').submit();
+                } else {
+                    $('#infocmdb-dialog').html(content);
+                    $('.attributeSelect').combobox({
+                        source: "<?php echo APPLICATION_URL . 'attribute/autocompleteactive/attributeGroupId/' . $this->attributegroupId?>",
+                    });
+                }
+            })
+
+            .fail(function (result) {
+                console.log("submitAttributeForm ajax error", result);
+            });
+    }
+</script>
+
+<body>
+<h1 class="pageName"><?php echo $this->translate('addAttributeToCi') ?></h1>
+
+<fieldset class="create_form" style="width:500px">
+    <form id="attributeAddForm">
+
+        <?php echo $this->form->autoAttribute; ?>
+        <?php echo $this->form->autoCreate; ?>
+
+        <div class="buttonCon">
+            <?php echo $this->form->sessionID; ?>
+            <input type="button" class="standard_button" value="<?php echo $this->translate('add') ?>"
+                   onClick="javascript:submitAttributeForm(this);">
+        </div>
+    </form>
+</fieldset>

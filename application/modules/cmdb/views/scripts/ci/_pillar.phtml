@@ -1,0 +1,32 @@
+<!-- Metadata right -->
+<div id="pillar_right">
+    <table>
+        <?php
+        echo $this->render('ci/_pillar_base_info.phtml');
+        ?>
+        <?php
+        if (!$this->historyView) {
+            echo $this->render('ci/_pillar_history_info.phtml');
+        }
+        ?>
+    </table>
+
+
+    <?php
+    if (!$this->historyView) {
+        echo $this->render('ci/_pillar_functions.phtml');
+    }
+    ?>
+
+    <?php
+    if (count($this->events) > 0 && !$this->historyView) {
+        echo $this->render('ci/_pillar_actions.phtml');
+    }
+    ?>
+
+    <?php
+    if (!$this->historyView) {
+        echo $this->render('ci/_pillar_relations.phtml');
+    }
+    ?>
+</div>

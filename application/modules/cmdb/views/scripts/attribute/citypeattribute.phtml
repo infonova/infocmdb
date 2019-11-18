@@ -1,0 +1,108 @@
+<script type="text/javascript">
+    function reset() {
+
+        window.location.href = '<?php echo APPLICATION_URL . 'attribute/resetfinalize'; ?>';
+
+    }
+
+    function submit() {
+        document.forms['assign'].submit();
+    }
+
+    function finalize() {
+        window.location.href = '<?php echo APPLICATION_URL . 'attribute/finalize/'; ?>';
+    }
+
+    function back() {
+        window.location.href = '<?php echo APPLICATION_URL . 'attribute/create/'; ?>';
+    }
+
+    $(document).ready(function () {
+        $("select#ciType").change(function () {
+            if ($(this).get(0).value != 0) {
+                getContent($(this).get(0).value);
+            }
+            else {
+                $("div#attributes").html('');
+            }
+        });
+    });
+
+    function getContent() {
+        $.post("<?php echo $this->url(array('action' => 'assigncitypeattribute')); ?>/id/" + id,
+            function (response) {
+                $("div#attributes").html(response);
+            },
+            "html"
+        );
+    }
+
+    $(function () {
+        $("#tabs").tabs({disabled: [3, 4, 5]}, {active: 2});
+    });
+</script>
+
+<h1 class="pageName"><?php echo $this->translate('manageOptions') ?></h1>
+<div class="break"></div>
+
+<?php $step = 1; ?>
+
+<div id="tabs">
+    <ul>
+        <li>
+            <a href="#fragment-<?php echo $step ?>" onClick="window.location.href = '<?php echo APPLICATION_URL . 'attribute/create/isBack/1/' ?>';"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('createAttribute') ?></span></a>
+        </li>
+        <li>
+            <a href="#fragment-<?php echo $step ?>" onClick="window.location.href = '<?php echo APPLICATION_URL . 'attribute/create/isBack/1/#fragment-2' ?>';"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('optional') ?></span></a></li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('assignCiTypeAndAttribute') ?></span></a>
+        </li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('ciTypesAdd') ?></span></a>
+        </li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('permissionsAdd') ?></span></a>
+        </li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('summary') ?></span></a></li>
+
+    </ul>
+
+
+    <fieldset class="create_form">
+
+        <div id="fragment-1">
+
+        </div>
+
+        <div id="fragment-2">
+        </div>
+
+        <div id="fragment-3">
+            <form name="<?php echo $this->escape($this->form->getName()) ?>" action="<?php echo $this->escape($this->form->getAction()) ?>"
+                  method="<?php echo $this->escape($this->form->getMethod()) ?>">
+                <div class="standardField"><?php echo $this->form->ciType->setDecorators(array('Label', 'ViewHelper', 'Errors')); ?></div>
+                <div id="attributes"></div>
+            </form>
+            <div class="break"></div>
+            <div class="buttonCon">
+                <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:reset();">
+                <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back()">
+                <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:submit()">
+            </div>
+        </div>
+
+        <div id="fragment-4">
+        </div>
+
+        <div id="fragment-5">
+        </div>
+
+        <div id="fragment-5">
+        </div>
+
+
+    </fieldset>
+</div>

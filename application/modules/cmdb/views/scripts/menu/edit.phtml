@@ -1,0 +1,35 @@
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>menu/index"><?php echo $this->translate('overview') ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('editMenu') ?></h1>
+
+<form name="<?php echo $this->escape($this->form->getName()) ?>" action="<?php echo $this->escape($this->form->getAction()) ?>"
+      method="<?php echo $this->escape($this->form->getMethod()) ?>">
+    <fieldset class="lordVader">
+        <table>
+            <tr>
+                <td><strong><?php echo $this->translate('name'); ?>: </strong></td>
+                <td><?php echo $this->escape($this->menu[Db_Menu::NAME]) ?></td>
+            </tr>
+
+            <?php echo $this->form->order ?>
+            <tr>
+                <td>
+                    <?php echo $this->form->create; ?>
+                    <?php echo $this->form->cancel; ?>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </fieldset>
+</form>

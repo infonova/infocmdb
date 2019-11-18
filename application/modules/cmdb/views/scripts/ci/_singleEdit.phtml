@@ -1,0 +1,300 @@
+<td class="column_left" width="200px">
+    <?php
+    //Admin-Mode: show attribute-name
+    if (Zend_Registry::get('adminMode') === true) {
+        $link = "<a href='" . APPLICATION_URL . "attribute/edit/attributeId/" . $this->attribute[attribute_id] . "'><img class='image' src='" . APPLICATION_URL . "images/navigation/settings.png'></a>";
+        echo $link . htmlspecialchars($this->attribute[Db_Attribute::NAME]);
+    } else {
+        echo htmlspecialchars($this->attribute[Db_Attribute::DESCRIPTION]);
+    }
+    ?>
+</td>
+<td>
+    <a name="edit"></a>
+    <?php
+    $locking_config = Zend_Registry::get('lockingConfig');
+    ?>
+
+    <script type="text/javascript" src="<?php echo APPLICATION_URL ?>js/multiselect/plugins/tmpl/jquery.tmpl.1.1.1.js"></script>
+    <script type="text/javascript" src="<?php echo APPLICATION_URL ?>/js/multiselect/ui.multiselect.js"></script>
+    <script type="text/javascript" src="<?php echo APPLICATION_URL ?>/js/multiselect/locale/ui-multiselect-<?php echo ($this->language === 'de' ? 'de' : 'en'); ?>.js"></script>
+    <script type="text/javascript" src="<?php echo APPLICATION_URL ?>/js/multiselect/plugins/localisation/jquery.localisation-min.js"></script>
+    <script type="text/javascript">
+        LOCK_LANG_STRINGS = {
+            expired: "<?php echo $this->translate('lockExpired'); ?>",
+            error: "<?php echo $this->translate('lockError'); ?>",
+        };
+        var lock_id = '<?php echo $this->lockId ?>';
+        var refresh_rate = '<?php echo $locking_config->getValue('lock.refresh.rate', 60, Util_Config::INT) * 1000; ?>';
+
+        function cancelSingleEdit() {
+            $('<input />').attr('type', 'hidden')
+                .attr('name', "cancel")
+                .attr('value', "true")
+                .appendTo('#CreateForm');
+            $('#CreateForm').submit();
+        }
+
+        function submitSingleEdit() {
+            var refreshSuccess = refreshLock(lock_id, refresh_rate, LOCK_LANG_STRINGS);
+            invalidLocks[lock_id] = lock_id;
+
+            if(refreshSuccess) {
+                document.forms['CreateForm'].submit();
+            }
+        }
+
+        $(document).ready(function () {
+
+            var multiselect = $(".multiselect");
+            if (multiselect.length) {	//check if exists
+                var attributeID = multiselect.data('attributeid');
+                var selected_ciids = '<?php echo $this->attribute['value_ci'] ?>';
+                var multiselectType = multiselect.data('ismultiselect');
+                var itemIncreaseable = false;
+                if (multiselectType == 2) {
+                    itemIncreaseable = true;
+                }
+                $(".multiselect").multiselect({
+                    itemIncreasable: itemIncreaseable,
+                    remoteUrl: '<?php echo APPLICATION_URL ?>ci/autocompletemultiselect?ciId=<?php echo $this->ciid ?>&attributeId=' + attributeID + '&values=' + selected_ciids
+                });
+            }
+
+            $.widget("ui.combobox", {
+                _create: function () {
+                    var self = this;
+                    var select = this.element.hide();
+                    var selectID = select.attr('id');
+                    var attributeID = selectID;
+
+                    var input = $("<input>")
+                        .insertAfter(select)
+                        .autocomplete({
+
+                            source: function (request, response) {
+
+                                var term = encodeURIComponent(request.term);
+                                var ciId = "<?php echo $this->ciid ?>";
+
+                                var ajaxUrl = "<?php echo APPLICATION_URL?>ci/autocompletecitype?attributeId=" + attributeID + "&name=" + term + "&ciId=" + ciId;
+
+                                select.append($('<option></option>').val("").html(""));
+
+                                $.ajax({
+                                    url: ajaxUrl,
+                                    dataType: "json",
+                                    success: function (data) {
+                                        response($.map(data, function (item) {
+                                            if (select.find('option[value="' + item.id + '"]').size() == 0) {
+                                                select.append($('<option></option>').val(item.id).html(item.value));
+                                            }
+                                            var text = item.value;
+                                            return {
+                                                id: item.id,
+                                                //label: unescape(text.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + request.term.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1") + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>")),
+                                                label: text,
+                                                value: text
+                                            }
+                                        }));
+                                    }
+                                });
+                            },
+                            delay: 1000,
+                            select: function (e, ui) {
+                                if (!ui.item) {
+                                    // remove invalid value, as it didn't match anything
+                                    $(this).val("");
+                                    return false;
+                                }
+                                $(this).focus();
+                                select.val(ui.item.id);
+                                self._trigger("selected", null, {
+                                    item: select.find("[value='" + ui.item.id + "']")
+                                });
+
+
+                            },
+
+
+                            change: function (event, ui) {
+                                if (!ui.item) {
+                                    var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex($(this).val()) + "$", "i"),
+                                        valid = false;
+                                    select.children("option").each(function () {
+                                        if (this.value.match(matcher)) {
+                                            this.selected = valid = true;
+                                            return false;
+                                        }
+                                    });
+                                    if (!valid) {
+                                        // remove invalid value, as it didn't match anything
+                                        $(this).val("");
+                                        select.val("");
+                                        return false;
+                                    }
+                                }
+                            },
+
+
+                            minLength: 0
+                        })
+                        .blur(function () {
+                            //only execute if dropdown menu is not visible
+                            if (!$(".ui-menu").is(':visible')) {
+                                //if value is empty set back old value in autocomplete
+                                if (input.val() == "") {
+                                    input.val(select.find("[value='" + select.val() + "']").html()); //set value of autocomplete
+                                }
+                            }
+                        })
+                        .css('width', select.width())
+                        .addClass("ui-widget ui-widget-content ui-corner-left");
+
+                    var clearButton = $("<button><?php echo $this->translate("inputClear") ?></button>")
+                        .insertAfter(input)
+                        .button({
+                            icons: {
+                                primary: "ui-icon-cancel"
+                            },
+                            text: false
+                        }).removeClass("ui-corner-all")
+                        .position({
+                            my: "left center",
+                            at: "right center",
+                            of: input,
+                            offset: "-1 0"
+                        })
+                        .css("top", "-1px").css("left", "0px")
+                        .click(function () {
+                            input.val('');
+                            select.val('');
+                            return false;
+                        });
+
+                    var collapseAll = $("<button><?php echo $this->translate("inputShowAllOptions") ?></button>")
+                        .insertAfter(clearButton)
+                        .button({
+                            icons: {
+                                primary: "ui-icon-triangle-1-s"
+                            },
+                            text: false
+                        }).removeClass("ui-corner-all")
+                        .addClass("ui-corner-right ui-button-icon")
+                        .position({
+                            my: "left center",
+                            at: "right center",
+                            of: clearButton,
+                            offset: "-1 0"
+                        })
+                        .css("top", "-1px").css("left", "0px")
+                        .click(function () {
+                            // close if already visible
+                            if (input.autocomplete("widget").is(":visible")) {
+                                input.autocomplete("close");
+                                return false;
+                            }
+                            // pass empty string as value to search for, displaying all results
+                            input.autocomplete("search", "");
+                            input.focus();
+                            return false;
+                        });
+
+                    input.val($(select).find("option:selected").text());
+                }
+            });
+
+            var autocompleteElement = $('.autocomplete-value');
+            var autocompleteSelectedOption = autocompleteElement.find('option:selected');
+            if (autocompleteSelectedOption.length > 0) {
+                $.ajax({
+                    url: "<?php echo APPLICATION_URL?>ci/autocompleteattributeid/attributeId/" + autocompleteElement.data('attributeid') + "/ciId/" + autocompleteSelectedOption.val(),
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        autocompleteSelectedOption.html(data.value);
+                    }
+                });
+            }
+            autocompleteElement.combobox();
+
+
+            /* DROPZONE */
+            DROPZONE_LANG_STRINGS = {
+                dictDefaultMessage: "<?php echo $this->translate('dictDefaultMessage')?>",
+                dictFallbackMessage: "<?php echo $this->translate('dictFallbackMessage')?>",
+                dictFallbackText: "<?php echo $this->translate('dictFallbackText')?>",
+                dictInvalidFileType: "<?php echo $this->translate('dictInvalidFileType')?>",
+                dictFileTooBig: "<?php echo $this->translate('dictFileTooBig')?>",
+                dictResponseError: "<?php echo $this->translate('dictResponseError')?>",
+                dictCancelUpload: "<?php echo $this->translate('dictCancelUpload')?>",
+                dictCancelUploadConfirmation: "<?php echo $this->translate('dictCancelUploadConfirmation')?>",
+                dictRemoveFile: "<?php echo $this->translate('dictRemoveFile')?>",
+                dictMaxFilesExceeded: "<?php echo $this->translate('dictMaxFilesExceeded')?>",
+                dictDeleteUploadConfirmation: "<?php echo $this->translate('dictDeleteUploadConfirmation')?>",
+                dictTooManyFiles: "<?php echo $this->translate('dictTooManyFiles')?>",
+                dictOverrideFile: "<?php echo $this->translate('dictOverrideFile') ?>"
+            };
+            Dropzone.autoDiscover = false;
+
+            $('body').data('sendCount', 0);       // keep track of number of files being uploaded to disable submit button
+            $('.dzData').wrap("<div class='dropzone'></div>");
+            var file_descr = $('.file_description'); // input with file_description as value
+            var file_name = $('.file_name'); // input with file_name as value
+            // call function returnDropzone(sendBtn, className, POST_URL, customTemplate, file_descr, file_name)
+            var dz = returnDropzone($('.buttonLink.save_list'), 'dropzone', $('.dzData').data('href'), customDZTemplate, file_descr, file_name);
+
+            activateDatetimePickers();
+
+            refreshLock(lock_id, refresh_rate, LOCK_LANG_STRINGS);
+        });
+
+
+    </script>
+    <?php
+    echo $this->form;
+
+    // handle uploads
+    if ($this->attribute['attributeTypeName'] == Enum_AttributeType::ATTACHMENT) {
+
+        ?>
+        <div id="<?php echo $this->attribute['attribute_id'] ?>filenameupload" class="fileupload"></div>
+        <?php
+    } else if ($this->attribute['attributeTypeName'] == Enum_AttributeType::SCRIPT) {
+        $outputValue = $this->translate("currentDocument") . ": ";
+        if ($this->attribute[Db_CiAttribute::VALUE_TEXT]) {
+            $outputValue .= "<strong>" . $this->attribute[Db_CiAttribute::VALUE_TEXT] . "</strong> ";
+        }
+        if ($this->attribute['valueNote']) {
+            $outputValue .= $this->attribute['valueNote'];
+        }
+
+        ?>
+        <div id="<?php echo $this->attribute['attribute_id'] ?>filenameupload"><?php echo $outputValue; ?></div>
+        <?php
+    }
+
+    ?>
+</td>
+<?php if ($this->attribute['relationType']): ?>
+    <td style="width: 200px;">
+        <?php
+        $linkedValue = ($this->attribute['linkedValue']) ? ' (' . $this->attribute['linkedValue'] . ')' : '';
+        if ($this->attribute['linkedCi'] == $this->ciid):
+            ?>
+            <span onmouseover="Tip('<?php echo $this->attribute['relationType'] . $linkedValue; ?>')" onmouseout="UnTip()" class="relation_list">
+		<?php echo $attr[0]['relationType'] . $linkedValue; ?>
+	</span>
+        <?php else: ?>
+            <a onmouseover="Tip('<?php echo $this->attribute['relationType'] . $linkedValue; ?>')" onmouseout="UnTip()" class="relation_list" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->attribute['linkedCi'] ?>/">
+                <?php echo $attr[0]['relationType'] . $linkedValue; ?>
+            </a>
+        <?php endif; ?>
+    </td>
+<?php endif; ?>
+<td style="width: 60px">
+    <div class="rfloater">
+        <a class="buttonLink cancel_list" title="Abbrechen" href="javascript:cancelSingleEdit();">&nbsp;</a>
+        <a class="buttonLink save_list" title="Speichern" href="javascript:submitSingleEdit();">&nbsp;</a>
+    </div>
+</td>

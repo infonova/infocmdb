@@ -1,0 +1,35 @@
+<fieldset class="lordVader">
+    <table>
+        <tbody>
+        <tr id="subform">
+            <td>
+                <fieldset class="execution_time">
+                    <table>
+                        <tr>
+                            <?php echo $this->form->trigger_ci; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->trigger_ci_type_change; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->trigger_attribute; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->trigger_relation; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->trigger_project; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->trigger_fileimport; ?>
+                        </tr>
+                    </table>
+                </fieldset>
+            </td>
+            <td>
+                <?php echo $this->translate('workflowTriggerActivityExample'); ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>

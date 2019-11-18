@@ -1,0 +1,52 @@
+{
+    "name": "diablomedia/zendframework1-json",
+    "description": "Zend Framework 1 JSON component",
+    "type": "library",
+    "keywords": [
+        "framework",
+        "zf1"
+    ],
+    "homepage": "http://framework.zend.com/",
+    "license": "BSD-3-Clause",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.0.0",
+        "diablomedia/zendframework1-exception": "^1.0.0",
+        "diablomedia/zendframework1-xml": "^1.0.0",
+        "diablomedia/zendframework1-server": "^1.0.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Zend_Json_": "src/"
+        },
+        "classmap": [
+            "src/Zend/Json.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "Zend_": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "phpstan/phpstan": "0.11.15",
+        "friendsofphp/php-cs-fixer": "2.15.2",
+        "maglnet/composer-require-checker": "^1.1.0 || ^2.0.0",
+        "phpro/grumphp": "^0.14.0 || ^0.15.0"
+    },
+    "archive": {
+        "exclude": ["/tests"]
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-with-coverage": "phpunit --coverage-clover=clover.xml",
+        "phpstan": "phpstan analyze -c phpstan.neon --no-progress --ansi",
+        "style-check": "php-cs-fixer fix --dry-run -vv"
+    },
+    "suggest": {
+        "ext-json": "Can use built-in json_encode/json_decode functions if available",
+        "ext-mbstring": "Will use mbstring extension for encoding/decoding if available"
+    }
+}

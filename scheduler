@@ -1,0 +1,20 @@
+#!/bin/bash
+
+current="$(readlink -f $(dirname "$0"))"
+cd $current || exit 1;
+
+if [[ "${APPLICATION_ENV}" == "testing" ]]
+then
+  echo "Not running starting cron in testing environment."
+  exit 0
+fi
+
+if [ `ps aux |grep $PWD/run | grep -c -v 'grep'` -eq 0 ]
+then
+    echo "`date`    starting cron" >> data/logs/queue.log
+    $PWD/run cron 2>&1 >> data/logs/queue.log &
+else
+    echo "`date`    cron already running" >> data/logs/queue.log
+fi
+
+exit 0

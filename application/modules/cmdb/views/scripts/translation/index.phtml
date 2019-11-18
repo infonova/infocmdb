@@ -1,0 +1,23 @@
+<h1 class="pageName"><?php echo $this->translate('configFiles') ?></h1>
+<ul>
+    <?php
+    renderList($this->directory);
+
+    function renderList($array)
+    {
+        foreach ($array as $key => $file) {
+            if (is_numeric($key)) {
+                ?>
+                <li><a href="<?php echo $file['link']; ?>"><?php echo $file['title'] ?></a></li>
+            <?php } else { ?>
+                <li><span><strong><?php echo $key; ?></strong></span></li>
+                <ul>
+                    <?php renderList($file); ?>
+                </ul>
+                <?php
+            }
+        }
+    }
+
+    ?>
+</ul>

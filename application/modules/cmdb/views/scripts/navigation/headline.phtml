@@ -1,0 +1,118 @@
+<?php if ($this->isRoot) { ?>
+    <script type="text/javascript">
+        <!--
+        function toggleAdminMode(enable) {
+            if (enable == true) {
+                url = '<?php echo APPLICATION_URL?>/admin/enable/';
+            } else {
+                url = '<?php echo APPLICATION_URL?>/admin/disable/';
+            }
+
+            $.ajax({
+                type: "GET",
+                dataType: "text",
+                url: url,
+                success: function () {
+                    // reload page
+                    window.location.reload();
+                }
+            });
+        }
+
+        //-->
+    </script>
+<?php } ?>
+
+<!-- part1 -->
+
+<div style="position: fixed; top:0; left:0; z-index:10">
+    <div id="addInfo" style="position: relative;">
+        <div style="width:100%">
+            <div id="addInfoCover" style="width: 100%; position: fixed; top: 2px; right: 0;">
+                <div style="color: white; font-weight: bold; position: fixed; left: 2px; top: 2px">
+                    infoCMDB <?php echo $this->cmdbVersion['version']; ?></div>
+                <div class="spacer">&nbsp;</div>
+                <div class="userData_dark" style="float: right;">
+                    <div class="spriteHeader sprite-log_off"></div>
+                    <div>
+                        <a href="<?php echo APPLICATION_URL ?>login/logout/"><?php echo $this->translate('logout') ?></a>
+                    </div>
+                </div>
+                <?php /*<div class="userData_dark" style="float: right;" style="display: none">
+					<div class="spriteHeader sprite-mail" ></div>
+					<div>
+						(<a href="<?php echo APPLICATION_URL?>message/index/"><?php echo $this->newMessages;?>
+						<?php echo ' '.$this->translate('privateMessages')?></a>)
+					</div>
+				</div>*/ ?>
+                <div class="userData_dark" style="float: right;">
+                    <div class="spriteHeader sprite-role"></div>
+                    <div><?php echo $this->roleName ?></div>
+                </div>
+                <div class="userData_dark" style="float: right;">
+                    <div class="spriteHeader sprite-user"></div>
+                    <div id="userDataLink">
+                        <a alt="<?php echo $this->translate('changeUserSettings') ?>" title="<?php echo $this->translate('changeUserSettings') ?>" href="<?php echo APPLICATION_URL ?>user/usersettings/"><?php echo $this->userName ?></a>
+                    </div>
+                </div>
+                <?php if ($this->isRoot) { ?>
+                    <div class="userData_dark" style="float: right;">
+                        <div>
+                            <?php if ($this->adminMode) { ?>
+                                <a href="javascript:toggleAdminMode(false)"><?php echo $this->translate('disableAdminMode'); ?></a>
+                            <?php } else { ?>
+                                <a href="javascript:toggleAdminMode(true)"><?php echo $this->translate('enableAdminMode'); ?></a>
+                            <?php } ?>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+
+    <?php
+    /* Display infoBox if there are new messages*/
+    if ($this->newMessages > 0) {
+        ?>
+        <script type="text/javascript">
+            $("#addInfo").slideDown('fast', function () {
+                infoOpen = 1;
+                $("#openTab").addClass('opened');
+            });
+            $("#quickMessages").slideDown('fast');
+        </script>
+    <?php } ?>
+
+    <div id="openAddInfo">
+        <div id="openTab">Info</div>
+    </div>
+</div>
+<div id="opener"></div>
+
+<!-- Logo -->
+<div id="headline">
+    <div class="logo" style="position:fixed;">
+        <a href="/" title="home" class="logoLink">
+            <div><?php echo $this->individualizationConfig->homelink->string->partA; ?></div>
+            <div class="bold"><?php echo $this->individualizationConfig->homelink->string->partB; ?></div>
+        </a>
+    </div>
+
+    <div class="search-box" style="position:fixed;">
+        <form
+                name="<?php echo $this->escape($this->headerSearchForm->getName()) ?>"
+                action="<?php echo $this->escape($this->headerSearchForm->getAction()) ?>"
+                method="<?php echo $this->escape($this->headerSearchForm->getMethod()) ?>">
+
+            <?php
+            echo $this->headerSearchForm->searchstring->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->headerSearchForm->searchShortButton;
+            ?>
+        </form>
+    </div>
+</div>
+<div style="height:51px;width:100%"></div>
+
+	
+	
+

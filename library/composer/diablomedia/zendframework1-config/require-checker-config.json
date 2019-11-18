@@ -1,0 +1,10 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "Zend_Xml_Security", "Zend_Xml_Exception",
+    "SimpleXMLElement", "simplexml_import_dom", 
+    "dom_import_simplexml", "DOMElement"
+  ]
+}

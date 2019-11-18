@@ -1,0 +1,13 @@
+parameters:
+    level: 6
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        - '#Method Zend_Filter_Input::_getFilter\(\) should return Zend_Filter_Interface but returns Zend_Filter_Interface\|Zend_Validate_Interface\.#'
+        - '#Method Zend_Filter_Input::_getValidator\(\) should return Zend_Validate_Interface but returns Zend_Filter_Interface\|Zend_Validate_Interface\.#'
+        - 
+            message: '#Method Zend_Filter_Input::_getFilterOrValidator\(\) should return Zend_Filter_Interface\|Zend_Validate_Interface but returns object\.#'
+            path: %currentWorkingDirectory%/src/Zend/Filter/Input.php

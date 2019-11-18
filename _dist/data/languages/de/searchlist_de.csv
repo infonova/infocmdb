@@ -1,0 +1,38 @@
+# Translation file
+
+name;					"Name"
+description;			"Beschreibung"
+note;					"Notiz"
+valid;					"Gültig"
+active;					"aktiv"
+inactive;				"inaktiv"
+position;				"Position "
+
+overview;				"Übersicht"
+back;					"Zurück"
+save;					"Speichern"
+change;					"Ändern"
+delete;					"Löschen"
+add;					"hinzufügen"
+searchList;				"Listen Konfiguration"
+
+type;					"Typ"
+ciType;					"CI Typ"
+
+searchtemplates;		"Suchtemplates"
+searchtemplatesCreate;	"Suchtemplates erstellen"
+
+numberOfResults;	"Anzahl der Ergebnisse:"
+
+# search list child list page
+container;				"Container "
+searchlistDefault;		"Default Suchliste"
+
+
+searchlistChildIndexOff;		"Default/Parent Suchliste verwenden"
+searchlistChildIndexOn;			"Für diesen CI Typ eine eigene Suchliste verwenden"
+searchlistAddChild;				"Suchliste hinzufügen für Ci Typ: "
+
+searchListCreateForContainer;	"Suchliste anlegen für Container: "
+
+areYouSureDelete;				"Wollen Sie das Such Template wirklich löschen?"

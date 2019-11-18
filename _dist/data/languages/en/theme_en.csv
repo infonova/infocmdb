@@ -1,0 +1,48 @@
+# This is the language file for user interaction.
+
+# General
+overview;			"Overview"
+themeDeleteCheck;	"Are you sure you want to delete this theme?"
+
+
+# Index Page
+themes;				"Themes"
+name;				"Name"
+description;		"Description"
+note;				"Note"
+searchlist;			"Searchlist"
+homepage;			"Homepage"
+wildcardAllowed;	"Wildcard-Search allowed"
+valid;				"Valid"
+active;				"active"
+inactive;			"inactive"
+numberOfResults;	"Number of Results:"
+
+themeCreate;		"Create Theme"
+themeEdit;			"Edit Theme"
+
+module;				"Module"
+createTheme;		"General"
+modules;			"Modules"
+
+save;				"Save"
+cancel;				"Cancel"
+duplicate;			"Duplicate"
+
+
+# Messages
+themeInsertSuccess;	"Theme created successfully!"
+themeInsertFailed;	"Couldn't create Theme!"
+
+themeUpdateSuccess;	"Theme updated successfully!"
+themeUpdateFailed;	"Couldn't update Theme!"
+
+themeDeleteSuccess;	"Theme deleted successfully!"
+themeDeleteFailed;	"Couldn't delete Theme!"
+
+themeDeactivationSuccess; "Theme in use => deactivated successfully!"
+themeActivateCheck; "Do you really want to activate this Theme?"
+
+themeActivateSuccess; "Theme activated successfully!"
+
+noThemeFound;   "No entries found!"

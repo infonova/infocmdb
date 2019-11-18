@@ -1,0 +1,43 @@
+<a class="button overview" href="<?php echo APPLICATION_URL ?>fileimport/history"><?php echo $this->translate('importHistory') ?></a>
+<a class="button overview" href="<?php echo APPLICATION_URL ?>fileimport/queue/type/queue"><?php echo $this->translate('importQueue') ?></a>
+<a class="button overview" href="<?php echo APPLICATION_URL ?>fileimport/queue/type/queue/method/success"><?php echo $this->translate('importsSucceeded') ?></a>
+<a class="button overview" href="<?php echo APPLICATION_URL ?>fileimport/queue/type/queue/method/error"><?php echo $this->translate('importsFailed') ?></a>
+
+<script type="text/javascript">
+
+    window.setTimeout("refresh()", 5000);
+
+    function refresh() {
+        $.ajax({
+            url: '<?php echo APPLICATION_URL?>/fileimport/queue/type/queue/method/ajax/filter/<?php echo $this->filterterm?>/page/<?php echo $this->page?>',
+            success: function (result) {
+                $('#queue_container').html(result);
+                window.setTimeout("refresh()", 5000);
+            }
+        });
+    }
+
+</script>
+
+<h1 class="pageName"><?php echo $this->translate('queueTitle'); ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->filter->getName()) ?>"
+              action="<?php echo $this->escape($this->filter->getAction()) ?>"
+              method="<?php echo $this->escape($this->filter->getMethod()) ?>">
+            <?php
+            echo $this->filter->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            ?>
+        </form>
+    </div>
+</div>
+
+<div class="break"></div>
+
+<div id="queue_container">
+    <?php echo $this->result ?>
+</div>

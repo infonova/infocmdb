@@ -1,0 +1,66 @@
+<a class="button overview" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<? echo $this->ciid; ?>"><?php echo $this->translate('overview') ?></a>
+<h1 class="pageName"><?php echo $this->translate('userAdd') ?></h1>
+
+<form name="<?php echo $this->escape($this->form->getName()) ?>" action="<?php echo $this->escape($this->form->getAction()) ?>"
+      method="<?php echo $this->escape($this->form->getMethod()) ?>">
+    <fieldset class="create_form">
+        <table style="padding-right:0px;">
+            <tr>
+                <th width="25px">
+                    <span title="<?php echo $this->translate('userCiCheckDescription') ?>"><?php echo $this->translate('userCiCheckName') ?></span>
+                </th>
+                <th>
+                    <span title="<?php echo $this->translate('userName') ?>"><?php echo $this->translate('user') ?></span>
+                </th>
+
+                <th width="25px">
+                    <span title="<?php echo $this->translate('userCiCheckDescription') ?>"><?php echo $this->translate('userCiCheckName') ?></span>
+                </th>
+                <th>
+                    <span title="<?php echo $this->translate('userName') ?>"><?php echo $this->translate('user') ?></span>
+                </th>
+
+                <th width="25px">
+                    <span title="<?php echo $this->translate('userCiCheckDescription') ?>"><?php echo $this->translate('userCiCheckName') ?></span>
+                </th>
+                <th>
+                    <span title="<?php echo $this->translate('userName') ?>"><?php echo $this->translate('user') ?></span>
+                </th>
+            </tr>
+            <?php
+            $i = 0;
+            while (true) {
+                ?>
+                <tr>
+                    <?php $var = $this->row1[$i][Db_User::ID] ?>
+                    <td style="padding-right: 0px;"><?php echo $this->form->$var ?></td>
+                    <td>
+                        <span title="<?php echo $this->row1[$i][Db_User::FIRSTNAME] . ' ' . $this->row1[$i][Db_User::LASTNAME] ?>"><?php echo $this->row1[$i][Db_User::USERNAME] ?></span>
+                    </td>
+
+                    <?php $var = $this->row2[$i][Db_User::ID] ?>
+                    <td style="padding-right: 0px;"><?php echo $this->form->$var ?></td>
+                    <td>
+                        <span title="<?php echo $this->row2[$i][Db_User::FIRSTNAME] . ' ' . $this->row2[$i][Db_User::LASTNAME] ?>"><?php echo $this->row2[$i][Db_User::USERNAME] ?></span>
+                    </td>
+
+                    <?php $var = $this->row3[$i][Db_User::ID] ?>
+                    <td style="padding-right: 0px;"><?php echo $this->form->$var ?></td>
+                    <td>
+                        <span title="<?php echo $this->row3[$i][Db_User::FIRSTNAME] . ' ' . $this->row3[$i][Db_User::LASTNAME] ?>"><?php echo $this->row3[$i][Db_User::USERNAME] ?></span>
+                    </td>
+                </tr>
+                <?php
+                $i++;
+
+                if (!$this->row1[$i] && !$this->row2[$i] && !$this->row3[$i])
+                    break;
+            }
+            ?>
+        </table>
+        <?php
+        //echo $this->form->csrf_token;
+        echo $this->form->createAssign;
+        ?>
+    </fieldset>
+</form>

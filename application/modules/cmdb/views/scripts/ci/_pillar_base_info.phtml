@@ -1,0 +1,74 @@
+<tr>
+    <td colspan="2">
+        <div class="pillar_icon">
+            <img class="image" src="<?php echo $this->icon ?>" />
+            <?php
+            if ($this->form && $this->form->ciicon) :
+                $this->form->ciicon->removeDecorator('Label');
+
+                echo $this->form->ciicon;
+                echo $this->form->ciicon_delete; ?>
+
+                <a href="#" onclick="$('#ciicon').trigger('click');">
+                    <?php echo $this->translate('uploadIcon') ?>
+                </a>
+
+                <p id="ciicon_delete_link" style="<?php echo (strpos($this->icon, 'ci.png') === false) ? '' : 'display: none' ?>">
+                    <a href="#" onclick="deleteCiIcon($('#ciicon').get(0));" class="link"><?php echo $this->translate('deleteIcon') ?></a>
+                </p>
+            <?php endif; ?>
+        </div>
+    </td>
+</tr>
+
+<!-- CIID -->
+<tr>
+    <td>
+        <b>CI ID</b>
+    </td>
+    <td>
+        <?php echo $this->ciId; ?>
+    </td>
+</tr>
+
+<!-- CI-Type -->
+<tr>
+    <td>
+        <a class="link" title="<?php echo $this->translate('changeCiType') ?>" href="<?php echo APPLICATION_URL . 'ci/changecitype/ciid/' . $this->ciId; ?>/">
+            <b><?php echo $this->translate('ciType') ?></b>
+        </a>
+    </td>
+    <td>
+        <span class="pillar-citype">
+        <?php
+        if (Zend_Registry::get('adminMode') === true) {
+            echo $this->ciType[Db_CiType::NAME];
+        } else {
+            echo $this->ciType[Db_CiType::DESCRIPTION];
+        }
+        ?>
+        </span>
+    </td>
+</tr>
+
+<!-- Project -->
+<tr>
+    <td>
+        <a class="link" href="<?php echo APPLICATION_URL . 'ci/project/ciid/' . $this->ciId; ?>/">
+            <b><?php echo $this->translate('ciProjectTitle') ?></b>
+        </a>
+    </td>
+    <td>
+        <?php foreach ($this->projectList as $project) : ?>
+            <?php if (Zend_Registry::get('adminMode') === true) : ?>
+                <div class="pillar-project" onmouseover="Tip('<?php echo $project[Db_Project::DESCRIPTION] ?>')" onmouseout="UnTip()">
+                    <?php echo $project[Db_Project::NAME] ?>
+                </div>
+            <?php else : ?>
+                <div class="pillar-project" onmouseover="Tip('<?php echo $project[Db_Project::NAME] ?>')" onmouseout="UnTip()">
+                    <?php echo $project[Db_Project::DESCRIPTION] ?>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </td>
+</tr>

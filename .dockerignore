@@ -1,0 +1,11 @@
+.gitignore
+.dockerignore
+!.gitkeep
+.idea
+.env*
+/doc
+/data
+/application/configs
+/public/_uploads
+/library/perl
+/library/golang

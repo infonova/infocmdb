@@ -1,0 +1,25 @@
+<script type="text/javascript">
+    function finalizeFileUpload(filename) {
+        opener.document.getElementById('element_file_upload_icon').innerHTML = filename;
+        opener.document.forms["createForm"]['element_file_upload_icon'].value = filename;
+        this.close();
+    }
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>config/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('configFilesEdit') ?></h1>
+
+<fieldset class="create_form">
+    <?php echo $this->form ?>
+</fieldset>

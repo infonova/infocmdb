@@ -1,0 +1,70 @@
+<?php if (($this->status == 'in_progress') || ($this->status == 'idle')) {
+    echo '<img src="' . APPLICATION_URL . 'images/icon/loading.gif" alt="loading"/>';
+    echo "<h2>" . $this->translate('statusRunning') . "</h2>";
+    // show running pic
+} else if ($this->status == 'idle') {
+    echo "<h2>" . $this->translate('statusPreparing') . "</h2>";
+} else if ($this->status == 'success') {
+    echo "<h2>" . $this->translate('statusSuccess') . "</h2>";
+} else if ($this->status == 'failed') {
+    echo "<h2>" . $this->translate('statusFailed') . "</h2>";
+}
+?>
+
+<h1 class="pageName"><?php echo $this->translate('Statuslog') ?>:</h1>
+<?php echo $this->translate('progress') ?>: <?php echo $this->processedLines ?> / <?php echo $this->totalLines ?> <br>
+<?php echo $this->translate('successful') ?>:
+<span style="color:#339966;font-weight:bolder;"><?php echo $this->successLines ?></span><br>
+<?php echo $this->translate('failed') ?>:
+<span style="color:#C21731;font-weight:bolder;"><?php echo $this->failedLines ?></span><br>
+
+<?php if ($this->status == 'failed') { ?>
+    <br>
+    <a href="<?php echo APPLICATION_URL ?>fileimport/errorcsv/hid/<?php echo $this->history_id; ?>" target="_blank"><?php echo $this->translate('exporterrors'); ?></a>
+
+    <br>
+
+    <div id="button"><b><i><a href="#" onClick="loadPopup()"><?php echo $this->translate('detail') ?></a></i></b></br>
+    </div>
+    <?php
+}
+if ($this->detailedError && count($this->detailedError) > 0) {
+    ?>
+    <div id="popupDetailError" style="width:90%;height:100%;">
+        <p id="DetailErrorArea">
+        <div align="right"><a href="#" onClick="javascript:disablePopup(); return false;">x</a></div>
+        <?php
+        foreach ($this->detailedError as $error) {
+
+            echo $this->translate('line') . ' ' . ($error['line']) . ', ' . $this->translate('column') . ' ' . $error['column'] . ': => ' . $this->translate($error['message']) . '!<br>';
+        }
+        ?>
+        <br /><br />
+        </p>
+
+    </div>
+
+    <div id="backgroundPopup"></div>
+
+    <?php
+}
+?>
+
+
+<?php if ($this->status == 'success' || $this->status == 'failed') { ?>
+    <div class="buttonCon">
+        <input type="submit" class="standard_button" value="<?php echo $this->translate('finished') ?>" onClick="window.location.href = '<?php echo APPLICATION_URL ?>fileimport/';return false;">
+    </div>
+    <script type="text/javascript">
+        function refreshInternal() {
+            // just die already!!
+        }
+    </script>
+<?php } else { ?>
+    <script type="text/javascript">
+        function refreshInternal() {
+            refresh();
+        }
+    </script>
+<?php } ?>
+

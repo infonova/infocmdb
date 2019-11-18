@@ -1,0 +1,81 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery.ajaxSetup({
+            beforeSend: function () {
+                $('#loader').show();
+            },
+            complete: function () {
+                $('#loader').hide();
+            },
+            success: function () {
+            }
+        });
+
+        $('form').submit(function () {
+            $(this).find("input[type='image'],input[type='submit']").click(function () {
+                return false;
+            });
+        });
+
+        $("#submit").click(function () {
+            var searchstring = $('#searchstringAjax').val();
+            var page = $('#page').val();
+            var session = $('#session').val();
+            var history = $('input[type=checkbox]').is(':checked');
+            var dataString = '/history/' + history + '?searchstring=' + encodeURIComponent(searchstring);
+
+
+            $('#search_result').html("");
+            var url = "<?php echo APPLICATION_URL?>/search/searchajax" + dataString;
+
+            $.ajax({
+                type: "POST",
+                dataType: "text",
+                url: url,
+                success: function (result) {
+                    $('#search_result').html(result);
+                }
+            });
+            return false;
+        });
+
+        $("#filesearch").click(function () {
+            var searchstring = $('#searchstringAjax').val();
+            var page = $('#page').val();
+            var session = $('#session').val();
+            var dataString = '/searchstring/' + searchstring;
+
+            $('#search_result').html("");
+            var url = "<?php echo APPLICATION_URL?>/search/filesearch" + dataString;
+
+            $.ajax({
+                type: "POST",
+                dataType: "text",
+                url: url,
+                success: function (result) {
+                    $('#search_result').html(result);
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+<div id="status_message"><!-- ajax messages go here--></div>
+<form name="<?php echo $this->escape($this->form->getName()) ?>" action="<?php echo $this->escape($this->form->getAction()) ?>"
+      method="<?php echo $this->escape($this->form->getMethod()) ?>">
+    <?php echo $this->form->searchstringAjax->setDecorators(array('ViewHelper', 'Label')); ?>
+    <?php echo $this->form->page->setDecorators(array('ViewHelper')); ?>
+    <?php echo $this->form->session->setDecorators(array('ViewHelper')); ?>
+    <?php echo $this->form->submit->setDecorators(array('ViewHelper'));; ?>
+    <?php echo (isset($this->form->filesearch)) ? $this->form->filesearch->setDecorators(array('ViewHelper')) : '' ?>
+    <?php echo $this->form->history->setDecorators(array('ViewHelper', 'Label'));;?>
+    <div id="loader" class="loader" style="display:none;">
+        <img src="<?php echo APPLICATION_URL ?>images/icon/loading.gif" alt="loading" />
+    </div>
+</form>
+<div id="search_result">
+    <?php if ($this->result) {
+        echo $this->result;
+    }?>
+</div>

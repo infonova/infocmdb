@@ -1,0 +1,116 @@
+<script type="text/javascript">
+    function delete_reporting(reporting_id) {
+        if (confirm('<? echo $this->translate("areYouSureDelete"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>reporting/delete/reportingId/' + reporting_id;
+        }
+    }
+
+    function activate_reporting(reporting_id) {
+        if (confirm('<? echo $this->translate("areYouSureActivate"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>reporting/activate/reportingId/' + reporting_id;
+        }
+    }
+</script>
+
+
+<div class="button_row">
+    <a href="<?php echo APPLICATION_URL ?>reporting/execute/reportingId/<?php echo $this->reporting[Db_Reporting::ID] ?>"><?php echo $this->translate('execute') ?></a>
+    |
+    <a href='<?php echo APPLICATION_URL ?>reporting/edit/reportingId/<?php echo $this->reporting[Db_Reporting::ID] ?>'><?php echo $this->translate('edit'); ?></a>
+    <?php if ($this->reporting[Db_Reporting::IS_ACTIVE]): ?>
+        |
+        <a href="javascript:delete_reporting(<?php echo $this->reporting[Db_Reporting::ID]; ?>)"><?php echo $this->translate('delete'); ?></a>
+    <?php else: ?>
+        |
+        <a href="javascript:activate_reporting(<?php echo $this->reporting[Db_Reporting::ID]; ?>)"><?php echo $this->translate('activate'); ?></a>
+    <?php endif; ?>
+    | <a href="<?php echo APPLICATION_URL ?>reporting/index"><?php echo $this->translate('overview'); ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('reporting') ?></h1>
+<br>
+
+<fieldset class="create_form">
+    <table>
+        <tr>
+            <td><strong><?php echo $this->translate('name'); ?></strong></td>
+            <td><?php echo $this->reporting['name']; ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('description'); ?></strong></td>
+            <td><?php echo $this->reporting['description']; ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('note'); ?></strong></td>
+            <td><?php echo $this->reporting['note']; ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('input'); ?></strong></td>
+            <td><?php echo $this->reporting['input']; ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('output'); ?></strong></td>
+            <td><?php echo $this->reporting['output']; ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('transport'); ?></strong></td>
+            <td><?php echo $this->reporting['versand']; ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('trigger'); ?></strong></td>
+            <td><?php echo $this->reporting['trigger']; ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('active'); ?></strong></td>
+            <td><?php echo $this->reporting['active']; ?></td>
+        </tr>
+    </table>
+
+    <fieldset class="detail_fieldset" style="margin-bottom:15px;" id='<?php echo $this->translate('archive'); ?>'>
+        <legend><strong><?php echo $this->translate('archive'); ?></strong></legend>
+        <?php
+
+        if ($this->archive && count($this->archive) > 0): ?>
+
+            <table>
+                <tr>
+                    <th>
+                    <?php echo $this->translate('archiveCreated'); ?></td>
+                    <th>
+                    <?php echo $this->translate('archiveUser'); ?></td>
+                    <th>
+                    <?php echo $this->translate('archiveFilename'); ?></td>
+                    <th>
+                    <?php echo $this->translate('archiveNote'); ?></td>
+                    <th></th>
+                </tr>
+                <?php
+                foreach ($this->archive as $arch): ?>
+
+                    <tr>
+                        <td><?php echo $arch[Db_ReportingHistory::CREATED] ?></td>
+                        <td><?php echo ($arch[Db_User::USERNAME]) ? $arch[Db_User::USERNAME] : 'system' ?></td>
+                        <td>
+                            <?php if ($arch[Db_ReportingHistory::FILENAME] == 'none') {
+                                echo $this->translate('noFile');
+
+                            } else { ?>
+                                <a href="<?php echo $this->filepath ?>/file/<?php echo $arch[Db_ReportingHistory::FILENAME] ?>"><?php echo $arch[Db_ReportingHistory::FILENAME] ?></a>
+                            <?php } ?>
+                        </td>
+                        <td><?php echo $arch[Db_ReportingHistory::NOTE] ?></td>
+                        <td>
+                            <a class="delete_list" href="<?php echo APPLICATION_URL ?>reporting/removearchive/reportingId/<?php echo $arch[Db_ReportingHistory::REPORTING_ID] ?>/archiveId/<?php echo $arch[Db_ReportingHistory::ID] ?>/">&nbsp;</a>
+                        </td>
+                    </tr>
+
+                <?php
+                endforeach; ?>
+
+            </table>
+        <?php
+        else:
+            echo $this->translate('archiveEmpty');
+        endif;
+        ?>
+    </fieldset>
+</fieldset>

@@ -1,0 +1,39 @@
+<a class="button overview" href="<?php echo APPLICATION_URL ?>fileimport/queue/type/manualupdate"><?php echo $this->translate('importQueue') ?></a>
+<a class="button overview" href="<?php echo APPLICATION_URL ?>fileimport/queue/type/manualupdate/method/success"><?php echo $this->translate('importsSucceeded') ?></a>
+<a class="button overview" href="<?php echo APPLICATION_URL ?>fileimport/queue/type/manualupdate/method/error"><?php echo $this->translate('importsFailed') ?></a>
+
+<h1 class="pageName"><?php echo $this->translate('updateManualSuccessTitle'); ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th><?php echo $this->translate('filename'); ?></th>
+            <th><?php echo $this->translate('dateProceeded'); ?></th>
+            <th><?php echo $this->translate('log'); ?></th>
+            <th>&nbsp;</th>
+        </tr>
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <tr>
+                <td>
+                    <a href="<?php echo APPLICATION_URL . '/download/file/type/fileimport/method/manualupdate/status/success/id/' . $item[Db_ImportFileHistory::ID] . '/file/' . $item[Db_ImportFileHistory::FILENAME] ?>"><?php echo $item[Db_ImportFileHistory::FILENAME]; ?></a>
+                </td>
+                <td><?php echo $item[Db_ImportFileHistory::CREATED] ?></td>
+                <td>
+                    <a class="tu_iframe_550x510" toptions="effect = clip, layout = flatlook" href="<?php echo APPLICATION_URL . 'fileimport/queue/type/manualupdate/method/log/file/' . $item[Db_ImportFileHistory::FILENAME] . '.log' ?>"><?php echo $this->translate('log'); ?></a>
+                </td>
+
+                <td>
+                    <a class="delete_list" href="<?php echo APPLICATION_URL ?>fileimport/queue/type/manualupdate/method/delete/status/success/id/<?php echo $item['id']; ?>"></a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+
+    </table>
+    <?php echo $this->paginator; ?>
+<?php endif; ?>

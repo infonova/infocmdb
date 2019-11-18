@@ -1,0 +1,103 @@
+<meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
+<script
+        type="text/javascript"
+        src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+
+    var MapApp = {
+        infWind: null
+    };
+
+    MapApp.closeInfoWindow = function () {
+        MapApp.infWind.close();
+    };
+
+
+    function initialize() {
+        var latlng = new google.maps.LatLng(48.275, 16.333);
+        var myOptions = {
+            zoom: 8,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+        MapApp.infWind = new google.maps.InfoWindow();
+        google.maps.event.addListener(map, 'click', MapApp.closeInfoWindow);
+
+
+        <?php
+        foreach($this->items as $i => $marker) { ?>
+
+        var breite = <?php  echo $marker['x']; ?>;
+        var laenge = <?php  echo $marker['y']; ?>;
+        var image = new google.maps.MarkerImage('<?php
+            if ($marker['tickets'] && count($marker['tickets']) > 0) {
+                echo APPLICATION_URL . '/_uploads/icons/' . $marker['citype'] . '_ticket.png';
+            } else {
+                echo APPLICATION_URL . '/_uploads/icons/' . $marker['citype'] . '.png';
+            }?>');
+
+
+        var marker<?php echo $i?> = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(breite, laenge),
+            draggable: false,
+            icon: image,
+            title: '<?php  echo $marker['standort']; ?>'
+        });
+
+        <?php
+
+
+        $content = '<br>' . $this->translate("sender") . ': <a href="' . APPLICATION_URL . 'ci/detail/ciid/' . $marker['ciid'] . '">' . $marker['standort'] . '</a><br>';
+
+        if ($marker['tickets'] && count($marker['tickets']) > 0) {
+            $content .= '<b>' . $this->translate("ticket") . ': ';
+
+
+            foreach ($marker['tickets'] as $ticket) {
+                $content .= $ticket[Db_CiTicket::TICKET_NAME] . ', ';
+            }
+            $content .= '</b>';
+        } else {
+            $content .= $this->translate("ticket") . ': ';
+            $content .= $this->translate("none");
+        }
+
+        $content .= '<br>';
+
+        ?>
+
+        google.maps.event.addListener(marker<?php echo $i?>, 'click', function () {
+            var infowindow<?php echo $i?> = new google.maps.InfoWindow({
+                content: '<?php echo $content;?>'
+            });
+            MapApp.closeInfoWindow();
+            MapApp.infWind = infowindow<?php echo $i?>;
+            MapApp.infWind.open(map, this);
+        });
+        google.maps.event.addListener(marker<?php echo $i?>, 'dblclick', function () {
+            map.setZoom(16);
+        });
+
+
+        var circle = new google.maps.Circle({
+            map: map,
+            radius: <?php  echo $marker['range']; ?> // 3000 km
+        });
+
+        circle.bindTo('center', marker<?php echo $i?>, 'position');
+
+        <?php
+        } ?>
+
+    }
+
+    $(function () {
+        initialize();
+    });
+
+</script>
+<div id="map_canvas" style="width: 100%; height: 650px;"></div>

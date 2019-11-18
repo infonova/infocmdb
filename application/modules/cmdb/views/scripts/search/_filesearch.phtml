@@ -1,0 +1,54 @@
+<?php
+function byte_ausrechnen($byte)
+{
+    if ($byte < 1024) {
+        return round($byte, 2) . ' Byte';
+    } elseif ($byte >= 1024 and $byte < pow(1024, 2)) {
+        return round($byte / 1024, 2) . ' KB';
+    } elseif ($byte >= pow(1024, 2) and $byte < pow(1024, 3)) {
+        return round($byte / pow(1024, 2), 2) . ' MB';
+    } elseif ($byte >= pow(1024, 3) and $byte < pow(1024, 4)) {
+        return round($byte / pow(1024, 3), 2) . ' GB';
+    }
+}
+
+?>
+
+<?php
+if ($this->hits && count($this->hits)):
+    $row_count = 0;
+    ?>
+    <div class="break"></div>
+    <p class="headline" align="right"><?php echo $this->translate('numberOfResults') . ' ' . $this->numHits ?></p>
+    <h1 class="pageName"><?php echo $this->translate('filesearch'); ?></h1>
+    <div class="break"></div>
+    <span title="<?php echo $ciType['citype_name'] ?>"><strong><?php echo $ciType['ciList'][0]['ciType']; ?></strong></span>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th><?php echo $this->escape($this->translate('ciId')) ?></th>
+            <th><?php echo $this->escape($this->translate('filename')) ?></th>
+            <th><?php echo $this->escape($this->translate('creationDate')) ?></th>
+            <th><?php echo $this->escape($this->translate('modDate')) ?></th>
+            <th><?php echo $this->escape($this->translate('size')) ?></th>
+        </tr>
+
+        <?php foreach ($this->hits as $hit): ?>
+            <tr>
+                <td>
+                    <a href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $hit->CIID ?>"><?php echo $this->escape($hit->CIID); ?></a>
+                </td>
+                <td>
+                    <a href="<?php echo APPLICATION_URL ?>download/file/type/attachment/ciid/<?php echo $hit->CIID ?>/file/<?php echo $hit->Filename ?>/browser/1"><?php echo $this->escape($hit->Title); ?></a>
+                </td>
+                <td><?php echo date('d.m.Y H:i:s', strtotime($this->escape($hit->CreationDate))); ?></td>
+                <td><?php echo date('d.m.Y H:i:s', strtotime($this->escape($hit->ModDate))); ?></td>
+                <td><?php echo byte_ausrechnen($this->escape($hit->Size)); ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php
+else:
+    echo $this->escape($this->translate('noEntriesFound'));
+endif;
+?>
+

@@ -1,0 +1,236 @@
+﻿# Aktivitäten
+save;				"Save"
+add;				"Add"
+activate;			"activate"
+next;				"Next"
+delete;				"Delete"
+edit;				"Edit"
+back;				"Back"
+duplicate;			"Duplicate"
+abort;				"Cancel"
+numberOfResults;	"Number of Results:"
+isevent;            "Action Script"
+iseventDesc;        "Show link in the CI sidebar?"
+
+result;                         "Search Result"
+selectRight;                    "Set filter"
+setFilter;                      "Enter description"
+setFilterOptional;              "optional"
+setFilterMandatoryOROptional;   "mandatory or optional"
+setFilterMandatory;             "mandatory"
+setFilterX;                     "not assigned"
+noFilter;                       "all CI Types"
+attr;                           "Attributes"
+
+addAttributeToCi;	"Add Attribute to CI"
+createAttribute;	"Create Attribute"
+isNumeric;			"numeric value"
+
+
+# Eigenschaften
+general;			"General"
+individual;			"Individual"
+name;				"Name"
+description;		"Description"
+note;				"Note"
+hint;				"Hint"
+attributeType;		"Attribute Type"
+displayType;		"Attribute Group"
+column;				"Column"
+sorting;			"Sorting"
+uniqueConstraint;	"Unique Constraint"
+attributeValue;		"Attribute Value"
+highlightAttribute;	"Highlight Attribute"
+inputLength;		"Input length" 
+textfieldHeight;	"Textheight"
+textfieldWidth;		"Textwidth"
+createXML;			"XML Tag"
+name_desc;			"Internal name of the attribute. e.g. <ci_type>_<attribute_label>"
+description_desc;   "Visible name of the attribute at ci level"
+note_desc;			"Mouse over tooltip"
+hint_desc;			"Help displayed along the attributes, can be long and include html"
+attributgroup_desc; "Attributegroup in which this attribute belongs"
+column_desc;		"Column alignment of this attribute"
+highlight_desc;		"Highlights this attribute in bold"
+sorting_desc;		"Sorting number within the ci (integer, 0-255)"
+unique_desc;		"Unique restrictions for this attribute in the system"
+xml_desc;			"XML Tag used for webservice calls, if using xml as a return type"
+regex;				"Regular Expression"
+mailEnabledLabel;	"Enable E-Mail"
+sortingAbbreviated;	"Sorting"
+valid;				"Status"
+type;				"Type"
+options;			"Options"
+query;				"Query"
+mailConfig;			"E-Mail Configuration"
+active;				"active"
+inactive;			"inactive"
+attributes;			"Attributes"
+attribute;			"Attribute"
+cqlQuery;			"CQL Query"
+queryScript;		"Script"
+filename;			"Filename"
+scriptName;			"Scriptname"
+filterQuery;		"Filter-Query"
+filterEdit;			"Edit Filter"
+useScript;			"Use Script"
+defaultvalue;		"Default Value"
+isasync;			"asynchronously"
+script_text;		"Script Content"
+attributeAutocompleteWarning; "Attention: existing data must me updated manually!"
+attributeDisplayStyle;    "Display Style"
+attributeStyleOneRow; "row"
+attributeStyleOptionList; "list"
+attributeAutocompleteSelectOne; "deactivated"
+attributeAutocompleteOne; "one"
+attributeAutocompleteMultiple; "multiple"
+attributeAutocompleteMultipleWithCounter; "multiple with counter"
+attributeWorkflow; "Workflow"
+attributeWorkflowDesc; "Workflow which will be executed when clicking on attribute"
+attributeGoToWorkflow; "Go to current workflow"
+attributeHintIndividualQueryHelp;   "possible placeholder:"
+attributeHintIndividualQueryCurrentCiId;    "current CI-ID"
+attributeHintIndividualQueryCurrentValue;   "current value"
+
+ProjectRestriction; "Only show CI's from user's projects"
+attributeProjectRestrictionTitle; "Only CI's of the projects the user is member of can be selected"
+
+isLight;			"Trafficlight-Style"
+isLight_query;		"The SQL Query should return 2 values 1.) color in hexadecimal format e.g. FF0000 2.) description as text e.g. critical"
+
+
+
+name_desc;         "Name of the Attribute e.g. attribute_name (CMDB internal)"
+description_desc;  "Name of the Attribute displayed in the CI"
+note_desc;		   "Help-Text being displayed on mouse over"
+please_select;	   "Please select and move mouse over Info-Button"
+attributgroup_desc;	"Attribute Group the Attribute is assigned to"
+sorting_desc;		"Sorting within the CI"
+hint_desc;			"Help-Text being displayed beneath the Attribute as Info-Symbol"
+column_desc;		"Column-Alignment of the Attribute in the Form"
+highlight_desc;		"Highlight the Attribute by displaying it bold"
+unique_desc;		"Attribute-Value must be unique"
+xml_desc;			"XML Tag being displayed when generating an XML-Output by Webservice"
+
+
+
+
+# edit page
+editAttribute;		"Edit Attribute"
+search;				"Search"
+overview;			"Overview"
+permission;			"Role"
+
+
+# option page
+manageOptions;		"Manage Options"
+optionAdd;			"Add Option"
+optionName;			"Option"
+optionChange;		"Change"
+ordernumber;		"Sorting"
+optionActivateSuccess; "Option activated successfully!"
+optionssaved;		"Saved Options:"
+attributeOptionChangeSuccess; "Option changed successfully!"
+attributeOptionAddedSuccess; "Option added successfully!"
+
+
+# create page
+createAttribute;	"Create Attribute"
+ciType;				"CI Type"
+assignCiTypeAndAttribute;	"Assign CI Type and Attribute"
+pleaseChose;		"please Chose"
+
+
+# ci type
+assignCiType;		"Assign CI Types"
+
+
+#permission - Role
+rolePermission;		"Role Permissions"
+
+
+# mail config
+mailAdd;			"Add E-Mail"
+
+
+# query config
+queryEdit;			"Edit Query"
+
+
+ciTypesAdd;			"Add Ci Type"
+optionsAdd;			"Add Options"
+permissionsAdd;		"Add Permissions"
+
+
+attributeSummary;	"Attribute Summary"
+
+yes;				"Yes"
+no;					"No"
+
+ciTypes;			"CI Types"
+mandatory;			"mandatory"
+notMandatory; 		"not mandatory"
+
+#unique attribute error
+notUniqueAttribute;			"Already not unique values found"
+
+#unique name error
+notUniqueName;			"Name already taken"
+
+roles;				"Role"
+permissionRead;		"Reading Permissions"
+permissionWrite;	"Writing Permissions"
+
+
+areYouSureDelete;			"Are you sure you want to delete this Attribute?"
+areYouSureActivate;			"Are you sure you want to activate this Attribute?"
+attributeInsertSuccess;		"Attribute created successfully!"
+
+
+attributeDeleteSuccess;		"Attribute deleted successfully!"
+attributeDactivateSuccess;	"Attribute in use => deactivated successfully!"
+attributeCreateFailed;		"Couldn't create Attribute!"
+attributeActivateSuccess;	"Attribute activated successfully!"
+
+attributeOptionDeleteSuccess;		"Attribute Option deleted successfully!"
+attributeOptionDeleteFailure;		"Option couldn't be deleted, because it's used!"
+attributeOptionDeactivateSuccess;	"Option deactivated successfully!"
+attributeOptionActivateSuccess;		"Activating Option succeeded!"
+
+attributeActivateFailed; "Attribute could not be activated!"
+attributeDeleteFailed; "Attribute could not be deleted!"
+attributeInsertFailed; "Attribute could not be created!"
+
+#Form titles
+
+attributeNameTitle;					"Name of the Attribute"
+attributeDescriptionTitle;			"Description of the Attribute"
+attributeNoteTitle;					"Note of the Attribute"
+attributeHintTitle;					"Helptext"
+attributeAttributeTypeTitle;		"Attribute Type"
+attributeCiTypeTitle;				"Ci Type"
+attributedisplayTypeTitle;			"Display Type"
+attributeColumnTitle;				"Column"
+attributeSortingTitle;				"Sorting"
+attributeInputLengthTitle;			"Length of Input"
+attributeTextfieldHeightTitle;		"Height"
+attributeTextfieldWidthTitle;		"Width"
+attributeAttributeInfoTitle;		"Attribute Info"
+attributeScriptUploadTitle;			"Script Upload"
+attributeHighlightAttributeTitle;	"Attribute emphasize"
+attributeCiTypeHierarchyTitle;		"Ci Typ Hierarchy"
+attributeCiTypeAutocompleteTitle;	"Autocomplete"
+attributeDateEventTitle;			"Date event"
+attributeUniqueConstraintTitle;		"Unique Constraint"
+attributeMailEnabledTitle;			"Mail activate"
+attributeXMLTitle;					"xml Title"
+attributeRegexTitle;				"Regular Expression"
+optional;                               "Optional"
+summary;                                "Summary"
+attributeUpdateSuccess;                 "Attribute edited successfully!"
+
+formInvalid;						"Some fields are not valid: "
+
+
+
+formFilterDescription;"Hallo! <br> Das ist die Beschreibung, die noch befüllt werden muss!"

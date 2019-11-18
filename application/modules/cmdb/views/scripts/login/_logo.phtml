@@ -1,0 +1,9 @@
+<div class="logo_wrapper">
+    <?php if (isset($this->individualizationConfig->homelink->string->partA) && isset($this->individualizationConfig->homelink->string->partB)) : ?>
+        <div class="info"><?php echo $this->individualizationConfig->homelink->string->partA; ?></div>
+        <div class="cmdb"><?php echo $this->individualizationConfig->homelink->string->partB; ?> </div>
+    <?php else: ?>
+        <div class="info">info</div>
+        <div class="cmdb">cmdb</div>
+    <?php endif; ?>
+</div>

@@ -1,0 +1,5 @@
+<a class="button overview" href="<?php echo APPLICATION_URL ?>query/index"><?php echo $this->translate('overview') ?></a>
+<a class="button overview" href="<?php echo APPLICATION_URL ?>query/detail/queryId/<?php echo $this->queryId ?>"><?php echo $this->translate('queryDetail') ?></a>
+<h1 class="pageName"><?php echo $this->translate('queryErrorDetail'); ?></h1>
+
+<?php echo $this->query[Db_StoredQuery::STATUS_MESSAGE] ?>

@@ -1,0 +1,83 @@
+#Language file for Relations
+# relationt type create
+relationtypeId;			"ID"
+name;					"Name"
+description;			"Description from CI"
+description2;			"Description to CI"
+note;					"Note"
+color;					"Color"
+active;					"active"
+inactive;				"inactive"
+valid;					"valid"
+visualizeCiType;		"visualize CI Typ"
+
+name_desc;				"Relationstype name (CMDB intern)"
+description_desc;		"Description of the relation of the 'from'-CI"
+description2_desc;		"Description of the relation of the 'receiving'-CI"
+note_desc;				"Note to describe the type of relation between CIs"
+color_desc;				"Color for use in visualization"
+visualize_desc;			"Visualize relation?"
+
+relationsFromCi;			"Relations of CI: "
+relationId;					"ID"
+relationType;				"Relation Type"
+visualize;					"Visualize"
+relationCreate;				"Create new Relation"
+
+noItemsFound;				"no Items found"
+wizardSelectRelation;		"Select Relation"
+wizardSearchCi;				"Search CI"
+wizardOptions;				"Options"
+
+abort;						"Abort"
+next;						"Next"
+back;						"Back"
+optional;					"Optional"
+relationAreYouSureDelete;	"Do you really want to delete this Relation?"
+areYouSureReset;			"Abort?"
+
+attribute;					"Attribute"
+addSelection;				"Add Selection"
+
+remove;						"Remove"
+createRelationTo;			"Create Relation to"
+
+ciTypes;					"CI Types"
+delete;						"Delete"
+
+save;						"Save"
+
+# search
+relation;					"Relation"
+reltionDirectonHeader;      "Relation"
+switchRelation;				"switch"
+direction;					"Direction"
+weight;						"Weight"
+searchstring;				"Searchstring"
+search;						"Search"
+searchResult;				"Searchresult"
+ci;							"CI"
+numberOfResults;			"Number of results:"
+
+relationCreateSuccess;		"Relation created successfully!"
+relationCreateFailed;		"Couldn't create Relation!"
+relationDeleteSuccess;		"Relation deleted successfully!"
+relationDeleteFailed;		"Couldn't delete Relation!"
+
+relationAddError1;			"User is not permitted to change CI!"
+relationAddError2;			"CI reached maximum number of relations for given type!"
+relationAddError3;			"Linked CI reached maximum number of relations for given type!"
+relationAddError4;			"For given ci-type has no relation been assigned!"
+
+tooBigVisualisation;		"The Visualisation may be too big to display, would you like to continue?"
+tooMuchData;				"The Relation is too big for the server to process!"
+
+exportCiRelated;            "Export (all attributes)"
+numberOfShownRelations;     "Number of shown relations"
+showAllRelations;           "Show all relations"
+of;                         "of"
+
+ab_direction;               "directed A - B"
+ba_direction;               "directed B - A"
+bidirected;                 "bi-directed"
+undirected;                 "not directed"

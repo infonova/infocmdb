@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+
+############ DOCHEAD ############
+# DO NOT EDIT - This part will be set automatically
+############ /DOCHEAD ############
+
+
+############ PERL MODULES ############
+
+use strict;        # code tidy!
+use utf8;            # use utf8 everywhere!!
+use JSON;           # handle JSON content
+use Data::Dumper;   # debug variables
+use lib '<?php echo $this->perlLibPath ?>';
+use InfoCMDB;       # simplify InfoCMDB-API-Usage
+
+
+############ PRE INIT ############
+my $args = decode_json($ARGV[0]);
+my $cmdb = InfoCMDB->new('<?php echo $this->infocmdbConfigName ?>');
+$cmdb->setSettings(
+    'apikey' => $args->{'apikey'},
+    'debug' => 0
+);
+
+
+############ PARSE PARAMS ############
+my $ciId;
+if(defined($args->{'ciid'})) {
+    $ciId = $args->{'ciid'};
+} elsif(defined($args->{'ciAttributeId'})) {
+    $ciId = $cmdb->getCiIdByCiAttributeId($args->{'ciAttributeId'});
+}
+
+
+############ VALIDATE PARAMS ############
+if(not defined($ciId)) {
+    $cmdb->printLog('ERROR: CIID could not be found!');
+    exit 0;
+}
+
+
+############ SETTINGS ############
+
+# define all of your settings used in this script here
+
+
+############ INIT ############
+
+# process settings, initialize data here
+
+
+############ LOGIC ############
+
+# define your logic here

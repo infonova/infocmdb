@@ -1,0 +1,269 @@
+<script type="text/javascript">
+    function restore_ci_entry(ciid, historyId) {
+        if (confirm('<?php echo $this->translate('confirmRestoreCi') ?>')) {
+            var ciid = <?php echo $this->ciId ?>;
+            var historyId = <?php echo $this->historyId ?>;
+            window.location.href = '<?php echo APPLICATION_URL ?>history/restore/ciid/' + ciid + '/historyId/' + historyId;
+        }
+    }
+
+    function restore_project(ciid, projectId) {
+        if (confirm('<?php echo $this->translate('confirmRestoreProject') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>history/restoreproject/ciid/' + ciid + '/projectId/' + projectId;
+        }
+    }
+
+    function restore_attribute(ciid, userid, currentCiAttributeId, restoreCiAttributeId) {
+        if (confirm('<?php echo $this->translate('confirmRestoreAttribute') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>history/restoreattribute/ciid/' + ciid + '/user_id/' + userid + '/currentCiAttributeId/' + currentCiAttributeId + '/restoreCiAttributeId/' + restoreCiAttributeId + '/';
+        }
+    }
+
+    function restore_relation(ciid1, ciid2, restoreCiRelationId) {
+        if (confirm('<?php echo $this->translate('confirmRestoreRelation') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>history/restorerelation/ci_id_1/' + ciid1 + '/ci_id_2/' + ciid2 + '/restoreCiRelationId/' + restoreCiRelationId + '/';
+        }
+    }
+
+</script>
+<?php
+function compare($string1, $string2, $div_class)
+{
+    if (strcasecmp($string1, $string2) != 0) {
+        ?>
+        <script type="text/javascript" language="javascript">
+            document.getElementById('<?php echo $div_class; ?>').style.background = 'green';
+        </script>
+        <?php
+    }
+}
+
+function printArray($array)
+{
+    if (is_array($array)) {
+        foreach ($array as $key => $value) {
+            ?>
+            <fieldset class="detail_fieldset info" id='<?php echo $value['description'] ?>'>
+                <legend><strong><?php echo $value['description']; ?></strong></legend>
+                <?php
+                if ($value['attributes']) {
+                    ?>
+                    <table class="list list_detail" cellpadding="0" cellspacing="0" width="100%" border="0">
+                        <?php
+                        $row_count = 0;
+                        foreach ($value['attributes'] as $attr) {
+                            ?>
+                            <tr>
+                                <td width="200px"> <?php echo $attr[Db_Attribute::DESCRIPTION]; ?> </td>
+                                <td>
+                                    <?php
+                                    if ($attr[Db_Attribute::IS_BOLD]) {
+                                        echo "<strong>";
+                                    }
+
+                                    if ($attr[Db_CiAttribute::VALUE_TEXT]) {
+                                        echo $attr[Db_CiAttribute::VALUE_TEXT];
+                                    } else if ($attr[Db_CiAttribute::VALUE_DATE]) {
+                                        echo $attr[Db_CiAttribute::VALUE_DATE];
+                                    } else if ($attr[Db_CiAttribute::VALUE_DEFAULT]) {
+                                        echo $attr[Db_CiAttribute::VALUE_DEFAULT];
+                                    }
+
+                                    if ($attr[Db_Attribute::IS_BOLD]) {
+                                        echo "</strong>";
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                    <?php
+                }
+
+                if (is_array($value['children'])) {
+                    printArray($value['children']);
+                }
+                ?>
+            </fieldset>
+            <?php
+        }
+    }
+}
+
+?>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL . 'history/ci/ciid/' . $this->ciId; ?>/"><?php echo $this->translate('back') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('pastVersion'); ?><?php echo $this->historyCi['historyDate']; ?></h1>
+<fieldset class="lordVader">
+    <table width="100%">
+        <tr>
+            <td width="100%">
+                <div>
+
+                    <table class="list list_detail" cellpadding="0" cellspacing="0" width="100%">
+                        <tr class="headline" style="line-height:5px">
+                            <td style="width: 15%;"><strong><?php echo $this->translate('ciId') ?>:</strong></td>
+                            <td style="width: 55%;">
+                                <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->ciId; ?>"><?php echo $this->ciId; ?></a>
+                            </td>
+                        </tr>
+                        <tr style="line-height:5px">
+                            <td style="width: 15%;"><strong><?php echo $this->translate('ciType') ?>:</strong></td>
+                            <td style="width: 55%;"><?php echo $this->historyCi['ciType']['description']; ?></td>
+                        </tr>
+                        <tr style="line-height:5px">
+                            <td style="width: 15%;"><strong><?php echo $this->translate('projects') ?>:</strong></td>
+                            <td style="width: 55%;"><?php
+                                foreach ($this->historyCi['projectList'] as $project) {
+                                    echo '<div>' . $project['description'] . '</div>';
+                                }
+                                ?></td>
+                        </tr>
+                    </table>
+
+
+                    <?php
+                    if (is_array($this->historyCi['attributeList'])) {
+                        foreach ($this->historyCi['attributeList'] as $key => $hi_value) {
+                            ?>
+
+                            <fieldset class="detail_fieldset info" id='<?php echo $hi_value['description'] ?>'>
+                                <legend><strong><?php echo $hi_value['description']; ?></strong></legend>
+                                <?php
+                                if ($hi_value['attributes']) {
+                                    ?>
+                                    <table class="list_detail" cellpadding="0" cellspacing="0" width="100%">
+                                        <?php
+                                        $row_count = 0;
+                                        foreach ($hi_value['attributes'] as $hi_attr) {
+                                            ?>
+                                            <tr>
+                                                <td width="200px"> <?php echo $hi_attr[Db_Attribute::DESCRIPTION]; ?> </td>
+                                                <td>
+                                                    <?php
+                                                    if ($hi_attr[Db_Attribute::IS_BOLD]) {
+                                                        echo "<strong>";
+                                                    }
+
+                                                    if ($hi_attr[Db_CiAttribute::VALUE_TEXT]) {
+                                                        $hi_text = $hi_attr[Db_CiAttribute::VALUE_TEXT];
+                                                        echo $hi_attr[Db_CiAttribute::VALUE_TEXT];
+                                                    } else if ($hi_attr[Db_CiAttribute::VALUE_DATE]) {
+                                                        echo $hi_attr[Db_CiAttribute::VALUE_DATE];
+                                                    } else if ($hi_attr[Db_CiAttribute::VALUE_DEFAULT]) {
+                                                        $hi_info = $hi_attr[Db_CiAttribute::VALUE_DEFAULT];
+                                                        echo '<span id="changed">' . $hi_attr[Db_CiAttribute::VALUE_DEFAULT] . '</span>';
+                                                    }
+
+                                                    if ($hi_attr[Db_Attribute::IS_BOLD]) {
+                                                        echo "</strong>";
+                                                    }
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                        <?php }
+
+
+                                        ?>
+                                    </table>
+                                    <?php
+                                }
+
+                                if (is_array($hi_value['children'])) {
+                                    printArray($hi_value['children']);
+                                }
+                                ?>
+                            </fieldset>
+                            <?php
+
+                        }
+                    }
+                    ?>
+                    <?php
+
+                    //printArray($this->historyCi['attributeList']);
+                    ?>
+                    <?php
+                    if (!empty($this->historyCi['relationList'])) {
+                        ?>
+                        <fieldset class="detail_fieldset info" id='<?php echo $this->translate('relations') ?>'>
+                            <legend><strong><?php echo $this->translate('relations'); ?></strong></legend>
+                            <table class="list list_detail" cellpadding="0" cellspacing="0" width="100%" style=" border-bottom:none">
+                                <tr>
+                                    <td width="100%">
+                                        <?php
+                                        foreach ($this->historyCi['relationList'] as $relation) {
+                                            ?>
+                                            <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $relation['ci_id_1']; ?>"><?php echo $relation['ci_id_1']; ?></a> --> <?php echo $relation['description'] ?> <--
+                                            <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $relation['ci_id_2']; ?>"><?php echo $relation['ci_id_2']; ?></a>
+                                            <br>
+                                            <?php
+                                        }
+                                        if (!empty($this->restoreId)) {
+                                            ?>
+                                            <s><i><a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $relation['ci_id_1']; ?>"><?php echo $relation['ci_id_1']; ?></a>
+                                                    --> <?php echo $relation['description'] ?> <--
+                                                    <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->restoreId; ?>"><?php echo $this->restoreId; ?></a></s>
+                                            <a href="javascript:restore_relation(<?php echo $this->ciId; ?>,<?php echo $this->restoreId; ?>,<?php echo $this->restoreCiRelationId; ?>);" class="restore"><?php echo $this->translate('relationRestore'); ?></a></i>
+                                            <br>
+                                            <?php
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <?php
+                    } else {
+
+                    }
+                    if (empty($this->historyCi['relationList']) && !empty($this->restoreId)) {
+                        ?>
+                        <fieldset class="detail_fieldset info" id='<?php echo $this->translate('relations') ?>'>
+                            <legend><strong><?php echo $this->translate('relations'); ?></strong></legend>
+                            <table class="list list_detail" cellpadding="0" cellspacing="0" width="100%" style=" border-bottom:none">
+                                <tr>
+                                    <td width="100%">
+                                        <s><i><a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->ciId; ?>"><?php echo $this->ciId; ?></a>
+                                                --> <?php echo $relation['description'] ?> <--
+                                                <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->restoreId; ?>"><?php echo $this->restoreId; ?></a></s>
+                                        <a href="javascript:restore_relation(<?php echo $this->ciId; ?>,<?php echo $this->restoreId; ?>,<?php echo $this->restoreCiRelationId; ?>);" class="restore"><?php echo $this->translate('relationRestore'); ?></a></i>
+                                        <br>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <?php
+                    }
+                    ?>
+
+
+                </div>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<div class="break"></div>
+<div>
+    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="window.location.href = '<?php echo APPLICATION_URL . 'history/ci/ciid/' . $this->ciId; ?>/';">
+</div>
+<div class="break"></div>
+<?php
+//compare($cur_info,$hi_info,'changed');
+//compare($cur_text,$hi_text,'text_changed');
+?>

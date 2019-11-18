@@ -1,0 +1,135 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+<script type="text/javascript">
+    function delete_announcement(id) {
+        if (confirm('<?php echo $this->translate('announcementDeleteCheck') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL?>announcement/delete/announcementId/' + id + '/';
+        }
+    }
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class = " button";
+}
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?> create" href="<?php echo APPLICATION_URL ?>announcement/create"><?php echo $this->translate('announcementCreate') ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('announcements') ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+              action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+              method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterButton;
+            ?>
+        </form>
+    </div>
+</div>
+<div class="clearBoth" style="margin-bottom: 15px;"></div>
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th>
+                <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+                <a href="<?php echo APPLICATION_URL ?>announcement/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Announcement::ID ?>/direction/<?php echo(($this->orderBy == Db_Announcement::ID) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('id'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>announcement/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Announcement::NAME ?>/direction/<?php echo(($this->orderBy == Db_Announcement::NAME) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('name'); ?>
+                </a>
+            </th>
+            <th>
+                <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+                <a href="<?php echo APPLICATION_URL ?>announcement/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Announcement::TITLE_DE ?>/direction/<?php echo(($this->orderBy == Db_Announcement::TITLE_DE) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('titleDe'); ?>
+                </a>
+            </th>
+            <th>
+                <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+                <a href="<?php echo APPLICATION_URL ?>announcement/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Announcement::TITLE_EN ?>/direction/<?php echo(($this->orderBy == Db_Announcement::TITLE_EN) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('titleEn'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>announcement/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Announcement::SHOW_FROM_DATE ?>/direction/<?php echo(($this->orderBy == Db_Announcement::SHOW_FROM_DATE) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('showFromDate'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>announcement/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Announcement::SHOW_TO_DATE ?>/direction/<?php echo(($this->orderBy == Db_Announcement::SHOW_TO_DATE) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('showToDate'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>announcement/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Announcement::TYPE ?>/direction/<?php echo(($this->orderBy == Db_Announcement::TYPE) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('type'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>announcement/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Announcement::IS_ACTIVE ?>/direction/<?php echo(($this->orderBy == Db_Announcement::IS_ACTIVE) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('valid'); ?>
+                </a>
+            </th>
+            <th>&nbsp;</th>
+        </tr>
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <?php
+            if (!$item[Db_Announcement::IS_ACTIVE]) {
+                ?>
+                <tr class="inactive">
+                <?php
+            } else {
+                ?>
+                <tr>
+                <?php
+            }
+            ?>
+            <td>
+                <a class="link" href="<?php echo APPLICATION_URL ?>announcement/edit/announcementId/<?php echo $item[Db_Announcement::ID]; ?>"><?php echo $item[Db_Announcement::ID]; ?></a>
+            </td>
+            <td>
+                <a class="link" href="<?php echo APPLICATION_URL ?>announcement/edit/announcementId/<?php echo $item[Db_Announcement::ID]; ?>"><?php echo $item[Db_Announcement::NAME]; ?></a>
+            </td>
+            <td><?php echo $item[Db_Announcement::TITLE_DE]; ?></td>
+            <td><?php echo $item[Db_Announcement::TITLE_EN]; ?></td>
+            <td><?php echo substr($item[Db_Announcement::SHOW_FROM_DATE], 0, 10); ?></td>
+            <td><?php echo substr($item[Db_Announcement::SHOW_TO_DATE], 0, 10); ?></td>
+            <td><?php echo $this->translate($item[Db_Announcement::TYPE]) ?></td>
+            <td><?php if ($item[Db_Announcement::IS_ACTIVE]) {
+                    echo $this->translate('active');
+                } else {
+                    echo $this->translate('inactive');
+                } ?></td>
+            <td width="80px">
+                <a class="delete_list" href="javascript:delete_announcement('<?php echo $item[Db_Announcement::ID] ?>');"
+                   title="<?php echo $this->translate('announcementIndexLinkDelete') ?>"></a>
+                <div class="rfloater">
+                    <a class="duplicate_list buttonLink" href="<?php echo APPLICATION_URL ?>announcement/create/cloneFromId/<?php echo $item[Db_Announcement::ID] ?>" title="<?php echo $this->translate('duplicate') ?>">&nbsp;</a>
+                    <a class="edit_list buttonLink" href="<?php echo APPLICATION_URL ?>announcement/edit/announcementId/<?php echo $item[Db_Announcement::ID]; ?>" title="<?php echo $this->translate('edit') ?>">&nbsp;</a>
+                </div>
+            </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php echo $this->paginator; ?>
+<?php else: ?>
+    <div class="empty_message">
+        <?php echo $this->translate('noAnnouncementFound') ?>
+    </div>
+<?php endif; ?>

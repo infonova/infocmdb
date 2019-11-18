@@ -1,0 +1,248 @@
+﻿# Aktivitäten
+save;				"Speichern"
+add;				"Hinzufügen"
+activate;			"aktivieren"
+next;				"Weiter"
+delete;				"Löschen"
+edit;				"Bearbeiten"
+duplicate;			"Duplizieren"
+back;				"Zurück"
+abort;				"Abbrechen"
+
+duplicateGroup;		"Gruppe verdoppeln"
+result;                         "Suchergebnis"
+selectRight;                    "Zuordnung"
+setFilter;                      "Bezeichnung"
+setFilterOptional;              "optional"
+setFilterMandatoryOROptional;   "obligatorisch oder optional"
+setFilterMandatory;             "obligatorisch"
+setFilterX;                     "nicht zugeordnet"
+noFilter;                       "alle CI Typen"
+attr;                           "Attribute"
+
+addAttributeToCi;	"Attribut zum CI hinzufügen"
+createAttribute;	"Attribut anlegen"
+detailAttribute;	"Attribut Detail"
+orderCiTypeAttribute;"Sortierung"
+orderSelectAttribute;"Sortierung"
+
+todoItem;			"Unique-Überprüfung"
+attributeCreateScriptUpload;	"Script Upload"
+
+numberOfResults;	"Anzahl der Ergebnisse:"
+isevent;			"Aktions-Script"
+iseventDesc;        "Link in der CI-Sidebar anzeigen?"
+isNumeric;			"numerischer Wert"
+isLight;			"Ampel-Darstellung"
+isLight_query;		"Die SQL Query muss 2 Werte liefern welche in Form einer Ampel dargestellt werden 1.) Farbe als HEX Wert z.B. FF0000 2.) Beschreibung als Text z.B. critial"
+
+# Eigenschaften
+attributeId;		"ID"
+name;				"Name"
+name_desc;			"Name des Attributes z.B. attribute_name (CMDB intern)"
+description;		"Beschreibung"
+description_desc;   "Name des Attributes der im CI angezeigt wird"
+note;				"Notiz"
+note_desc;			"Hilfetext der durch Berührung mit dem Mouse Cursor angezeigt wird"
+hint;				"Hilfetext"
+hint_desc;			"Hilfetext der als Infosymbol neben dem Attribut angezeigt wird"
+attributgroup_desc; "Attributgruppe welcher das Attribut zugeordnet ist"
+attributeType;		"Attribut Typ"
+displayType;		"Attribut Gruppe"
+column;				"Spalte"
+column_desc;		"Spaltenausrichtung des Attributes im Formular"
+highlight_desc;		"Attribut hervorheben, indem es fett dargestellt wird"
+sorting;			"Sortierung"
+sorting_desc;		"Sortierung innerhalb des CIs"
+uniqueConstraint;	"Unique-Beschränkung"
+unique_desc;		"Attributwert darf nur einmal vorkommen"
+attributeValue;		"Attribut Wert"
+highlightAttribute;	"Attribute hervorheben"
+inputLength;		"Eingabelänge" 
+textfieldHeight;	"Feldhöhe"
+textfieldWidth;		"Feldbreite"
+createXML;			"XML Tag"
+xml_desc;			"XML Tag der beim Generieren des Webservice angezeigt wird"
+regex;				"Regulärer Ausdruck"
+mailEnabledLabel;	"Mailversand aktivieren"
+sortingAbbreviated;	"Sort"
+valid;				"Gültig"
+type;				"Typ"
+options;			"Optionen"
+query;				"Query"
+mailConfig;			"Mail Konfiguration"
+active;				"aktiv"
+inactive;			"inaktiv"
+attributes;			"Attribute"
+attribute;			"Attribut"
+cqlQuery;			"SQL Query"
+queryScript;		"Script"
+filename;			"Dateiname"
+scriptName;			"Scriptname"
+filterQuery;		"Filter-Query"
+filterEdit;			"Filter bearbeiten"
+useScript;			"Script verwenden"
+order;				"Sortiernummer"
+optionssaved;		"Gespeicherte Optionen"
+attributeInfo;		"Info-Text"
+sqlAutocomplete;	"Autovervollständigen"
+ciTypeAutocomplete; "Autovervollständigen"
+attributeMultiselect;	"Mehrfachauswahl"
+please_select;			"bitte wählen und Zeiger über Infofeld bewegen"
+defaultvalue;			"Standardwert"
+isasync;				"asynchron"
+script_text;		    "Script Inhalt"
+attributeAutocompleteWarning; "Bitte beachten: Bestehende Daten müssen manuell geändert werden!"
+attributeDisplayStyle;  "Darstellung"
+attributeStyleOneRow;   "Zeile"
+attributeStyleOptionList; "Liste"
+attributeAutocompleteSelectOne; "deaktiviert"
+attributeAutocompleteOne; "Einfach"
+attributeAutocompleteMultiple; "Mehrfach"
+attributeAutocompleteMultipleWithCounter; "Mehrfach mit Zähler"
+attributeWorkflow; "Workflow"
+attributeWorkflowDesc; "Workflow der bei Klick auf das Attribut ausgeführt werden soll"
+attributeGoToWorkflow; "Zum aktuellen Workflow"
+
+ProjectRestriction; "CI-Auswahl auf User-Projekte einschränken"
+attributeProjectRestrictionTitle; "Nur CI's aus den Projekten auswählbar auf die der Benutzer Zugriff hat"
+
+nameRegexNotMatch; "Sonderzeichen dürfen nicht verwendet werden"
+
+
+# edit page
+editAttribute;		"Attribut bearbeiten"
+search;				"Suche"
+overview;			"Übersicht"
+permission;			"Rolle"
+roles;				"Rollen"
+general;			"Allgemein"
+
+
+# option page
+manageOptions;		"Optionen verwalten"
+optionAdd;			"Option hinzufügen"
+optionName;			"Option"
+optionChange;		"Ändern"
+ordernumber;		"Sortierreihenfolge"
+attributeOptionAddedSuccess; "Option erfolgreich hinzugefügt!"
+attributeOptionChangeSuccess; "Option erfolgreich geändert!"
+optionActivateSuccess;		"Option erfolgreich aktiviert!"
+optionsSaved;				"Gespeicherte Optionen"
+
+
+# create page
+createAttribute;	"Attribut anlegen"
+ciType;				"CI Typ"
+assignCiTypeAndAttribute;	"CI Typ und Attribute zuweisen"
+pleaseChose;		"bitte wählen"
+
+
+# ci type
+assignCiType;		"CI Typen zuweisen"
+fieldsetAddedCiTypes;"Hinzugefügte Ci Typen"
+fieldsetCiTypes;	"Verfügbare Ci Typen"
+noItems;			"Keine Items"
+none;				"Keine"
+
+
+#permission - Role
+rolePermission;		"Rollen Berechtigungen"
+
+
+# mail config
+mailAdd;			"E-Mail hinzufügen"
+
+#unique attribute error
+notUniqueAttribute;			"bereits gleiche Werte"
+
+#unique name error
+notUniqueName;			"wird bereits verwendet"
+
+# query config
+queryEdit;			"Query bearbeiten"
+
+
+ciTypesAdd;			"Ci Typen hinzufügen"
+optionsAdd;			"Optionen hinzufügen"
+permissionsAdd;		"Berechtigungen hinzufügen"
+individual;			"Individuell"
+
+
+attributeSummary;	"Attribut Zusammenfassung"
+
+yes;				"Ja"
+no;					"Nein"
+
+ciTypes;			"CI Typen"
+off;				"Off"
+mandatory;			"Mandatory"
+notMandatory; 		"Not mandatory"
+
+
+permissions;		"Berechtigungen"
+role;				"Rolle"
+permissionRead;		"Leseberechtigung"
+permissionWrite;	"Schreibberechtigung"
+read;				"Lesen"
+read_write;			"Lesen/Schreiben"
+
+attributeInsertSuccess;		"Attribut erfolgreich angelegt!"
+
+areYouSureDelete;			"Wollen Sie das Attribute wirklich löschen?"
+areYouSureActivate;			"Wollen Sie das Attribute wirklich aktivieren?"
+areYouSureReset;			"Wollen Sie das Attribute wirklich zurücksetzen?"
+
+attributeCreateSuccess;		"Attribut erfolgreich angelegt!"
+attributeDeleteSuccess;		"Attribut erfolgreich gelöscht!"
+attributeDactivateSuccess;	"Attribut in Verwendung => erfolgreich deaktiviert!"
+attributeCreateFailed;		"Attribut nicht angelegt werden!"
+attributeActivateSuccess;	"Attribut erfolgreich aktiviert!"
+
+attributeOptionDeleteSuccess;"Option wurde erfolgreich gelöscht!"
+attributeOptionDeleteFailure;"Option konnte nicht gelöscht werden, da sie bereits in Verwendung gewesen ist!"
+attributeOptionDeactivateSuccess;"Option wurde deaktiviert."
+attributeOptionActivateSuccess;"Option wurde erfolgreich aktiviert!"
+
+
+attributeDeleteFailed; "Attribut konnte nicht gelöscht werden!"
+attributeActivateFailed; "Attribut konnte nicht aktiviert werden!"
+attributeInsertFailed; "Attribut konnte nicht angelegt werden!"
+
+#Form titles
+
+#Hilfetext
+attributeNameTitle;					"Name des Attributes auf Englisch, kleingeschrieben, z.B.: attribute_name"
+attributeDescriptionTitle;			"Name des Attributes auf Deutsch"
+attributeNoteTitle;					"Hilfetext der durch Berührung mit dem Mauszeiger angezeigt wird"
+attributeHintTitle;					"Hilfetext"
+attributeAttributeTypeTitle;		"Festlegung des Eingabetyps"
+attributeCiTypeTitle;				"Ci Typ"
+attributedisplayTypeTitle;			"Auswahl der Attributgruppe"
+attributeColumnTitle;				"Spaltenausrichtung des Attributes im Formular"
+attributeSortingTitle;				"Gibt die Reihung des Attributes an"
+attributeInputLengthTitle;			"Maximale Eingabelaenge"
+attributeTextfieldHeightTitle;		"Hoehe des Eingabefeldes"
+attributeTextfieldWidthTitle;		"Breite des Eingabefeldes"
+attributeAttributeInfoTitle;		"Attributinfo"
+attributeScriptUploadTitle;			"Script Upload"
+attributeHighlightAttributeTitle;	"Attribut hervorheben, indem es fett dargestellt wird"
+attributeCiTypeHierarchyTitle;		"Ci Typ Hierarchie"
+attributeCiTypeAutocompleteTitle;	"Autocomplete"
+attributeDateEventTitle;			"Date event"
+attributeUniqueConstraintTitle;		"Eingegebene Daten in diesem Attribut dürfen nur einmal vorkommen"
+attributeMailEnabledTitle;			"Mailversand aktivieren"
+attributeXMLTitle;					"XML Tag-Name"
+attributeRegexTitle;				"Hier kann ein Regulärer Ausdruck für die Eingabe verwendet werden"
+optional;                           "Optional"
+summary;                            "Zusammenfassung"
+attributeUpdateSuccess;             "Attribut erfolgreich bearbeitet!"
+ciId;								"CIID"
+attributeHintIndividualQueryHelp;   "mögliche Platzhalter:"
+attributeHintIndividualQueryCurrentCiId;    "Aktuelle CI-ID"
+attributeHintIndividualQueryCurrentValue;   "Aktueller Wert"
+
+formInvalid;						"Folgende Felder des Formulars wurden nicht richtig befüllt: "
+
+
+formFilterDescription;"Hallo! <br> Das ist die Beschreibung, die noch befüllt werden muss!"

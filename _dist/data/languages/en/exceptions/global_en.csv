@@ -1,0 +1,15 @@
+#Language file for exception handling (en)
+
+DtoConverterRoleArrayWasNull;"An exception occurred while converting an entry!"
+DtoConverterCiTypeArrayWasNull;"An exception occurred while converting an entry!"
+DtoConverterAttributeArrayWasNull;"An exception occurred while converting an entry!"
+DtoConverterProjectArrayWasNull;"An exception occurred while converting an entry!"
+
+SessionAccessFailed;"Session access failed!"
+AuthFailed;"Authentification failed!";
+TranslationLoadFailed;"Failed to load Translation file"
+
+fileuploadTypeNotEnabled;"The fileupload is not allowed for the given Type"
+fileuploadRenamingFailed;"fiel renaming failed"
+
+globalFileNotFound;"Datei wurde nicht gefunden!"

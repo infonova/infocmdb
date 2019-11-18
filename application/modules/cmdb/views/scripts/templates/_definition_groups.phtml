@@ -1,0 +1,21 @@
+<div class="definition-groups">
+    <?php foreach ($this->groups as $group) : ?>
+        <div class="definition-group">
+
+            <?php if (isset($group['name'])) : ?>
+                <div class="definition-header">
+                    <?php echo $group['name'] ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($group['description'])) : ?>
+                <div class="definition-description"><?php echo $group['description'] ?></div>
+            <?php endif; ?>
+
+            <div class="definition-content">
+                <?php echo $this->partial('_definition_list.phtml', array('list' => $group['list'])); ?>
+            </div>
+
+        </div>
+    <?php endforeach; ?>
+</div>

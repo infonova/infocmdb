@@ -1,0 +1,108 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+<script type="text/javascript">
+    function updatePage(page) {
+        <?php
+        $url = $this->url(array('orderBy' => $this->orderBy, 'direction' => $this->direction, 'page' => null));
+        if (!strstr($url, 'index'))
+            $url .= '/index';
+        ?>
+        window.location.href = "<?php echo $url; ?>/page/" + page;
+        return false;
+    }
+
+    function deactivate_menu(menu_id) {
+        if (confirm('<?php echo $this->translate('areYouSureDeactivate') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>menu/deactivate/menuId/' + menu_id;
+        }
+    }
+
+    function activate_menu(menu_id) {
+        if (confirm('<?php echo $this->translate('areYouSureActivate') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>menu/activate/menuId/' + menu_id;
+        }
+    }
+</script>
+
+
+<h1 class="pageName"><?php echo $this->translate('menu') ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+              action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+              method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterButton;
+            ?>
+        </form>
+    </div>
+</div>
+<div class="clearBoth" style="margin-bottom: 15px;"></div>
+
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Menu::NAME, 'direction' => (($this->orderBy == Db_Menu::NAME) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('name') ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Menu::DESCRIPTION, 'direction' => (($this->orderBy == Db_Menu::DESCRIPTION) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('description') ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Menu::NOTE, 'direction' => (($this->orderBy == Db_Menu::NOTE) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('note') ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Menu::ORDER_NUMBER, 'direction' => (($this->orderBy == Db_Menu::ORDER_NUMBER) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('sortingAbbreviated') ?>
+                </a>
+            </th>
+            <th style="width:300px;">&nbsp;</th>
+        </tr>
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+
+            if (!$item[Db_Menu::IS_ACTIVE]) {
+                ?>
+                <tr  class="inactive">
+            <?php } else { ?>
+                <tr>
+            <?php } ?>
+            <td>
+                <a class="link" href="<?php echo APPLICATION_URL . 'menu/edit/menuId/' . $item[Db_Menu::ID]; ?>"><?php echo $item[Db_Menu::NAME]; ?></a>
+            </td>
+            <td><?php echo $this->translate($item[Db_Menu::NAME]); ?></td>
+            <td><?php echo $item[Db_Menu::NOTE]; ?></td>
+            <td><?php echo $item[Db_Menu::ORDER_NUMBER]; ?></td>
+            <td>
+                <?php if ($item[Db_Menu::IS_ACTIVE]): ?>
+                <a class="delete_list" href="#" onclick="javascript:deactivate_menu(<?php echo $item[Db_Menu::ID]; ?>);"></a>
+                <div class="rfloater">
+                    <a class="edit_list buttonLink" href="<?php echo APPLICATION_URL . 'menu/edit/menuId/' . $item[Db_Menu::ID]; ?>" title="<?php echo $this->translate('edit') ?>">&nbsp;</a>
+                    <?php else: ?>
+                        <a class="activate_list" href="#" onclick="javascript:activate_menu(<?php echo $item[Db_Menu::ID]; ?>);"></a>
+                    <?php endif;
+                    ?>
+                </div>
+            </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php echo $this->paginator; ?>
+<?php else: ?>
+    <div class="empty_message">
+        <?php echo $this->translate('noMenuFound') ?>
+    </div>
+<?php endif; ?>

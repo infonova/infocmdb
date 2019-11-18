@@ -1,0 +1,128 @@
+/* Nornix TreeMenu IE 5.5-6 stylesheet  */
+
+.menu {
+    position: relative !important;
+}
+
+.menu li.folder span,
+.menu li.open li.folder span,
+.menu li.open li.folder li.folder span,
+.menu li.open li.folder li.folder li.folder span {
+    display: block !important;
+    position: absolute !important;
+    left: -20px !important;
+    top: 3px !important;
+    height: 15px !important;
+    width: 15px !important;
+    background: transparent url(nornix-plus-node.gif) 3px 3px no-repeat !important;
+    cursor: pointer !important;
+}
+
+.menu li.open span,
+.menu li.open li.open span,
+.menu li.open li.open li.open span,
+.menu li.open li.open li.open li.open span {
+    background-image: url(nornix-minus-node.gif) !important;
+}
+
+.menu li.document span,
+.menu li.folder li.document span,
+.menu li.folder li.folder li.document span,
+.menu li.folder li.folder li.folder li.document span {
+    background-image: none !important;
+    cursor: default !important;
+}
+
+.menu li.folder ul,
+.menu li.folder li.folder ul,
+.menu li.folder li.folder li.folder ul,
+.menu li.folder li.folder li.folder li.folder ul {
+    display: none !important;
+}
+
+body .menu li.open ul,
+body .menu li.folder li.open ul,
+body .menu li.folder li.folder li.open ul,
+body .menu li.folder li.folder li.folder li.open ul {
+    display: block !important;
+}
+
+.menu li a,
+.menu li.document a,
+.menu li.folder li.document a,
+.menu li.folder li.folder li.document a {
+    background: url(nornix-doc-node-icon.gif) no-repeat !important;
+    background-position: 2px 2px !important;
+}
+
+.menu li a, .menu li a:hover, .menu li a:active {
+    background-repeat: no-repeat !important;
+    background-color: transparent !important;
+}
+
+.menu li.closed a,
+.menu li.open li.closed a,
+.menu li.open li.open li.closed a {
+    background-image: url(nornix-folder-closed-icon.gif) !important;
+    background-position: 0 2px !important;
+}
+
+.menu li.open a {
+    background-image: url(nornix-folder-open-icon.gif) !important;
+    background-position: 0 2px !important;
+}
+
+.menu li a, .menu a.root {
+    height: 18px !important; /* works like CSS2 min-height in IE 5-6 */
+}
+
+body .menu a.root {
+    height: 24px !important;
+}
+
+.menu a:hover, .menu li.folder a:hover, .menu ul li.open a:hover,
+.menu a:link.current, .menu a:visited.current, .menu a:active.current {
+    text-decoration: underline !important;
+}
+
+/* display marker on current item */
+.menu a.current span,
+.menu ul li.folder a.current span,
+.menu ul li.folder li.folder a.current span,
+.menu ul li.folder li.folder li.folder a.current span,
+.menu ul li.folder li.folder li.folder li.folder a.current span {
+    display: block !important;
+    position: absolute !important;
+    top: 3px !important;
+    left: 10px !important;
+    height: 13px !important;
+    width: 14px !important;
+    font-size: 2px !important;
+    background: url(nornix-treemenu-current.gif) !important;
+}
+
+.menu a.current.root span {
+    left: 28px !important;
+}
+
+.closeTree, .openTree, a.closeTree:hover, a.openTree:hover,
+a.closeTree:link, a.openTree:link, a.closeTree:active, a.openTree:active {
+    background: transparent url(nornix-close-icon.gif) 3px 3px no-repeat;
+}
+
+.openTree, a.openTree:hover, a.openTree:link, a.openTree:active {
+    background-image: url(nornix-open-icon.gif);
+}
+
+.menu li {
+    background: url(nornix-treemenu-line.gif) 0 10px no-repeat !important;
+}
+
+.menu ul li.last {
+    background: url(nornix-treemenu-corner.gif) 0 0 no-repeat !important;
+}
+
+body .menu a.root {
+    background: url(nornix-home-icon.gif) 0 0 no-repeat !important;
+}
+

@@ -1,0 +1,64 @@
+# Translation file
+
+name;					"Name"
+userName;				"Username"
+description;			"Description"
+note;					"Note"
+valid;					"Valid"
+active;					"active"
+inactive;				"inactive"
+user;					"User"
+permissions;			"Permissions"
+numberOfResults;		"Number of Results:"
+createRole;				"General"
+cancel;					"Cancel"
+next;					"Next"
+
+result;                 "Search Result"
+selectRight;            "Permission"
+setFilter;              "Name"
+setFilterRandW;         "read and write"
+setFilterR;             "read"
+setFilterX;             "no rights"
+setFilterRorW;          "read or write"
+noFilter;               "all rights"
+attr;                   "attributes"
+
+attributes;				"Attribute"
+
+roles;					"Roles"
+roleCreate;				"Create Role"
+
+overview;				"Overview"
+save;					"Save"
+delete;					"Delete"
+duplicate;				"Duplicate"
+
+roleEdit;				"Edit Role"
+permissionsAdd;			"Add permissions"
+userAdd;				"Add User"
+
+
+roleUserCheckName;		"x"
+roleUserCheckDescription;"Should user be assigned to role?"
+
+areYouSureDelete; "Do you really want to delete this Role?"
+areYouSureActivate; "Do you really want to activate this Role?"
+
+roleInsertSuccess;				"roleInsertSuccess"
+roleUpdateSuccess;				"roleUpdateSuccess"
+roleActivateSuccess;			"Role activated successfully!"
+roleUpdateUsersSuccess;			"roleUpdateUsersSuccess"
+roleUpdatePermissionSuccess;	"roleUpdatePermissionsSuccess"
+roleDeactivationSuccess;        "Role deactivated successfully!"
+roleUpdateSuccess;				"Role edited successfully!"
+roleInsertSuccess;				"Role created successfully!"
+roleDeleteSuccess;				"Role deleted successfully!"
+
+noRoleFound;   "No entries found!"
+
+setFilterHasRole;               "User has Role"
+setFilterHasRoleNot;            "User has Role not"
+setFilterAllRoles;              "All User"
+setRoles;                       "User"
+setUserFilter;                  "Username"

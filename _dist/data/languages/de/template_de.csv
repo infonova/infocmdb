@@ -1,0 +1,39 @@
+# Index page
+
+indexTitle;"Templates"
+linkCreate;"Template anlegen"
+overview;"Übersicht"
+
+# index template list
+
+listName;"Name"
+listDescription;"Beschreibung"
+listNote;"Notiz"
+listFile;"File"
+
+listDelete;"Löschen"
+
+
+# Forms
+
+name;"Name"
+description;"Beschreibung"
+note;"Notiz"
+file;"aktuelles Template"
+
+upload;"Datei hochladen"
+save;"Speichern"
+
+currentDocument;		"aktuelles Dokument"
+
+# Create
+
+createTitle;"Template Anlegen"
+
+# Notifications
+
+notificationDeleteSuccess;"Template erfolggreich gelöscht!"
+notificationDeleteFailed;"Template konnte nicht gelöscht werden!"
+
+notificationInsertSuccess;"Template erfolgreich angelegt!"
+notificationInsertFailed;"Template konnte nicht angelegt werden!"

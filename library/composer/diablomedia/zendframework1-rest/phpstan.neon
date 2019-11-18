@@ -1,0 +1,14 @@
+parameters:
+    level: 1
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        - '#Zend_Rest_Route::__construct\(\) does not call parent constructor from Zend_Controller_Router_Route_Module\.#'
+        # Technically $value could be `null` (there's no restriction on what the user can pass in), which would fail
+        # the `isset` check, so leaving this as-is.
+        -
+            message: '#Variable \$value in isset\(\) always exists and is not nullable\.#'
+            path: %currentWorkingDirectory%/src/Zend/Rest/Server.php

@@ -1,0 +1,39 @@
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs
+    helpers: tests/_helpers
+settings:
+    bootstrap: _bootstrap.php
+    suite_class: \PHPgUnit_Framework_TestSuite
+    colors: true
+    memory_limit: 1024M
+    log: true
+coverage:
+    enabled: true
+    blacklist:
+        include:
+            - library/*
+            - tests/*
+            - codecept.phar
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+        - Codeception\Extension\TeamCity
+    config:
+        Codeception\Extension\Recorder:
+            delete_successful: false
+modules:
+    config:
+        Db:
+            dsn: 'mysql:host=localhost;dbname='
+            user: ''
+            password: ''
+
+        \Helper\ZF1AppHelper:
+            config:
+                - 'application/configs/application.ini'
+                - 'application/configs/database.ini'

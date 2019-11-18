@@ -1,0 +1,55 @@
+<body onLoad="document.forms[0].username.focus();">
+<div id=login_background></div>
+<div class='logo_topright'></div>
+<div class='login_slider' <?php echo $this->backgroundStyle; ?>>
+    <div class="coda-slider" id="slider-id">
+        <?php
+        //Image Pfad
+        $path  = APPLICATION_PATH . "/../public/images/slider_pictures";
+        $files = scandir($path);
+        for ($i = 0; $i < count($files); $i++) {
+            //Verzeichnis auslesen
+            if ($files[$i] != "." && $files[$i] != ".." && !is_dir($files[$i])) {
+                // Nur Bilder durch lassen (Filter)
+                if (strstr($files[$i], ".gif") || strstr($files[$i], ".png") || strstr($files[$i], ".jpg")) {
+                    //Pfad zum aktuellen Bild
+                    $path       = APPLICATION_URL . "/images/slider_pictures";
+                    $image_path = $path . "/" . $files[$i];
+                    //Bild anzeigen
+                    echo "<div><p><img src=\"$image_path\"></p></div>";
+                }
+            }
+        }
+        ?>
+
+    </div>
+</div>
+<div class='login_table_wrapper' style="min-height: 160px;">
+    <div class="login_infocmdb">
+
+        <?php echo $this->render('login/_logo.phtml'); ?>
+
+        <h6 class="configuration">Configuration Management</h6>
+    </div>
+
+
+    <div class="recovery">
+        <?php echo $this->translate('loginPasswordRecoveryTitel'); ?><br>
+        <?php echo $this->translate('loginPasswordRecoveryMessage'); ?>
+    </div>
+
+
+    <div class='login_form' style="margin-bottom: 15px; padding-bottom: 10px;">
+        <?php echo $this->form ?>
+    </div>
+    <?php if ($this->pwrestebabled) { ?>
+        <p style="position:absolute; bottom: 8px; right: 5px;">
+            <a href="<?php echo APPLICATION_URL ?>login/recover"><?php echo $this->translate('loginPasswordRecoveryForgotPassword') ?></a>
+        </p>
+    <?php } ?>
+    <p style="position:absolute; bottom: 8px; right: 5px;">
+        <a href="<?php echo APPLICATION_URL ?>index"><?php echo $this->translate('loginPasswordRecoveryBackToLogin') ?></a>
+    </p>
+</div>
+
+</body>

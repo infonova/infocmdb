@@ -1,0 +1,174 @@
+<script type="text/javascript">
+    function delete_workflow(workflow_id) {
+        if (confirm('<?php echo $this->translate("areYouSureDelete") ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>workflow/delete/workflowId/' + workflow_id;
+        }
+    }
+
+    function activate_workflow(workflow_id) {
+        if (confirm('<?php echo $this->translate("areYouSureActivate") ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>workflow/activate/workflowId/' + workflow_id;
+        }
+    }
+</script>
+
+<div class="button_row">
+    <a href="<?php echo APPLICATION_URL ?>workflow/execute/workflowId/<?php echo $this->workflow[Db_Workflow::ID]; ?>"><?php echo $this->translate('execute'); ?></a>
+    |
+    <a href='<?php echo APPLICATION_URL ?>workflow/edit/workflowId/<?php echo $this->workflow[Db_Workflow::ID] ?>'><?php echo $this->translate('edit'); ?></a>
+    <?php if ($this->workflow[Db_Workflow::IS_ACTIVE]): ?>
+        |
+        <a href="javascript:delete_workflow(<?php echo $this->workflow[Db_Workflow::ID]; ?>)"><?php echo $this->translate('delete'); ?></a>
+    <?php else: ?>
+        |
+        <a href="javascript:activate_workflow(<?php echo $this->workflow[Db_Workflow::ID]; ?>)"><?php echo $this->translate('activate'); ?></a>
+    <?php endif; ?>
+    |
+    <a href='<?php echo APPLICATION_URL ?>workflow/solve/workflowId/<?php echo $this->workflow[Db_Workflow::ID] ?>'><?php echo $this->translate('workflowMarkAsSolvedError'); ?></a>
+    |
+    <a href="<?php echo APPLICATION_URL ?>workflow/index"><?php echo $this->translate('overview'); ?></a>
+</div>
+<h1 class="pageName">
+    <?php echo $this->translate('workflowDetail'); ?>
+</h1>
+<br>
+<fieldset class="create_form">
+    <table>
+        <tr>
+            <td style="width:40%"><strong><?php echo $this->translate('workflowId'); ?></strong></td>
+            <td><?php echo $this->workflow[Db_Workflow::ID] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('name'); ?></strong></td>
+            <td><?php echo $this->workflow[Db_Workflow::NAME] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('description'); ?></strong></td>
+            <td><?php echo $this->workflow[Db_Workflow::DESCRIPTION] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('note'); ?></strong></td>
+            <td><?php echo $this->workflow[Db_Workflow::NOTE] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('user'); ?></strong></td>
+            <td><?php echo $this->workflow['username'] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('active'); ?></strong></td>
+            <td><input disabled="disabled" type="checkbox" <?php if ($this->workflow[Db_Workflow::IS_ACTIVE]) {
+                    echo "checked";
+                } ?>></input></td>
+        </tr>
+    </table>
+    <fieldset class="detail_fieldset">
+        <legend><strong><?php echo $this->translate('trigger'); ?></strong></legend>
+        <table>
+            <?php if (!$this->workflow[Db_Workflow::TRIGGER_TIME]): ?>
+                <tr>
+                    <td style="width:40%"><?php echo $this->translate('trigger_ci'); ?></td>
+                    <td>
+                        <input type="checkbox" disabled="disabled" <?php if ($this->workflow[Db_Workflow::TRIGGER_CI]) {
+                            echo 'checked="checked"';
+                        } ?>></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->translate('trigger_attribute'); ?></td>
+                    <td>
+                        <input type="checkbox" disabled="disabled" <?php if ($this->workflow[Db_Workflow::TRIGGER_ATTRIBUTE]) {
+                            echo 'checked="checked"';
+                        } ?>></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->translate('trigger_relation'); ?></td>
+                    <td>
+                        <input type="checkbox" disabled="disabled" <?php if ($this->workflow[Db_Workflow::TRIGGER_RELATION]) {
+                            echo 'checked="checked"';
+                        } ?>></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->translate('trigger_project'); ?></td>
+                    <td>
+                        <input type="checkbox" disabled="disabled" <?php if ($this->workflow[Db_Workflow::TRIGGER_PROJECT]) {
+                            echo 'checked="checked"';
+                        } ?>></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->translate('trigger_fileimport'); ?></td>
+                    <td>
+                        <input type="checkbox" disabled="disabled" <?php if ($this->workflow[Db_Workflow::TRIGGER_FILEIMPORT]) {
+                            echo 'checked="checked"';
+                        } ?>></input>
+                    </td>
+                </tr>
+            <?php else: ?>
+                <tr>
+                    <td><?php echo $this->translate('triggerTime'); ?></td>
+                    <td>
+                        <input type="checkbox" disabled="disabled" <?php if ($this->workflow[Db_Workflow::TRIGGER_TIME]) {
+                            echo 'checked="checked"';
+                        } ?>> </input>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->translate('executionTime'); ?></td>
+                    <td><?php echo $this->workflow[Db_Workflow::EXECUTION_TIME] ?></td>
+                </tr>
+            <?php endif; ?>
+        </table>
+    </fieldset>
+    <fieldset class="detail_fieldset" style="margin-bottom:15px;" id='<?php echo $this->translate('archive'); ?>'>
+        <legend><strong><?php echo $this->translate('instances'); ?></strong></legend>
+
+        <?php if (count($this->paginator)): ?>
+            <table class="list" cellpadding="0" cellspacing="0" width="100%">
+                <tr class="headline">
+                    <th><?php echo $this->translate('instanceId'); ?></th>
+                    <th><?php echo $this->translate('instanceUser'); ?></th>
+                    <th><?php echo $this->translate('instanceCreated'); ?></th>
+                    <th><?php echo $this->translate('instanceFinished'); ?></th>
+                    <th><?php echo $this->translate('instanceStatus'); ?></th>
+                    <th>
+                        <div style="width:200px;"></div>
+                    </th>
+                </tr>
+                <?php
+                $row_count = 0;
+                foreach ($this->paginator as $item):
+                    ?>
+
+                    <tr>
+                        <td>
+                            <a href="<?php echo APPLICATION_URL ?>workflow/instance/instanceId/<?php echo $item[Db_WorkflowCase::ID]; ?>"><?php echo $item[Db_WorkflowCase::ID] ?></a>
+                        </td>
+                        <td><?php if ($item[Db_User::USERNAME]) {
+                                echo $item[Db_User::USERNAME];
+                            } else if ($item[Db_WorkflowCase::USER_ID] == '0') {
+                                echo 'system';
+                            } else {
+                                echo $item[Db_WorkflowCase::USER_ID];
+                            } ?></td>
+                        <td><?php echo $item[Db_WorkflowCase::CREATED] ?></td>
+                        <td><?php echo $item[Db_WorkflowCase::FINISHED] ?></td>
+                        <td>
+                            <?php echo $this->partial('workflow/_workflow_case_solve_status.phtml', array(
+                                    'case' => $item
+                            )); ?>
+                        </td>
+                        <td></td>
+                    </tr>
+
+
+                <?php endforeach; ?>
+            </table>
+            <?php echo $this->paginator; ?>
+        <?php endif; ?>
+    </fieldset>
+
+</fieldset>
+
+<div class="break"></div>

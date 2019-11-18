@@ -1,0 +1,30 @@
+<h1 class="pageName"></h1>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th><?php echo $this->translate('name') ?></th>
+            <th><?php echo $this->translate('createDate') ?></th>
+            <th>&nbsp;</th>
+        </tr>
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <tr>
+                <td>
+                    <a href="<?php echo APPLICATION_URL . 'relation/visualize/ciid/' . $item['name'] ?>"><?php echo $item['name']; ?></a>
+                </td>
+                <td><?php echo $item['time'] ?></td>
+
+                <td>
+                    <a class="delete_list" href="<?php echo APPLICATION_URL ?>relation/delvis/file/<?php echo $item['name']; ?>"></a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+
+    </table>
+    <?php echo $this->paginator; ?>
+<?php else: ?>
+    <h1 class="pageName"><?php echo $this->translate('noItemsFound') ?></h1>
+<?php endif; ?>

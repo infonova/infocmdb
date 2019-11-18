@@ -1,0 +1,131 @@
+<div class="button_row">
+    <a href="<?php echo APPLICATION_URL ?>workflow/visinstance/instanceId/<?php echo $this->instanceId; ?>"><?php echo $this->translate('visualizeInstance'); ?></a>
+
+    |
+    <a href="<?php echo APPLICATION_URL ?>workflow/retry/instanceId/<?php echo $this->instanceId; ?>"><?php echo $this->translate('instanceRetry'); ?></a>
+
+    <?php if ($this->instance[Db_WorkflowCase::STATUS] != Dao_Workflow::WORKFLOW_INS_STATUS_CLOSED) { ?>
+
+        <?php if ($this->instance[Db_WorkflowCase::STATUS] == Dao_Workflow::WORKFLOW_INS_STATUS_SUSPENDED) { ?>
+            |
+            <a href="<?php echo APPLICATION_URL ?>workflow/wakeup/instanceId/<?php echo $this->instanceId; ?>"><?php echo $this->translate('instanceWakeup'); ?></a>
+        <?php } ?>
+
+
+        <?php // suspend WF isntance ?>
+        |
+        <a href='<?php echo APPLICATION_URL ?>workflow/suspend/instanceId/<?php echo $this->instanceId ?>'><?php echo $this->translate('instanceSuspend'); ?></a>
+
+
+        <?php // cancle WF instance ?>
+        |
+        <a href="<?php echo APPLICATION_URL ?>workflow/cancel/instanceId/<?php echo $this->instanceId; ?>"><?php echo $this->translate('instanceCancel'); ?></a>
+    <?php } ?>
+    <?php // zurück ?>
+    |
+    <a href="<?php echo APPLICATION_URL ?>workflow/detail/workflowId/<?php echo $this->workflowId ?>"><?php echo $this->translate('overview'); ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('workflowInstanceDetail'); ?></h1>
+
+<fieldset class="create_form">
+
+    <table>
+        <tr>
+            <td><?php echo $this->translate('instanceId'); ?></td>
+            <td><?php echo $this->instance[Db_WorkflowCase::ID] ?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate('instanceStatus'); ?></td>
+            <td>
+                <?php echo $this->partial('workflow/_workflow_case_solve_status.phtml', array(
+                    'case' => $this->instance
+                )); ?>
+            </td>
+        </tr>
+
+        <?php if ($this->currentPositionType == 'transition') { ?>
+
+            <tr>
+                <td><?php echo $this->translate('instanceCurrentPosition'); ?></td>
+                <td><?php echo $this->translate("transition") ?>:
+                    <a href="<?php echo APPLICATION_URL ?>workflow/transitiondetail/transitionId/<?php echo $this->currentPositionId ?>"><?php echo $this->currentPosition ?></a>
+                </td>
+            </tr>
+
+        <?php } else if ($this->currentPositionType == 'place') { ?>
+
+            <tr>
+                <td><?php echo $this->translate('instanceCurrentPosition'); ?></td>
+                <td>Place:
+                    <a href="<?php echo APPLICATION_URL ?>workflow/placedetail/placeId/<?php echo $this->currentPositionId ?>"><?php echo $this->currentPosition ?></a>
+                </td>
+            </tr>
+
+        <?php } ?>
+        <?php if (isset($this->arg_context)) { ?>
+            <tr>
+                <td><?php echo $this->translate('scriptCall'); ?></td>
+                <td><?php echo $this->arg_context; ?></td>
+            </tr>
+        <?php } ?>
+        <!-- ids are used to collapse and pretty print -->
+    </table>
+    <fieldset class="detail_fieldset" style="margin-bottom:15px;">
+        <legend><strong><?php echo $this->translate('instanceContext'); ?></strong></legend>
+
+        <table cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td>
+                    <span id="context_data" style="display:none;"><?php
+                    $workflow_context = $this->instance[Db_WorkflowCase::CONTEXT];
+                    $workflow_context = preg_replace('#//[\w-]+?(?:\:[\w-]+)?@#','//<credentials>@', stripslashes($workflow_context));
+                    echo htmlspecialchars(addcslashes($workflow_context,"\\"));
+                    // uses https://github.com/abodelot/jquery.json-viewer
+                    ?></span>
+                    <div id="context_container" style="padding-left: 1em;"></div>
+                </td>
+            </tr>
+            <script type="application/javascript">
+                $(document).ready(function () {
+                    var context_container_selector = $('#context_container');
+                    var context_data = JSON.parse($('#context_data').text());
+                    context_container_selector.jsonViewer(context_data, {collapsed: true});
+                    // open context to desired degree
+                    context_container_selector.find("> a.json-placeholder").click();
+                    context_container_selector.find("> ul > li > a.json-placeholder").click();
+                    context_container_selector.find("> ul > li > a.json-placeholder").click();
+                });
+            </script>
+        </table>
+    </fieldset>
+
+    <fieldset class="detail_fieldset" style="margin-bottom:15px;" id='<?php echo $this->translate('archive'); ?>'>
+        <legend><strong><?php echo $this->translate('instanceLog'); ?></strong></legend>
+
+        <table class="list" cellpadding="0" cellspacing="0" width="100%">
+            <tr class="headline">
+                <th><?php echo $this->translate('instanceLogCreated'); ?></th>
+                <th><?php echo $this->translate('instanceLogMessage'); ?></th>
+            </tr>
+
+            <?php foreach ($this->instanceLogs as $log) { ?>
+                <?php
+                $rowClass = 'workflow-log';
+                if (strpos($log[Db_WorkflowLog::MESSAGE], '[ERROR]') !== false) {
+                    $rowClass .= ' has-error';
+                } elseif (strpos($log[Db_WorkflowLog::MESSAGE], '[FAILED]') !== false) {
+                    $rowClass .= ' has-error';
+                } else {
+                    $rowClass .= ' no-error';
+                }
+                ?>
+                <tr class="<?php echo $rowClass ?>">
+                    <td class="workflow-log-date"><?php echo $log[Db_WorkflowLog::CREATED] ?></td>
+                    <td class="workflow-log-message"><?php echo htmlspecialchars($log[Db_WorkflowLog::MESSAGE]) ?></td>
+                </tr>
+
+            <?php } ?>
+        </table>
+    </fieldset>
+
+</fieldset>

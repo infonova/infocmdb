@@ -1,0 +1,15 @@
+<?php
+if (isset($this->filename)) {
+    echo $this->translate('uploadedFileName') . ': <b>' . $this->filename . '</b>';
+    ?>
+    <input type="submit" class="standard_button" value="<?php echo $this->translate('delete') ?>" onClick="window.location.href = '<?php echo APPLICATION_URL . 'fileimport/deletefile/fileId/' . $this->fileId; ?>';">
+    <br />
+
+    <?php
+} else {
+    echo $this->form;
+    ?>
+    <input type="submit" class="standard_button" value="<?php echo $this->translate('upload') ?>" onClick="javascript:uploadFile();return false;">
+    <?php
+}
+?>

@@ -1,0 +1,80 @@
+<script>
+    function viewFileimportLog(element) {
+        var elem = $(element);
+        var parent = elem.parent();
+        var loading_icon = '<i class="fa fa-spinner fa-spin fa-lg log-load-icon"></i>';
+        loading_icon = $(loading_icon);
+        elem = elem.detach();
+        parent.append(loading_icon);
+        var url = $(element).data('content-url');
+        $.get(url, function (data) {
+            showInfocmdbDialog("<?php echo $this->translate('importDialogTitle');?>", data, {width: 800});
+            $(loading_icon).detach();
+            parent.append(elem);
+            $('#infocmdb-dialog').on('dialogclose', function (event) {
+                log_refreshing_enabled = false;
+            });
+        });
+    }
+</script>
+<h1 class="pageName"><?php echo $this->translate('importHistory'); ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<div class="break"></div>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th><?php echo $this->translate('status'); ?></th>
+            <th><?php echo $this->translate('method'); ?></th>
+            <th><?php echo $this->translate('queque'); ?></th>
+            <th><?php echo $this->translate('filename'); ?></th>
+            <th><?php echo $this->translate('linestotal'); ?></th>
+            <th><?php echo $this->translate('lineerrors'); ?></th>
+            <th><?php echo $this->translate('dateProceeded'); ?></th>
+            <th><?php echo $this->translate('log'); ?></th>
+            <th>&nbsp;</th>
+        </tr>
+        <?php
+        $row_count      = 0;
+        foreach ($this->paginator as $item):
+
+            $importDao = new Dao_Import();
+            $errors     = $importDao->getCountDetailFileImportHistory($item[Db_ImportFileHistory::ID]);
+            $errorlines = $errors['cnt'];
+
+            if ($item[Db_ImportFileHistory::STATUS] == 'success') {
+                $img = "<img src=\"" . APPLICATION_URL . "images/icon/accept_16.png\" align=\"middle\">";
+            } elseif ($item[Db_ImportFileHistory::STATUS] == 'failed') {
+                $img = "<img src=\"" . APPLICATION_URL . "images/icon/cancel.png\" align=\"middle\">";
+            } else {
+                $img = "<img src=\"" . APPLICATION_URL . "images/icon/loading.gif\" align=\"middle\">";
+            }
+
+            ?>
+            <tr>
+                <td><?php echo $img . ' ' . $this->translate($item[Db_ImportFileHistory::STATUS]) ?></td>
+                <td><?php echo $item[Db_ImportFileHistory::VALIDATION] ?></td>
+                <td><?php echo $item[Db_ImportFileHistory::QUEUE] ?></td>
+                <td>
+                    <a href="<?php echo APPLICATION_URL . 'download/fileimport/id/' . $item[Db_ImportFileHistory::ID] . '/file/' . $item[Db_ImportFileHistory::FILENAME] ?>">
+                        <?php echo $item[Db_ImportFileHistory::FILENAME]; ?>
+                    </a>
+                </td>
+                <td><?php echo($item[Db_ImportFileHistory::LINES_TOTAL] ? $item[Db_ImportFileHistory::LINES_TOTAL] : '-') ?></td>
+                <td><?php echo $errorlines ?></td>
+                <td><?php echo $item[Db_ImportFileHistory::CREATED] ?></td>
+                <td>
+                    <a class="log-view-button" data-content-url="<?php echo APPLICATION_URL . 'fileimport/log/id/' . $item[Db_ImportFileHistory::ID] ?>" href="#" onclick="viewFileimportLog(this);"><?php echo $this->translate('log'); ?></a>
+                </td>
+                <td>
+                    <a class="delete_list" href="<?php echo APPLICATION_URL; ?>fileimport/delete/file_history_id/<?php echo $item[Db_ImportFileHistory::ID]; ?>"></a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+
+    </table>
+    <?php echo $this->paginator; ?>
+<?php endif; ?>

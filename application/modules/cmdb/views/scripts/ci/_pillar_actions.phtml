@@ -1,0 +1,14 @@
+<div style="margin-top:25px;">
+    <b><?php echo $this->translate('actions') ?></b>
+</div>
+
+<!-- Actions -->
+<div class="pillar_actions">
+    <?php foreach ($this->events as $event) : ?>
+        <div class="pillar_item">
+            <a class="link" title="<?php echo $event[Db_Attribute::NOTE] ?>" href="javascript:executeScript(<?php echo $this->ciId ?>, <?php echo $event['id'] ?>, <?php echo $event['ciAttributeId'] ?>, 1)">
+                <?php echo $event[Db_Attribute::DESCRIPTION] ?>
+            </a>
+        </div>
+    <?php endforeach; ?>
+</div>

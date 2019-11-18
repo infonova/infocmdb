@@ -1,0 +1,16 @@
+parameters:
+    level: 4
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        - '#Variable \$currentOffset might not be defined\.#'
+        - '#Call to an undefined method Zend_View_Interface::paginationControl\(\)\.#'
+        -
+            message: '#Cannot access offset int on Traversable\.#'
+            path: %currentWorkingDirectory%/src/Zend/Paginator.php
+        -
+            message: '#Return type \(Zend_Db_Table_Rowset_Abstract\) of method Zend_Paginator_Adapter_DbTableSelect::getItems\(\) should be compatible with return type \(array\) of method Zend_Paginator_Adapter_(DbSelect|Interface)::getItems\(\)#'
+            path: %currentWorkingDirectory%/src/Zend/Paginator/Adapter/DbTableSelect.php

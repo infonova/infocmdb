@@ -1,0 +1,71 @@
+﻿# This is the language file for user interaction.
+
+# General
+overview;			        "Übersicht"
+announcementDeleteCheck;	"Wollen Sie die Ankündigung wirklich löschen?"
+
+
+# Index Page
+announcements;		"Ankündigungen"
+id;                 "ID"
+name;	            "Name"
+titleDe;			"Titel in Deutsch"
+messageDe;		    "Nachricht in Deutsch"
+titleEn;			"Titel in Englisch"
+messageEn;		    "Nachricht in Englisch"
+showFromDate;		"Sichtbar ab"
+showToDate;		    "Sichtbar bis"
+searchlist;			"Suchliste"
+wildcardAllowed;	"Wildcard-Suche erlaubt"
+valid;				"Gültig"
+active;				"aktiv"
+inactive;			"inaktiv"
+createAnnouncement;	 "Allgemein"
+
+# Create/Update Page
+type;               "Typ"
+reConfirmation;     "Benutzer müssen Ankündigung erneut bestätigen"
+information;        "Information"
+question;           "Frage"
+agreement;          "Vereinbarung"
+
+
+announcementDetail;		"Ankündigungsdetails"
+announcementCreate;		"Ankündigung anlegen"
+announcementEdit;		"Ankündigung bearbeiten"
+
+duplicate;			"Duplizieren"
+edit;				"Bearbeiten"
+delete;				"Löschen"
+save;				"Speichern"
+
+numberOfResults;	"Anzahl der Ergebnisse:"
+cancel;				"Abbrechen"
+
+# Messages
+announcementInsertSuccess;	"Ankündigung erfolgreich angelegt!"
+announcementInsertFailed;	"Ankündigung konnte nicht angelegt werden!"
+
+announcementUpdateSuccess;	        "Ankündigung erfolgreich aktualisiert!"
+announcementUpdateFailed;	        "Ankündigung konnte nicht aktualisiert werden!"
+announcementDeactivationSuccess;    "Ankündigung in Verwendung => erfolgreich deaktiviert!"
+announcementActivateSuccess;	    "Ankündigung erfolgreich aktiviert!"
+
+
+
+announcementDeleteSuccess;	"Ankündigung erfolgreich gelöscht!"
+announcementDeleteFailed;	"Ankündigung konnte nicht gelöscht werden!"
+
+noAnnouncementFound;   "Keine Einträge gefunden!"
+
+# Display to User
+accept;                     "Akzeptieren"
+decline;                    "Ablehnen"
+understood;                 "Verstanden"
+areYouSure;                 "Wollen Sie wirklich ablehnen?"
+iamSure;                    "Ja, ablehnen"
+cancel;                     "Abbrechen"
+explainLogout;              "Wenn Sie ablehnen werden Sie automatisch ausgeloggt."
+explainDeactivateAccount;   "Wenn Sie ablehnen werden Sie automatisch ausgeloggt und Ihr Account deaktiviert. Kontaktieren Sie bitte den Support, wenn Sie ihn reaktivieren möchten."
+takeNote;                   "Ich habe den Text gelesen und verstanden"
+necessary;                  "Bitte bestätigen Sie zuerst, dass Sie den Text verstanden haben"

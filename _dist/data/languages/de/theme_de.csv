@@ -1,0 +1,65 @@
+# This is the language file for user interaction.
+
+# General
+overview;			"Übersicht"
+themeDeleteCheck;	"Wollen Sie das Thema wirklich löschen?"
+
+
+# Index Page
+themes;				"Themes"
+themeId;			"ID"
+name;				"Name"
+description;		"Beschreibung"
+note;				"Notiz"
+searchlist;			"Suchliste"
+homepage;			"Startseite"
+wildcardAllowed;	"Wildcard-Suche erlaubt"
+valid;				"Gültig"
+active;				"aktiv"
+inactive;			"inaktiv"
+createTheme;		"Allgemein"
+
+name_desc;			"Name des Themes (CMDB intern)"
+description_desc;	"Bezeichnung des Themes z.B. Benutzer Theme"
+note_desc;			"Beschreibung des Themes welche durch Berührung mit dem Mouse Cursor angezeigt wird"
+startpage_desc;		"Startseite die für Benutzer welche dieses Theme verwenden aufgerufen wird"
+
+
+themeNameTitle;			"Name des Themes, kleingeschrieben, auf Englisch z.B.: themes_name"
+themeDescriptionTitle;	"Name des Themes auf Deutsch"
+themeNoteTitle;			"Hilfetext der durch Berührung mit dem Mouse Cursor angezeigt wird"
+themeWildcardTitle;		"Wildcard-Suche erlaubt"
+themeStartpageTitle;	"Startseite"
+
+themeDetail;		"Theme Detail"
+themeCreate;		"Theme anlegen"
+themeEdit;			"Theme bearbeiten"
+
+duplicate;			"Duplizieren"
+edit;				"Bearbeiten"
+delete;				"Löschen"
+save;				"Speichern"
+
+module;				"Modul"
+modules;			"Module"
+
+numberOfResults;	"Anzahl der Ergebnisse:"
+cancel;				"Abbrechen"
+
+themeActivateCheck;	"Wollen Sie das Theme wirklich aktivieren?"
+
+# Messages
+themeInsertSuccess;	"Theme erfolgreich angelegt!"
+themeInsertFailed;	"Theme konnte nicht angelegt werden!"
+
+themeUpdateSuccess;	"Theme erfolgreich aktualisiert!"
+themeUpdateFailed;	"Theme konnte nicht aktualisiert werden!"
+themeDeactivationSuccess; "Theme in Verwendung => erfolgreich deaktiviert!"
+themeActivateSuccess;	"Theme erfolgreich aktiviert!"
+
+
+
+themeDeleteSuccess;	"Theme erfolgreich gelöscht!"
+themeDeleteFailed;	"Theme konnte nicht gelöscht werden!"
+
+noThemeFound;   "Keine Einträge gefunden!"

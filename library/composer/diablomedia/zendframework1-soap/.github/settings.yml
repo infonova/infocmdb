@@ -1,0 +1,10 @@
+repository:
+  name: zf1-soap
+  private: false
+  has_issues: true
+  has_projects: true
+  has_wiki: true
+  has_downloads: true
+  default_branch: master
+  allow_squash_merge: true
+  allow_rebase_merge: true

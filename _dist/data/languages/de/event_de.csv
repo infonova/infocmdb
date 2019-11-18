@@ -1,0 +1,11 @@
+eventTitle;"Events" 
+
+ciId;"CI ID"
+eventName;"Name"
+eventLink;"Link"
+validFrom;"Gültig von"
+validTo;"Gültig bis"
+
+validToUnlimited;"ungebrenzt"
+
+numberOfResults;			"Anzahl der Ergebnisse:"

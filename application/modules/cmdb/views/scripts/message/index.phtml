@@ -1,0 +1,31 @@
+<a href="<?php echo APPLICATION_URL ?>message/create"><?php echo $this->translate('messageCreate') ?></a>
+| <a href="<?php echo APPLICATION_URL ?>message/outgoing"><?php echo $this->translate('messagesSent') ?></a>
+
+<h1 class="pageName"><?php echo $this->translate('messageInbox') ?></h1>
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th><?php echo $this->translate('messageId') ?></th>
+            <th><?php echo $this->translate('sender') ?></th>
+            <th><?php echo $this->translate('subject') ?></th>
+            <th><?php echo $this->translate('sent') ?></th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+        </tr>
+        <?php foreach ($this->paginator as $item): ?>
+            <tr class="<?php echo((!$item[Db_PrivateMessage::READ]) ? ' unread' : ''); ?>">
+                <td><?php echo $item[Db_PrivateMessage::ID]; ?></td>
+                <td><?php echo($item[Db_User::USERNAME] ? $item[Db_User::USERNAME] : "system"); ?></td>
+                <td><?php echo $item[Db_PrivateMessage::SUBJECT]; ?></td>
+                <td><?php echo $item[Db_PrivateMessage::SENT]; ?></td>
+                <td>
+                    <a href='<?php echo APPLICATION_URL ?>message/read/messageId/<?php echo $item[Db_PrivateMessage::ID] ?>'><?php echo $this->translate('read') ?></a>
+                </td>
+                <td>
+                    <a href='<?php echo APPLICATION_URL ?>mail/delete/messageId/<?php echo $item[Db_PrivateMessage::ID] ?>'><?php echo $this->translate('delete') ?></a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php endif; ?>
+<?php echo $this->paginator; ?>

@@ -1,0 +1,15 @@
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>log/index/type/<?php echo $this->type; ?>"><?php echo $this->translate('overview') ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('detail') ?></h1>
+<?php echo nl2br($this->log); ?>

@@ -1,0 +1,11 @@
+# This is the language file for fileupload interaction.
+
+filename;					"Filename"
+filepath;					"Upload File"
+submit;						"upload"
+
+line;"line"
+column;"column"
+
+
+errorOccurred;                      "An error occurred. Please try again later or contact your admin!"

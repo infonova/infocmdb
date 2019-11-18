@@ -1,0 +1,39 @@
+<h1 class="pageName"><?php echo $this->translate('favourites') ?></h1>
+<div class="numberResult">(<?php echo $this->translate('numberOfResults') ?> <?php echo count($this->valueLis) ?>)</div>
+
+<?php
+if (count($this->valueList)):
+    $row_count = 0;
+    ?>
+    <div class="break"></div>
+    <?php foreach ($this->valueList as $ciType): ?>
+    <?php if (count($ciType['ciList'])): ?>
+        <div class="break"></div>
+        <span title="<?php echo $ciType['citype_name'] ?>"><strong><?php echo $ciType['ciList'][0]['ciType']; ?></strong></span>
+        <table class="list" cellpadding="0" cellspacing="0" width="100%">
+            <tr class="headline">
+                <th width="40px"><?php echo $this->translate('ci'); ?></th>
+                <?php foreach ($ciType['attribList'] as $attrib): ?>
+                    <th><span title="<?php echo $attrib['name'] ?>"><?php echo $attrib['description'] ?></span></th>
+                <?php endforeach; ?>
+                <th width="20px">&nbsp;</th>
+            </tr>
+
+            <?php foreach ($ciType['ciList'] as $ci): ?>
+                <tr>
+                    <td>
+                        <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $ci['id'] ?>"><?php echo $ci['id'] ?></a>
+                    </td>
+                    <?php foreach ($ciType['attribList'] as $attrib): ?>
+                        <td><?php echo $ci[$attrib['name']] ?></td>
+                    <?php endforeach; ?>
+                    <td>
+                        <a class="link" href="<?php echo APPLICATION_URL ?>favourites/remove/ciid/<?php echo $ci['id'] ?>"><img class="form_icon" src="<?php echo APPLICATION_URL ?>/images/icon/inactive.png" alt="<?php echo $this->translate('remove') ?>" title="<?php echo $this->translate('remove') ?>" /></a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php endif; ?>
+<?php endforeach; ?>
+    <?php echo $this->paginator; ?>
+<?php endif; ?>

@@ -1,0 +1,131 @@
+importQueue;		"Queueuing Imports"
+importsSucceeded;	"Imports Succeeded"
+importsFailed;		"Imports Failed "
+
+noItemsFound;		"No Items found"
+restart;			"Restart"
+help;				"Help"
+
+numberOfResults; "Number of Results:"
+importHistory; "Import History"
+
+relation;			"create Relations"
+
+
+import;				"Import"
+overview;			"Overview"
+currentQueue;		"Current Queue"
+
+filename;			"Filename"
+linestotal;		"lines total"
+lineerrors;		"line errors"
+dateProceeded;		"Date of proceeding"
+log;				"Log"
+
+upload;				"Upload"
+historyfileDeleteSuccess; "History-Entry delted successfully!"
+
+addField;			"Add Field"
+removeField;		"Remove Field"
+hideForm;			"Close Fileupload Form"
+displayForm;		"Show Fileupload Form"
+
+fileserverConfiguration;	"Fileserver Configuration"
+
+createConfig;		"Create Configuration"
+fileimportConfig;	"Filesystem Import Configuration"
+
+configId;			"ID"
+name;				"Name"
+description;		"Description"
+note;				"Note"
+host;				"Host"
+
+edit;				"Edit"
+
+noConfigFound;		"No Configuration found"
+
+idleTitle;			"Idle Queue"
+attributeTitle;		"Attribut Queue"
+attributeSuccessTitle;"Attribut Success Queue"
+attributeErrorTitle;	"Attribut Error Queue"
+
+insertTitle;		"Insert Queue"
+insertSuccessTitle;	"Insert Success Queue"
+insertErrorTitle;	"Insert Error Queue"
+
+updateTitle;		"Update Queue"
+updateAutoTitle;	"Update Auto Queue"
+updateAutoSuccessTitle;	"Update Auto Success Queue"
+updateAutoErrorTitle;	"Update Auto Error Queue"
+
+updateManualTitle;	"Update Manuell Queue"
+updateManualSuccessTitle;	"Update Manuell Success Queue"
+updateManualErrorTitle;	"Update Manuell Error Queue"
+
+pickImport;"Importart wählen"
+
+importAttribute;"Attribute"
+importInsert;"Insert"
+importUpdateAuto;"Auto-Update"
+importUpdateManual;"Manual-Update"
+
+downloadLog;"Download"
+
+# WIZARD
+wizardImportType;"Import Type"
+wizardUpload;"File Upload"
+wizardModus;"Import Modus"
+wizardSummary;"Summary"
+wizardLog;"Log"
+wizardResult;"Result"
+abort;"Abort"
+back;"Back"
+save;"Save"
+next;"Next"
+ImportModus;"Kind of Import"
+Fortschritt;"Progress"
+Erfolgreich;"Successfully"
+Fehlgeschlagen;"Failed"
+close;"close"
+chooseImportType;"Choose Import Type"
+functionImport;"AdHoc Import per Fileupload"
+functionMail;"Import per Mail Configuration"
+functionFtp;"Import per FTP Configuration"
+linkImportStatus;"View current Imports"
+linkConfigMail;"View Imports per Mail"
+linkConfigFtp;"View Import per FTP"
+webFormUpload;"File"
+uploadedFileName;"Uploaded File Name"
+fileimportGetFilenameFailed;"Uploaded File not found! Please upload again!"
+fileDeleteSuccess;"File successfully deleted"
+queueErrorTitle; "Imports failed"
+queueSuccessTitle; "Imports succeed"
+queueTitle; "Queueuing Imports"
+fileimport; "File Import"
+fileimportModusSelectfailed; "Please select a Import Modus"
+modusUpdateAuto; "Import without manual Validation"
+modusUpdateManual; "Import with manual Validation"
+
+
+
+# import error codes
+676; "Importing one of the attributes failed"
+1; "CiType is missing"
+2; "General Error (red X)"
+50; "Attribute ID is missing"
+51; "Attribute is set multiple times (is not Unique)"
+52; "Mandatory attribute is missing"
+53; "Invalid attribute value"
+54; "Update failed"
+55; "Insert failed"
+56; "Invalid attribute"
+57; "Invalid CI Type"
+58; "Invalid project"
+59; "Attribute is empty (ISNULL)"
+66; "Unexpected error occurred"
+677; "All attributes failed"
+80; "Inserting attribute failed"
+90; "Imported attribute OR CI Type is empty (= NULL)"
+666;"Attribute in Header does not exist in the CMDB"
+667;"Value for Select, Radio or Checkbox is invalid"

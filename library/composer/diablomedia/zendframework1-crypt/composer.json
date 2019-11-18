@@ -1,0 +1,61 @@
+{
+    "name": "diablomedia/zendframework1-crypt",
+    "description": "Zend Framework 1 Crypt component",
+    "type": "library",
+    "keywords": [
+        "framework",
+        "zf1"
+    ],
+    "homepage": "http://framework.zend.com/",
+    "license": "BSD-3-Clause",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.0.0",
+        "diablomedia/zendframework1-exception": "^1.0.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Zend_Crypt_": "src/"
+        },
+        "classmap": [
+            "src/Zend/Crypt.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "Zend_": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "no-api": true,
+            "url": "https://github.com/diablomedia/phpstorm-stubs"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "phpstan/phpstan": "^0.11.2",
+        "jetbrains/phpstorm-stubs": "dev-phpstan",
+        "friendsofphp/php-cs-fixer": "^2.11",
+        "maglnet/composer-require-checker": "^1.1.0",
+        "phpro/grumphp": "^0.14.0"
+    },
+    "archive": {
+        "exclude": ["/tests"]
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-with-coverage": "phpunit --coverage-clover=clover.xml",
+        "phpstan": "phpstan analyze -c phpstan.neon --no-progress --ansi",
+        "style-check": "php-cs-fixer fix --dry-run -vv"
+    },
+    "suggest": {
+        "ext-openssl": "Used in various hashing/crypt algorithms",
+        "ext-hash": "Used in various hashing/crypt algorithms",
+        "ext-bcmath": "Used in various hashing/crypt algorithms",
+        "ext-gmp": "Used in various hashing/crypt algorithms",
+        "ext-mcrypt": "Used in various hashing/crypt algorithms"
+    }
+}

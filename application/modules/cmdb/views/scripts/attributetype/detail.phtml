@@ -1,0 +1,71 @@
+<script type="text/javascript">
+    function deactivate_menu(menu_id) {
+        if (confirm('<?php echo $this->translate('areYouSureDeactivate') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>attributetype/deactivate/attributetypeId/' + menu_id;
+        }
+    }
+
+    function activate_menu(menu_id) {
+        if (confirm('<?php echo $this->translate('areYouSureActivate') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>attributetype/activate/attributetypeId/' + menu_id;
+        }
+    }
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+$pre   = '';
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+} else {
+    $pre .= " | ";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href='<?php echo APPLICATION_URL ?>attributetype/edit/attributetypeId/<?php echo $this->menu[Db_AttributeType::ID] ?>'><?php echo $this->translate('edit'); ?></a>
+    <?php if ($this->menu[Db_AttributeType::IS_ACTIVE]): ?>
+        <?php echo $pre; ?>
+        <a class="<?php echo $class; ?> cancel" href="javascript:deactivate_menu(<?php echo $this->menu[Db_AttributeType::ID] ?>)"><?php echo $this->translate('delete'); ?></a>
+    <?php else: ?>
+        <?php echo $pre; ?>
+        <a class="<?php echo $class; ?> activate" href="javascript:activate_menu(<?php echo $this->menu[Db_AttributeType::ID] ?>)"><?php echo $this->translate('activate'); ?></a>
+    <?php endif; ?>
+    <?php echo $pre; ?>
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>attributetype/index"><?php echo $this->translate('overview'); ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('detailAttributetype'); ?></h1>
+
+<fieldset class="lordVader">
+    <table>
+        <tr>
+            <td><strong><?php echo $this->translate('attributetypeId'); ?></strong></td>
+            <td><?php echo $this->menu[Db_AttributeType::ID] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('name'); ?></strong></td>
+            <td><?php echo $this->menu[Db_AttributeType::NAME] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('description'); ?></strong></td>
+            <td><?php echo $this->menu[Db_AttributeType::DESCRIPTION] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('note'); ?></strong></td>
+            <td><?php echo $this->menu[Db_AttributeType::NOTE] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('order'); ?></strong></td>
+            <td><?php echo $this->menu[Db_AttributeType::ORDER_NUMBER] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('active'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->menu[Db_AttributeType::IS_ACTIVE]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+    </table>
+</fieldset>

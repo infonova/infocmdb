@@ -1,0 +1,63 @@
+parameters:
+    level: 2
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        - '#Variable \$id might not be defined\.#'
+        - '#Variable \$idstamp might not be defined\.#'
+        - '#Variable \$day might not be defined\.#'
+        - '#Variable \$leapyear might not be defined\.#'
+        - '#Variable \$year might not be defined\.#'
+        - '#Variable \$offset might not be defined\.#'
+        - '#Variable \$masterException might not be defined\.#'
+        -
+            message: '#Binary operation "&" between string and [\d]+ results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/TimeSync/Ntp.php
+        -
+            message: '#Binary operation "\+" between string and 2208988800 results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/TimeSync/Ntp.php
+        -
+            message: '#Binary operation ">>" between string and 17 results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/TimeSync/Ntp.php
+        -
+            message: '#Binary operation "\*" between string and [\d]+ results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Binary operation "\+" between string and [\d]+ results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Binary operation "-" between string and [\d] results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Binary operation "\+" between [\d]+ and string results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Binary operation "-=" between string and [\d]+ results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Binary operation "-" between string and [\d]+ results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Binary operation "-" between string and int results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Binary operation "\+=" between int and string results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Binary operation "-" between string and float\|int\|string results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Binary operation "\+=" between float\|int\|string and string results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Binary operation "-" between string and int\|string results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Comparison operation ">" between int\|string\|Zend_Date and 0 results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php
+        -
+            message: '#Comparison operation "<" between int\|string\|Zend_Date and 0 results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/Date.php

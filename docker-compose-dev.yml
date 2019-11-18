@@ -1,0 +1,106 @@
+version: "3.4"
+
+services:
+
+  #
+  # FOR DEVELOPMENT ONLY
+  #
+  # can be used to simulate a volume containing the defined environment as secrets
+  # mount the secrets volume to /run/secrets in each container were needed
+  #
+  secret-simulator:
+    image: mikesir87/secrets-simulator
+    volumes:
+      - secrets:/run/secrets:rw
+    environment:
+      - DB_HOST=mariadb
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=infoCMDB
+      - DB_PASSWORD=password1234
+      - DB_ROOT_PASSWORD=rootpassword1234
+    restart: "no"
+
+  mariadb:
+    volumes:
+      - 'database-volume:/var/lib/mysql'
+      - secrets:/run/secrets:ro
+      - './docker/mariadb:/bootstrap:ro'
+
+  php:
+    build:
+      args:
+        APPLICATION_ENV: "development"
+    volumes:
+      - "./docker/php:/bootstrap:cached"
+      - "./:/app:cached"
+      - secrets:/run/secrets:ro
+    environment:
+      - DB_SEEDING_ENABLED=1
+      - APPLICATION_ENV=development
+      - DB_DATABASE_TESTING=${DB_DATABASE_TESTING}
+    depends_on:
+      - secret-simulator
+
+  cron:
+    environment:
+      - APPLICATION_ENV="development"
+
+  web:
+    environment:
+      - APPLICATION_ENV=development
+    volumes:
+      - "./docker/nginx:/bootstrap"
+      - "./:/app:cached"
+    ports:
+      - "${DOCKER_WEB_PORT}:80"
+      - "${DOCKER_WEB_SSL_PORT}:443"
+    networks:
+      default:
+        aliases:
+          - cmdb.test.local
+          - ${DOCKER_WEB_HOSTNAME}
+
+  hub:
+    image: elgalu/selenium:${COMPOSE_ENV_SELENIUM_VERSION:-3}
+    volumes:
+      - /dev/shm:/dev/shm
+    privileged: true
+    environment:
+      - SELENIUM_HUB_HOST=hub
+      - SELENIUM_HUB_PORT=4444
+      - GRID=true
+      - CHROME=false
+      - FIREFOX=false
+
+  chrome:
+    image: elgalu/selenium:${COMPOSE_ENV_SELENIUM_VERSION:-3}
+    depends_on:
+      - hub
+    ports:
+      # noVNC: See what's going on by hitting http://0.0.0.0:6080 in your browser
+      - '${DOCKER_WEBVNC_PORT}:26080'
+    tmpfs:
+      - /tmp
+    volumes:
+      - /dev/shm:/dev/shm
+    privileged: true
+    environment:
+      - NOVNC=${DOCKER_WEBVNC_ENABLED}
+      - SELENIUM_HUB_HOST=hub
+      - SELENIUM_HUB_PORT=${DOCKER_SELENIUM_HUB_PORT}
+      - SELENIUM_NODE_HOST={{CONTAINER_IP}}
+      - SCREEN_WIDTH=1920
+      - SCREEN_HEIGHT=1080
+      - VIDEO=false
+      - GRID=false
+      - CHROME=true
+      - FIREFOX=false
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - '${DOCKER_MAILCATCHER_PORT}:1080'
+
+volumes:
+  secrets:
+    driver: local

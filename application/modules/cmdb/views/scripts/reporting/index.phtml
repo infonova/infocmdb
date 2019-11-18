@@ -1,0 +1,142 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+<script type="text/javascript">
+    function delete_reporting(reporting_id) {
+        if (confirm('<? echo $this->translate("areYouSureDelete"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>reporting/delete/reportingId/' + reporting_id;
+        }
+    }
+
+    function activate_reporting(reporting_id) {
+        if (confirm('<? echo $this->translate("areYouSureActivate"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>reporting/activate/reportingId/' + reporting_id;
+        }
+    }
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class = " button";
+}
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?> create" href="<?php echo APPLICATION_URL ?>reporting/create"><?php echo $this->translate('reportCreate') ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('reporting') ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+              action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+              method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterButton;
+            ?>
+        </form>
+    </div>
+</div>
+<div class="clearBoth" style="margin-bottom: 15px;"></div>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th>
+                <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Reporting::NAME, 'direction' => (($this->orderBy == Db_Reporting::NAME) ? $urlDirection : "DESC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('name'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Reporting::DESCRIPTION, 'direction' => (($this->orderBy == Db_Reporting::DESCRIPTION) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('description'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Reporting::INPUT, 'direction' => (($this->orderBy == Db_Reporting::INPUT) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('input'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Reporting::OUTPUT, 'direction' => (($this->orderBy == Db_Reporting::OUTPUT) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('output'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Reporting::TRANSPORT, 'direction' => (($this->orderBy == Db_Reporting::TRANSPORT) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('transport'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Reporting::TRIGGER, 'direction' => (($this->orderBy == Db_Reporting::TRIGGER) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('trigger'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_Reporting::IS_ACTIVE, 'direction' => (($this->orderBy == Db_Reporting::IS_ACTIVE) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('active'); ?>
+                </a>
+            </th>
+            <th>
+                <div style="width:200px;"></div>
+            </th>
+        </tr>
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <?php
+            if (!$item[Db_Reporting::IS_ACTIVE]) {
+                ?>
+                <tr class="inactive">
+                <?php
+            } else {
+                ?>
+                <tr>
+                <?php
+            }
+            ?>
+            <td>
+                <a class="link" href="<?php echo APPLICATION_URL ?>reporting/detail/reportingId/<?php echo $item[Db_Reporting::ID]; ?>"><?php echo $item[Db_Reporting::NAME]; ?></a>
+            </td>
+            <td><?php echo $item[Db_Reporting::DESCRIPTION]; ?></td>
+            <td><?php echo $item[Db_Reporting::INPUT]; ?></td>
+            <td><?php echo $item[Db_Reporting::OUTPUT]; ?></td>
+            <td><?php echo $item[Db_Reporting::TRANSPORT]; ?></td>
+            <td><?php echo $item[Db_Reporting::TRIGGER]; ?></td>
+            <td><?php if ($item[Db_Reporting::IS_ACTIVE]) {
+                    echo $this->translate('active');
+                } else {
+                    echo $this->translate('inactive');
+                } ?></td>
+            <td>
+                <?php if ($item[Db_Reporting::IS_ACTIVE]): ?>
+                    <a class="delete_list" title="<?php echo $this->translate('delete'); ?>" href="#" onclick="javascript:delete_reporting(<?php echo $item[Db_Reporting::ID]; ?>);"></a>
+                <?php endif; ?>
+                <div class="rfloater">
+                    <a class="link buttonLink" href="<?php echo APPLICATION_URL ?>reporting/execute/reportingId/<?php echo $item[Db_Reporting::ID]; ?>"><?php echo $this->translate('execute') ?></a>
+                    <a class="edit_list buttonLink" href="<?php echo APPLICATION_URL ?>reporting/edit/reportingId/<?php echo $item[Db_Reporting::ID]; ?>" title="<?php echo $this->translate('edit') ?>"></a>
+                    <?php if (!$item[Db_Reporting::IS_ACTIVE]): ?>
+                        <a href="#" onclick="javascript:activate_reporting(<?php echo $item[Db_Reporting::ID]; ?>);"><img class="delete_list" src='<?php echo APPLICATION_URL . "images/icon/activate.png" ?>' title="<?php echo $this->translate('activate') ?>"></a>
+                    <?php endif; ?>
+
+                </div>
+            </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php echo $this->paginator; ?>
+<?php else: ?>
+    <div class="empty_message">
+        <?php echo $this->translate('noReportingFound') ?>
+    </div>
+<?php endif; ?>
+
+
+

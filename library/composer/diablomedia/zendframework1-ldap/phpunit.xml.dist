@@ -1,0 +1,34 @@
+<phpunit
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    backupGlobals="true"
+    stderr="true"
+    colors="true">
+    <php>
+        <const name="TESTS_ZEND_LDAP_ONLINE_ENABLED" value="false" />
+        <const name="TESTS_ZEND_LDAP_HOST" value="localhost" />
+        <const name="TESTS_ZEND_LDAP_USE_START_TLS" value="true" />
+        <const name="TESTS_ZEND_LDAP_USERNAME" value="CN=someUser,DC=example,DC=com" />
+        <const name="TESTS_ZEND_LDAP_PRINCIPAL_NAME" value="someUser@example.com" />
+        <const name="TESTS_ZEND_LDAP_PASSWORD" value="null" />
+        <const name="TESTS_ZEND_LDAP_BIND_REQUIRES_DN" value="true" />
+        <const name="TESTS_ZEND_LDAP_BASE_DN" value="OU=Sales,DC=example,DC=com" />
+        <const name="TESTS_ZEND_LDAP_ACCOUNT_DOMAIN_NAME" value="example.com" />
+        <const name="TESTS_ZEND_LDAP_ACCOUNT_DOMAIN_NAME_SHORT" value="EXAMPLE" />
+        <const name="TESTS_ZEND_LDAP_ALT_USERNAME" value="anotherUser" />
+        <const name="TESTS_ZEND_LDAP_ALT_DN" value="CN=Another User,OU=Sales,DC=example,DC=com" />
+        <const name="TESTS_ZEND_LDAP_ALT_PASSWORD" value="null" />
+    </php>
+    <testsuites>
+        <testsuite name="default">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>

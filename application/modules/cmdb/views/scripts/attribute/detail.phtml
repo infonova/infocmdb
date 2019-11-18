@@ -1,0 +1,130 @@
+<script type="text/javascript">
+    function delete_attribute(attribute_id) {
+        if (confirm('<?php echo $this->translate('areYouSureDelete') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>attribute/delete/attributeId/' + attribute_id;
+        }
+    }
+
+    function activate_attribute(attribute_id) {
+        if (confirm('<?php echo $this->translate('areYouSureActivate') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>attribute/activate/attributeId/' + attribute_id;
+        }
+    }
+</script>
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href='<?php echo APPLICATION_URL ?>attribute/edit/attributeId/<?php echo $this->attribute[Db_Attribute::ID] ?>'><?php echo $this->translate('edit'); ?></a>
+    <?php if ($this->attribute[Db_Attribute::IS_ACTIVE]): ?>
+        <a class="<?php echo $class; ?> cancel" href="javascript:delete_attribute(<?php echo $this->attribute[Db_Attribute::ID] ?>)"><?php echo $this->translate('delete'); ?></a>
+    <?php else: ?>
+        <a class="<?php echo $class; ?> activate" href="javascript:activate_attribute(<?php echo $this->attribute[Db_Attribute::ID] ?>)"><?php echo $this->translate('activate'); ?></a>
+    <?php endif; ?>
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>attribute/index"><?php echo $this->translate('overview'); ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('detailAttribute'); ?></h1>
+
+<fieldset class="lordVader">
+    <table>
+        <tr>
+            <td><strong><?php echo $this->translate('attributeId'); ?></strong></td>
+            <td><?php echo $this->attribute[Db_Attribute::ID] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('name'); ?></strong></td>
+            <td><?php echo $this->attribute[Db_Attribute::NAME] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('description'); ?></strong></td>
+            <td><?php echo $this->attribute[Db_Attribute::DESCRIPTION] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('note'); ?></strong></td>
+            <td><?php echo $this->attribute[Db_Attribute::NOTE] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('hint'); ?></strong></td>
+            <td><?php echo $this->attribute[Db_Attribute::HINT] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('createXML'); ?></strong></td>
+            <td><?php echo $this->attribute[Db_Attribute::TAG] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('order'); ?></strong></td>
+            <td><?php echo $this->attribute[Db_Attribute::ORDER_NUMBER] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('column'); ?></strong></td>
+            <td><?php echo $this->attribute[Db_Attribute::COLUMN] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('highlightAttribute'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->attribute[Db_Attribute::IS_BOLD]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('uniqueConstraint'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->attribute[Db_Attribute::IS_UNIQUE]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('ticketEnabledLabel'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->attribute[Db_Attribute::IS_EVENT]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('todoItem'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->attribute[Db_Attribute::IS_UNIQUE_CHECK]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('isNumeric'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->attribute[Db_Attribute::IS_NUMERIC]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('active'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->attribute[Db_Attribute::IS_ACTIVE]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+    </table>
+    <?php if ($this->types && count($this->types) > 0) : ?>
+        <fieldset class="detail_fieldset">
+            <legend><strong><?php echo $this->translate('ciTypes'); ?></strong></legend>
+            <ul>
+                <?php foreach ($this->types as $type): ?>
+                    <li>
+                        <a class="link" href="<?php echo APPLICATION_URL ?>citype/detail/citypeId/<?php echo($type[Db_CiType::ID]); ?>"><?php if ($type[Db_CiTypeAttribute::IS_MANDATORY]) echo '<strong>'; ?><?php echo($type[Db_CiType::NAME]); ?><?php if ($type[Db_CiTypeAttribute::IS_MANDATORY]) echo '</strong>'; ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </fieldset>
+    <?php endif; ?>
+    <?php if ($this->roles && count($this->roles) > 0) : ?>
+        <fieldset class="detail_fieldset">
+            <legend><strong><?php echo $this->translate('roles'); ?></strong></legend>
+            <ul>
+                <?php foreach ($this->roles as $role): ?>
+                    <li>
+                        <a class="link" href="<?php echo APPLICATION_URL ?>role/detail/roleId/<?php echo($role[Db_Role::ID]); ?>"><?php echo($role[Db_Role::NAME]); ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </fieldset>
+    <?php endif; ?>
+</fieldset>

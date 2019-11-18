@@ -1,0 +1,9 @@
+<script type="text/javascript">
+    function updateCiForm(createForm) {
+        createForm.action = "<?php echo APPLICATION_URL . 'ci/changecitype/ciid/' . $this->ciid; ?>";
+        createForm.submit();
+    }
+</script>
+
+<h1 class="pageName"><?php echo $this->translate('changeCiType') ?></h1>
+<?php echo $this->form; ?>

@@ -1,0 +1,102 @@
+<script src="/js/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    <!--
+
+    function cancelForm() {
+        location.href = '<?php echo APPLICATION_URL?>/query/detail/queryId/<?php echo $this->queryId?>';
+        return false;
+    }
+
+    //-->
+
+
+    $(document).ready(function () {
+        //editor
+        var editor = initAceEditor('#query', 'mysql');
+    });
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>"
+       href="<?php echo APPLICATION_URL ?>query/index"><?php echo $this->translate('overview') ?></a>
+    |
+    <a class="<?php echo $class; ?>"
+       href="<?php echo APPLICATION_URL ?>query/detail/queryId/<?php echo $this->queryId ?>"><?php echo $this->translate('queryDetail') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('queryEdit'); ?></h1>
+
+<form name="<?php echo $this->escape($this->form->getName()) ?>"
+      action="<?php echo $this->escape($this->form->getAction()) ?>"
+      method="<?php echo $this->escape($this->form->getMethod()) ?>">
+    <fieldset class="lordVader">
+        <table>
+            <tr>
+                <td width="80%">
+                    <table>
+                        <tr>
+                            <?php echo $this->form->name ?>
+                            <td class="query"><em><?php echo $this->translate('queryNameExample'); ?></em></td>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->description ?>
+                            <td class="query"><em><?php echo $this->translate('queryDescriptionExample'); ?></em></td>
+                        </tr>
+
+
+
+                        <tr>
+                            <?php echo $this->form->query ?>
+                            <td class="query"><em><?php echo $this->translate('queryQueryExample'); ?></em></td>
+                        </tr>
+
+                        <?php
+                        $formDesc = $this->form->getDescription();
+                        if (!empty($formDesc)) : ?>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="slidebox">
+                                        <h3 class="slidebox-header"><?php echo $this->translate('formHelp') ?></h3>
+                                        <div class="slidebox-content">
+                                            <?php echo $formDesc ?>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <tr>
+                            <td colspan=3>
+                                <?php echo $this->form->submit ?>
+                                <?php echo $this->form->cancle ?>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <?php
+
+                    $icon = null;
+                    if ($this->query[Db_StoredQuery::STATUS]) {
+                        $icon = 'accept_16.png';
+                    } else if (!$this->query[Db_StoredQuery::STATUS_MESSAGE]) {
+                        $icon = 'info_yellow.png';
+                    } else {
+                        $icon = 'info_red.png';
+                    }
+                    ?>
+                    <?php echo $this->translate('queryStatus'); ?>:
+                    <img width="15" height="15" src="<?php echo APPLICATION_URL . '/images/icon/' . $icon; ?>"/>
+                </td>
+            </tr>
+
+        </table>
+    </fieldset>
+</form>

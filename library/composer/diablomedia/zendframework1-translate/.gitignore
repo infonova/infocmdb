@@ -1,0 +1,6 @@
+/vendor
+/composer.lock
+/clover.xml
+/tests/Zend/_files/zend_cache*
+/tests/Zend/Translate/Adapter/_files/zend_cache*
+.php_cs.cache

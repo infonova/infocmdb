@@ -1,0 +1,48 @@
+<div class="button_row">
+    <a class="link button" href="<?php echo APPLICATION_URL ?>workflow/detail/workflowId/<?php echo $this->workflowId; ?>"><?php echo $this->translate('back'); ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('transitionDetail'); ?></h1>
+
+<fieldset class="create_form">
+    <table>
+        <tr>
+            <td><?php echo $this->translate('transitionId'); ?></td>
+            <td><?php echo $this->transition[Db_WorkflowTransition::ID] ?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate('name'); ?></td>
+            <td><?php echo $this->transition[Db_WorkflowTransition::NAME] ?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate('description'); ?></td>
+            <td><?php echo $this->transition[Db_WorkflowTransition::DESCRIPTION] ?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate('note'); ?></td>
+            <td><?php echo $this->transition[Db_WorkflowTransition::NOTE] ?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate('script'); ?></td>
+            <td>
+                <a class="tu_iframe_700x600" toptions="effect = clip, layout = flatlook" href="<?php echo APPLICATION_URL ?>fileupload/edit/filetype/workflow/file/<?php echo $this->task[Db_WorkflowTask::SCRIPT]; ?>"><?php echo $this->task[Db_WorkflowTask::SCRIPT]; ?></a>
+            </td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate('role'); ?></td>
+            <td><?php echo $this->transition[Db_WorkflowTransition::ROLE_ID] ?></td>
+        </tr>
+
+        <tr>
+            <td><?php echo $this->translate('trigger'); ?></td>
+            <td><?php echo $this->transition[Db_WorkflowTransition::TRIGGER] ?></td>
+        </tr>
+
+        <?php if ($this->transition[Db_WorkflowTransition::TRIGGER] == Dao_Workflow::WORKFLOW_TRANS_TRIGGER_TIME): ?>
+            <tr>
+                <td><?php echo $this->translate('time'); ?></td>
+                <td><?php echo $this->transition[Db_WorkflowTransition::TRIGGER_TIME] ?> sec.</td>
+            </tr>
+        <?php endif; ?>
+    </table>
+
+</fieldset>

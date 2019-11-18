@@ -1,0 +1,201 @@
+<script type="text/javascript">
+    function cancel() {
+
+        window.location.href = '<?php echo APPLICATION_URL . 'user/index'; ?>';
+
+    }
+
+    function submitForm() {
+        $("input[id^=projectId]").prop('disabled', false);
+        document.forms['create'].submit();
+    }
+
+    $(function () {
+        $("#tabs").tabs();
+    });
+
+    function changeDIVElement(divElement) {
+        $("#tabs").tabs({active: $(divElement).index()});
+    };
+
+    $(document).ready(function () {
+        $(document).ready(function () {
+            $("form#create input").keypress(function (e) {
+                if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                    submitForm();
+                    return false;
+                }
+            });
+            $("form#create select").keypress(function (e) {
+                if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                    submitForm();
+                    return false;
+                }
+            });
+        });
+    })
+</script>
+<div class="button_row">
+    <a href="<?php echo APPLICATION_URL ?>user/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('userCreate') ?></h1>
+
+
+<div id="tabs">
+    <ul>
+        <li>
+            <a href="#fragment-1"><span class="att_nr">1</span><span class="att_desc"><?php echo $this->translate('userCreate') ?></span></a>
+        </li>
+        <li>
+            <a href="#fragment-2"><span class="att_nr">2</span><span class="att_desc"><?php echo $this->translate('assignProjects') ?></span></a>
+        </li>
+        <li>
+            <a href="#fragment-3"><span class="att_nr">3</span><span class="att_desc"><?php echo $this->translate('assignRoles') ?></span></a>
+        </li>
+    </ul>
+    <fieldset class="create_form steps">
+        <form widgetid="create" id="create" enctype="<?php echo $this->form->getEnctype() ?>" method="<?php echo $this->form->getMethod() ?>">
+            <div id="fragment-1">
+                <fieldset class="lordVader">
+                    <table>
+                        <tbody>
+                        <?php
+                        echo $this->form->theme;
+                        echo $this->form->name;
+                        echo $this->form->email;
+                        echo $this->form->password;
+                        echo $this->form->password_confirm;
+                        echo $this->form->password_expire_off;
+                        echo $this->form->firstname;
+                        echo $this->form->lastname;
+                        echo $this->form->description;
+                        echo $this->form->note;
+                        echo $this->form->language;
+                        echo $this->form->layout;
+                        echo $this->form->ciDelete;
+                        echo $this->form->relationDelete;
+                        echo $this->form->ldapAuth;
+                        echo $this->form->isRoot;
+                        ?>
+                        </tbody>
+                    </table>
+                    <br><br>
+                </fieldset>
+                <div class="buttonCon">
+                    <input type="button" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="button" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
+                </div>
+            </div>
+            <div id="fragment-2">
+                <fieldset class="lordVader">
+                    <table style="padding-right:0px;">
+                        <tr>
+                            <th width="25px">
+                                <a class="all project" href="#"><span title="<?php echo $this->translate('userProjectCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('project') ?>"><?php echo $this->translate('project') ?></span>
+                            </th>
+
+                            <th width="25px">
+                                <a class="all project" href="#"><span title="<?php echo $this->translate('userProjectCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('project') ?>"><?php echo $this->translate('project') ?></span>
+                            </th>
+
+                            <th width="25px">
+                                <a class="all project" href="#"><span title="<?php echo $this->translate('userProjectCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('project') ?>"><?php echo $this->translate('project') ?></span>
+                            </th>
+                        </tr>
+                        <?php
+                        $count = 0;
+                        foreach ($this->projects as $project) {
+                            if (!$count)
+                                echo '<tr>';
+                            $fieldname = 'projectId_' . $project[Db_Project::ID];
+                            ?>
+                            <td width="20px" style="padding-right:0px;"><?php echo $this->form->$fieldname ?></td>
+                            <td>
+                                <span title="<?php echo $project[Db_Project::NOTE] ?>"><?php echo $project[Db_Project::NAME] ?></span>
+                            </td>
+                            <?php
+                            $count++;
+                            if ($count == 3) {
+                                echo '</tr>';
+                                $count = 0;
+                            }
+                        }
+                        ?>
+                    </table>
+                </fieldset>
+                <br><br>
+                <div class="buttonCon">
+                    <input type="button" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-1'); return false;">
+                    <input type="button" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="button" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-3'); return false;">
+                </div>
+
+            </div>
+            <div id="fragment-3">
+                <fieldset class="lordVader">
+                    <table style="padding-right:0px;">
+                        <tr>
+                            <th width="25px">
+                                <a class="all role" href="#"><span title="<?php echo $this->translate('userRoleCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('role') ?>"><?php echo $this->translate('role') ?></span>
+                            </th>
+
+                            <th width="25px">
+                                <a class="all role" href="#"><span title="<?php echo $this->translate('userRoleCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('role') ?>"><?php echo $this->translate('role') ?></span>
+                            </th>
+
+                            <th width="25px">
+                                <a class="all role" href="#"><span title="<?php echo $this->translate('userRoleCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('role') ?>"><?php echo $this->translate('role') ?></span>
+                            </th>
+                        </tr>
+                        <?php
+                        $count = 0;
+                        foreach ($this->roles as $role) {
+                            if (!$count)
+                                echo '<tr>';
+                            $fieldname = 'roleId_' . $role[Db_Role::ID];
+                            ?>
+                            <td width="20px" style="padding-right:0px;"><?php echo $this->form->$fieldname ?></td>
+                            <td>
+                                <span title="<?php echo $role[Db_Role::NOTE] ?>"><?php echo $role[Db_Role::NAME] ?></span>
+                            </td>
+                            <?php
+                            $count++;
+                            if ($count == 3) {
+                                echo '</tr>';
+                                $count = 0;
+                            }
+                        }
+                        ?>
+                    </table>
+                </fieldset>
+                <br><br>
+                <div class="buttonCon">
+                    <input type="button" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
+                    <input type="button" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                </div>
+
+            </div>
+        </form>
+    </fieldset>
+</div>

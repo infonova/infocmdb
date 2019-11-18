@@ -1,0 +1,67 @@
+# This is the language file for view type interaction.
+
+# General
+overview;					"Übersicht"
+
+
+# Index Page
+attributegroups;					"Attribut-Gruppen"
+createattributegroup;				"Allgemein"
+sortattributegroup;                 "Sortierung"
+
+attributeGroupId;					"ID"
+name;						"Name"
+description;				"Beschreibung"
+attributegroupParent;		"Übergeordnete Attribut-Gruppe"
+note;						"Notiz"
+sorting;					"Sortierung"
+valid;						"Gültig"
+active;						"aktiv"
+inactive;					"inaktiv"
+order;						"Sortiernummer"
+parent;						"Parent"
+
+duplicate_allow;			"Verdoppeln erlauben"
+duplicate_allow_desc;		"legt fest ob eine Attributgruppe verdoppelt werden darf"
+
+name_desc;					"Name der Attribut-Gruppe (CMDB intern)"
+parentAttributeGroup_desc;	"Übergeordnete Attribut-Gruppe welcher die zu erstellende Attribut Gruppe zugeordnet ist"
+description_desc;			"Bezeichnung der Attribut-Gruppe welche im CI angezeigt wird"
+note_desc;					"Beschreibung der Attribut-Gruppe welche durch Berührung mit dem Mouse Cursor angezeigt wird"
+sorting_desc;				"Sortierung der Attribut-Gruppe innerhalb des CIs"
+valid_desc;					"Attribut-Gruppe aktivieren und deaktivieren"
+
+
+attributegroupCreate;				"Attribut-Gruppe anlegen"
+attributegroupEdit;				"Attribut-Gruppe bearbeiten"
+attributegroupDetail;				"Attribut-Gruppe Detail"
+
+attributeGroupNameTitle;  "Name der Attribut Gruppe, kleingeschreiben, auf Englisch z.B.: cmdb_attribute_group"
+attributeGroupDescriptionTitle; "Name der Attribut Gruppe auf Deutsch"
+attributeGroupParentTitle; "Die Übergeordnete Attribut-Gruppe"
+attributeGroupNoteTitle; "Hilfetext der durch Berührung mit dem Mouse Cursor angezeigt wird"
+attributeGroupSortingTitle; "Gibt die Reihung der Attribut-Gruppe an"
+
+save;						"Speichern"
+edit;						"Bearbeiten"
+delete;						"Löschen"
+abort;          			"Abbrechen"
+
+numberOfResults;	"Anzahl der Ergebnisse:"
+
+# Form Validation
+nameTooShort;				"Der Name ist zu kurz!"
+nameTooLong;				"Der Name ist zu lange!"
+
+
+# Messages
+attributegroupUpdateSuccess;		"Attribut Gruppe erfolgreich aktualisiert!"
+attributegroupUpdateFailed;		"Attribut Gruppe konnte nicht aktualisiert werden!"
+
+attributegroupInsertSuccess;		"Attribut Gruppe erfolgreich angelegt!"
+attributegroupInsertFailed;		"Attribut Gruppe konnte nicht angelegt werden!"
+
+attributegroupDeleteSuccess;		"Attribut Gruppe erfolgreich gelöscht!"
+attributegroupDeleteFailed;		"Attribut Gruppe konnte nicht gelöscht werden!"
+
+areYouSureDelete;			"Wollen Sie die Attribut Gruppe wirklich löschen?"

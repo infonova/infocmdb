@@ -1,0 +1,36 @@
+# Translation file
+
+# General
+overview;				"Overview"
+numberOfResults;		"Number of Results:"
+
+createProject;			"General"
+projects;				"Projects"
+user;					"User"
+name;					"Name"
+description;			"Description"
+note;					"Note"
+valid;					"Status"
+inactive;				"inactive"
+order;					"Sorting"
+cancel;					"Cancel"
+save;					"Save"
+
+projectCreate;			"Create Project"
+projectEdit;			"Edit Project"
+
+
+# User Page
+addUser;				"Add User"
+roleUserCheckName;		"x"
+
+# messages
+areYouSureDelete; "Do you really want to delete this Project?"
+areYouSureActivate;	"Do you really want to activate this Project?"
+projectInsertSuccess;	"Project created successfully!"
+projectDeleteSuccess;	"Project deleted successfully!"
+projectDeactivationSuccess;	"Project in use => deactivated successfully!"
+projectActivateSuccess;	"Project activated successfully!"
+projectUpdateSuccess; "Project edited successfully!"
+
+noProjectFound;   "No entries found!"

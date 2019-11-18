@@ -1,0 +1,169 @@
+# This is the language file for CI interaction.
+
+# Used for project view settings
+ciProjects;				"Projekte des CI"
+changeCiType;			"CI Typ Ändern"
+change;					"Aenderungen Uebernehmen"
+icon;					"Icon"
+note;					"Notiz"
+ciCreate;				"CI anlegen"
+create;					"Speichern"
+ciEdit;					"CI bearbeiten"
+project;				"Projekt"
+projectName;			"Name des Projektes"
+addProjectCheck;		"Soll das CI dem Projekt zugeordnet werden?"
+ciType;					"CI Typ"
+uploadIcon;				"Icon hochladen"
+deleteIcon;				"Icon löschen"
+createCiButton;			"anlegen"
+fadeOut;				"ausblenden"
+fadeIn;				    "einblenden"
+createCiButtonEN;		""
+back;					"Zurück"
+abort;					"Abbrechen"
+next;					"Weiter"
+areYouSureabort;		"Wollen Sie das CI wirklich zurücksetzen?"
+ciProjectMappingUpdateSuccess;	"Projekte erfolgreich geändert"
+checknotunique;			"Der eingegebene Wert wird bereits von einem anderen CI verwendet"
+ciCreateLinkFailed;     "Hinzufügen fehlgeschlagen"
+ciDuplicateFailMultipleProjects;    "Das duplizierte CI ist mehreren Projekten zugeordnet. Bitte manuell auswählen!"
+
+ciParentCiTypeTitle;	"CI Typ"
+ciProjectTitle;			"Projekt"
+
+exportCiList;			"Exportieren (aktuelle Liste)"
+exportCiType;			"Exportieren (alle Attribute)"
+
+upload;					"Hochladen"
+date;					"Datum:"
+time;					"Uhrzeit:"
+currentDocument;		"aktuelles Dokument"
+actions;				"Aktionen"
+color;					"Einfärben"
+functions;				"Funktionen"
+
+
+cancle;					"Abbrechen"
+inputClear;             "leeren"
+inputShowAllOptions;    "alle Optionen anzeigen"
+filterattribute;		"Attribut-Filter"
+
+areYouSureDelete;		"Wollen Sie das CI wirklich löschen?"
+areYouSureDeleteWithRelations;		"Wollen Sie dieses CI und die daran hängenden %s Relationen wirklich löschen?"
+cantDeleteBecauseOfRelations; "CI kann nicht gelöscht werden, da für dieses CI Relations existieren."
+ciCreateCiAttachNotAllowed;	"Dem ausgewählten CI Typ dürfen keine CIs zugeordnet werden!"
+beCareful;				"Sind sie sicher, dass sie die Aktion ausführen möchten?"
+
+isEmpty;				"Feld darf nicht leer sein!"
+fileName;				"Dateiname"
+filePath;				"Dateipfad"
+submit;					"Upload File"
+
+showAllItems;			"Show All Items"
+
+noCisFound;				"Keine CI's gefunden!"
+
+numberOfResults;		"Anzahl der Ergebnisse:"
+
+edit;					"Bearbeiten"
+history;				"CI History"
+delete;                 "Löschen"
+deleteCi;				"CI Löschen"
+deleteRelation;         "CI Relation löschen"
+pdfExport;				"PDF Export"
+visualize;				"Relationen visualisieren"
+print;					"Drucken"
+xmlExport;				"XML Export"
+duplicate;				"CI duplizieren"
+favourites;				"Lesezeichen hinzufügen"
+close;					"Schließen"
+printview;				"Druckansicht"
+
+configurationItem;		"Configuration Item"
+ciId;					"CI Id"
+update;					"Update: "
+projectOrProjects;		"Projekt(e): "
+created;				"Erstellt"
+changed;				"Geändert"
+user;					"Benutzer: "
+relations;				"Relationen"
+relationAdd;			"Relationen hinzufügen"
+
+tickets;				"Tickets"
+events;					"Events"
+
+pickColor;				"Farbe wählen:"
+red;					"rot"
+green;					"grün"
+darkgreen;              "dunkelgrün"
+orange;                 "orange"
+blue;					"blau"
+purple;					"violett"
+clear;					"clear"
+
+new;					"neu"
+
+editAttribute;          "Attribut-Einstellungen öffnen"
+
+
+ciCreateDatestamp;		"Datestamp"
+ciInsertSuccess;		"CI wurde erfolgreich erstellt!"
+ciInsertFailed;			"CI konnte nicht erstellt werden!"
+
+ciDeleteSuccess;		"CI wurde erfolgreich gelöscht!"
+ciDeleteFailed;			"CI konnte nicht gelöscht werden!"
+
+ciUpdateSuccess;		"CI wurde erfolgreich geändert!"
+ciUpdateFailed;			"CI konnte nicht geändert werden!"
+
+ciTypeChangeSuccess;		"CI Typ erfolgreich geändert"
+
+
+# USER CI MAPPING
+overview;				"Zurück"
+userAdd;				"Benutzer hinzufügen"
+userCiCheckName;		"x"
+
+save;					"Speichern"
+
+
+# filter popup
+filterCiId; 			"CiID"
+filterValue;			"Wert"
+attribute_filter_off;	"Attributfilter aus"
+attribute_filter_on;	"Attributfilter ein"
+filter_clear;			"Filter löschen"
+sorting_clear;          "Sortierung aufheben"
+
+january;				"Jänner"
+february;				"Februar"
+march;					"März"
+april;					"April"
+may;					"Mai"
+june;					"Juni"
+july;					"Juli"
+august;					"August"
+september;				"September"
+october;				"Oktober"
+november;				"November"
+december;				"Dezember"
+
+# dropzone language strings
+dictDefaultMessage;              "Ziehen Sie Dateien zum Hochladen hier her"
+dictFallbackMessage;             "Ihr Browser unterstützt Drag'n'Drop nicht"
+dictFallbackText;                "Klicken Sie hier, um eine Datei hochzuladen"
+dictInvalidFileType;             "Dieser Dateityp wird nicht unterstützt!"
+dictFileTooBig;          "Datei ist zu groß. Maximale Groesse: {{maxFilesize}}"
+dictResponseError;               "Serverfehler: {{statusCode}}"
+dictCancelUpload;                "Hochladen abbrechen"
+dictCancelUploadConfirmation;            "Hochladen wirklich abbrechen?"
+dictRemoveFile;          "Datei entfernen"
+dictMaxFilesExceeded;            "Sie können keine weiteren Dateien hochladen"
+dictDeleteUploadConfirmation;            "Datei wirklich entfernen?"
+dictTooManyFiles;                "Maximale Datei-Anzahl überschritten! Maximale Anzahl: "
+dictOverrideFile;           "Es ist bereits eine Datei vorhanden. Möchten Sie diese überschreiben?"
+
+# locking
+lockHeld;				"CI gesperrt (%s, %s) <a href='%s'>Bearbeiten erzwingen</a>"
+lockExpired;			"Formular ist abgelaufen. Öffnen Sie die Bearbeitenmaske erneut und übertragen Sie Ihre Änderungen"
+lockError;				"Beim Sperren des Objekts ist ein Fehler aufgetreten. Es könnte sein, dass Ihre Änderungen verworfen werden. Bitte laden Sie die Seite neu sobald Sie bereit sind."

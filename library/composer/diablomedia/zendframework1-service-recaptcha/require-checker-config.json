@@ -1,0 +1,8 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "MCRYPT_MODE_CBC", "MCRYPT_RIJNDAEL_128", "mcrypt_encrypt"
+  ]
+}

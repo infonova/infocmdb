@@ -1,0 +1,8 @@
+# This is the language file for fileupload interaction.
+
+filename;					"Dateiname"
+filepath;					"Datei Hochladen"
+currentDocument;			"aktuelles Dokument"
+submit;						"hochladen"
+
+errorOccurred;                      "Ein Fehler ist aufgetreten. Versuchen Sie es später erneut oder kontaktieren Sie Ihren Administrator!"

@@ -1,0 +1,27 @@
+<?php
+$config = $this->individualizationConfig->toArray();
+
+$jsFiles = array();
+if (isset($config['js']) && isset($config['js']['load'])) {
+    $jsFiles = $config['js']['load'];
+}
+
+$cssFiles = array();
+if (isset($config['css']) && isset($config['css']['load'])) {
+    $cssFiles = $config['css']['load'];
+}
+
+?>
+
+<?php foreach ($cssFiles as $file) : ?>
+    <link rel="stylesheet"
+          href="<?php echo APPLICATION_URL . $file['path'] . '?v=' . $this->version ?>"
+          type="text/css"
+    />
+<?php endforeach; ?>
+
+<?php foreach ($jsFiles as $file) : ?>
+    <script type="text/javascript"
+            src="<?php echo APPLICATION_URL . $file['path'] . '?v=' . $this->version ?>"
+    ></script>
+<?php endforeach; ?>

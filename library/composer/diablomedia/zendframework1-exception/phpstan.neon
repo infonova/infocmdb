@@ -1,0 +1,12 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        - '#Parameter \#2 \$code of class Zend_Exception constructor expects int, string given\.#'
+        # Seems that this is checked for null before the __toString call
+        -
+            message: '#Cannot call method __toString\(\) on Throwable\|null\.#'
+            path: %currentWorkingDirectory%/src/Zend/Exception.php

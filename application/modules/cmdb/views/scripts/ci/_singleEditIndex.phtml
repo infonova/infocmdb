@@ -1,0 +1,117 @@
+<?php $locking_config = Zend_Registry::get('lockingConfig'); ?>
+
+<link type="text/css" href="<?php echo APPLICATION_URL ?>/js/multiselect/css/ui.multiselect.css" rel="stylesheet" />
+<script language="JavaScript">
+    LOCK_LANG_STRINGS = {
+        expired: "<?php echo $this->translate('lockExpired'); ?>",
+        error: "<?php echo $this->translate('lockError'); ?>",
+    };
+    var lock_id = '<?php echo $this->lockId ?>';
+    var refresh_rate = '<?php echo $locking_config->getValue('lock.refresh.rate', 60, Util_Config::INT) * 1000; ?>';
+
+    $(document).ready(function () {
+        // submit when hitting enter key
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                var refreshSuccess = refreshLock(lock_id, refresh_rate, LOCK_LANG_STRINGS);
+                invalidLocks[lock_id] = lock_id;
+
+                if(refreshSuccess) {
+                    document.getElementsByName("<?php echo $this->escape($this->form->getName()) ?>")[0].submit();
+                }
+            }
+        });
+
+        var multiselect = $(".multiselect");
+        if(multiselect.length > 0) {
+            $.when(
+                $.getScript( "<?php echo APPLICATION_URL ?>js/multiselect/plugins/tmpl/jquery.tmpl.1.1.1.js" ),
+                $.getScript( "<?php echo APPLICATION_URL ?>/js/multiselect/ui.multiselect.js" ),
+                $.getScript( "<?php echo APPLICATION_URL ?>/js/multiselect/ui-multiselect-<?php echo ($this->language === 'de' ? 'de' : 'en'); ?>.js" ),
+
+                $.getScript( "<?php echo APPLICATION_URL ?>/js/multiselect/plugins/localisation/jquery.localisation-min.js" ),
+                $.Deferred(function( deferred ){
+                    $( deferred.resolve );
+                })
+            ).done(function() {
+                var attributeID = multiselect.data('attributeid');
+                var selected_ciids = '<?php echo $this->attribute['value_ci'] ?>';
+                var multiselectType = multiselect.data('ismultiselect');
+                var itemIncreaseable = false;
+                if (multiselectType == 2) {
+                    itemIncreaseable = true;
+                }
+                $(".multiselect").multiselect({
+                    itemIncreasable: itemIncreaseable,
+                    remoteUrl: '<?php echo APPLICATION_URL ?>ci/autocompletemultiselect?ciId=<?php echo $this->ciid ?>&attributeId=' + attributeID + '&values=' + selected_ciids,
+                    dividerLocation: 0.5,
+                });
+            });
+        }
+
+        <?php if ($this->attribute['attribute_type_id'] == Util_AttributeType_Type_DateTime::ATTRIBUTE_TYPE_ID) : ?>
+            activateDatetimePickers();
+        <?php endif; ?>
+
+        refreshLock(lock_id, refresh_rate, LOCK_LANG_STRINGS);
+    });
+
+</script>
+
+<?php
+if ($this->attribute['attribute_type_id'] == Util_AttributeType_Type_DateTime::ATTRIBUTE_TYPE_ID || $this->attribute['attribute_type_id'] == Util_AttributeType_Type_Date::ATTRIBUTE_TYPE_ID) {
+    ?>
+    <form name="<?php echo $this->escape($this->form->getName()) ?>"
+          action="<?php echo $this->escape($this->form->getAction()) ?>"
+          method="<?php echo $this->escape($this->form->getMethod()) ?>"
+          enctype="<?php echo $this->escape($this->form->getEnctype()) ?>">
+        <?php
+        if ($this->attribute['attribute_type_id'] == Util_AttributeType_Type_Date::ATTRIBUTE_TYPE_ID) {
+            $varName = 'date';
+            $this->form->$varName->setDecorators(array(array('viewHelper', array('tag' => '<div>')), 'Errors'));
+            echo $this->form->$varName;
+        }
+        ?>
+        <?php
+        if ($this->attribute['attribute_type_id'] == Util_AttributeType_Type_DateTime::ATTRIBUTE_TYPE_ID) {
+            $varName = 'datetime';
+            $this->form->$varName->setDecorators(array(array('viewHelper', array('tag' => '<div>')), 'Errors'));
+            echo $this->form->$varName;
+        }
+        ?>
+    </form>
+<?php } else { ?>
+    <?php
+    echo $this->form;
+    // handle uploads
+    if ($this->attribute['attributeTypeName'] == Enum_AttributeType::ATTACHMENT || $this->attribute['attributeTypeName'] == Enum_AttributeType::SCRIPT) {
+        $outputValue = $this->translate("currentDocument") . ": ";
+        if ($this->attribute[Db_CiAttribute::VALUE_TEXT]) {
+            $outputValue .= "<strong>" . $this->attribute[Db_CiAttribute::VALUE_TEXT] . "</strong> ";
+        }
+        if ($this->attribute['valueNote']) {
+            $outputValue .= $this->attribute['valueNote'];
+        }
+        ?>
+        <div id="<?php echo $this->attribute['attribute_id'] ?>filenameupload"><?php echo $outputValue; ?></div>
+        <?php
+    }
+
+}
+?>
+<?php if (isset($this->attribute['relationType'])): ?>
+    <td style="width: 200px;">
+        <?php
+        $linkedValue = ($this->attribute['linkedValue']) ? ' (' . $this->attribute['linkedValue'] . ')' : '';
+        if ($this->attribute['linkedCi'] == $this->ciid):
+            ?>
+            <span onmouseover="Tip('<?php echo $this->attribute['relationType'] . $linkedValue; ?>')" onmouseout="UnTip()" class="relation_list">
+		<?php echo $attr[0]['relationType'] . $linkedValue; ?>
+	</span>
+        <?php else: ?>
+            <a onmouseover="Tip('<?php echo $this->attribute['relationType'] . $linkedValue; ?>')" onmouseout="UnTip()" class="relation_list" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->attribute['linkedCi'] ?>/">
+                <?php echo $attr[0]['relationType'] . $linkedValue; ?>
+            </a>
+        <?php endif; ?>
+    </td>
+<?php endif; ?>

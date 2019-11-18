@@ -1,0 +1,125 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+<script type="text/javascript">
+    function delete_project(project_id) {
+        if (confirm('<? echo $this->translate("areYouSureDelete"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>project/delete/projectId/' + project_id;
+        }
+    }
+
+    function activate_project(project_id) {
+        if (confirm('<? echo $this->translate("areYouSureActivate"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>project/activate/projectId/' + project_id;
+        }
+    }
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class ?> create" href="<?php echo APPLICATION_URL ?>project/create"><?php echo $this->translate('projectCreate') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('projects') ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+              action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+              method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterButton;
+            ?>
+        </form>
+    </div>
+</div>
+<div class="clearBoth" style="margin-bottom: 15px;"></div>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th>
+                <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+                <a href="<?php echo APPLICATION_URL ?>project/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Project::NAME ?>/direction/<?php echo(($this->orderBy == Db_Project::NAME) ? $urlDirection : "DESC"); ?>">
+                    <?php echo $this->translate('name'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>project/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Project::DESCRIPTION ?>/direction/<?php echo(($this->orderBy == Db_Project::DESCRIPTION) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('description'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>project/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Project::NOTE ?>/direction/<?php echo(($this->orderBy == Db_Project::NOTE) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('note'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>project/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Project::ORDER_NUMBER ?>/direction/<?php echo(($this->orderBy == Db_Project::ORDER_NUMBER) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('order'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>project/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Project::IS_ACTIVE ?>/direction/<?php echo(($this->orderBy == Db_Project::IS_ACTIVE) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('valid'); ?>
+                </a>
+            </th>
+            <th style="width: 120px;">&nbsp;</th>
+        </tr>
+
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <?php
+            if (!$item[Db_Project::IS_ACTIVE]) {
+                ?>
+                <tr  class="inactive">
+                <?php
+            } else {
+                ?>
+                <tr>
+                <?php
+            }
+            ?>
+            <td>
+                <a class="link" href="<?php echo APPLICATION_URL ?>project/edit/projectId/<?php echo $item[Db_Project::ID]; ?>"><?php echo $item[Db_Project::NAME]; ?></a>
+            </td>
+            <td><?php echo $item[Db_Project::DESCRIPTION]; ?> </td>
+            <td><?php echo $item[Db_Project::NOTE]; ?> </td>
+            <td><?php echo $item[Db_Project::ORDER_NUMBER]; ?> </td>
+            <td><?php if ($item[Db_Project::IS_ACTIVE]) {
+                    echo $this->translate('active');
+                } else {
+                    echo $this->translate('inactive');
+                } ?> </td>
+            <td>
+                <?php if ($item[Db_Project::IS_ACTIVE]): ?>
+                    <a class="delete_list" href="#" title="<?php echo $this->translate('projectIndexLinkDelete') ?>" onclick="javascript:delete_project(<?php echo $item[Db_Project::ID]; ?>);"></a>
+                <?php endif; ?>
+                <div class="rfloater">
+                    <a class="edit_list buttonLink" href="<?php echo APPLICATION_URL ?>project/edit/projectId/<?php echo $item[Db_Project::ID]; ?>" title="<?php echo $this->translate('edit') ?>">&nbsp;</a>
+                    <?php if (!$item[Db_Project::IS_ACTIVE]): ?>
+                        <a href="#" onclick="javascript:activate_project(<?php echo $item[Db_Project::ID]; ?>);"><img class="delete_list" src='<?php echo APPLICATION_URL . "images/icon/activate.png" ?>' title="<?php echo $this->translate('activate') ?>"></a>
+                    <?php endif; ?>
+                </div>
+
+            </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php echo $this->paginator; ?>
+<?php else: ?>
+    <div class="error_message">
+        <?php echo $this->translate('noProjectFound') ?>
+    </div>
+<?php endif; ?>

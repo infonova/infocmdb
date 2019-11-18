@@ -1,0 +1,225 @@
+<fieldset class="lordVader">
+    <?php //translate ?>
+    <div id="fileimport-mapping-tab">
+        <span style="display:block;font-weight:bold;"><?php echo $this->translate('workflowRegexTimeOfExecution'); ?>
+            :</span>
+        <select name="fileimport_trigger_method" style="margin-bottom: 10px;">
+            <option value="before" <?php if ($this->current_method == "before") echo "selected='selected'"; ?>><?php echo $this->translate('workflowFileimportMethodPre'); ?></option>
+            <option value="after" <?php if ($this->current_method == "after") echo "selected='selected'"; ?>><?php echo $this->translate('workflowFileimportMethodPost'); ?></option>
+            <option value="before_and_after" <?php if ($this->current_method == "before_and_after") echo "selected='selected'"; ?>><?php echo $this->translate('workflowFileimportMethodPrePost'); ?></option>
+        </select>
+        <span style="display:block;font-weight:bold;"><?php echo $this->translate('workflowRegexDefinition'); ?></span>
+        <div id="fileimport-regex-saved" class="tag-container">
+        </div>
+        <div>
+            <input class="input-helper-left" type="text" value="/" disabled>
+            <input type="text" id="regex-input" class="input-with-helper-left input-with-helper-right" autocomplete="false">
+            <input class="input-helper-right" type="text" value="/" disabled>
+            <input id="saved-regex" type="hidden" name="fileimport_trigger_regex" value="[]">
+            <button id="regex-check" type="button" onclick="testRegex()"><?php echo $this->translate('workflowRegexTest'); ?></button>
+            <button id="regex-save" type="button" onclick="saveRegex()" title="<?php echo $this->translate('workflowRegexSaveTitle'); ?>">
+                <i class="fa fa-check"></i></button>
+
+        </div>
+    </div>
+    <div id="fileimport-regex-result" class="flex-container" style="margin-right: 5px;">
+    </div>
+    <div id="fileimport-regex-negative-results" class="flex-container">
+    </div>
+    <table>
+        <tbody>
+        <tr>
+            <script type="text/javascript">
+                import_names = <?php echo $this->file_imports; ?>;
+                regex_worker = new Worker('<?php echo APPLICATION_URL . "js/utils/regex-checker.js";  ?>');
+                regex_worker.addEventListener('message', function (e) {
+                    var max_elements = 5;
+                    // performance improvement to not search dom again if selector is already known globally
+                    if (typeof regex_input_selector === 'undefined') {
+                        regex_input_selector = $('#regex-input');
+                    }
+                    if (typeof regex_button_selector === 'undefined') {
+                        regex_button_selector = $('#regex-check');
+                    }
+
+                    regex_input_selector.removeAttr("disabled");
+                    regex_button_selector.removeAttr("disabled");
+                    regex_button_selector.html("<?php echo $this->translate('workflowRegexTest'); ?>");
+                    regex_input_selector.focus();
+
+                    var message = e.data;
+                    switch (message.type) {
+                        case "setData":
+                            if (message.success === false) {
+                                console.warning("Failed to set import names for regex check");
+                            }
+                            break;
+                        case "checkRegex":
+                            var result = message.result;
+                            var negative_result = message.not_matched;
+                            var append_to_results = $('#fileimport-regex-result');
+                            var append_to_negative_results = $('#fileimport-regex-negative-results');
+                            append_to_results.empty();
+                            append_to_negative_results.empty();
+                            addRegExResults(append_to_results, result, true, max_elements);
+                            if (negative_result !== undefined && negative_result.length > 0) {
+                                addRegExResults(append_to_negative_results, negative_result, false, max_elements);
+                            }
+                            break;
+                        default:
+                            console.warn("Unknown message type received");
+                            console.log(message);
+                    }
+                });
+
+                function isRegexValid(regex) {
+                    var is_valid = true;
+                    try {
+                        var test = new RegExp(regex);
+                    } catch (e) {
+                        is_valid = false;
+                    }
+                    if (!is_valid) {
+                        console.error("Regex invalid");
+                    }
+                    return is_valid;
+                }
+
+                function testRegex() {
+                    var regex = $('#regex-input').val();
+                    if (isRegexValid(regex)) {
+                        var message = {};
+                        message.type = "checkRegex";
+                        message.regex = new RegExp(regex);
+                        regex_worker.postMessage(message);
+                    }
+                    else {
+                        // not valid
+                    }
+                }
+
+                function saveRegex(to_add, idx) {
+                    var regex = (typeof to_add === 'undefined') ? $('#regex-input').val() : to_add;
+                    if (isRegexValid(regex)) {
+                        regex = new RegExp(regex);
+                        if (typeof saved_regex_selector === 'undefined') {
+                            saved_regex_selector = $('#saved-regex');
+                        }
+                        var current = saved_regex_selector.val();
+                        current = JSON.parse(current);
+                        current.push(regex.toString());
+                        saved_regex_selector.val(JSON.stringify(current));
+                        var saved_regex_flexbox_selector = $('#fileimport-regex-saved');
+                        saved_regex_flexbox_selector.append(generateRegExTag(regex.toString(), idx));
+                    }
+                    else {
+                        // not valid
+                    }
+                }
+
+                function removeRegex(idx, element_to_detach) {
+                    var current = saved_regex_selector.val();
+                    current = JSON.parse(current);
+                    current.splice(idx, 1);
+                    saved_regex_selector.val(JSON.stringify(current));
+                    var parent = element_to_detach.parentNode;
+                    element_to_detach.parentNode.parentNode.removeChild(parent);
+                }
+
+                function editRegex(to_edit, element_to_detach) {
+                    let oldValue = element_to_detach.parentElement.title;
+                    if ( oldValue.charAt(0) === '/'
+                        && oldValue.charAt(oldValue.length - 1) === '/') {
+                        oldValue = oldValue.slice(1, -1);
+                    }
+                    regex_input_selector.val(oldValue);
+                    removeRegex(to_edit, element_to_detach);
+                }
+
+                function generateRegExTag(regex, idx) {
+                    var tag = '';
+                    tag += "<div class='tag' id='filter_regex_" + idx + "' title='" + regex + "'>";
+                    tag += "<span class='tagged-regex'>";
+                    tag += regex;
+                    tag += "</span>";
+                    tag += "<i class='fa fa-times remove'";
+                    tag += " onclick='removeRegex(" + idx + ", this)' title='" + "<?php echo $this->translate('workflowRegexRemove');?>";
+                    tag += "'></i>";
+                    tag += "<i class='fa fa-pencil edit'";
+                    tag += " onclick='editRegex(" + idx + ", this)' title='" + "<?php echo $this->translate('workflowRegexEdit');?>";
+                    tag += "'></i>";
+                    tag += "</div>";
+                    return tag;
+                }
+
+                function generateFlexitem(filename, matched) {
+                    var match_class = matched ? "matched" : "not-matched";
+                    return "<div class='flex-item " + match_class + "' title='" + filename + "'>" + filename + "</div>";
+                }
+
+                function addRegExResults(append_to, match_data, matched, max_elements) {
+                    var array_length = match_data.length;
+                    var accumulated_string = "";
+                    matched ? accumulated_string = "<div class='flex-item success-header'><?php echo $this->translate('workflowRegexMatchedItems'); ?></div>" : accumulated_string = "<div class='flex-item error-header'><?php echo $this->translate('workflowRegexUnmatchedItems'); ?></div>";
+                    for (var i = 0; i < array_length; i++) {
+                        accumulated_string = accumulated_string + generateFlexitem(match_data[i].name, matched);
+                        if (i + 1 >= max_elements) {
+                            break;
+                        }
+                    }
+                    var parent = append_to.parent();
+                    var element = append_to.detach();
+                    element.empty();
+                    element.append(accumulated_string);
+                    parent.append(element);
+                }
+
+                $(document).ready(function () {
+                    var message = {};
+                    message.type = "setData";
+                    message.data = import_names;
+                    regex_worker.postMessage(message);
+
+                    // performance improvement to not search dom again if selector is already known globally
+                    if (typeof regex_input_selector === 'undefined') {
+                        regex_input_selector = $('#regex-input');
+                    }
+                    if (typeof regex_button_selector === 'undefined') {
+                        regex_button_selector = $('#regex-check');
+                    }
+                    if (typeof saved_regex_selector === 'undefined') {
+                        saved_regex_selector = $('#saved-regex');
+                    }
+                    regex_input_selector.on('keypress', function (e) {
+                        if (e.which === 13) {
+                            //Disable textbox to prevent multiple submit
+                            $(this).attr("disabled", "disabled");
+                            regex_button_selector.html("<?php echo $this->translate('workflowRegexPleaseWait'); ?>");
+                            regex_button_selector.attr("disabled", "disabled");
+                            testRegex();
+                        }
+                    });
+                    var current_regex = <?php echo $this->current_regex;?>;
+                    var array_length = current_regex.length;
+                    if (array_length > 0) {
+                        for (var i = 0; i < array_length; i++) {
+                            saveRegex(current_regex[i].slice(1, -1), i);
+                        }
+                    }
+
+                    regex_input_selector.bind("paste", function (e) {
+                        var paste_data = e.originalEvent.clipboardData.getData('text');
+                        var first_character = paste_data.charAt(0);
+                        var last_character = paste_data.charAt(paste_data.length - 1);
+                        if (first_character === '/' && last_character === '/') {
+                            paste_data = paste_data.slice(1, -1);
+                        }
+                        regex_input_selector.val(paste_data);
+                        e.preventDefault();
+                    });
+                });
+            </script>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>

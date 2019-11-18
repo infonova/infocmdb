@@ -1,0 +1,70 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+
+<h1 class="pageName"><?php echo $this->translate('history') ?></h1>
+
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+              action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+              method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterButton;
+            ?>
+        </form>
+    </div>
+</div>
+<div class="clearBoth" style="margin-bottom: 15px;"></div>
+
+<table class="list" cellpadding="0" cellspacing="0" width="100%" style=" border-bottom:none ">
+    <tr class="headline">
+        <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+        <th>
+            <?php echo 'CIID' ?>
+        </th>
+
+        <th>
+            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_History::DATESTAMP, 'direction' => (($this->orderBy == Db_History::DATESTAMP) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                <?php echo $this->translate('datestamp') ?>
+            </a>
+        </th>
+        <th>
+            <?php echo $this->translate('default_attribute') ?>
+        </th>
+        <th>
+            <?php echo $this->translate('ci_typ') ?>
+        </th>
+        <th>
+            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_User::USERNAME, 'direction' => (($this->orderBy == Db_User::USERNAME) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                <?php echo $this->translate('username') ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_History::NOTE, 'direction' => (($this->orderBy == Db_History::NOTE) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                <?php echo $this->translate('note') ?>
+            </a>
+        </th>
+    </tr>
+    <?php
+    if (count($this->history)):
+        $row_count = 0;
+        foreach ($this->history as $item):
+            ?>
+            <tr>
+                <td>
+                    <a class="link" href="<?php echo APPLICATION_URL ?>history/ci/historyId/<?php echo $item[Db_History::ID]; ?>/"><?php echo $item['ci_id']; ?></a>
+                </td>
+                <td><?php echo $item[Db_History::DATESTAMP]; ?></td>
+                <td><?php echo $item['default_attribute'][Db_CiAttribute::VALUE_TEXT]; ?></td>
+                <td><?php echo $item['citype']; ?></td>
+                <td><?php if ($item[Db_User::USERNAME]) {
+                        echo $item[Db_User::USERNAME];
+                    } else {
+                        echo 'system';
+                    }; ?></td>
+                <td><?php echo $item[Db_History::NOTE]; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</table>
+<?php echo $this->paginator; ?>

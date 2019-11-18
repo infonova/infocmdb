@@ -1,0 +1,74 @@
+<script type="text/javascript"
+        src="<?php echo APPLICATION_URL ?>js/Vis/vis.js"></script>
+
+<script type="text/javascript">
+
+    function onDBClick(properties) {
+        location.href = "<?php echo APPLICATION_URL?>ci/detail/ciid/" + properties.nodes[0];
+    }
+
+
+    // Called when the page is ready
+    function draw(event) {
+
+        var nodes = null;
+        var edges = null;
+        var network = null;
+
+        // Create a data table with nodes.
+        nodes = <?php echo $this->nodes;?>
+
+            // Create a data table with links.
+            edges =  <?php echo $this->edges;?>
+
+        // create a network
+        var container = document.getElementById('mynetwork');
+        var data = {
+            nodes: nodes,
+            edges: edges
+        };
+        var options = {
+            nodes: {
+                widthMin: 50, // min width in pixels
+                widthMax: 50, // max width in pixels
+                color: '#d3d3d3'
+            },
+            smoothCurves: false, // gerade linien, weniger
+            // abstand bei false
+            physics: {
+                barnesHut: {
+                    enabled: true,
+                    gravitationalConstant: -20000,
+                    springConstant: 0.03,
+                    damping: 1,
+                    centralGravity: 0
+                }
+            }
+        };
+
+        network = new vis.Network(container, data, options);
+
+        // add event listener
+        network.on('doubleClick', onDBClick);
+
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        draw();
+
+
+    });
+</script>
+
+<style type="text/css">
+    #mynetwork {
+        width: <?php echo $this->width;?>px;
+        height: <?php echo $this->height;?>px;
+        border: 1px solid lightgray;
+    }
+</style>
+
+<div id="mynetwork"></div>
+

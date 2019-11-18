@@ -1,0 +1,110 @@
+version: '3.4'
+
+services:
+
+  mariadb:
+    image: ${COMPOSE_DOCKER_REGISTRY}/cmdb-db:${IMAGE_TAG:-development}
+    build:
+      context: ./
+      dockerfile: ./docker/mariadb/Dockerfile
+      args:
+        COMPOSE_ENV_DB_VERSION: "${COMPOSE_ENV_DB_VERSION}"
+        DOCKER_TIMEZONE: "${DOCKER_TIMEZONE}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "10"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    restart: always
+    ports:
+      - '${DOCKER_DB_PORT}:3306'
+    networks:
+      default:
+        aliases:
+          - db
+
+  php:
+    image: ${COMPOSE_DOCKER_REGISTRY}/cmdb-php:${IMAGE_TAG:-development}
+    build:
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
+      args:
+        APPLICATION_ENV: "production"
+        COMPOSE_ENV_PHP_VERSION: "${COMPOSE_ENV_PHP_VERSION}"
+        GOLANG_VERSION: "${COMPOSE_ENV_GOLANG_VERSION}"
+        APP_LIBRARY_PERL_REPO: "${APP_LIBRARY_PERL_REPO}"
+        APP_LIBRARY_GOLANG_REPO: "${APP_LIBRARY_GOLANG_REPO}"
+        BUILD_NPROC: "${NPROC:-4}"
+        BUILD_PERLPROC: "${PERLPROC:-10}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "10"
+    tmpfs:
+      - /app/data/cache:mode=1777
+      - /app/data/session:mode=1777
+      - /app/data/tmp:mode=1777
+    environment:
+      - APPLICATION_ENV=production
+      - APP_LIBRARY_PERL_REPO=${APP_LIBRARY_PERL_REPO}
+      - APP_LIBRARY_GOLANG_REPO=${APP_LIBRARY_GOLANG_REPO}
+      - DB_HOST=mariadb
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_ROOT_USERNAME=${DB_ROOT_USERNAME}
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    restart: always
+    depends_on:
+      - mariadb
+      - web
+    networks:
+      default:
+
+  cron:
+    image: ${COMPOSE_DOCKER_REGISTRY}/cmdb-cron:${IMAGE_TAG:-development}
+    build:
+      context: ./
+      dockerfile: ./docker/cron/Dockerfile
+      args:
+       APPLICATION_ENV: production
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "10"
+    restart: always
+    depends_on:
+      - php
+    networks:
+      - default
+
+  web:
+    image: ${COMPOSE_DOCKER_REGISTRY}/cmdb-web:${IMAGE_TAG:-development}
+    build:
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile
+      args:
+        APPLICATION_ENV: "production"
+        COMPOSE_ENV_NGINX_VERSION: "${COMPOSE_ENV_NGINX_VERSION}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "10"
+    environment:
+      - DOCKER_WEB_HOSTNAME=${DOCKER_WEB_HOSTNAME}
+      - DOCKER_WEB_HOSTALIAS=${DOCKER_WEB_HOSTALIAS}
+      - APPLICATION_ENV=production
+    restart: always
+
+volumes:
+  data-volume:
+  database-volume:
+
+networks:
+  default:

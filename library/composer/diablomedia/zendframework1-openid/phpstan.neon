@@ -1,0 +1,31 @@
+parameters:
+    level: 4
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    bootstrap: %rootDir%/../../../phpstan-bootstrap.php
+    ignoreErrors:
+        - '#Access to an undefined property Zend_Session_Namespace::\$.+\.#'
+        - '#Variable \$bn_pub_key might not be defined\.#'
+        - '#Variable \$status might not be defined\.#'
+        - '#Variable \$ret might not be defined\.#'
+        # Abstract returns void, but File returns bool
+        - '#Result of method Zend_OpenId_Consumer_Storage::addAssociation\(\) \(void\) is used\.#'
+        - '#Method Zend_OpenId_Consumer::_addAssociation\(\) with return type void returns void but should not return anything\.#'
+        # These are passed by reference, so are basically being defined here. Could define them earlier, but don't want to change behavior
+        - '#Undefined variable: \$server#'
+        - '#Undefined variable: \$discovered_version#'
+        -
+            message: '#Result of && is always false\.#'
+            path: %currentWorkingDirectory%/src/Zend/OpenId/Consumer.php
+        -
+            message: '#Result of && is always true\.#'
+            path: %currentWorkingDirectory%/src/Zend/OpenId/Consumer.php
+        -
+            message: '#Binary operation "\^" between string and string\|false results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/OpenId/Consumer.php
+        -
+            message: '#Binary operation "\+" between int and string results in an error\.#'
+            path: %currentWorkingDirectory%/src/Zend/OpenId/Consumer.php

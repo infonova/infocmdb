@@ -1,0 +1,65 @@
+<h1 class="pageName"><?php echo $this->translate('import') ?></h1>
+<a href="<?php echo APPLICATION_URL ?>import/config"><?php echo $this->translate('fileserverConfiguration') ?></a>
+
+<div class="importFileUpload">
+    <?php
+    if ($this->form) {
+        $files = 1;
+
+        if ($this->files) {
+            $files = $this->files;
+        }
+
+        $less = $files - 1;
+        if ($less < 1)
+            $less = 1;
+        $more = $files + 1;
+
+        if ($this->exceptionMessage) {
+            echo $this->exceptionMessage;
+        }
+        ?>
+        <a href="<?php echo APPLICATION_URL ?>import/index/">
+            <img alt="<?php echo $this->translate('hideForm') ?>" title="<?php echo $this->translate('importIndexLinkHide') ?>" src="<?php echo APPLICATION_URL ?>images/icon/hide_arrow.jpeg"></img>
+        </a>
+
+        <a href="<?php echo APPLICATION_URL ?>import/index/isUpload/1/files/<?php echo $more ?>">
+            <img alt="<?php echo $this->translate('addField') ?>" title="<?php echo $this->translate('addField') ?>" src="<?php echo APPLICATION_URL ?>images/icon/add.png"></img>
+        </a>
+
+        <a href="<?php echo APPLICATION_URL ?>import/index/isUpload/1/files/<?php echo $less ?>">
+            <img alt="<?php echo $this->translate('removeField') ?>" title="<?php echo $this->translate('removeField') ?>" src="<?php echo APPLICATION_URL ?>images/icon/delete_20.png"></img>
+        </a>
+
+        <table>
+            <?php echo $this->form; ?>
+        </table>
+    <?php } else { ?>
+        <a href="<?php echo APPLICATION_URL ?>import/index/isUpload/1">
+            <img alt="<?php echo $this->translate('displayForm') ?>" title="<?php echo $this->translate('importIndexLinkShow') ?>" src="<?php echo APPLICATION_URL ?>images/icon/show_arrow.jpeg"></img>
+        </a>
+    <?php } ?>
+</div>
+
+<table>
+    <tr>
+        <td class="import_type_container">
+            <a href="<?php echo APPLICATION_URL ?>import/queue">
+                <img src="<?php echo APPLICATION_URL ?>images/import/current_queue.png"></img>
+                <span style="display:block;"><?php echo $this->translate('currentQueue'); ?></span>
+            </a>
+        </td>
+        <td class="import_type_container">
+            <a href="<?php echo APPLICATION_URL ?>import/success">
+                <img src="<?php echo APPLICATION_URL ?>images/import/success_queue.png"></img>
+                <span style="display:block;"><?php echo $this->translate('importsSucceeded'); ?></span>
+            </a>
+        </td>
+        <td class="import_type_container">
+            <a href="<?php echo APPLICATION_URL ?>import/failed">
+                <img src="<?php echo APPLICATION_URL ?>images/import/failed_queue.png"></img>
+                <span style="display:block;"><?php echo $this->translate('importsFailed'); ?></span>
+            </a>
+        </td>
+    </tr>
+</table>

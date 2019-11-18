@@ -1,0 +1,18 @@
+parameters:
+    level: 1
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    bootstrap: %rootDir%/../../../phpstan-bootstrap.php
+    ignoreErrors:
+        - '#Zend_Db_.+_Exception::__construct\(\) does not call parent constructor from Zend_.*Exception\.#'
+        - '#Zend_Db_Profiler_Firebug::__construct\(\) does not call parent constructor from Zend_Db_Profiler\.#'
+        - '#Call to an undefined method Zend_Db_Statement::_bindParam\(\)\.#'
+        - '#Call to an undefined method Zend_Db_Statement::_execute\(\)\.#'
+        - '#Variable \$.+ might not be defined\.#'
+        # __unset's return is not void, it's $this
+        -
+            message: '#Result of method Zend_Db_Table_Row_Abstract::__unset\(\) \(void\) is used\.#'
+            path: %currentWorkingDirectory%/src/Zend/Db/Table/Row/Abstract.php

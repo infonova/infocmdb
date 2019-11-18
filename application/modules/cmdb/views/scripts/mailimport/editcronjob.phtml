@@ -1,0 +1,59 @@
+<script type="text/javascript">
+    function changeCron() {
+        document.forms["CronForm"].submit();
+    }
+
+    function triggerDisabled(trigger) {
+        if (document.forms["CronForm"][trigger].disabled == true) {
+            document.forms["CronForm"][trigger].disabled = false;
+        } else {
+            document.forms["CronForm"][trigger].disabled = true;
+            document.forms["CronForm"].submit();
+        }
+    }
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>mailimport/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('assignCronjob') ?></h1>
+
+<fieldset class="create_form">
+    <p><?php echo $this->translate('currentExecutionTime') ?>: <?php echo $this->cronjob ?>
+    <div class="break"></div>
+    <form name="<?php echo $this->escape($this->form->getName()) ?>" action="<?php echo $this->escape($this->form->getAction()) ?>"
+          method="<?php echo $this->escape($this->form->getMethod()) ?>">
+
+        <table>
+            <tr>
+                <th><?php echo $this->translate('minutes') ?></th>
+                <th><?php echo $this->translate('hours') ?></th>
+                <th><?php echo $this->translate('days') ?></th>
+                <th><?php echo $this->translate('months') ?></th>
+                <th><?php echo $this->translate('weekdays') ?></th>
+            </tr>
+            <tr>
+                <td><?php echo $this->form->minutes_radio ?></td>
+                <td><?php echo $this->form->hours_radio ?></td>
+                <td><?php echo $this->form->days_radio ?></td>
+                <td><?php echo $this->form->months_radio ?></td>
+                <td><?php echo $this->form->weekdays_radio ?></td>
+            </tr>
+            <tr>
+                <td><?php echo $this->form->minutes ?></td>
+                <td><?php echo $this->form->hours ?></td>
+                <td><?php echo $this->form->days ?></td>
+                <td><?php echo $this->form->months ?></td>
+                <td><?php echo $this->form->weekdays ?></td>
+            </tr>
+        </table>
+    </form>

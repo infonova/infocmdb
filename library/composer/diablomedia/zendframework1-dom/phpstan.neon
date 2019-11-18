@@ -1,0 +1,24 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        - '#Parameter \#1 \$xml of static method Zend_Xml_Security::scan\(\) expects string, DOMDocument\|string\|null given\.#'
+        - '#Parameter \#1 \$document of method Zend_Dom_Query::_getNodeList\(\) expects DOMDocument, DOMDocument\|false given\.#'
+        - '#Parameter \#1 \$cssQuery of class Zend_Dom_Query_Result constructor expects string, string\|null given\.#'
+        - '#Parameter \#3 \$document of class Zend_Dom_Query_Result constructor expects DOMDocument, DOMDocument\|false given\.#'
+        -
+            message: '#Parameter \#1 \$source of method DOMDocument::loadHTML\(\) expects string, DOMDocument\|string\|null given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Dom/Query.php
+        -
+            message: '#Cannot cast array\|string to string\.#'
+            path: %currentWorkingDirectory%/src/Zend/Dom/Query.php
+        -
+            message: '#Elseif branch is unreachable because previous condition is always true\.#'
+            path: %currentWorkingDirectory%/src/Zend/Dom/Query/Css2Xpath.php
+        -
+            message: '#Argument of an invalid type array<int, string>\|false supplied for foreach, only iterables are supported\.#'
+            path: %currentWorkingDirectory%/src/Zend/Dom/Query/Css2Xpath.php

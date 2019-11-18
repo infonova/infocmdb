@@ -1,0 +1,9 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "FILEINFO_MIME_TYPE", "FILEINFO_MIME", "finfo_open", "finfo_file", "mime_content_type",
+    "hash_algos", "hash_file"
+  ]
+}

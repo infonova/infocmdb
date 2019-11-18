@@ -1,0 +1,47 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver
+        - \Helper\Acceptance
+        - Db
+        - Asserts
+    config:
+        WebDriver:
+            url: 'http://cmdb.test.local/'
+            window_size: 1920x1080
+            browser: chrome
+            capabilities:
+                chromeOptions:
+                    args:
+                      - "--no-sandbox"
+                      - "--start-maximized"
+                      - "--proxy-server='direct://'"
+                      - "--proxy-bypass-list=*"
+                      - "--no-proxy-server"
+                      - "--disable-save-password-bubble"
+                      - "--wm-window-animations-disabled"
+                      - "--disable-gpu"
+
+env:
+    chrome:
+        # nothing changed
+
+    firefox:
+        modules:
+            config:
+                WebDriver:
+                    browser: firefox
+                    #capabilities:
+                    #    unexpectedAlertBehaviour: 'accept'
+
+    phantomjs:
+        modules:
+            config:
+                WebDriver:
+                    browser: phantomjs

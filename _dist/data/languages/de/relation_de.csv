@@ -1,0 +1,80 @@
+#Language file for Relations
+
+relationsFromCi;			"Relationen von CI: "
+relationId;					"ID"
+relationType;				"Relations Typ"
+visualize;					"Visualisieren"
+relationCreate;				"Neue Relation anlegen"
+
+
+wizardSelectRelation;		"Relation auswählen"
+wizardSearchCi;				"CI Suchen"
+wizardOptions;				"Optionen"
+
+abort;						"Abbrechen"
+next;						"Nächstes"
+back;						"Zurück"
+optional;					"Optional"
+
+areYouSureReset;			"Wollen Sie wirklich Abbrechen?"
+
+note;						"Notiz"
+color;						"Farbe"
+
+attribute;					"Attribut"
+addSelection;				"Auswahl hinzufügen"
+
+remove;						"Entfernen"
+
+
+ciTypes;					"CI Typen"
+delete;						"Löschen"
+
+save;						"Speichern"
+
+# search
+relation;					"Relationstyp"
+reltionDirectonHeader;      "Relation"
+switchRelation;				"umkehren"
+direction;					"Richtung"
+weight;						"Gewichtung"
+searchstring;				"Suchbegriff"
+search;						"Suchen"
+searchResult;				"Suchergebnisse"
+ci;							"CI"
+ciType;						"CI Typ"
+rootCi;						"Root CI"
+numberOfResults;			"Anzahl der Ergebnisse:"
+extendedProperties;			"Erweiterte Eigenschaften"
+name;						"Name"
+createDate;					"Erstelldatum"
+
+createRelationTo;			"Relation anlegen zu"
+
+relationCreateSuccess;		"Relation wurde erfolgreich angelegt!"
+relationCreateFailed;		"Relation konnte nicht angelegt werden!"
+
+relationDeleteSuccess;		"Relation wurde erfolgreich gelöscht!"
+relationDeleteFailed;		"Relation konnte nicht gelöscht werden!" 
+
+relationAddError1;			"Der Benutzer ist nicht dazu berechtigt, Relationen zu verändern!"
+relationAddError2;			"Das CI hat die maximale Anzahl an Relationen dieses Typs erreicht!"
+relationAddError3;			"Das verlinkte CI hat die maximale Anzahl an Relationen dieses Typs erreicht!"
+relationAddError4;			"Es wurden keine Relationen gefunden, die dem CI Typ des ausgewählten CI's zugeordet wurden!"
+
+relationAreYouSureDelete;	"Wollen Sie die Relation wirklich löschen?"
+noItemsFound;				"keine Einträge gefunden!"
+
+tooBigVisualisation;		"Die Grafik ist vielleicht zu umfangreich zur Darstellung, wollen Sie dennoch fortfahren?"
+tooMuchData;				"Die Beziehungungen dieses Cis ist zu umfangreich um vom Server verarbeitet zu werden!"
+
+exportCiRelated;            "Exportieren (alle Attribute)"
+numberOfShownRelations;     "Anzahl der angezeigten Relationen"
+showAllRelations;           "Alle Relationen anzeigen"
+of;                         "von"
+
+
+ab_direction;               "gerichtet A - B"
+ba_direction;               "gerichtet B - A"
+bidirected;                 "bi-gerichtet"
+undirected;                 "nicht gerichtet"

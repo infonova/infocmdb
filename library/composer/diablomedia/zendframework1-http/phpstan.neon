@@ -1,0 +1,20 @@
+parameters:
+    level: 3
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        # Couldn't find these classes in a composer installable way
+        - '#Instantiated class TeraWurfl not found\.#'
+        - '#Parameter \$wurflObj of method Zend_Http_UserAgent_Features_Adapter_TeraWurfl::getAllCapabilities\(\) has invalid typehint type TeraWurfl\.#'
+        - '#Call to method getDeviceCapabilitiesFromRequest\(\) on an unknown class TeraWurfl\.#'
+        - '#Access to property \$capabilities on an unknown class TeraWurfl\.#'
+        - '#Call to static method getTreeFromFile\(\) on an unknown class Mobi_Mtld_DA_Api\.#'
+        - '#Call to static method getProperties\(\) on an unknown class Mobi_Mtld_DA_Api\.#'
+        # Not used anywhere else, not sure
+        - '#Access to an undefined property Zend_Http_UserAgent_AbstractDevice::\$device_os\.#'
+        - '#Variable \$.+ might not be defined\.#'
+        # No idea where this variable came from, put a comment in
+        - '#Variable \$headers in isset\(\) is never defined\.#'

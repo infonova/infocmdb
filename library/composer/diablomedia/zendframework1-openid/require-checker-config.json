@@ -1,0 +1,12 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "hash", "mhash", "MHASH_SHA256", "hash_hmac",
+    "openssl_digest", "openssl_pkey_new", "openssl_pkey_get_details", "openssl_dh_compute_key",
+    "mb_strlen",
+    "bcmul", "bcadd", "bccomp", "bcmod", "bcdiv", "bcpowmod",
+    "gmp_init", "gmp_strval", "gmp_powm"
+  ]
+}

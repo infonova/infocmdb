@@ -1,0 +1,15 @@
+<!-- Created At -->
+<tr>
+    <td onmouseover="Tip('<?php echo $this->historyCreated ?>');" onmouseout="UnTip();">
+        <b><?php echo $this->translate('created') ?></b></td>
+    <td onmouseover="Tip('<?php echo $this->historyCreated ?>');"
+        onmouseout="UnTip();"><?php echo substr($this->historyCreated, 0, 10); ?></td>
+</tr>
+
+<!-- Updated At -->
+<tr>
+    <td onmouseover="Tip('<?php echo $this->historyCreated ?>');" onmouseout="UnTip();">
+        <b><?php echo $this->translate('changed') ?></b></td>
+    <td onmouseover="Tip('<?php echo $this->historyChanged ?>');"
+        onmouseout="UnTip();"><?php echo substr($this->historyChanged, 0, 10); ?></td>
+</tr>

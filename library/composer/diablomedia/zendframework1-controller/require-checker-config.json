@@ -1,0 +1,9 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "session_write_close",
+    "apache_request_headers"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "DOMDocument", "DOMElement",
+    "zend_monitor_custom_event", "monitor_custom_event"
+  ]
+}

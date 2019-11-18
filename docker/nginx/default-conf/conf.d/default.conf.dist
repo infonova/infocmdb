@@ -1,0 +1,57 @@
+include security_cors.conf;
+
+server {
+
+    listen 80;
+    listen [::]:80;
+
+    server_name ${DOCKER_WEB_HOSTNAME} ${DOCKER_WEB_HOSTALIAS} ${DOCKER_INTERNAL_HOSTALIAS};
+    root /app/public;
+    index index.php index.html index.htm;
+
+    include security_headers.conf;
+
+    location /_uploads/individualization {
+         alias /app/data/uploads/individualization;
+    }
+
+    location /_uploads/icons {
+         alias /app/data/uploads/icons;
+    }
+
+    location ~ /(js|css|images|fonts)/ {
+        log_not_found off;
+    }
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+        if (!-f $document_root$fastcgi_script_name) {
+            return 404;
+        }
+
+        # Mitigate https://httpoxy.org/ vulnerabilities
+        fastcgi_param HTTP_PROXY "";
+
+        fastcgi_pass php:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param APPLICATION_ENV  ${APPLICATION_ENV};
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        ${PHP_DISABLE_FUNCTIONS}
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ ^/favicon.ico$ {
+        try_files $uri /images/$uri;
+        log_not_found off;
+        access_log off;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}

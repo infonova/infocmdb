@@ -1,0 +1,14 @@
+<?php
+
+if (getenv('TRAVIS')) {
+    /**
+     * Zend_Auth_Adapter_DbTable tests
+     */
+    defined('TESTS_ZEND_AUTH_ADAPTER_DBTABLE_PDO_SQLITE_ENABLED') || define('TESTS_ZEND_AUTH_ADAPTER_DBTABLE_PDO_SQLITE_ENABLED', true);
+}
+
+/**
+ * Zend_Auth_Adapter_DbTable tests
+ */
+defined('TESTS_ZEND_AUTH_ADAPTER_DBTABLE_PDO_SQLITE_ENABLED') || define('TESTS_ZEND_AUTH_ADAPTER_DBTABLE_PDO_SQLITE_ENABLED', false);
+defined('TESTS_ZEND_AUTH_ADAPTER_DBTABLE_PDO_SQLITE_DATABASE') || define('TESTS_ZEND_AUTH_ADAPTER_DBTABLE_PDO_SQLITE_DATABASE', ':memory:');

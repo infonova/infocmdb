@@ -1,0 +1,88 @@
+<a class="button overview" href="<?php echo APPLICATION_URL ?>fileimport/queue/type/queue"><?php echo $this->translate('importQueue') ?></a>
+<a class="button overview" href="<?php echo APPLICATION_URL ?>fileimport/queue/type/queue/method/success"><?php echo $this->translate('importsSucceeded') ?></a>
+<a class="button overview" href="<?php echo APPLICATION_URL ?>fileimport/queue/type/queue/method/error"><?php echo $this->translate('importsFailed') ?></a>
+
+
+<h1 class="pageName"><?php echo $this->translate('queueErrorTitle'); ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->filter->getName()) ?>"
+              action="<?php echo $this->escape($this->filter->getAction()) ?>"
+              method="<?php echo $this->escape($this->filter->getMethod()) ?>">
+            <?php
+            echo $this->filter->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            ?>
+        </form>
+    </div>
+</div>
+
+<div class="break"></div>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th><?php echo $this->translate('queue'); ?></th>
+            <th><?php echo $this->translate('filename'); ?></th>
+            <th><?php echo $this->translate('dateProceeded'); ?></th>
+            <th><?php echo $this->translate('log'); ?></th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+        </tr>
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <tr>
+
+                <?php
+                $downloadPath = "";
+                $logPath      = "";
+                $deletePath   = "";
+
+                switch ($item[Db_ImportFileHistory::QUEUE]) {
+                    case 'insert':
+                        $downloadPath = APPLICATION_URL . '/download/file/type/fileimport/method/insert/status/error/id/' . $item[Db_ImportFileHistory::ID] . '/file/';
+                        $logPath      = APPLICATION_URL . 'fileimport/queue/type/insert/method/log/file/';
+                        $deletePath   = APPLICATION_URL . 'fileimport/queue/type/insert/method/delete/status/error/id/' . $item[Db_ImportFileHistory::ID];
+                        break;
+                    case 'attribute':
+                        $downloadPath = APPLICATION_URL . '/download/file/type/fileimport/method/attribute/status/error/id/' . $item[Db_ImportFileHistory::ID] . '/file/';
+                        $logPath      = APPLICATION_URL . 'fileimport/queue/type/attribute/method/log/file/';
+                        $deletePath   = APPLICATION_URL . 'fileimport/queue/type/attribute/method/delete/status/error/id/' . $item[Db_ImportFileHistory::ID];
+                        break;
+                    case 'update_auto':
+                        $downloadPath = APPLICATION_URL . '/download/file/type/fileimport/method/autoupdate/status/error/id/' . $item[Db_ImportFileHistory::ID] . '/file/';
+                        $logPath      = APPLICATION_URL . 'fileimport/queue/type/autoupdate/method/log/file/';
+                        $deletePath   = APPLICATION_URL . 'fileimport/queue/type/autoupdate/method/delete/status/error/id/' . $item[Db_ImportFileHistory::ID];
+                        break;
+                    case 'update_manual':
+                        $downloadPath = APPLICATION_URL . '/download/file/type/fileimport/method/manualupdate/status/error/id/' . $item[Db_ImportFileHistory::ID] . '/file/';
+                        $logPath      = APPLICATION_URL . 'fileimport/queue/type/manualupdate/method/log/file/';
+                        $deletePath   = APPLICATION_URL . 'fileimport/queue/type/manualupdate/method/delete/status/error/id/' . $item[Db_ImportFileHistory::ID];
+                        break;
+
+                } ?>
+
+                <td><?php echo $item[Db_ImportFileHistory::QUEUE] ?></td>
+                <td>
+                    <a href="<?php echo $downloadPath . $item[Db_ImportFileHistory::FILENAME] ?>"><?php echo $item[Db_ImportFileHistory::FILENAME]; ?></a>
+                </td>
+                <td><?php echo $item[Db_ImportFileHistory::CREATED] ?></td>
+                <td>
+                    <a class="tu_iframe_550x510" toptions="effect = clip, layout = flatlook" href="<?php echo $logPath . $item[Db_ImportFileHistory::FILENAME] . '.log' ?>"><?php echo $this->translate('log'); ?></a>
+                </td>
+
+                <td>
+                    <a href="<?php echo APPLICATION_URL . 'fileimport/queue/type/queue/method/retry/id/' . $item[Db_ImportFileHistory::ID] ?>"><?php echo $this->translate('retry'); ?></a>
+                </td>
+                <td><a class="delete_list" href="<?php echo $deletePath ?>"></a></td>
+            </tr>
+        <?php endforeach; ?>
+
+    </table>
+    <?php echo $this->paginator; ?>
+<?php endif; ?>

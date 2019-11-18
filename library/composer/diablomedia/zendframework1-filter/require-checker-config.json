@@ -1,0 +1,20 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "iconv",
+    "ctype_print",
+    "mb_internal_encoding", "mb_list_encodings", "mb_strtolower", "mb_strtoupper",
+    "Archive_Tar",
+    "mcrypt_list_algorithms", "mcrypt_list_modes", "mcrypt_module_self_test", "mcrypt_enc_get_iv_size", "MCRYPT_RAND",
+    "MCRYPT_DEV_URANDOM", "MCRYPT_DEV_RANDOM", "mcrypt_create_iv", "mcrypt_generic", "mcrypt_generic_deinit",
+    "mdecrypt_generic", "mcrypt_module_open", "mcrypt_module_close", "mcrypt_enc_get_supported_key_sizes", "mcrypt_enc_get_key_size", "mcrypt_generic_init",
+    "gzopen", "gzwrite", "gzclose", "gzdeflate", "gzcompress", "gzread", "gzinflate", "gzuncompress",
+    "openssl_pkey_get_public", "openssl_free_key", "openssl_pkey_get_private", "openssl_pkey_get_details", "openssl_seal", "openssl_open",
+    "bzopen", "bzwrite", "bzclose", "bzcompress", "bzread", "bzdecompress",
+    "ZipArchive",
+    "rar_open", "rar_list", "rar_close",
+    "lzf_compress", "lzf_decompress"
+  ]
+}

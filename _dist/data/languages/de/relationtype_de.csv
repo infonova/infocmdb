@@ -1,0 +1,95 @@
+#Language file for Relations
+# relationt type create
+relationtypeId;			"ID"
+name;					"Name"
+description;			"Beschreibung von CI"
+description2;			"Beschreibung zu CI"
+note;					"Notiz"
+color;					"Farbe"
+active;					"Aktiv"
+inactive;				"inaktiv"
+valid;					"Gültig"
+visualizeCiType;		"CI Typ visualisieren"
+
+name_desc;				"Name des Relationstypen (CMDB intern)"
+description_desc;		"Beschreibung der Relation aus Sicht des CI von welchem sie erstellt wird"
+description2_desc;		"Beschreibung der Relation aus Sicht des CI zu welchem sie hin führt"
+note_desc;				"Notiz dient zur Beschreibung der Relation z.B. Ansprechpartner für"
+color_desc;				"Hier kann die Farbe mit der die Relation in der Visualisierung dargestellt wird ausgewählt werden"
+visualize_desc;			"Sollen Relationen dieses Typs visualisiert werden"
+
+
+
+relationType;			"Relations Typen"
+overview;				"Übersicht"
+
+relationTypeEdit;		"Relations Typ bearbeiten"
+relationTypeCreate;		"Relations Typ anlegen"
+relationTypeDetail;		"Relations Typ Detail"
+
+
+relationtypeNameTitle; 					"Name des Relations Typen, kleingeschrieben, auf Englisch z.B.: cmdb_relation_type"
+relationtypeDescriptionTitle; 			"Name des Relations Typen auf Deutsch"
+relationtypeDescriptionOptionalTitle;	"optionale Beschreibung"
+relationtypeNoteTitle; 					"Hilfetext der durch Ber�hrung mit dem Mouse Cursor angezeigt wird"
+relationtypeColorTitle; 				"Farbe mit der die Beziehung eines Relation Typen bei einer Visualisierung angezeigt wird"
+relationtypeVisualizeTitle; 			"Soll der Relations Typ für eine Visualisierung freigegeben werden oder nicht "
+
+#navigation
+addCiTypes;				"CI Typen hinzufügen"
+
+save;					"Speichern"
+abort;					"Abbrechen"
+next;					"Weiter"
+back;					"Zurück"
+edit;					"Bearbeiten"
+delete;					"Löschen"
+
+noRelationtypeFound; "Keine Ergebnisse"
+numberOfResults;	"Anzahl der Ergebnisse:"
+
+#ci types
+ciTypes;				"CI Typen"
+assignCiTypes;			"CI Typen zuweisen"
+assigned;				"zugewiesen"
+unused;					"nicht verwendet"
+type;					"Typ"
+ciTypeName;				"CI Typ Name"
+fieldsetAddedCiTypes;	"Hinzugefügte Ci Typen"
+fieldsetCiTypes;		"Verfügbare Ci Typen"
+noItems;				"Keine Items"
+
+#finalize
+assignedCiTypes;		"Zugewiesene CI Typen"
+none;					"Keine"
+
+pickColor;				"Farbe wählen:"
+red;					"rot"
+green;					"grün"
+blue;					"blau"
+purple;					"violett"
+clear;					"clear"
+
+
+relationCreateWizardSuccess;	"Relation Type wurde erfolgreich angelegt!"
+relationtypeDeleteSuccess;		"Relation Type wurde erfolgreich gelöscht!"
+relationTypeDactivateSuccess;	"Relation Type konnte nicht gelöscht werden, da er noch verwendet wird. <br>Er wurde stattdessen deaktiviert!"
+relationCreateWizardFailed;		"Relation Type konnte nicht angelegt werden!"
+relationtypeActivationSuccess;	"Relation Type wurde erfolgreich aktiviert!"
+relationtypeUpdateSuccess;		"Relation Type wurde erfolgreich bearbeitet!"
+relationtypeDeactivateSuccess;  "Relation Type in Verwendung => erfolgreich deaktiviert!"
+
+relationCreateSuccess;			"Relation wurde erfolgreich angelegt!"
+relationCreateFailed;			"Relation konnte nicht angelegt werden!"
+relationDeleteSuccess;			"Relation wurde erfolgreich gelöscht!"
+relationDeleteFailed;			"Relation konnte nicht gelöscht werden!"
+
+relationAddError1;				"Der Benutzer ist nicht dazu berechtigt, Relationen zu verändern!"
+relationAddError2;				"Das CI hat die maximale Anzahl an Relationen dieses Typs erreicht!"
+relationAddError3;				"Das verlinkte CI hat die maximale Anzahl an Relationen dieses Typs erreicht!"
+relationAddError4;				"Es wurden keine Relationen gefunden, die dem CI Typ des ausgewählten CI's zugeordet wurden!"
+relationtypeCreateCancled; "Relation anlegen abgebrochen"
+
+areYouSureDelete;				"Wollen Sie den Relations Typ wirklich löschen?"
+areYouSureReset;				"Wollen Sie den Relations Typ wirklich zurücksetzen?"
+areYouSureActivate;				"Wollen Sie den Relations Typ wirklich aktivieren?"

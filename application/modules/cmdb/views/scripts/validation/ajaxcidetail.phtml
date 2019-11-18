@@ -1,0 +1,39 @@
+<td style="border-left:1px solid #ccc;"></td>
+<td colspan="9">
+    <fieldset style="margin-bottom: 20px; border: 1px solid #ccc;">
+        <?php if ($this->attributeList && count($this->attributeList) > 0): ?>
+            <table class="list" cellpadding="0" cellspacing="0" width="100%">
+                <tr class="headline">
+                    <th>
+                        <span><?php echo $this->escape($this->translate('attribute')) ?></span>
+                    </th>
+                    <th>
+                        <span><?php echo $this->escape($this->translate('value')) ?></span>
+                    </th>
+                    <th>
+                        <span><?php echo $this->escape($this->translate('status')) ?></span>
+                    </th>
+                    <th style="width:300px;">&nbsp;</th>
+                </tr>
+                <?php
+                $row_count = 0;
+                foreach ($this->attributeList as $item):
+                    ?>
+                    <tr>
+                        <td><?php echo $this->escape($item[Db_Attribute::DESCRIPTION]); ?></td>
+                        <td><?php echo $this->escape($item[Db_ImportFileValidationAttributes::VALUE]); ?></td>
+                        <td><?php echo $this->escape($item[Db_ImportFileValidationAttributes::STATUS]); ?></td>
+                        <td>
+                            <?php if ($item[Db_ImportFileValidationAttributes::STATUS] === 'idle'): ?>
+                                <a class="delete_list" onclick="javascript:deleteValidation(<?php echo $item[Db_ImportFileValidationAttributes::ID] ?>)" title="<?php echo $this->escape($this->translate('delete')) ?>"></a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php else: ?>
+            <span><?php echo $this->escape($this->translate('noAttributes')); ?></span>
+        <?php endif; ?>
+
+    </fieldset>
+</td>

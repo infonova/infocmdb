@@ -1,0 +1,61 @@
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>mailimport/create"><?php echo $this->translate('mailimportCreate') ?></a>
+    |
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>mailimport/retrievemailmessages/"><?php echo $this->translate('execute') ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('mailimports') ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>mailimport/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_MailImport::ID ?>/direction/<?php echo(($this->orderBy == Db_MailImport::ID) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('mailimportId'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>mailimport/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_MailImport::USER ?>/direction/<?php echo(($this->orderBy == Db_MailImport::USER) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('user'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>mailimport/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_MailImport::HOST ?>/direction/<?php echo(($this->orderBy == Db_MailImport::HOST) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('host'); ?>
+                </a>
+            </th>
+            <th>&nbsp;</th>
+        </tr>
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <tr>
+                <td><?php echo $item[Db_MailImport::ID]; ?></td>
+                <td><?php echo $item[Db_MailImport::USER]; ?></td>
+                <td><?php echo $item[Db_MailImport::HOST]; ?></td>
+                <td>
+                    <a class='delete_list' href='<?php echo APPLICATION_URL ?>mailimport/delete/mailImportId/<?php echo $item[Db_MailImport::ID] ?>'></a>
+                    <div class="rfloater">
+                        <a class="link buttonLink" href='<?php echo APPLICATION_URL ?>mailimport/edit/mailImportId/<?php echo $item[Db_MailImport::ID] ?>'><?php echo $this->translate('edit') ?></a>
+                        <a class="link buttonLink" href='<?php echo APPLICATION_URL ?>mailimport/editcronjob/mailimportId/<?php echo $item[Db_MailImport::ID] ?>'><?php echo $this->translate('editCronjob') ?></a>
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php echo $this->paginator; ?>
+<?php endif; ?>

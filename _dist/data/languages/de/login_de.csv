@@ -1,0 +1,80 @@
+#Language file for Login Page (de)
+productDescription;		"Configuration Management"
+
+#Form elements
+username;				"Benutzername"
+password;				"Passwort"
+login;					"Einloggen"
+password_input;			"password_input"
+username_input;			"username_input"
+
+#Exception messages
+exceptionTitle;			"Login gescheitert:"
+exceptionNotFound;		" konnte nicht gefunden werden!"
+exceptionInvalid;		" ist nicht gültig! Versuchen Sie es bitte erneut"
+exceptionDefault;		"Unerwarteter Fehler!"
+
+exceptionSolution;		""
+
+#Form validation
+isEmpty;				"Das Feld ist leer!"
+
+usernameTooShort;		"Eingebener Benutzername ist zu kurz!"
+usernameTooLong;		"Eingebener Benutzername ist zu lange!"
+
+usernameRegexNotMatch;	"Benutzername ist nicht valide (regex)"
+
+passwordTooShort;		"Passwort zu kurz"
+passwordTooLong;		"Passwort zu lange"
+
+loginPasswordRecoveryUser;				"Benutzername bestätigen"
+loginPasswordRecoverySubmit;			"Abschicken"
+loginPasswordRecoveryNewPassword;               "Neues Passwort"
+loginPasswordRecoveryNewPasswordConfirm;        "Neues Passwort bestätigen"
+loginPasswordRecoveryTFA;                       "2-Faktor Code"
+
+loginPasswordRecoveryForgotPassword;	"Passwort vergessen?"
+loginPasswordRecoveryBackToLogin;		"Zurück zur Login Seite"
+
+loginPasswordRecoveryTitel;				"Passwort vergessen?"
+loginPasswordRecoveryMessage;			"Tragen Sie Ihren Benutzernamen in das Feld ein und wir senden Ihnen einen Link zu, mit dem Sie Ihr Passwort zurücksetzen können!"
+
+loginPasswordRecoveryErrorTitel;		"Es ist ein Fehler aufgetreten!"
+loginPasswordRecoveryInvalidUsername;	"Der eingegebene Benutzername ist nicht gültig!"
+loginPasswordRecoveryNoAddressFound;	"Es wurde keine Email Adresse für den User gefunden!"
+loginPasswordRecoveryConnectionException;"Es ist ein unerwarteter Fehler aufgetreten. Bitte kontaktieren Sie jemanden!"
+
+loginPasswordRecoverySuccessTitel;		"Passwort-Recovery Mail wurde Ihnen zugesandt!"
+loginPasswordRecoverySuccessMessage;	"Bitte überprüfen Sie ihre Mailbox."
+loginPasswordRecoveryLdapUser;			"Single Sign-on ist für Ihren Account aktiviert. Bitte kontaktieren Sie ihren Administrator."
+
+loginPasswordRecoverySuccessRecoveredTitel;		"Ihr neues Passwort wurde gesetzt!"
+loginPasswordRecoverySuccessRecoveredMessage;	"Bitte loggen Sie sich mit Ihren neuen Daten ein."
+
+loginPasswordRecoveryHashInvalid;				"Der verwendete Link ist leider nicht gültig."
+loginPasswordRecoveryUnexpectedException;		"Unerwarter Fehler! Bitte kontaktieren Sie den Support!"
+
+loginPasswordRecoveryRequestAlreadyOpen;           "Sie haben bereits ein Passwort-Reset angefordert! Bitte kümmern Sie sich um die vorhergehende Anfrage!"
+loginPasswordRecoveryRequestTimeout;    "Sie haben bereits zu viele Passwort-Resets angefordert! Bitte warten Sie"
+loginPasswordRecoveryResetFailed;       "Passwort neu setzen ist fehlgeschlagen! Überprüfen Sie, ob Sie alle Daten korrekt eingegeben haben!"
+
+loginPasswordRecoveryAccessDenied;      "Zugriff verweigert! Sind Sie sicher, dass Sie die korrekte URL angegeben haben?"
+loginPasswordRecoveryClientTimeout;     "Es kommen zu viele Passwort-Reset Anfragen von Ihrem Client. Bitte warten Sie"
+
+loginPasswordRecoveryGlobalTimeout;     "Passwörter können erst in einer Stunde wieder zurückgesetzt werden. Bitte warten Sie oder kontaktieren Sie Ihren Administrator"
+
+
+# user login
+2FAenterCode;                   "Geben Sie bitte den in der Google Authenticator App angezeigten Code ein"
+2FAErrorCodeInvalid;            "ERROR Der Code ist nicht gültig! Versuchen Sie es erneut"
+2FACodeInvalidTooOften;         "Code zu oft falsch eingegeben! Versuchen Sie es erneut"
+2FACode;                        "2-Faktor Code"
+wait;                            "Bitte warten Sie einen Moment!"
+
+# password change action (reset with hash)
+resetPasswordHelpText;          "Geben Sie Ihren Benutzernamen ein und setzen Sie ein neues Passwort"
+
+serverError;                    "Es gab einen Server-Fehler beim Übertragen der Login-Informationen!"
+
+passwordExpired;                "Ihr Passwort ist abgelaufen. <a href='%s'>Klicken Sie hier um ein neues anzufordern.</a>"
+passwordAboutToExpire;          "Ihr Passwort läuft in %s Tagen ab. <a href='%s'>Klicken Sie hier um Ihr Passwort zu ändern.</a>"

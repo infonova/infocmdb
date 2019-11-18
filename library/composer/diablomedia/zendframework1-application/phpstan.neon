@@ -1,0 +1,9 @@
+parameters:
+    level: 1
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        - '#Zend_Application_Module_Bootstrap::__construct\(\) does not call parent constructor from Zend_Application_Bootstrap_Bootstrap\.#'

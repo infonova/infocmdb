@@ -1,0 +1,77 @@
+language: php
+
+sudo: false
+
+env:
+  global:
+    - COMPOSER_ARGS="" TMPDIR=/tmp USE_XDEBUG=false
+
+branches:
+  only:
+    master
+
+install:
+  - phpenv rehash
+  - travis_retry composer update --no-interaction --prefer-source $COMPOSER_ARGS
+
+stages:
+  - test
+  - style check
+  - phpstan analysis
+  - test with coverage
+
+before_script:
+  - if [[ "$USE_XDEBUG" == false ]]; then phpenv config-rm xdebug.ini || return 0; fi
+
+script:
+  - composer test
+
+jobs:
+  fast_finish: true
+  allow_failures:
+    - php: 7.4snapshot
+    - php: nightly
+  include:
+    - php: 7.1
+      env: COMPOSER_ARGS="--prefer-lowest"
+    - php: 7.1
+    - php: 7.2
+      env: COMPOSER_ARGS="--prefer-lowest"
+    - php: 7.2
+    - php: 7.3
+      env: COMPOSER_ARGS="--prefer-lowest"
+    - php: 7.3
+    - php: 7.4snapshot
+      env: COMPOSER_ARGS="--ignore-platform-reqs --prefer-lowest"
+    - php: 7.4snapshot
+      env: COMPOSER_ARGS="--ignore-platform-reqs"
+    - php: nightly
+      env: COMPOSER_ARGS="--ignore-platform-reqs --prefer-lowest"
+    - php: nightly
+      env: COMPOSER_ARGS="--ignore-platform-reqs"
+      
+    - stage: style check
+      php: 7.2
+      env: TMPDIR=/tmp USE_XDEBUG=false
+      script:
+        - composer style-check
+        
+    - stage: phpstan analysis
+      php: 7.2
+      env: TMPDIR=/tmp USE_XDEBUG=false
+      script:
+        - composer phpstan
+        
+    - stage: test with coverage
+      php: 7.2
+      env: TMPDIR=/tmp USE_XDEBUG=true CC_TEST_REPORTER_ID=2ded43f9d7ab416de8628a0c216ee6f04eab266b1fc9e2c56a624f886aa5d7a6
+      before_script:
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
+      script:
+        - composer test-with-coverage
+      after_success:
+        - bash <(curl -s https://codecov.io/bash) -f ./clover.xml
+      after_script:
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

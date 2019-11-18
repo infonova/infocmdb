@@ -1,0 +1,13 @@
+parameters:
+    level: 1
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        # Bad reflection I assume
+        - '#Call to an undefined static method SoapClient::__construct\(\)\.#'
+        # Not sure what default should be
+        - '#Variable \$xml might not be defined\.#'
+        - '#Variable \$complexTypeName might not be defined\.#'

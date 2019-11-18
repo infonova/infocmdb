@@ -1,0 +1,72 @@
+<h1 class="pageName"><?php echo $this->translate('searchList') ?></h1>
+<fieldset class="create_form">
+    <form name="<?php echo $this->escape($this->form->getName()) ?>" action="<?php echo $this->escape($this->form->getAction()) ?>"
+          method="<?php echo $this->escape($this->form->getMethod()) ?>">
+        <table style="padding-right:0px;">
+            <tr>
+                <th style="width:33%;">
+                    <div class="two_radio_group">
+                        <div class="radio_label" title="<?php echo $this->translate('searchlistChildIndexOff') ?>">x
+                        </div>
+                        <div class="radio_label" title="<?php echo $this->translate('searchlistChildIndexOn') ?>">o
+                        </div>
+                    </div>
+                    <span title="CI Typ"><?php echo $this->translate('type') ?></span>
+                </th>
+                <th style="width:33%;">
+                    <div class="two_radio_group">
+                        <div class="radio_label" title="<?php echo $this->translate('searchlistChildIndexOff') ?>">x
+                        </div>
+                        <div class="radio_label" title="<?php echo $this->translate('searchlistChildIndexOn') ?>">o
+                        </div>
+                    </div>
+                    <span title="CI Typ"><?php echo $this->translate('type') ?></span>
+                </th>
+                <th style="width:33%;">
+                    <div class="two_radio_group">
+                        <div class="radio_label" title="<?php echo $this->translate('searchlistChildIndexOff') ?>">x
+                        </div>
+                        <div class="radio_label" title="<?php echo $this->translate('searchlistChildIndexOn') ?>">o
+                        </div>
+                    </div>
+                    <span title="CI Typ"><?php echo $this->translate('type') ?></span>
+                </th>
+            </tr>
+            <?php
+            $count = 0;
+            foreach ($this->ciTypes as $ciType) {
+                if ($count == 0) {
+                    echo "<tr>";
+                }
+                if ($ciType['searchList']) {
+                    if ($ciType['searchList'][Db_SearchList::IS_ACTIVE]) {
+                        $attributeX = '';
+                        $attributeM = 'checked = "checked"';
+                    } else {
+                        $attributeX = 'checked = "checked"';
+                        $attributeM = '';
+                    }
+                } else {
+                    $attributeX = 'checked = "checked"';
+                    $attributeM = 'disabled = "disabled"';
+                }
+                ?>
+                <td style="padding-right: 0px;">
+                    <div class="two_radio_group">
+                        <label><input type="RADIO" name="<?php echo $ciType[Db_CiType::ID]; ?>" value="0" <?php echo $attributeX; ?>/></label>
+                        <label><input type="RADIO" name="<?php echo $ciType[Db_CiType::ID]; ?>" value="1" <?php echo $attributeM; ?>/></label>
+                    </div>
+                    <span><a class="link" href="<?php echo APPLICATION_URL ?>searchlist/detail/ciTypeId/<?php echo $ciType[Db_CiType::ID] ?>" title="<?php echo $this->translate('searchlistAddChild') . $ciType[Db_CiType::DESCRIPTION] ?>"><?php echo $ciType[Db_CiType::NAME] ?></a></span>
+                </td>
+                <?php
+                $count++;
+                if ($count == 3) {
+                    echo "</tr>";
+                    $count = 0;
+                }
+            }
+            ?>
+        </table>
+        <?php echo $this->form->save ?>
+    </form>
+</fieldset>

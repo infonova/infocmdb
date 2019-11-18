@@ -1,0 +1,9 @@
+parameters:
+    level: 3
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        - '#Variable \$className might not be defined\.#'

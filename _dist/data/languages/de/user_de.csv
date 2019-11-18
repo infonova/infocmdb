@@ -1,0 +1,152 @@
+﻿# This is the language file for user interaction.
+
+userId;					"ID"
+user;					"Benutzer"
+username;				"Benutzername"
+password;				"Passwort"
+passwordConfirm;		"Passwort bestätigen"
+theme;					"Theme"
+ciDeleteAllowed;		"darf CIs löschen"
+relationDeleteAllowed;	"darf Relationen verändern"
+firstname;				"Vorname"
+lastname;				"Nachname"
+description;			"Beschreibung"
+comment;				"Kommentar"
+language;				"Sprache"
+mailaddress;			"Mailadresse"
+valid;					"Gültig"
+active;					"aktiv"
+inactive;				"inaktiv"
+layout;					"Layout"
+projects;				"Projekte"
+roles;					"Rollen"
+email;					"E-Mail"
+note;					"Notiz"
+role;					"Rolle"
+ValidatorPasswortStrength_NOT_VALID;    "Das Passwort muss aus mindestens 8 Zeichen bestehen..."
+
+
+numberOfResults;			"Anzahl der Ergebnisse:"
+
+
+theme_desc;					"Theme das dem Benutzer zugeordnet ist"
+name_desc;					"Benutzername mit welchem sich der Benutzer an der CMDB anmeldet (keine Sonder Zeichen erlaubt)"
+email_desc;					"E-Mail Addresse des Benutzers"
+password_desc;				"Passwort wenn keine LDAP Authentifizierung ausgewählt wurde"
+password_confirm_desc;		"Bestätigung des eingegeben Passwortes"
+firstname_desc;				"Vorname des Benutzers"
+lastname_desc;				"Nachname des Benutzers"
+description_desc;			"Beschreibung des Benutzers (z.B. Serververantwortlicher)"
+note_desc;					"Beschreibung des Benutzers welche durch Berührung mit dem Mouse Cursor angezeigt wird"
+language_desc;				"Sprache der CMDB Oberfläche für den Benutzer"
+layout_desc;				"Layout der CMDB (admin/default)"
+ciDelete_desc;				"Darf der Benutzer CIs löschen"
+relationDelete_desc;		"Darf der Benutzer Relationen löschen"
+ldapAuth_desc;				"Erfolgt bei der Anmeldung die Authentifizierung über LDAP"
+allowAdminMode;             "Admin-Mode erlauben"
+isRoot_desc;                "Benutzer kann den Admin-Mode aktivieren. Ist dieser aktiv wird bei den Attribut-Bezeichnungen der Name statt der Beschreibung angezeigt."
+userDeactivationSuccess;		"Benutzer erfolgreich deaktiviert"
+
+
+
+
+
+
+
+userThemeTitle; 			"Welche Baummenüansicht dem Benutzer zugewiesen wird"
+userNameTitle;				"Name des Benutzers"
+userEmailTitle;				"E-Mail-Adresse des Benutzers"
+userPasswordTitle;			"Passwort des Benutzers"
+userPasswordConfirmTitle;	"Passwort des Benutzers bestÃ¤tigen"
+userCiDeleteTitle;			"Benutzer darf CIs löschen"
+userRelationDeleteTitle;	"Benutzer darf Relationen löschen"
+userLdapAuthTitle;			"LDAP Auth"
+userIsRootTitle;            "Benutzer kann den Admin-Mode aktivieren"
+userFirstnameTitle;			"Vorname des Benutzers"
+userLastnameTitle;			"Nachname des Benutzers"
+userDescriptionTitle;		"Arbeitstitel des Benutzers"
+userNoteTitle;				"Hilfetext der durch Berührung mit dem Mouse Cursor angezeigt wird"
+userLanguageTitle;			"Sprachauswahl"
+userLayoutTitle;			"Layout"
+comment;  "Notiz"
+
+userEdit;				"Benutzer bearbeiten"
+userCreate;				"Benutzer anlegen"
+userSummary;			"Benutzer Zusammenfassung"
+userDetail;				"Benutzer Detail"
+
+pleaseChose;			"Bitte wählen"
+#wizard
+yes;					"Ja"
+no;						"Nein"
+
+assignProjects;			"Projekte zuweisen"
+assignRoles;			"Rollen zuweisen"
+
+overview;				"Übersicht"
+save;					"Speichern"
+delete;					"Löschen"
+abort;					"Abbrechen"
+back;					"Zurück"
+next;					"Weiter"
+edit;					"Bearbeiten"
+duplicate;				"Duplizieren"
+
+projectName;			"Name des Projektes"
+project;				"Projekt"
+none;					"Keine"
+
+userCreateSuccess;		"Benutzer wurde erfolgreich angelegt!"
+userCreateFailed;		"Benutzer konnte nicht angelegt werden!"
+userUpdateSuccess;		"Benutzer erfolgreich bearbeitet!"
+
+userDeleteSuccess;		"Benutzer wurde erfolgreich gelöscht!"
+userDeleteFailed;		"Benutzer konnte nicht gelöscht werden!"
+
+projectAssignSuccess;	"Projekte wurden erfolgreich zugewiesen."
+roleAssignSuccess;		"Rollen wurden erfolgreich zugewiesen."
+
+userProjectCheckDescription;"Projekt dem Benutzer zuweisen?"
+userProjectCheckName;		"x"
+userCreateCancled;"Benutzer anlegen abgebrochen"
+
+areYouSureCancel;			"Wollen Sie wirklich abbrechen?"
+areYouSureActivate;			"Wollen Sie den Benutzer wirklich aktivieren?"
+areYouSureDelete;			"Wollen Sie den Benutzer wirklich löschen?"
+areYouSureReset;			"Wollen Sie den CI Typen wirklich zurücksetzen?"
+
+# view messages 2 Factor Auth
+is_two_factor_auth;             "2-Faktoren Authentifizierung nutzen"
+2FA;                      "2-Faktoren Authentifizierung"
+2FASetup;                       "2-Faktoren Authentifizierung für Ihren Benutzer einrichten"
+2FAGoogleAuthInstall;           "Falls nicht bereits geschehen, installieren Sie die Google Authenticator App"
+2FAGoogleAuthOpen;              "Öffnen Sie die Google Authenticator App"
+2FAGoogleAuthSetupAccount;      "Tippen Sie 'Menü' und danach 'Konto einrichten'. Nun scannen Sie den unten dargestellten Code oder geben Sie manuell den Schlüssel ein"
+2FASecret;                      "Schlüssel"
+2FAactive;                      "Sie haben die 2-Faktoren Authentifizierung aktiviert! Bei jedem Login werden Sie nun aufgefordert, den in der Google Authenticator App angezeigten Code einzugeben"
+2FAFinishSetup;                 "Um die Einrichtung abzuschließen, geben Sie den 6-stelligen Zahlencode ein, der in der Google Authenticator App angezeigt wird, und drücken Sie auf 'Code verifizieren'"
+2FAVerifyCode;                  "Code verifizieren"
+general;                        "Allgemein"
+wait;                           "Bitte warten.."
+
+# error messages returned by activateTFA Action
+2FAErrorNoUser;             "ERROR Benutzer passt nicht!"
+2FAErrorAlreadyActive;      "ERROR 2 Faktor Auth ist bereits aktiviert für diesen Account"
+2FAErrorNoSecret;           "ERROR Kein secret vorhanden"
+2FAErrorCodeInvalid;        "ERROR Der Code ist nicht gültig! Versuchen Sie es erneut"
+UnexpectedError;            "ERROR Unerwarteter error. Bitte kontaktieren Sie Ihren Administrator"
+
+# admin mode edit user
+2FAenabled;                 "Benutzer hat 2-Faktoren Authentifizierung aktiviert"
+2FAdisabled;                "2-Faktoren Authentifizierung für den Benutzer ist deaktiviert"
+2FAdisable;                 "2-Faktoren Authentifizierung deaktivieren"
+2FAreallyDisable;           "Sind Sie sicher, dass Sie 2-Faktoren Authentifizierung für diesen Benutzer deaktivieren wollen?"
+
+ldapAuth; "LDAP"
+
+noUserFound;   "Keine Einträge gefunden!"
+PasswordsDoNotMatch;        "Die Passwörter stimmen nicht überein"
+
+noPassExpireLabel;          "Passwort läuft nie ab"
+noPassExpireTitle;          "Passwort läuft nie ab"
+noPassExpireDesc;           "Falls ablaufende Passwörter aktiviert sind läuft das Passwort für diesen Benutzer nie ab. Für API Benutzer z.B."

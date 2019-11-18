@@ -1,0 +1,227 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/tooltip/wz_tooltip.js"></script>
+<script type="text/javascript">
+    function delete_workflow(workflow_id) {
+        if (confirm('<?php echo $this->translate("areYouSureDelete") ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>workflow/delete/workflowId/' + workflow_id;
+        }
+    }
+
+    function activate_workflow(workflow_id) {
+        if (confirm('<?php echo $this->translate("areYouSureActivate") ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>workflow/activate/workflowId/' + workflow_id;
+        }
+    }
+
+    $(document).ready(function () {
+
+        $(".btn-slide").click(function () {
+            $("#panel").slideToggle("slow");
+            $(this).toggleClass("active");
+            var btn_slide_active = $(this).hasClass("active");
+            if (btn_slide_active == true) {
+                $(this).val("<?php echo $this->translate('attribute_filter_off'); ?>");
+            } else {
+                $("#panel td input").val("");//clear all attribute filters
+                $("#panel td select").val("");
+                $("#panel td input").closest("form").submit();
+                $(this).val("<?php echo $this->translate('attribute_filter_on'); ?>");
+            }
+        });
+
+        $("#panel td select").change(function () {
+            $(this).closest("form").submit();
+        });
+
+        $("#clear_filter").click(function () {
+            $("#panel td input").val("");//clear all attribute filters
+            $("#panel td select").val("");
+            $("#search").val("");
+            $("#panel td input").closest("form").submit();
+        });
+
+        $("#clear_sorting").click(function () {
+            window.location = "<?php echo APPLICATION_URL . '/workflow/index/typeid/' . $this->typeId; ?>";
+        });
+
+        //change width of input fields to width of td-element in headline
+        $("#panel td input").hide();//hide cause sometimes the input is wider than the ohter things
+        $("#panel td input").each(function () {
+            var index = $(this).parent().parent().children().index($(this).parent());
+            var width = $(".headline th:eq(" + index + ")").width();
+            $(this).width(width);
+        });
+        $("#panel td input").show();
+    });
+
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class = " button";
+}
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>workflow/rebuild/all/1"><?php echo $this->translate('workflowRebuildAll') ?></a>
+    |
+    <a class="<?php echo $class; ?> create" href="<?php echo APPLICATION_URL ?>workflow/create"><?php echo $this->translate('workflowCreate') ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('workflow') ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+
+<form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+      action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+      method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+
+    <div id="filter">
+        <div class="filter-box">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterButton;
+            ?>
+            <input class="btn-slide attribute_search_button <?php echo ($this->displayAttributeFilter) ? "active" : ""; ?>" type="button" value="<?php echo $this->translate(($this->displayAttributeFilter) ? 'attribute_filter_off' : 'attribute_filter_on'); ?>">
+            <input id="clear_filter" class="attribute_search_button" type="button" value="<?php echo $this->translate("filter_clear"); ?>">
+            <input id="clear_sorting" class="attribute_search_button" type="button" value="<?php echo $this->translate("sorting_clear"); ?>">
+        </div>
+    </div>
+
+    <div class="clearBoth" style="margin-bottom: 15px;"></div>
+
+    <table class="list hidden_row_list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline" style="background-color: transparent">
+            <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+            <th>
+                <a class="link" href="<?php echo $this->url(array('orderBy' => Db_Workflow::NAME, 'direction' => (($this->orderBy == Db_Workflow::NAME) ? $urlDirection : "DESC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('name') ?>
+                </a>
+            </th>
+            <th>
+                <a class="link" href="<?php echo $this->url(array('orderBy' => Db_Workflow::DESCRIPTION, 'direction' => (($this->orderBy == Db_Workflow::DESCRIPTION) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('description') ?>
+                </a>
+            </th>
+            <th>
+                <a class="link" href="<?php echo $this->url(array('orderBy' => 'trigger_type', 'direction' => (($this->orderBy == 'trigger_type') ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('trigger') ?>
+                </a>
+            </th>
+            <th>
+                <a class="link" href="<?php echo $this->url(array('orderBy' => Db_Workflow::EXECUTION_TIME, 'direction' => (($this->orderBy == Db_Workflow::EXECUTION_TIME) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('execution_time') ?>
+                </a>
+            </th>
+            <th>
+                <a class="link" href="<?php echo $this->url(array('orderBy' => Db_Workflow::NOTE, 'direction' => (($this->orderBy == Db_Workflow::NOTE) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('note') ?>
+                </a>
+            </th>
+            <th>
+                <a class="link" href="<?php echo $this->url(array('orderBy' => Db_Workflow::IS_ASYNC, 'direction' => (($this->orderBy == Db_Workflow::IS_ASYNC) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('async') ?>
+                </a>
+            </th>
+            <th>
+                <a class="link" href="<?php echo $this->url(array('orderBy' => Db_Workflow::IS_ACTIVE, 'direction' => (($this->orderBy == Db_Workflow::IS_ACTIVE) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('active') ?>
+                </a>
+            </th>
+            <th>
+                <a class="link" href="<?php echo $this->url(array('orderBy' => Db_Workflow::STATUS, 'direction' => (($this->orderBy == Db_Workflow::STATUS) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('workflowStatus') ?>
+            </th>
+            <th></th>
+        </tr>
+        <?php //search form row ?>
+        <tr id="panel" class="headline" <?php if ($this->displayAttributeFilter) echo 'style="display:table-row;"'; ?>>
+            <?php
+            foreach ($this->columns as $column):?>
+                <td nowrap="nowrap">
+                    <?php
+                    echo $this->searchForm->$column;
+                    ?>
+                </td>
+            <?php endforeach; ?>
+            <td></td>
+        </tr>
+
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            $icon = 'info_red.png';
+            if ($item[Db_Workflow::STATUS] == 1) {
+                $icon = 'accept_16.png';
+            } else if (!$item[Db_Workflow::STATUS_MESSAGE]) {
+                $icon = 'info_yellow.png';
+            }
+            $workflowType = Util_Workflow_TypeFactory::create($item[Db_Workflow::SCRIPT_LANG], $item);
+            ?>
+            <span id="workflow_tooltip_id_<?php echo $item[Db_Workflow::ID] ?>" class="hidden">
+            <?php echo nl2br($item[Db_Workflow::STATUS_MESSAGE]) ?>
+        </span>
+
+            <?php if (!$item[Db_Workflow::IS_ACTIVE]) {
+            ?>
+            <tr class="inactive">
+            <?php
+        } else {
+            ?>
+            <tr>
+            <?php
+        }
+            ?>
+            <td>
+                <a href='<?php echo APPLICATION_URL ?>workflow/detail/workflowId/<?php echo $item[Db_Workflow::ID] ?>'><?php echo $item[Db_Workflow::NAME]; ?></a>
+            </td>
+            <td><?php echo $item[Db_Workflow::DESCRIPTION]; ?></td>
+            <td><?php echo $this->translate($this->triggerTypes[$item[Db_Workflow::ID]]); ?></td>
+            <td><?php echo $item[Db_Workflow::EXECUTION_TIME]; ?></td>
+            <td><?php echo $item[Db_Workflow::NOTE]; ?></td>
+            <td><?php if ($item[Db_Workflow::IS_ASYNC]) {
+                    echo $this->translate('yes');
+                } else {
+                    echo $this->translate('no');
+                } ?></td>
+            <td><?php if ($item[Db_Workflow::IS_ACTIVE]) {
+                    echo $this->translate('active');
+                } else {
+                    echo $this->translate('inactive');
+                } ?></td>
+            <td>
+                <img
+                    <?php if ($item[Db_Workflow::STATUS_MESSAGE]) : ?>
+                        onmouseover='TagToTip("workflow_tooltip_id_<?php echo $item[Db_Workflow::ID] ?>");'
+                        onmouseout='UnTip()'
+                    <?php endif; ?>
+                        width="15"
+                        height="15"
+                        src="<?php echo APPLICATION_URL . '/images/icon/' . $icon; ?>"
+                />
+            </td>
+            <td>
+                <div class="rfloater">
+                    <?php if(method_exists($workflowType, 'build')) : ?>
+                        <a class="link buttonLink" href="<?php echo APPLICATION_URL ?>workflow/rebuild/id/<?php echo $item[Db_Workflow::ID] ?>"><?php echo $this->translate('workflowRebuildShort') ?></a>
+                    <?php endif; ?>
+                    <a class="link buttonLink" href="<?php echo APPLICATION_URL ?>workflow/execute/workflowId/<?php echo $item[Db_Workflow::ID]; ?>"><?php echo $this->translate('execute') ?></a>
+                    <?php echo '<a class="edit_list  buttonLink" href="' . APPLICATION_URL . 'workflow/edit/workflowId/' . $item[Db_Workflow::ID] . '" title="' . $this->translate('edit') . '"></a>'; ?>
+                    <?php if ($item[Db_Workflow::IS_ACTIVE]): ?>
+                        <a class="delete_list" href="#" onclick="javascript:delete_workflow(<?php echo $item[Db_Workflow::ID]; ?>);"></a>
+                    <?php endif; ?>
+                    <?php if (!$item[Db_Workflow::IS_ACTIVE]): ?>
+                        <a href="#" onclick="javascript:activate_workflow(<?php echo $item[Db_Workflow::ID]; ?>);"><img class="delete_list" src='<?php echo APPLICATION_URL . "images/icon/activate.png" ?>' title="<?php echo $this->translate('activate') ?>"></a>
+                    <?php endif; ?>
+                </div>
+            </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php echo $this->paginator; ?>
+
+</form>

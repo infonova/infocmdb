@@ -1,0 +1,36 @@
+<?php
+$version = $this->cmdbVersion['build number'];
+$config  = new Zend_Config_Ini(APPLICATION_PATH . '/configs/individualization.ini', APPLICATION_ENV);
+$request = Zend_Controller_Front::getInstance()->getRequest();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+    <meta name="locale" content="<?php echo $this->localeLang ?>" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <?php echo $this->headTitle(); ?>
+    <link type="text/css" href="<?php echo APPLICATION_URL; ?>/css/global.css" rel="stylesheet" />
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>js/jquery/css/jquery-ui.min.css?v=<?php echo $version ?>" type="text/css" media="screen" />
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>js/jquery/css/jquery-ui-infocmdb.min.css?v=<?php echo $version ?>" type="text/css" media="screen" />
+    <link type="text/css" href="<?php echo APPLICATION_URL; ?>/css/print.css" rel="stylesheet" />
+    <script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/jquery/jquery-1.12.4.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/jquery/jquery-ui-1.11.4.js?v=<?php echo $version ?>"></script>
+    <?php echo $this->partial('_customization.phtml', array(
+        'version'                 => $version,
+        'individualizationConfig' => $config,
+    )); ?>
+</head>
+<body
+    <?php if ($this->onLoad) echo ' onLoad="' . $this->onLoad . '"' ?>
+        class="
+            print-layout
+            <?php echo $request->getControllerName(); ?>-controller
+            <?php echo $request->getActionName(); ?>-action
+        "
+>
+<div id="content">
+    <?php echo $this->layout()->content; ?>
+</div>
+</body>
+</html>

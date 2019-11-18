@@ -1,0 +1,51 @@
+<a class="add_headline button" href="<?php echo APPLICATION_URL ?>template/create"><?php echo $this->translate('linkCreate') ?></a>
+<h1 class="pageName"><?php echo $this->translate('indexTitle'); ?></h1>
+
+<table class="list" cellpadding="0" cellspacing="0" width="100%">
+    <tr class="headline">
+        <th>
+            <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+            <a href="<?php echo APPLICATION_URL ?>template/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Templates::NAME ?>/direction/<?php echo(($this->orderBy == Db_Templates::NAME) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('listName'); ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo APPLICATION_URL ?>template/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Templates::DESCRIPTION ?>/direction/<?php echo(($this->orderBy == Db_Templates::DESCRIPTION) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('listDescription'); ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo APPLICATION_URL ?>template/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Templates::NOTE ?>/direction/<?php echo(($this->orderBy == Db_Templates::NOTE) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('listNote'); ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo APPLICATION_URL ?>template/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Templates::FILE ?>/direction/<?php echo(($this->orderBy == Db_Templates::FILE) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('listFile'); ?>
+            </a>
+        </th>
+        <th style="width: 200px">&nbsp;</th>
+    </tr>
+    <?php
+    if (count($this->paginator)):
+        $row_count = 0;
+
+        foreach ($this->paginator as $item):
+            ?>
+            <tr>
+                <td>
+                    <a class="link" href="<?php echo APPLICATION_URL ?>template/edit/templateId/<?php echo $item[Db_Templates::ID]; ?>"><?php echo $item[Db_Templates::NAME]; ?></a>
+                </td>
+                <td><?php echo $item[Db_Templates::DESCRIPTION]; ?></td>
+                <td><?php echo $item[Db_Templates::NOTE]; ?> </td>
+                <td>
+                    <a class="tu_iframe_700x600" toptions="effect = clip, layout = flatlook" href="<?php echo APPLICATION_URL ?>fileupload/edit/filetype/template/file/<?php echo $item[Db_Templates::FILE]; ?>"><?php echo $item[Db_Templates::FILE]; ?></a>
+                </td>
+                <td>
+                    <a class="delete_list" href='<?php echo APPLICATION_URL . "template/delete/templateId/" . $item[Db_Templates::ID]; ?>' title="<?php echo $this->translate('listDelete') ?>"></a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</table>
+<?php echo $this->paginator; ?>

@@ -1,0 +1,15 @@
+.line{ background-position: 0 0; width: 20px; height: 24px; } 
+
+
+.nornix-close-icon{ background-position: 0 -74px; width: 19px; height: 18px; }
+ 
+.nornix-doc-node-icon{ background-position: 0 -142px; width: 16px; height: 16px; } 
+.nornix-folder-closed-icon{ background-position: 0 -208px; width: 16px; height: 15px; } 
+.nornix-folder-open-icon{ background-position: 0 -273px; width: 20px; height: 40px; } 
+.nornix-home-icon{ background-position: 0 -363px; width: 20px; height: 21px; } 
+.nornix-minus-node{ background-position: 0 -434px; width: 9px; height: 9px; } 
+.nornix-open-icon{ background-position: 0 -493px; width: 22px; height: 17px; } 
+.nornix-plus-node{ background-position: 0 -560px; width: 9px; height: 9px; } 
+.nornix-treemenu-corner{ background-position: 0 -619px; width: 24px; height: 11px; } 
+.nornix-treemenu-current{ background-position: 0 -680px; width: 14px; height: 13px; } 
+.nornix-treemenu-line{ background-position: 0 -743px; width: 24px; height: 1px; } 

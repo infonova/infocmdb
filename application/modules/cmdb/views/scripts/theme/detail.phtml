@@ -1,0 +1,81 @@
+<script type="text/javascript">
+    function delete_theme(id) {
+        if (confirm('<?php echo $this->translate('themeDeleteCheck') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL?>theme/delete/themeId/' + id + '/';
+        }
+    }
+
+    function activate_theme(id) {
+        if (confirm('<?php echo $this->translate('themeActivateCheck') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL?>theme/activate/themeId/' + id + '/';
+        }
+    }
+</script>
+
+<div class="button_row">
+    <a class="link button" href='<?php echo APPLICATION_URL ?>theme/edit/themeId/<?php echo $this->theme[Db_Theme::ID] ?>'><?php echo $this->translate('edit'); ?></a>
+    <?php if ($this->theme[Db_Theme::IS_ACTIVE]): ?>
+        <a class="link button cancel" href="javascript:delete_theme(<?php echo $this->theme[Db_Theme::ID] ?>)"><?php echo $this->translate('delete'); ?></a>
+    <?php else: ?>
+        <a class="link button activate" href="javascript:activate_theme(<?php echo $this->theme[Db_Theme::ID] ?>)"><?php echo $this->translate('activate'); ?></a>
+    <?php endif; ?>
+    <a class="link button" href="<?php echo APPLICATION_URL ?>theme/index"><?php echo $this->translate('overview'); ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('themeDetail'); ?></h1>
+
+<fieldset class="lordVader">
+    <table>
+        <tr>
+            <td><strong><?php echo $this->translate('themeId'); ?></strong></td>
+            <td><?php echo $this->theme[Db_Theme::ID] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('name'); ?></strong></td>
+            <td><?php echo $this->theme[Db_Theme::NAME] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('description'); ?></strong></td>
+            <td><?php echo $this->theme[Db_Theme::DESCRIPTION] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('note'); ?></strong></td>
+            <td><?php echo $this->theme[Db_Theme::NOTE] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('searchlist'); ?></strong></td>
+            <td>
+                <a class="link" href="<?php echo APPLICATION_URL ?>searchlist/detail/containerId/<?php echo $this->theme[Db_Theme::SEARCH_LIST_ID] ?>"><?php echo $this->theme['searchlistName'] ?></a>
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('homepage'); ?></strong></td>
+            <td>
+                <a class="link" href="<?php echo APPLICATION_URL ?>menu/detail/menuId/<?php echo $this->theme[Db_Theme::MENU_ID] ?>"><?php echo $this->translate($this->theme['menuName']) ?></a>
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('wildcardAllowed'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->theme[Db_Theme::IS_WILDCARD_ENABLED]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('active'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->theme[Db_Theme::IS_ACTIVE]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+    </table>
+
+    <?php if ($this->menus && count($this->menus) > 0) : ?>
+        <fieldset class="detail_fieldset">
+            <legend><strong><?php echo $this->translate('modules'); ?></strong></legend>
+            <ul>
+                <?php foreach ($this->menus as $menu): ?>
+                    <li><?php echo $this->translate($menu[Db_Menu::NAME]); ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </fieldset>
+    <?php endif; ?>
+</fieldset>

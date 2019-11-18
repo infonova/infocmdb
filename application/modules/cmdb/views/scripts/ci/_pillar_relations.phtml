@@ -1,0 +1,43 @@
+<div style="margin-top:25px;">
+    <a href="<?php echo APPLICATION_URL . 'relation/detail/sourceCiid/' . $this->ciId; ?>/">
+        <b><?php echo $this->translate('relations') ?></b>
+    </a>
+</div>
+
+
+<!-- Relations -->
+<div class="pillar_relations">
+
+    <?php foreach ($this->relations as $relation) : ?>
+        <?php
+        $relationDescription = (!$relation['base'] && $relation[Db_CiRelationType::DESCRIPTION_OPTIONAL]) ? $relation[Db_CiRelationType::DESCRIPTION_OPTIONAL] : $relation[Db_CiRelationType::DESCRIPTION];
+        if ($relation['relationsCount'] > 1) {
+            $relationUrl = $this->url(array(
+                'controller'       => 'relation',
+                'action'           => 'detail',
+                'ciRelationTypeId' => $relation['ci_relation_type_id'],
+                'sourceCiid'       => $this->ciId,
+            ), null, true);
+        } else {
+            $relationUrl = $this->url(array(
+                'controller' => 'ci',
+                'action'     => 'detail',
+                'ciid'       => (($this->ciId == $relation['ci_id_1']) ? $relation['ci_id_2'] : $relation['ci_id_1']),
+            ));
+        }
+        ?>
+
+
+        <div class="pillar_item">
+            <a class="link" href="<?php echo $relationUrl ?>">
+                <?php echo $relationDescription ?> (<?php echo $relation['relationsCount'] ?>)
+            </a>
+        </div>
+    <?php endforeach; ?>
+
+    <div class="pillar_item relation_add">
+        <a class="link" href="<?php echo APPLICATION_URL . 'relation/create/ciid/' . $this->ciId ?>">
+            <?php echo $this->translate('relationAdd') ?>
+        </a>
+    </div>
+</div>

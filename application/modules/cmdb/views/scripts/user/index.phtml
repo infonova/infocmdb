@@ -1,0 +1,147 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+<script type="text/javascript">
+    function updatePage(page) {
+        <?php
+        $url = $this->url(array('orderBy' => $this->orderBy, 'direction' => $this->direction, 'filter' => $this->filter, 'page' => null));
+        if (!strstr($url, 'index'))
+            $url .= '/index';
+        ?>
+        var filterDefault = 'Filter';
+        if ($("#search").val() == filterDefault)
+            $("#search").val('');
+        document.forms['searchForm'].action = "<?php echo $url; ?>/page/" + page;
+        document.forms['searchForm'].submit();
+        return false;
+    }
+
+    function delete_user(user_id) {
+        if (confirm('<?php echo $this->translate("areYouSureDelete"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>user/delete/userId/' + user_id;
+        }
+    }
+
+    function activate_user(user_id) {
+        if (confirm('<?php echo $this->translate("areYouSureActivate"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>user/activate/userId/' + user_id;
+        }
+    }
+
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class = " button";
+}
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?> create" href="<?php echo APPLICATION_URL ?>user/create"><?php echo $this->translate('userCreate') ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('user') ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+              action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+              method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterButton;
+            ?>
+        </form>
+    </div>
+</div>
+<div class="break"></div>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th>
+                <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_User::USERNAME, 'direction' => (($this->orderBy == Db_User::USERNAME) ? $urlDirection : "DESC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('username') ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_User::FIRSTNAME, 'direction' => (($this->orderBy == Db_User::FIRSTNAME) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('firstname') ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_User::LASTNAME, 'direction' => (($this->orderBy == Db_User::LASTNAME) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('lastname') ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_User::DESCRIPTION, 'direction' => (($this->orderBy == Db_User::DESCRIPTION) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('description') ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_User::THEME_ID, 'direction' => (($this->orderBy == Db_User::THEME_ID) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('theme') ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_User::IS_TWO_FACTOR_AUTH, 'direction' => (($this->orderBy == Db_User::IS_TWO_FACTOR_AUTH) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('2FA') ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_User::IS_ACTIVE, 'direction' => (($this->orderBy == Db_User::IS_ACTIVE) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('valid') ?>
+                </a>
+            </th>
+            <th style="width:160px;">&nbsp;</th>
+        </tr>
+
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <?php
+            if (!$item[Db_User::IS_ACTIVE]) {
+                ?>
+                <tr class="inactive">
+                <?php
+            } else {
+                ?>
+                <tr >
+                <?php
+            }
+            ?>
+            <td>
+                <a class="link" href="<?php echo APPLICATION_URL; ?>user/edit/userId/<?php echo $item[Db_User::ID]; ?>"><?php echo $item[Db_User::USERNAME]; ?></a>
+            </td>
+            <td><?php echo $item[Db_User::FIRSTNAME]; ?></td>
+            <td><?php echo $item[Db_User::LASTNAME]; ?></td>
+            <td><?php echo $item[Db_User::DESCRIPTION]; ?></td>
+            <td><?php echo $item['themeName']; ?></td>
+            <td><?php echo(($item[Db_User::IS_TWO_FACTOR_AUTH] == 1) ? $this->translate('active') : $this->translate('inactive')); ?></td>
+            <td><?php echo(($item[Db_User::IS_ACTIVE]) ? $this->translate('active') : $this->translate('inactive')); ?></td>
+            <td>
+                <?php if ($item[Db_User::IS_ACTIVE]): ?>
+                    <a class="delete_list" href="#" title="<?php echo $this->translate('delete') ?>" onclick="javascript:delete_user(<?php echo $item[Db_User::ID]; ?>);"></a>
+                <?php endif; ?>
+                <div class="rfloater">
+                    <a class="duplicate_list buttonLink" href="<?php echo APPLICATION_URL ?>user/create/cloneFromId/<?php echo $item[Db_User::ID] ?>" title="<?php echo $this->translate('duplicate') ?>">&nbsp;</a>
+                    <a class="edit_list buttonLink" href='<?php echo APPLICATION_URL; ?>user/edit/userId/<?php echo $item[Db_User::ID]; ?>' title="<?php echo $this->translate('edit') ?>">&nbsp;</a>
+                    <?php if (!$item[Db_User::IS_ACTIVE]): ?>
+                        <a href="#" onclick="javascript:activate_user(<?php echo $item[Db_User::ID]; ?>);"><img class="delete_list" src='<?php echo APPLICATION_URL . "images/icon/activate.png" ?>' title="<?php echo $this->translate('activate') ?>"></a>
+                    <?php endif; ?>
+            </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php echo $this->paginator; ?>
+<?php else: ?>
+    <div class="error_message">
+        <?php echo $this->translate('noUserFound') ?>
+    </div>
+<?php endif; ?>

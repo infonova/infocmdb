@@ -1,0 +1,10 @@
+parameters:
+    level: 1
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        - '#Zend_Mail_.+::__construct\(\) does not call parent constructor from Zend_Mail_.+\.#'
+        - '#Variable \$.+ might not be defined\.#'

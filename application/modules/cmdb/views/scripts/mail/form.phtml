@@ -1,0 +1,90 @@
+<script src="/js/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript"
+        src="<?php echo APPLICATION_URL ?>js/multiselect/plugins/tmpl/jquery.tmpl.1.1.1.js"></script>
+<script type="text/javascript"
+        src="<?php echo APPLICATION_URL ?>js/multiselect/ui.multiselect.js"></script>
+<script type="text/javascript"
+        src="<?php echo APPLICATION_URL ?>/js/multiselect/locale/ui-multiselect-<?php echo ($this->language === 'de' ? 'de' : 'en'); ?>.js"></script>
+<link type="text/css"
+      href="<?php echo APPLICATION_URL ?>js/multiselect/css/ui.multiselect.css"
+      rel="stylesheet" />
+<script type="text/javascript">
+    function changeEditor() {
+        var mimeType = $('#mime_type').val();
+        var enableEditor = $('#editor_enbaled').is(":checked");
+        var mailBody = $('#mail_body');
+        var editor;
+        var lang;
+
+        if (enableEditor === true) {
+            if (mimeType == 'text/html') {
+                editor = 'tiny_mce';
+                lang = 'html';
+            } else {
+                editor = 'ace';
+                lang = 'text';
+            }
+        } else {
+            if (mimeType == 'text/html') {
+                editor = 'ace';
+                lang = 'html';
+            } else {
+                editor = 'none';
+                lang = 'text';
+            }
+        }
+
+        // remove existing tinyMCE
+        destroy_tinymce();
+        mailBody.removeClass('tinymce');
+        mailBody.show();
+
+        // remove existing ace editor
+        $('#script_editor').remove();
+
+
+        // add editor
+        if (editor == 'tiny_mce') {
+            // setup tinyMCE
+            mailBody.addClass('tinymce');
+            setup_tinymce('<?php echo $this->language ?>');
+        } else if (editor == 'ace') {
+            // hide textarea
+            mailBody.hide();
+
+            // add script editor wrapper
+            mailBody.parent().prepend("<div id='script_editor' style='position:relative; height: 548px; z-index: 0;'>");
+
+            // setup ace editor
+            var editorDiv = ace.edit("script_editor");
+            editorDiv.getSession().setMode("ace/mode/" + lang);
+            editorDiv.getSession().setValue(mailBody.val());
+            editorDiv.getSession().on('change', function () {
+                mailBody.val(editorDiv.getSession().getValue());
+            });
+        }
+
+        // save editor
+        $('#editor').val(editor);
+
+    }
+
+    $(document).ready(function () {
+        $("#userRecipients").multiselect({
+            remoteUrl: '<?php echo APPLICATION_URL ?>mail/autocompletemultiselect/mailId/<?php echo $this->mailId;?>'
+        });
+
+        changeEditor();
+    });
+</script>
+
+<div class="button_row">
+    <a class="<?php echo $class; ?>"
+       href="<?php echo APPLICATION_URL ?>mail/index"><?php echo $this->translate('overview') ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->headerText ?></h1>
+
+<fieldset class="lordVader">
+    <?php echo $this->form ?>
+</fieldset>

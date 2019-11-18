@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+############ DOCHEAD ############
+# DO NOT EDIT - This part will be set automatically
+############ /DOCHEAD ############
+
+
+############ PERL MODULES ############
+
+use strict;        # code tidy!
+use utf8;            # use utf8 everywhere!!
+use Data::Dumper;   # debug variables
+use lib '<?php echo $this->perlLibPath ?>';
+use InfoCMDB;       # simplify InfoCMDB-API-Usage
+
+############ PRE INIT ############
+my $ciId   = $ARGV[0];
+my $userId = $ARGV[1];
+my $apiKey = $ARGV[2];
+
+my $cmdb = InfoCMDB->new('<?php echo $this->infocmdbConfigName ?>');
+$cmdb->setSettings(
+'apikey' => $apiKey,
+'debug' => 0
+);
+
+
+############ VALIDATE PARAMS ############
+if(not defined($ciId)) {
+$cmdb->printLog('ERROR: CIID could not be found!');
+exit 0;
+}
+
+
+############ SETTINGS ############
+
+# define all of your settings used in this script here
+
+
+############ INIT ############
+
+# process settings, initialize data here
+
+
+############ LOGIC ############
+
+# define your logic here

@@ -1,0 +1,130 @@
+# This is the language file for CI interaction.
+
+# Used for project view settings
+ciProjects;				"Projects of CI"
+changeCiType;			"Change CI Type"
+change;					"change"
+icon;					"Icon"
+note;					"Note"
+ciCreate;				"Create CI"
+create;					"Save"
+ciEdit;					"Edit CI"
+project;				"Project"
+projectName;			"Project's Name"
+addProjectCheck;		"Should the CI be assigned to the project?"
+ciType;					"CI Type"
+uploadIcon;				"upload Icon"
+deleteIcon;				"delete Icon"
+functions;				"Functions"
+ciDuplicateFailMultipleProjects;    "The duplicated CI is assigned to multiple projects. Please choose manually!"
+checknotunique;			"The entered value is already used by another CI"
+
+ciParentCiTypeTitle;	"CI Typ"
+ciProjectTitle;			"Project"
+
+exportCiList;			"Export (current view)"
+exportCiType;			"Export (all attributes)"
+
+createCiButton;			""
+fadeOut;				"hide"
+fadeIn;				    "show"
+createCiButtonEN;		"new"
+
+editAttribute;          "open attribute settings"
+
+upload;					"Upload"
+date;					"Date:"
+time;					"Time:"
+currentDocument;		"Current Document"
+color;					"color"
+
+cancle;					"Cancel"
+inputClear;             "Clear Input"
+inputShowAllOptions;    "Show all options"
+ciCreateCiAttachNotAllowed;	"The selected CI Type does not allow assigned CIs!"
+areYouSureDelete;		"Do you really want to delete this CI?"
+areYouSureDeleteWithRelations;	"Do you really want to delete this CI and its Relations?"
+areYouSureabort;		"Do you really want to reset the CI?"
+
+
+isEmpty;				"Field must not be empty!"
+fileName;				"Filename"
+filePath;				"Filepath"
+submit;					"Upload File"
+
+noCisFound;				"No CI's found!"
+
+numberOfResults;		"Number of Results::"
+
+visualize;				"Visualize"
+edit;					"Edit"
+history;				"History"
+delete;                 "Delete"
+deleteCi;				"Delete CI"
+deleteRelation;         "Delete CI relation"
+pdfExport;				"PDF Export"
+print;					"Print"
+xmlExport;				"XML Export"
+duplicate;				"Duplicate"
+favourites;				"Bookmark"
+close;					"Close"
+printview;				"Printing View"
+
+configurationItem;		"Configuration Item"
+ciId;					"CI Id"
+update;					"Update: "
+projectOrProjects;		"Project(s): "
+created;				"Created: "
+user;					"User: "
+relations;				"Relations:"
+relationAdd;			"Add Relations"
+
+pickColor;				"Pick Color:"
+red;					"red"
+green;					"green"
+darkgreen;              "darkgreen"
+orange;                 "orange"
+blue;					"blue"
+purple;					"purple"
+clear;					"clear"
+beCareful;				"Are you sure you want to perform the action?"
+
+ciCreateDatestamp;		"Datestamp"
+ciInsertSuccess;		"CI created successfully!"
+ciInsertFailed;			"Couldn't create CI!"
+
+
+ciDeleteSuccess;		"CI deleted successfully!"
+ciDeleteFailed;			"Couldn't delete CI!"
+
+ciUpdateSuccess;		"CI edited successfully!"
+ciUpdateFailed;			"Couldn't change CI!"
+
+
+# filter popup
+filterCiId; 			"CiID"
+filterValue;			"Value"
+attribute_filter_off;	"attributefilter off"
+attribute_filter_on;	"attributefilter on"
+filter_clear;			"clear filter"
+sorting_clear;          "clear sorting"
+
+# dropzone language strings
+dictDefaultMessage;              "Drop files here to upload"
+dictFallbackMessage;             "Your browser does not support drag'n'drop file uploads."
+dictFallbackText;                "Please use the fallback form below to upload your files like in the olden days."
+dictFileTooBig;          "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB."
+dictInvalidFileType;             "You can't upload files of this type."
+dictResponseError;               "Server responded with {{statusCode}} code."
+dictCancelUpload;                "Cancel upload"
+dictCancelUploadConfirmation;            "Are you sure you want to cancel this upload?"
+dictRemoveFile;          "Remove file"
+dictMaxFilesExceeded;            "You can not upload any more files."
+dictDeleteUploadConfirmation;    "Are you sure you want to remove the file?"
+dictTooManyFiles;                "Exceeding File limit! Limit: "
+dictOverrideFile;           "There is a file already. Would you like to override it?"
+
+# locking
+lockHeld;				"CI locked (%s, %s) <a href='%s'>Force edit</a>"
+lockExpired;			"Form timed out. Reopen the edit form and apply your changes."
+lockError;				"There was an error during the locking process. Your changes may be lost, please refresh the page when you are ready."

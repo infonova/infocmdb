@@ -1,0 +1,57 @@
+queryCreate;			"Webservice anlegen"
+overview;				"Übersicht"
+
+queryInterface;			"Webservice"
+queryId;				"ID"
+name;					"Name"
+active;					"Aktiv"
+status;					"Status"
+
+
+noEntriesFound;			"Keine Einträge gefunden!"
+
+queryCreateSuccess;		"Webservice erfolgreich angelegt!"
+queryCreateFailed;		"Webservice konnte nicht angelegt werden!"
+
+queryDeleteSuccess;		"Webservice wurde erfolgreich gelöscht!"
+queryDeleteFailed;		"Webservice konnte nicht gelöscht werden!"
+
+queryUpdateSuccess;		"Webservice wurde erfolgreich bearbeitet!"
+queryUpdateFailed;		"Webservice konnte nicht bearbeitet werden!"
+
+queryEdit;				"Webservice bearbeiten"
+queryDetail;			"Webservice Detail"
+
+queryName;				"Name"
+queryNameTitle;			"Name des Query"
+queryNameExample;		"Beispiel: create_ci_by_ciTypeName"
+queryDescription;		"Beschreibung"
+queryDescriptionTitle;	"Beschreibung"
+queryDescriptionExample;"Beispiel: Erstellt ein CI eines spezifischen ci_typeName (argv1)"
+queryQuery;				"Query"
+queryQueryTitle;		"Hier wird der Query eingegeben"
+queryQueryExample;		"Beispiel: insert into ci(ci_type_id) values (select id from ci_type where name = ':argv1:')"
+queryQueryHelp;         "Platzhalter"
+queryButtonTest;		"Teste Query"
+queryButtonTestTitle;	"Teste Query"
+queryApiUrl;			"Api Url"
+queryApiUrlTitle;		"Api Url"
+queryStatus;			"Status"
+testButtonHint;			"Es ist möglich Select-Querys (ohne argv) direkt zu testen"
+testButtonHintExtended;     Die URL kann direkt für den Webservice Aufruf verwendet (kopiert) werden. Bei Verwendung von ARGVs muss das Fragezeichen "?" durch den jeweiligen ARGV-Wert ersetzt werden. Ausserdem kann statt Method "json" auch "plain" oder "xml" gewählt werden.
+xmlinfo;	Wenn die Query bei der Methode XML im Resultset eine Spalte "ci_id" enthält werden alle CIs mit ihrer CI-Typ Hierachie zurückgegeben Bsp: select ci_id, max(case cia.attribute_id when (select id from attribute where name = 'ma_lastname') then cia.value_text else null end) as ma_lastname...  
+testQueryException;		"Beim Ausführen der Query ist ein Fehler aufgetreten. Bitte die mitgegebenen Argumente überprüfen."
+
+cqlDefault;				"Default Webservices"
+cqlIndividual;			"Individuelle Webservices"
+
+numberOfResults;		"Anzahl der Ergebnisse:"
+
+query;					"Query"
+save;					"Speichern"
+edit;					"Bearbeiten"
+cancle;					"Abbrechen"
+noQueryFound;			"Keine Ergebnisse"
+
+
+areYouSureDelete;		"Wollen Sie das Webservice wirklich löschen?"

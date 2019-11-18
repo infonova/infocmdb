@@ -1,0 +1,17 @@
+parameters:
+    level: 4
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        - '#Method Zend_Navigation_Container::findBy\(\) should return \(iterable<Zend_Navigation_Page>&Zend_Navigation_Page\)\|null but returns array<Zend_Navigation_Page>\.#'
+        # Defensive coding
+        - 
+            message: '#Strict comparison using !== between null and null will always evaluate to false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Navigation.php
+        # Defensive coding
+        - 
+            message: '#Result of \|\| is always true\.#'
+            path: %currentWorkingDirectory%/src/Zend/Navigation/Page.php

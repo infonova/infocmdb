@@ -1,0 +1,13 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        # This isn't enforced by php type-hints, so possible someone could pass something that isn't an array
+        -
+            message: '#Else branch is unreachable because ternary operator condition is always true.#'
+            path: %currentWorkingDirectory%/src/Zend/Auth/Adapter/Ldap.php
+        - '#Argument of an invalid type array\|null supplied for foreach, only iterables are supported\.#'

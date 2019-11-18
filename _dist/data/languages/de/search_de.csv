@@ -1,0 +1,18 @@
+# This is the language file for search interactions
+
+searchstring;			"Suchbegriff: "
+search;					"Suchen"
+filesearch;				"Fileserver-Suche"
+
+searchResult;			"Suchergebnisse"
+searchResultHistory;	"Suchergebnisse History"
+numberOfResults;		"Treffer:"
+noEntriesFound;			"Keine Einträge gefunden!"
+
+title;					"Titel"
+author;					"Autor"
+creationDate;			"Erstelldatum"
+modDate;				"Änderungsdatum"
+filename;				"Dateiname"
+
+ciId;					"CI"

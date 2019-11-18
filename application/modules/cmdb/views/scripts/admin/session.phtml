@@ -1,0 +1,58 @@
+<script type="text/javascript">
+
+    function delete_session(session_id) {
+        if (confirm('<?php echo $this->translate('areYouSureDelete') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>admin/killsession/sessionId/' + session_id;
+        }
+    }
+</script>
+
+<h1 class="pageName"><?php echo $this->translate('session') ?></h1>
+
+<table class="list" cellpadding="0" cellspacing="0" width="100%">
+    <tr class="headline">
+        <th>
+            <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+            <a href="<?php echo APPLICATION_URL ?>admin/session/page/<?php echo $this->page ?>/orderBy/<?php echo Db_UserSession::ID ?>/direction/<?php echo(($this->orderBy == Db_UserSession::ID) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('id'); ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo APPLICATION_URL ?>admin/session/page/<?php echo $this->page ?>/orderBy/<?php echo Db_UserSession::USER_ID ?>/direction/<?php echo(($this->orderBy == Db_UserSession::USER_ID) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('user'); ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo APPLICATION_URL ?>admin/session/page/<?php echo $this->page ?>/orderBy/<?php echo Db_UserSession::IP_ADDRESS ?>/direction/<?php echo(($this->orderBy == Db_UserSession::IP_ADDRESS) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('ipaddress'); ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo APPLICATION_URL ?>admin/session/page/<?php echo $this->page ?>/orderBy/<?php echo Db_UserSession::MODIFIED ?>/direction/<?php echo(($this->orderBy == Db_UserSession::MODIFIED) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('modified'); ?>
+            </a>
+        </th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php
+    if (count($this->paginator)):
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <tr>
+                <td><?php echo $item[Db_UserSession::ID]; ?></td>
+                <td><?php echo $item[Db_User::USERNAME]; ?></td>
+                <td><?php echo $item[Db_UserSession::IP_ADDRESS]; ?></td>
+                <td><?php echo $item[Db_UserSession::MODIFIED]; ?></td>
+                <td>
+                    <div class="rfloater">
+                        <a class="delete_list" href='javascript:delete_session("<?php echo $item[Db_UserSession::ID]; ?>");' title="<?php echo $this->translate('delete') ?>"></a>
+                    </div>
+                </td>
+            </tr>
+        <?php
+        endforeach;
+    endif;
+    ?>
+</table>
+<?php echo $this->paginator; ?>

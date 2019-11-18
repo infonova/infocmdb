@@ -1,0 +1,31 @@
+language: php
+
+sudo: false
+
+env: TMPDIR=/tmp
+
+branches:
+  only:
+    master
+
+install:
+  - phpenv rehash
+  - travis_retry composer install --no-interaction --prefer-source
+
+stages:
+  - style check
+  - phpstan analysis
+
+jobs:
+  fast_finish: true
+  include:
+    - stage: style check
+      php: 7.2
+      env: TMPDIR=/tmp USE_XDEBUG=false
+      script:
+        - composer style-check
+    - stage: phpstan analysis
+      php: 7.2
+      env: TMPDIR=/tmp USE_XDEBUG=false
+      script:
+        - composer phpstan

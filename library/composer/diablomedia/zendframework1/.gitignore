@@ -1,0 +1,9 @@
+.vagrant
+tests/TestConfiguration.php
+vendor/*
+composer.lock
+bin/dbunit
+bin/phpunit
+bin/phpcov
+bin/php-parse
+bin/phpstan

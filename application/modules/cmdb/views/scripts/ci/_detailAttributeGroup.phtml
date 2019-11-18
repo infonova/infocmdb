@@ -1,0 +1,193 @@
+<?php
+$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/forms/ci.ini', APPLICATION_ENV);
+$width  = $config->form->desc->width;
+?>
+
+<?php foreach ($this->attributeList as $attributeGroup) : ?>
+
+<?php if ($this->tabs) : ?>
+<div id="fragment-<?php echo $attributeGroup['name']; ?>">
+    <?php else : ?>
+    <div id="fragment-<?php echo $attributeGroup['name']; ?>" class="fieldset detail_fieldset info">
+        <div class="legend">
+            <b><?php echo htmlspecialchars($attributeGroup['description']) ?></b>
+            <div class="printControl">
+                <img height="16px" title="<?php echo $this->translate('fadeOut') ?>" src="<?php echo APPLICATION_URL ?>images/icon/delete.png" class="fadeout" />
+            </div>
+        </div>
+
+        <div class="fieldset_content">
+            <?php endif; ?>
+
+            <?php if ($attributeGroup['attributes']) : ?>
+                <?php
+                $tableClass = ($this->tabs) ? 'list' : 'list list_detail';
+                $tableClass .= " attributeGroup" . ucfirst($attributeGroup['name']);
+                ?>
+
+                <table class="<?php echo $tableClass ?>" cellpadding="0" cellspacing="0" width="100%" style="border-bottom: none" data-attributegroup="<?php echo $attributeGroup['name'] ?>">
+
+                    <tr>
+                        <?php if (isset($attributeGroup['columns']) && $attributeGroup['columns'] > 1) : ?>
+                            <th colspan="4"></th>
+                        <?php endif; ?>
+                        <th colspan="4"></th>
+                    </tr>
+
+                    <?php foreach ($attributeGroup['attributes'] as $attribute) : ?>
+
+                        <?php // switch name and description if admin mode active
+                        if ($this->isAdmin) {
+                            $attribute[0][Db_Attribute::NOTE] = $attribute[0][Db_Attribute::DESCRIPTION];
+                            $attribute[1][Db_Attribute::NOTE] = $attribute[1][Db_Attribute::DESCRIPTION];
+
+                            $attribute[0][Db_Attribute::DESCRIPTION] = $attribute[0][Db_Attribute::NAME];
+                            $attribute[1][Db_Attribute::DESCRIPTION] = $attribute[1][Db_Attribute::NAME];
+                        }
+
+                        ?>
+
+                        <tr
+                                data-ciattributeid="<?php echo $attribute[0]['ciAttributeId'] ?>"
+                                data-attributename="<?php echo $attribute[0][Db_Attribute::NAME] ?>"
+                                data-attributetypename="<?php echo $attribute[0]['attributeTypeName'] ?>"
+                                class="attributeType attributeType<?php echo ucfirst($attribute[0]['attributeTypeName']) ?>"
+                        >
+                            <?php if (!isset($attribute[0])) : ?>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <?php if (!isset($attribute[1])) : ?>
+                                    <td></td>
+                                <?php endif; ?>
+                            <?php else : ?>
+                                <?php if ($this->ciAttributeId && $this->ciAttributeId == $attribute[0]['ciAttributeId']) : ?>
+                                    <td width="<?php echo $width; ?>" class="column_left">
+                                        <?php echo htmlspecialchars($attribute[0][Db_Attribute::DESCRIPTION]); ?>
+                                    </td>
+                                    <td>
+                                        <a name="edit"></a>
+
+                                        <?php
+                                        echo $this->form;
+
+                                        // handle uploads
+                                        if ($attribute[0]['attributeTypeName'] == 'attachment' || $attribute[0]['attributeTypeName'] == 'script') {
+                                            $outputValue = $this->translate('currentDocument') . ": ";
+                                            if ($attribute[0][Db_CiAttribute::VALUE_TEXT]) {
+                                                $outputValue .= "<strong>" . $attribute[0][Db_CiAttribute::VALUE_TEXT] . "</strong> ";
+                                            }
+                                            if ($attribute[0]['valueNote']) {
+                                                $outputValue .= $attribute[0]['valueNote'];
+                                            }
+                                            ?>
+                                            <div id="<?php echo $attribute[0]['id'] ?>filenameupload">
+                                                <?php echo $outputValue; ?>
+                                            </div>
+                                        <?php } ?>
+                                    </td>
+
+                                    <?php if (!isset($attributeGroup['columns']) || $attributeibuteGroup['columns'] < 2) : ?>
+                                        <td width="75px">
+                                    <?php else : ?>
+                                        <td class="border_right" width="75px">
+                                    <?php endif; ?>
+
+                                    <?php if ($attribute[0]['permission_write']) : ?>
+                                        <div class="rfloater">
+                                            <a class="buttonLink cancel_list" title="<?php echo $this->translate('cancel'); ?>" href="<?php echo APPLICATION_URL . 'ci/detail/ciid/' . $this->ciid; ?>">&nbsp;</a>
+                                            <a class="buttonLink save_list" title="<?php echo $this->translate('save'); ?>" href="javascript:document.forms['CreateForm'].submit();">&nbsp;</a>
+                                        </div>
+                                    <?php endif; ?>
+                                    </td>
+                                <?php else :
+                                    // no single edit - normal view
+                                    $class = Util_AttributeType_Factory::get($attribute[0]['attributeTypeName']);
+                                    $preparedOutput = $class->getValueByCiAttribute($attribute[0], true);
+                                    ?>
+
+
+                                    <td width="<?php echo $width; ?>" class="column_left">
+                                        <?php if ($this->isAdmin) : ?>
+                                            <a class="settingsLink" title="<?php echo $this->translate('editAttribute'); ?>" href='<?php echo APPLICATION_URL ?>attribute/edit/attributeId/<?php echo $attribute[0][Db_Attribute::ID] ?>'>
+                                                <img class='image' src='<?php echo APPLICATION_URL ?>images/navigation/settings.png'>
+                                            </a>
+                                        <?php endif; ?>
+
+
+                                        <?php if ($attribute[0]['attributeTypeName'] == Enum_AttributeType::EXECUTEABLE) { // label of executable is clickable?>
+                                            <a class="link" title="<?php echo htmlspecialchars($attribute[0][Db_Attribute::NOTE]) ?>" href="javascript:executeScript(<?php echo $this->ciid ?>, <?php echo $attribute[0]['id'] ?>, <?php echo $attribute[0]['ciAttributeId'] ?>, <?php echo (is_null($preparedOutput)) ? 0 : 1 ?>)">
+                                                <?php echo htmlspecialchars($attribute[0][Db_Attribute::DESCRIPTION]); ?>
+                                            </a>
+                                        <?php } else { // show label ?>
+
+                                            <label title="<?php echo htmlspecialchars($attribute[0][Db_Attribute::NOTE]) ?>">
+                                                <?php echo htmlspecialchars($attribute[0][Db_Attribute::DESCRIPTION]); ?>
+                                            </label>
+                                        <?php } ?>
+                                    </td>
+
+                                    <td>
+                                        <div class="attributeValue attributeType<?php echo ucfirst($attribute[0]['attributeTypeName']) ?>" data-attributetype="<?php echo $attribute[0]['attributeTypeName'] ?>"><?php
+                                            if ($attribute[0][Db_Attribute::IS_BOLD]) {
+                                                echo "<b>";
+                                            }
+
+                                            if ($attribute[0]['noEscape']) {
+                                                echo $preparedOutput;
+                                            } else {
+                                                echo $this->escape($preparedOutput);
+                                            }
+
+                                            if ($attribute[0][Db_Attribute::IS_BOLD]) {
+                                                echo "</b>";
+                                            }
+                                            ?></div>
+                                    </td>
+
+                                    <?php if (!isset($attributeGroup['columns']) || $attributeGroup['columns'] < 2) : ?>
+                                    <td style="width: 20px;">
+                                <?php else : ?>
+                                    <td class="border_right" style="width: 20px;">
+                                <?php endif; ?>
+
+                                    <?php if (
+                                    $attribute[0]['permission_write'] &&
+                                    $attribute[0]['attributeTypeName'] != Enum_AttributeType::QUERY &&
+                                    $attribute[0]['attributeTypeName'] != Enum_AttributeType::QUERY_PERSIST &&
+                                    $attribute[0]['attributeTypeName'] != Enum_AttributeType::INFO &&
+                                    $attribute[0]['attributeTypeName'] != Enum_AttributeType::FILTER &&
+                                    !$this->historyView
+                                ) : ?>
+                                    <a style="float:right; padding-left: 10px;" title="<?php echo $this->translate('edit'); ?>" class="edit_list" id="<?php echo $attribute[0]['ciAttributeId'] ?>" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->ciid ?>/ciAttributeId/<?php echo $attribute[0]['ciAttributeId'] ?>/">&nbsp;</a>
+                                <?php endif; ?>
+                                    </td>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+            <?php endif; ?>
+
+            <?php
+            if (isset($attributeGroup['children']) && is_array($attributeGroup['children'])) {
+                echo $this->partial('ci/_detailAttributeGroup.phtml', array(
+                    'attributeList' => $attributeGroup['children'],
+                    'form'          => $this->form,
+                    'isAdmin'       => $this->isAdmin,
+                    'ciid'          => $this->ciid,
+                    'ciAttributeId' => $this->ciAttributeId,
+                    'historyView'   => $this->historyView,
+                    'tabs'          => false,
+                ));
+            }
+            ?>
+
+            <?php if (!$this->tabs) : ?>
+        </div><!-- fragmentData -->
+        <?php endif; ?>
+
+    </div><!-- fragment-xy -->
+
+
+    <?php endforeach; ?>

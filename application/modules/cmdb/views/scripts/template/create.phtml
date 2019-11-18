@@ -1,0 +1,34 @@
+<a class="button overview" href="<?php echo APPLICATION_URL ?>template/index"><?php echo $this->translate('overview') ?></a>
+<h1 class="pageName"><?php echo $this->translate('createTitle') ?></h1>
+
+<fieldset class="lordVader">
+    <form name="<?php echo $this->escape($this->form->getName()) ?>" action="<?php echo $this->escape($this->form->getAction()) ?>"
+          method="<?php echo $this->escape($this->form->getMethod()) ?>">
+        <table style="padding-right:0px; width:100%;">
+            <tr><?php echo $this->form->name; ?></tr>
+            <tr><?php echo $this->form->descr; ?></tr>
+            <tr><?php echo $this->form->note; ?></tr>
+
+            <tr>
+                <td><label><?php echo $this->form->script->getLabel() ?></label></td>
+                <td style="width: 80%;"><?php echo $this->form->script->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+                    echo $this->form->description->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+                    echo $this->form->filename->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+
+
+                    $value = $this->translate('currentDocument');
+                    if ($this->form->getValue('description')) {
+                        $value .= "<strong>" . $this->form->getValue($varName) . "</strong> ";
+                    }
+
+                    if ($this->form->getValue('filename')) {
+                        $value .= $this->form->getValue($varName);
+                    } ?>
+
+                    <div id='filenameupload'><?php echo $value ?></div>
+                </td>
+            </tr>
+            <tr><?php echo $this->form->submit; ?></tr>
+        </table>
+
+</fieldset>

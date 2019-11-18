@@ -1,0 +1,27 @@
+<phpunit
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    backupGlobals="true"
+    stderr="true"
+    colors="true">
+    <php>
+        <const name="TESTS_ZEND_SERVICE_RECAPTCHA_ENABLED" value="false" />
+        <const name="TESTS_ZEND_SERVICE_RECAPTCHA_ONLINE_ENABLED" value="false" />
+        <const name="TESTS_ZEND_SERVICE_RECAPTCHA_PUBLIC_KEY" value="public key" />
+        <const name="TESTS_ZEND_SERVICE_RECAPTCHA_PRIVATE_KEY" value="private key" />
+        <const name="TESTS_ZEND_SERVICE_RECAPTCHA_MAILHIDE_PUBLIC_KEY" value="public mailhide key" />
+        <const name="TESTS_ZEND_SERVICE_RECAPTCHA_MAILHIDE_PRIVATE_KEY" value="private mailhide key" />
+    </php>
+    <testsuites>
+        <testsuite name="default">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>

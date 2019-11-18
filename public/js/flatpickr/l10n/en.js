@@ -1,0 +1,1 @@
+// English placeholder file to satisfy php template

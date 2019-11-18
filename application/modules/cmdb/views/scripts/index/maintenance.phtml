@@ -1,0 +1,54 @@
+<body>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.maintenance-header').click(function (e) {
+            if (e.ctrlKey) {
+                location.href = '<?php echo APPLICATION_URL . "index/maintenance/disableForCurrentSession/1"; ?>';
+            }
+        });
+
+    });
+</script>
+
+<div id=login_background></div>
+<div class='logo_topright'></div>
+<div class='login_slider' <?php echo $this->backgroundStyle; ?>>
+    <div class="coda-slider" id="slider-id">
+        <?php
+        //Image Pfad
+        $path  = APPLICATION_PATH . "/../public/images/slider_pictures";
+        $files = scandir($path);
+        for ($i = 0; $i < count($files); $i++) {
+            //Verzeichnis auslesen
+            if ($files[$i] != "." && $files[$i] != ".." && !is_dir($files[$i])) {
+                // Nur Bilder durch lassen (Filter)
+                if (strstr($files[$i], ".gif") || strstr($files[$i], ".png") || strstr($files[$i], ".jpg")) {
+                    //Pfad zum aktuellen Bild
+                    $path       = APPLICATION_URL . "/images/slider_pictures";
+                    $image_path = $path . "/" . $files[$i];
+                    //Bild anzeigen
+                    echo '<div><p><img src="' . $image_path . '" height="110"></p></div>';
+                }
+            }
+        }
+        ?>
+
+    </div>
+</div>
+<div class='login_table_wrapper'>
+    <div class="login_infocmdb">
+
+        <?php echo $this->render('login/_logo.phtml'); ?>
+
+        <h6 class="configuration">Configuration Management</h6>
+    </div>
+
+    <div class="login_form" style="text-align: center; width: 100%">
+        <h3 class="maintenance-header"><?php echo $this->translate('maintenance_mode'); ?></h3>
+        <?php echo $this->translate('maintenance_description'); ?>
+        <?php echo $this->message; ?>
+    </div>
+</div>
+
+</body>

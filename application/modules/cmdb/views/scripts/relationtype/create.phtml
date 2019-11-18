@@ -1,0 +1,147 @@
+<script type="text/javascript" src="/js/jquery/jquery.colorbox.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("form#create input").keypress(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                submitForm();
+                return false;
+            }
+        });
+        $("form#create select").keypress(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                submitForm();
+                return false;
+            }
+        });
+
+        $('<p id="showroom" style="background-color:#000"></p>').insertAfter("#color");
+
+    });
+
+    function cancel() {
+        window.location.href = '<?php echo APPLICATION_URL . 'relationtype/index'; ?>';
+    }
+
+    function finalize() {
+        document.forms['create'].action = "<?php echo APPLICATION_URL . 'relationtype/finalize'; ?>";
+        document.forms['create'].submit();
+    }
+
+    function submitForm() {
+        document.forms['create'].submit();
+    }
+
+    $(function () {
+        $("#tabs").tabs();
+    });
+
+    function changeDIVElement(divElement) {
+        $("#tabs").tabs({active: $(divElement).index()});
+    }
+
+    jQuery(document).ready(function($) {
+        $("#showroom").colorbox({
+            labels: [
+                'black', 'blue', 'green', 'purple', 'red',
+            ],
+            colors: [
+                '000000', '1E90FF', '00C417', '9370D8', 'F08080',
+            ],
+            width: 20, height: 20,
+            perLine: 2,
+            onSelect: function ($this, color, index, label) {
+                $("#color").val(color);
+            }
+        }).
+        colorbox('setColor', '<?php echo(($this->color) ? $this->color : '000'); ?>');
+    });
+</script>
+
+<div class="button_row">
+    <a href="<?php echo APPLICATION_URL ?>relationtype/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('relationTypeCreate') ?></h1>
+
+<div id="tabs">
+    <ul>
+        <li>
+            <a href="#fragment-1"><span class="att_nr">1</span><span class="att_desc"><?php echo $this->translate('relationTypeCreate') ?></span></a>
+        </li>
+        <li>
+            <a href="#fragment-2"><span class="att_nr">2</span><span class="att_desc"><?php echo $this->translate('addCiTypes') ?></span></a>
+        </li>
+    </ul>
+
+    <fieldset class="create_form steps">
+        <form id="create" enctype="<?php echo $this->form->getEnctype() ?>" method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction() ?>">
+            <div id="fragment-1">
+                <fieldset class="lordVader">
+                    <table>
+                        <tbody>
+                        <?php
+                        echo $this->form->name;
+                        echo $this->form->description;
+                        echo $this->form->description2;
+                        echo $this->form->note;
+                        echo $this->form->color;
+                        echo $this->form->visualize;
+                        ?>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+
+            <div id="fragment-2">
+                <fieldset class="lordVader">
+                    <table style="padding-right:0px;">
+                        <tr>
+                            <th width="25px">
+                                <a class="all check" href="#"><span title="<?php echo $this->translate('relationtypeCitypeCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('ciType') ?>"><?php echo $this->translate('ciType') ?></span>
+                            </th>
+
+                            <th width="25px">
+                                <a class="all check" href="#"><span title="<?php echo $this->translate('relationtypeCitypeCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('ciType') ?>"><?php echo $this->translate('ciType') ?></span>
+                            </th>
+
+                            <th width="25px">
+                                <a class="all check" href="#"><span title="<?php echo $this->translate('relationtypeCitypeCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('ciType') ?>"><?php echo $this->translate('ciType') ?></span>
+                            </th>
+                        </tr>
+                        <?php
+                        $count = 0;
+                        foreach ($this->citypes as $citype) {
+                            if (!$count)
+                                echo '<tr>';
+                            ?>
+                            <td width="20px" style="padding-right:0px;"><?php echo $this->form->{$citype[Db_CiType::ID]} ?></td>
+                            <td>
+                                <span title="<?php echo $citype[Db_CiType::NOTE] ?>"><?php echo $citype[Db_CiType::NAME] ?></span>
+                            </td>
+                            <?php
+                            $count++;
+                            if ($count == 3) {
+                                echo '</tr>';
+                                $count = 0;
+                            }
+                        }
+                        ?>
+                    </table>
+                </fieldset>
+            </div>
+
+            <div class="buttonCon">
+                <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javacript:cancel();return false;">
+                <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+            </div>
+        </form>
+    </fieldset>
+</div>

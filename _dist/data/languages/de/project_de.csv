@@ -1,0 +1,55 @@
+# Translation file
+
+# General
+overview;				"Übersicht"
+
+
+projects;				"Projekte"
+user;					"Benutzer"
+name;					"Name"
+description;			"Beschreibung"
+note;					"Notiz"
+valid;					"Gültig"
+inactive;				"inaktiv"
+order;					"Sortierung"
+
+save;					"Speichern"
+edit;					"Bearbeiten"
+delete;					"Löschen"
+cancel;					"Abbrechen"
+
+name_desc;				"Name des Projekts (CMDB intern)"
+description_desc;		"Bezeichnung der Projekts z.B. Kunde A"
+note_desc;				"Beschreibung des Projekts welche durch Berührung mit dem Mouse Cursor angezeigt wird"
+order_desc;				"Sortierreihenfolge in welcher das Projekt im Projekttab (Kopfberich der CMDB) angezeigt wird"
+
+
+projectNameTitle;			"Name des Projekts, kleingeschrieben, auf Englisch z.B.: project_name"
+projectDescriptionTitle;	"Name des Projekts auf Deutsch"
+projectNoteTitle;			"Hilfetext der durch Berührung mit dem Mouse Cursor angezeigt wird"
+projectOrderNumberTitle;	"Gibt die Reihnung des Projekts an"
+
+projectDeactivationSuccess;	"Projekt in Verwendung => erfolgreich deaktiviert!"
+projectActivateSuccess;		"Projekt erfolgreich aktiviert!"
+projectUpdateSuccess;		"Projekt erfolgreich bearbeitet!"
+projectDeleteSuccess;		"Projekt erfolgreich gelöscht!"
+
+createProject;          "Projekt anlegen"
+updateProject;			"Projekt anlegen"
+projectDetail;			"Projekt Detail"
+projectCreate;			"Projekt anlegen"
+projectEdit;			"Projekt bearbeiten"
+
+numberOfResults;	"Anzahl der Ergebnisse:"
+noProjectFound;     "Keine Einträge gefunden!"
+
+# User Page
+addUser;				"Benutzer hinzufügen"
+roleUserCheckName;		"x"
+
+# messages
+projectInsertSuccess;	"Projekt erfolgreich angelegt."
+
+areYouSureDelete;		"Wollen Sie das Projekt wirklich löschen?"
+areYouSureActivate;		"Wollen Sie das Projekt wirklich aktivieren?"
+areYouSureReset;		"Wollen Sie das Projekt wirklich zurücksetzen?"

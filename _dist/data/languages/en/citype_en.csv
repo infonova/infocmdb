@@ -1,0 +1,124 @@
+# This is the language file for CI type interaction.
+
+# General
+numberOfResults;			"Number of Results:"
+general;					"General"
+name;						"Name"
+createButtonDescription;	"Description for Create-Button"
+description;				"Description"
+note;						"Note"
+sorting;					"Sorting"
+xml;						"XML"
+valid;						"Status"
+active;						"active"
+inactive;					"inactive"
+allowCiAttach;				"Allow CI Attachment"
+icon;						"Icon"
+iconCurrent;				"Current Icon"
+iconsInStock;				"Icons in Stock"
+noIconsInStock;				"No Icons in Stock"
+isDefaultSortAsc;			"Sort Ascending"
+allowAttributeAttach;		"Allow Attribute Attachment"
+numberOfResults;			"Number of Results:"
+
+
+parentCiType_desc;      "CI Type which is above the CI Type in the tree structure"
+defaultProject_desc;	"Project which is assigned to the CI by default"
+defaultAttribute_desc;	"Attribute which tell the most about the CI Type e.g. Name"
+defaultSortAttribute_desc; "Attribute by which CIs are sorted when beeing displayed"
+isDefaultSortAsc_desc;	"check if CIs should be sorted ascending"
+name_desc; 				"Name of the CI Type (CMDB internal)"
+description_desc;		"Name which is displayed in the tree structure"
+note_desc;				"Help-Text for the CI Type"
+orderNumber_desc;		"Order of the CI Type in the tree structure"
+allowCiAttach_desc;		"Allow attached CIs"
+allowAttributeAttach_desc;	"Allow attached Attributes"
+createButtonDescription_desc;	"Description of the button to create a new CI"
+xml_desc;					"XML Tag beeing displayed when generating an XML-Output by Webservice"
+ticketEnabled_desc;			"Ticket enabled"
+eventEnabled_desc;			"Event enabled"
+icon_desc;					"Icon beeing displayed in CIs of this Type and beeing used for Visualisation"
+query;						"Query"
+query_desc;					"Execute this query instead of the normal list view. :user_id: will be replaced by the ID of the current user, :project_id: with the ID of the current project."
+
+
+ciTypes;					"CI Type"
+ciTypeEdit;					"Edit CI Type"
+ciTypeCreate;				"Create CI Type"
+parentCiType;				"Parent CI Type"
+noParentCiType;				"no Parent"
+noDefaultProject;			"no Default Project"
+optional;					"Optional"
+addAttributes;				"Add Attributes"
+addRelations;				"Add Relations"
+listview;					"Listview"
+ticketEnabled;				"Ticket enabled"
+eventEnabled;				"Event enabled"
+ismandatory;				"mandatory"
+position;					"Position" 
+width;						"Width"
+
+yes;						"Yes"
+false;						"No"
+
+overview;					"Overview"
+
+save;						"Save"
+next;						"Next"
+back;						"Back"
+discard;					"Discard"
+abort;						"Cancel"
+activate;					"activate"
+duplicate;					"Duplicate"
+
+attribute;					"Attribute"
+attributes;					"Attributes"
+assignAttributes;			"Assign Attributes"
+
+relation;					"Relation"
+relations;					"Relations"
+assignRelation;				"Assign Relation"
+	
+
+defaultProject;				"Default Project"
+defaultAttribute;			"Default Attribute"
+defaultSortAttribute;		"Default Sort Attribute"
+
+
+ciTypeSummary;				"CI Type Summary"
+mandatory;					"mandatory"
+notMandatory;				"not mandatory"
+
+maxRelations;				"Maximum Relations"
+relationTypeName;			"Relation Type's Name"
+relationTypeActivateCheck;	"Active Relation Type for CI Type?"
+maxRelationsDescription;	"Anzahl der maximal zuordenbaren Relationen für diese CI Typ - Relation Typ Verbindung"
+areYouSureDelete;			"Do you really want to delete this CI Type?"
+areYouSureActivate;			"Do you really want to activate this CI Type?"
+
+# Messages
+ciTypeCreateSuccess;		"CI Type created successfully!"
+ciTypeCreateFailed;			"Couldn't create CI Type!"
+
+ciTypeDeleteSuccess;		"CI Type deleted successfully!"
+ciTypeDactivateSuccess;		"CI Type in use => deactivated successfully!"
+citypeActivateSuccess;		"CI Type activated successfully!"
+
+ciTypeUpdateSuccess;		"CI Typ edited successfully!"
+ciTypeUpdateFailed;			"Couldn't update CI Typ!"
+citypeCreateSuccess;		"CI Type created successfully!"
+
+
+# Form Titles
+citypeParentCiTypeTitle;			"Parent Ci Type"
+citypeDefaultProjectTitle;			"Default Projekt"
+citypeDefaultAttributeTitle;		"Default Attribute"
+citypeDefaultSortAttributeTitle;	"Default Sort Attribute"
+citypeNameTitle;					"Name"
+citypeDescriptionTitle;				"Beschreibung"
+citypeNoteTitle;					"Notiz"
+citypeAllowCiAttachTitle;			"Ci Attachment allowed"
+citypeXMLTitle;						"XML Tag"
+citypeOrderNumberTitle;				"Sortierung"
+citypeIconTitle;					"Icon"
+summary; "Summary"

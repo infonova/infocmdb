@@ -1,0 +1,209 @@
+<link type="text/css" href="<?php echo APPLICATION_URL ?>/js/multiselect/css/ui.multiselect.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    function delete_ci_entry(id) {
+        $.post("<?php echo APPLICATION_URL?>ci/checkdelete/", {ciid: id},
+            function (response) {
+                if (response == 'OK') {
+                    if (confirm('<?php echo $this->translate("areYouSureDelete") ?>')) {
+                        window.location.href = '<?php echo APPLICATION_URL . 'ci/'; ?>delete/typeid/<?php echo $this->ciType[Db_CiType::ID]?>/ciid/' + id + '/';
+                    }
+                } else if (response == 'NOK') {
+                    alert('<?php echo $this->translate("cantDeleteBecauseOfRelations") ?>');
+                } else {
+                    if (confirm('<?php echo $this->translate("areYouSureDeleteWithRelations") ?>'.replace(/%s/, response))) {
+                        window.location.href = '<?php echo APPLICATION_URL . 'ci/'; ?>delete/typeid/<?php echo $this->ciType[Db_CiType::ID]?>/ciid/' + id + '/';
+                    }
+                }
+            },
+            "text"
+        );
+    }
+
+    function executeScript(ciId, attributeId, ciAttributeId, hasActiveValues) {
+        if (hasActiveValues) {
+            if (confirm('<?php echo $this->translate("beCareful") ?>')) {
+                window.location = '<?php echo APPLICATION_URL . 'console/executionscript/ciId/'?>' + ciId + '/attributeId/' + attributeId + '/ciAttributeId/' + ciAttributeId
+            }
+        } else {
+            window.location = '<?php echo APPLICATION_URL . 'console/executionscript/ciId/'?>' + ciId + '/attributeId/' + attributeId + '/ciAttributeId/' + ciAttributeId
+        }
+    }
+
+    $(document).ready(function () {
+        // Font-Awesome place Icon before filename
+        var tab_selector = $('#tabs');
+        $('.attributeValue .fa').each(function (idx, el) {
+            $(this).addClass(returnFaClass($(this).attr('data-ext')));
+        });
+        if ($('div.notification').length > 0) {//if notification is displayed
+            $('#breadcrumbs_row').css('top', (parseFloat($('#breadcrumbs_row').css('top').replace('px')) + 45) + 'px');
+            $('div.notification').css('position', 'fixed');
+            $('div.notification').css('z-index', 2);
+            $('div.notification').width($('#breadcrumbs_row').width());
+            $('div#ci_detail').css('paddingTop', (parseFloat($('div#ci_detail').css('paddingTop').replace('px')) + 45) + 'px');
+        }
+
+        <?php if(empty($this->tabIndex)) : ?>
+        var selected_tab = 0;
+        <?php else : ?>
+        var selected_tab = $("#tabs li a[href='#<?php echo $this->tabIndex; ?>']").parent().index();
+        if (selected_tab == -1) {//if tab does not exist
+            selected_tab = 0;
+        }
+        <?php endif; ?>
+        tab_selector.tabs({active: selected_tab});
+
+        $('.edit_list').click(function () {
+            var myId = this.id;
+            var loader = $('#' + myId).parent();
+            var parent = $('#' + myId).parent().parent();
+
+
+            // TODO: deactivate all other buttons
+            loader.html('<img src="<?php echo APPLICATION_URL?>images/icon/loading.gif" alt="loading"/>');
+
+            $('.edit_list').each(function () {
+                $('#' + this.id).parent().html('');
+            });
+
+            var dataString = '/ciid/<?php echo $this->ciId;?>/ciAttributeId/' + myId + '/index/0/tab_index/' + $("#tab_index").text();
+
+            var url = "<?php echo APPLICATION_URL?>ci/singleedit" + dataString;
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                async: true,
+                url: url,
+                success: function (result) {
+                    if (result.success) {
+                        parent.html(result.msg);
+                    }
+                    else {
+                        window.location = "<?php echo APPLICATION_URL?>" + "ci/detail/ciid/<?php echo $this->ciId;?>/tab_index/" + $("#tab_index").text();
+                    }
+
+                    if ($(".multiselect").length > 0) {
+                        $(".multiselect").multiselect({dividerLocation: 0.5});
+                    }
+
+
+                    setup_tinymce('<?php echo $this->language;?>');
+
+                },
+                error: function (request, status, error) {
+                    window.location = "<?php echo APPLICATION_URL?>" + "ci/detail/ciid/<?php echo $this->ciId;?>/tab_index/" + $("#tab_index").text();
+                }
+            });
+
+            return false;
+        });
+
+        tab_selector.find("ul.ui-tabs-nav li a").click(function () {
+            var tab_index = $(this).attr("href").substr(1, $(this).attr("href").length);
+            $("#tab_index").text(tab_index);
+            var edit_link = $("#edit_link").attr("href");
+            edit_link = edit_link.substr(0, edit_link.indexOf("tab_index"));//complete url without everything after beginning of tab_index
+            $("#edit_link").attr("href", edit_link + "tab_index/" + tab_index);
+
+        });
+
+        //set the correct selected tab everywhere if the requested tab does not exist	
+        if (selected_tab == 0) {
+            tab_selector.find("ul.ui-tabs-nav li:first a").trigger("click");
+        }
+
+        $(".action_button").each(function (index, value) {
+            var button_height = $(this).height();
+            if (button_height > 25) {
+                $(this).removeClass('play_button');
+                $(this).addClass('play_button_2_lines');
+            }
+        });
+    });
+</script>
+<?php $config = Zend_Registry::get('viewConfig'); ?>
+
+<span id="tab_index" style="display:none"><?php echo $this->tabIndex ?></span>
+
+<div id="breadcrumbs_row">
+
+    <div class="breadcrumb">
+        <?php echo $this->ciBreadcrumb($this->breadcrumbs, $this->breadcrumbDepth); ?>
+    </div>
+
+    <div class="button_row" style="padding-right:10px;width:250px; margin-top: 4px;">
+
+        <?php if ($config->ci->detail->buttons->print && !$this->ciDidNotExist) : ?>
+            <?php
+            $href = APPLICATION_URL . 'ci/print/ciid/' . $this->ciId . "/";
+
+            if ($this->historyView) {
+                $href = APPLICATION_URL . 'ci/historyprint/ciid/' . $this->ciId . "/historyid/" . $this->historyId;
+            }
+            ?>
+            <a class="link"
+               onclick="window.open(this.href,this.target,'width=600,height=850,scrollbars=1'); return false;"
+               target="_blank" href="<?php echo $href; ?>"><img
+                        src="<?php echo APPLICATION_URL ?>images/icon/print.png"
+                        style="vertical-align:top;">&nbsp;<?php echo $this->translate('print') ?></a>&nbsp;&nbsp;
+        <?php endif; ?>
+        <?php if ($config->ci->detail->buttons->edit && !$this->historyView) : ?>
+            <a id="edit_link" class="link"
+               href="<?php echo APPLICATION_URL . 'ci/edit/ciid/' . $this->ciId; ?>/tab_index/<?php echo (!empty($this->tabIndex)) ? $this->tabIndex : 0; ?>"><img
+                        src="<?php echo APPLICATION_URL ?>images/icon/edit.png"
+                        style="vertical-align:top;">&nbsp;<?php echo $this->translate('edit') ?></a>&nbsp;&nbsp;
+        <?php endif; ?>
+        <?php if ($config->ci->detail->buttons->delete && !$this->historyView) : ?>
+            <a class="link" href="javascript:delete_ci_entry(<?php echo $this->ciId; ?>)"><img
+                        src="<?php echo APPLICATION_URL ?>images/icon/delete.gif" height="13" width="13"
+                        style="vertical-align:middle;">&nbsp;<b><?php echo $this->translate('delete') ?></b></a>
+        <?php endif; ?>
+    </div>
+
+</div>
+
+<!-- Attribute-Groups and Attributes -->
+<div id="ci_detail" class="ciType<?php echo ucfirst($this->ciType[Db_CiType::NAME]) ?>" data-ciid="<?php echo $this->ciId; ?>" data-citype="<?php echo $this->ciType[Db_CiType::NAME] ?>">
+
+    <?php if ($this->ciType[Db_CiType::IS_TAB_ENABLED]) : ?>
+    <div id="tabs">
+        <ul>
+            <?php foreach ($this->attributeList as $attributeGroup) : ?>
+                <li>
+                    <a href="#fragment-<?php echo $attributeGroup['name'] ?>">
+                            <span class="att_desc">
+                                <?php echo $attributeGroup['description'] ?>
+                            </span>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+
+        <fieldset class="create_form steps">
+            <?php endif; ?>
+
+            <!-- show all attributes -->
+            <?php echo $this->partial('ci/_detailAttributeGroup.phtml', array(
+                'attributeList' => $this->attributeList,
+                'form'          => $this->form,
+                'ciAttributeId' => $this->ciAttributeId,
+                'isAdmin'       => $this->isAdmin,
+                'ciid'          => $this->ciId,
+                'historyView'   => $this->historyView,
+                'tabs'          => $this->ciType[Db_CiType::IS_TAB_ENABLED],
+            )); ?>
+
+
+            <?php if ($this->ciType[Db_CiType::IS_TAB_ENABLED]) : ?>
+        </fieldset>
+    </div>
+<?php endif; ?>
+
+
+</div>
+
+<!-- Pillar Right -->
+<?php
+echo $this->render('ci/_pillar.phtml');
+?>

@@ -1,0 +1,83 @@
+<?php echo $this->flashMessenger(); ?>
+<script type="text/javascript">
+    log_refreshing_enabled = false;
+    window.setTimeout("refresh()", 5000);
+
+    function refresh() {
+        if (log_refreshing_enabled) {
+            $.ajax({
+                url: '<?php echo APPLICATION_URL?>/fileimport/log/async/1/id/<?php echo $this->importId?>',
+                success: function (data) {
+                    $('#logtext').val(data);
+                    var textarea = document.getElementById('logtext');
+                    textarea.scrollTop = textarea.scrollHeight;
+                    window.setTimeout("refresh()", 2000);
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        $('#refresh-on').change(function () {
+            log_refreshing_enabled = $(this).prop('checked');
+            if (log_refreshing_enabled) {
+                refresh();
+            }
+        });
+    });
+
+    function logScrollToTop() {
+        var textarea = document.getElementById('logtext');
+        textarea.scrollTop = 0;
+    }
+
+    function logScrollToBottom() {
+        var textarea = document.getElementById('logtext');
+        textarea.scrollTop = textarea.scrollHeight;
+    }
+</script>
+
+<style type="text/css">
+    textarea.html-text-box {
+        background-color: #ffffff;
+        background-image: url(http://);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #cccccc;
+        font-family: Arial;
+        font-size: 8pt;
+        color: #000000;
+    }
+</style>
+
+<div class="minimal-page-container">
+    <div class="min-title-container">
+        <div class="min-title">
+            &nbsp;<?php echo $this->file ?>
+        </div>
+        <div class="min-title-button-container">
+            <a href="<?php echo APPLICATION_URL . '/download/fileimport/id/' . $this->importId . '/log/true' ?>">
+                <?php echo $this->translate('downloadLog') ?>
+            </a>
+
+        </div>
+    </div>
+    <div>
+        <div style="display: flex; align-items: center; margin-bottom: 2px">
+            <span style="margin-right: 1em; padding-left: 0.3em;"><?php echo $this->translate('importDialogRefreshCheckboxLabel'); ?></span><input type="checkbox" id="refresh-on">
+            <a onclick="logScrollToTop();" class="info-simple-button">
+                <i class="fa fa-arrow-up"></i><?php echo $this->translate('importDialogScrollUpButton'); ?>
+            </a>
+            <a onclick="logScrollToBottom();" class="info-simple-button">
+                <i class="fa fa-arrow-down"></i><?php echo $this->translate('importDialogScrollDownButton'); ?>
+            </a>
+        </div>
+    </div>
+    <form method="post" action="http://" style="padding-left: 3px">
+        <textarea name="logtext" id="logtext" cols="100" rows="31" class="html-text-box" readonly="readonly"><?php echo $this->log ?></textarea>
+    </form>
+</div>
+
+

@@ -1,0 +1,16 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "accelerator_get_configuration", "accelerator_license_info",
+    "apc_clear_cache", "apc_delete", "apc_fetch", "APC_ITER_KEY", "apc_sma_info", "apc_store", "APCIterator",
+    "hash",
+    "Memcache", "MEMCACHE_COMPRESSED",
+    "Memcached",
+    "output_cache_get", "output_cache_put", "output_cache_remove_key",
+    "wincache_ucache_clear", "wincache_ucache_delete", "wincache_ucache_get", "wincache_ucache_info", "wincache_ucache_meminfo", "wincache_ucache_set",
+    "XC_TYPE_VAR", "xcache_clear_cache", "xcache_count", "xcache_get", "xcache_isset", "xcache_set", "xcache_unset",
+    "zend_disk_cache_clear", "zend_disk_cache_delete", "zend_disk_cache_fetch", "zend_disk_cache_store", "zend_shm_cache_clear", "zend_shm_cache_delete", "zend_shm_cache_fetch", "zend_shm_cache_store"
+  ]
+}

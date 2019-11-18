@@ -1,0 +1,31 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        -
+            message: '#Parameter \#1 \$var of function count expects array\|Countable, array<int, string>\|false given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Config/Ini.php
+        # preg_replace won't return an array here since the subject isn't an array
+        -
+            message: '#Cannot cast array\|string\|null to string\.#'
+            path: %currentWorkingDirectory%/src/Zend/Config/Yaml.php
+        -
+            message: '#Argument of an invalid type DOMDocument\|SimpleXMLElement\|false supplied for foreach, only iterables are supported\.#'
+            path: %currentWorkingDirectory%/src/Zend/Config/Xml.php
+        -
+            message: '#Parameter \#1 \$element of method Zend_Config_Xml::_processExtends\(\) expects SimpleXMLElement, DOMDocument\|SimpleXMLElement\|false given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Config/Xml.php
+        -
+            message: '#Parameter \#1 \$var of function count expects array\|Countable, SimpleXMLElement given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Config/Xml.php
+        -
+            message: '#Result of && is always false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Config/Xml.php
+        # Tried to fix this one by only returning an array in the _parseIniFile method, but then a test fails
+        - 
+            message: '#Argument of an invalid type array\|false supplied for foreach, only iterables are supported\.#'
+            path: %currentWorkingDirectory%/src/Zend/Config/Ini.php

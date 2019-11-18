@@ -1,0 +1,77 @@
+﻿# Index page
+
+indexTitle;"Benachrichtigungsverwaltung"
+mailCreate;"Benachrichtigung anlegen"
+mailUpdate;"Benachrichtigung bearbeiten"
+overview;"Übersicht"
+linkTemplate;"Templates"
+viewMail; "Mail ansehen"
+
+mailNameTitle;			"Name"
+mailDescriptionTitle;	"Beschreibung"
+mailNoteTitle;			"Notiz"
+mailLinkTitle;			"Link"
+mailSubjectTitle;		"Betreff"
+mailMimeTypeTitle;		"MIME-Typ des Mails"
+mailEditorTitle;        "Editor ein/aus"
+mailBodyTitle;			"Inhalt"
+
+# index template list
+
+listName;"Name"
+listDescription;"Beschreibung"
+listNote;"Notiz"
+listSubject;"Betreff"
+listMimeType;"Typ"
+mailMimeTypeTextHtml;"HTML"
+mailMimeTypeTextPlain;"Text"
+
+listDelete;"Löschen"
+
+
+# Forms
+
+name;"Name"
+description;"Beschreibung"
+note;"Notiz"
+link,"Empfänger"
+openRecipients;"Empfänger bearbeiten"
+addRecipients;"Empfänger hinzufügen"
+recipients;"Empfänger"
+userRecipients;"Empfängeremails von Benutzern"
+customRecipients;"benutzerdefinierte Empfängeremails"
+recipientsHelp; "neue Zeile, neue Email Addresse"
+
+subject;"Betreff"
+mimeType;"Typ"
+mailEditor;"Editor"
+template;"Template"
+body;"Body"
+
+numberOfResults;	"Anzahl der Ergebnisse:"
+
+save;"Speichern"
+
+# Create
+
+createTitle;"Template Anlegen"
+
+# Notifications
+
+notificationDeleteSuccess;"Mail erfolggreich gelöscht!"
+notificationDeleteFailed;"Mail konnte nicht gelöscht werden!"
+
+notificationInsertSuccess;"Mail erfolgreich angelegt!"
+notificationInsertFailed;"Mail konnte nicht angelegt werden!"
+
+recipientUpdateSuccess;"Empfänger wurden erfolgreich geändert!"
+recipientUpdateFailed;"Empfänger konnten nicht geändert werden!"
+
+areYouSureDelete;		"Wollen Sie diese Mailverwaltung wirklich löschen?"
+
+# view (sendTestMail)
+sendTestMail;   "Test-Mail senden"
+mailSuccess;    "E-Mail erfolgreich versandt"
+unexpectedError; "Ein unerwarteter Fehler ist aufgetreten"
+edit;           "Mail bearbeiten"
+add_recipient;  "Zusätzlicher Empfänger"

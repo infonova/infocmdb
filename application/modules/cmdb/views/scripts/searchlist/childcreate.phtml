@@ -1,0 +1,42 @@
+<script type="text/javascript">
+    function openAttributeWindow(id) {
+        win2 = open('<?php echo APPLICATION_URL?>searchlist/addattribute/elementId/' + id, 'win2', 'width=550,height=400,status');
+        win2.focus();
+    }
+</script>
+
+<a class="button overview" href="<?php echo APPLICATION_URL ?>searchlist/detail/containerId/<?php echo $this->containerId ?>"><?php echo $this->translate('back') ?></a>
+<h1 class="pageName"><?php echo $this->translate('searchListCreateForContainer') ?>
+    <a class="link" href="<?php echo APPLICATION_URL ?>searchlist/detail/containerId/<?php echo $this->containerId ?>/"><?php echo $this->containerId ?></a>
+</h1>
+
+<form name="<?php echo $this->escape($this->form->getName()) ?>" action="<?php echo $this->escape($this->form->getAction()) ?>"
+      method="<?php echo $this->escape($this->form->getMethod()) ?>">
+
+    <?php echo $this->form->container ?>
+    <?php echo $this->form->ciType ?>
+
+    <fieldset class="lordVader">
+
+        <table style="margin-bottom:15px;">
+            <tr>
+                <td><label><?php echo $this->translate('scrollable') ?>: </label></td>
+                <td><?php echo $this->form->scrollable ?></td>
+            </tr>
+        </table>
+        <table>
+
+            <?php for ($i = 1; $i <= $this->maxElements; $i++) { ?>
+                <tr>
+                    <td><?php echo $this->translate('position') ?> <?php echo $i ?>:</td>
+                    <td><?php $elem = 'create_' . $i;
+                        echo $this->form->$elem ?></td>
+                    <td>
+                        <a class="link" onClick="javascript:openAttributeWindow('<?php echo $elem ?>')" href="javascript:"><?php echo $this->translate('add') ?></a>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+        <?php echo $this->form->save ?>
+</form>
+</fieldset>

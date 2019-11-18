@@ -1,0 +1,22 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        - '#Variable \$padMode might not be defined\.#'
+        # Defensive coding
+        - 
+            message: '#Strict comparison using === between true and false will always evaluate to false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Text/Table/Column.php
+        -
+            message: '#Strict comparison using === between int and false will always evaluate to false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Text/Figlet.php
+        -
+            message: '#Strict comparison using === between int and null will always evaluate to false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Text/MultiByte.php
+        -
+            message: '#Result of && is always false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Text/Table.php

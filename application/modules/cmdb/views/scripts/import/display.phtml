@@ -1,0 +1,91 @@
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+    <div class="button_row">
+        <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>import/index"><?php echo $this->translate('overview') ?></a>
+    </div>
+    <h1 class="pageName">
+        <?php
+        switch ($this->type) {
+            case 'queue':
+                echo $this->translate('importsQueue');
+                break;
+            case 'success':
+                echo $this->translate('importsSucceeeded');
+                break;
+            case 'failed':
+                echo $this->translate('importsFailed');
+                break;
+            default:
+                echo $this->translate('importsQueue');
+                break;
+        }
+        ?>
+    </h1>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th><?php echo $this->translate('filename'); ?></th>
+            <th><?php echo $this->translate('dateProceeded'); ?></th>
+            <?php if ($this->type == 'failed'): ?>
+                <th><?php echo $this->translate('log'); ?></th>
+                <th>&nbsp;</th>
+            <?php endif; ?>
+            <?php if ($this->type == 'queue'): ?>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            <?php endif; ?>
+            <th>&nbsp;</th>
+        </tr>
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <tr>
+                <td><a href="<?php echo $this->filePath . '/' . $item['file'] ?>"><?php echo $item['file']; ?></a></td>
+                <td><?php echo $item['time'] ?></td>
+
+                <?php if ($this->type == 'failed'): ?>
+                    <td>
+                        <a href="<?php echo $this->filePath . '/log/' . $item['file'] . '.log' ?>"><?php echo $this->translate('log'); ?></a>
+                    </td>
+                    <td>
+                        <a href="<?php echo APPLICATION_URL ?>import/restart/file/<?php echo $item['file']; ?>"><?php echo $this->translate('restart') ?></a>
+                    </td>
+                <?php endif; ?>
+
+                <?php if ($this->type == 'queue'): ?>
+                    <td>
+                        <a href="<?php echo APPLICATION_URL ?>import/importattribute/file/<?php echo $item['file']; ?>"><?php echo $this->translate('importAttributes') ?></a>
+                    </td>
+                    <td>
+                        <a href="<?php echo APPLICATION_URL ?>import/import/file/<?php echo $item['file']; ?>"><?php echo $this->translate('importData') ?></a>
+                    </td>
+
+                    <?php if (is_file(APPLICATION_PUBLIC . '_uploads/import/log/' . $item['file'] . '.log')) { ?>
+                        <td>
+                            <a href="<?php echo $this->filePath . '/log/' . $item['file'] . '.log' ?>"><?php echo $this->translate('log'); ?></a>
+                        </td>
+                    <?php } else { ?>
+                        <td></td>
+                    <?php } ?>
+                <?php endif; ?>
+
+                <td>
+                    <a class="delete_list" href="<?php echo APPLICATION_URL ?>import/delete/type/<?php echo $this->type ?>/file/<?php echo $item['file']; ?>"></a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+
+    </table>
+    <?php echo $this->paginator; ?>
+<?php else: ?>
+    <h1 class="pageName"><?php echo $this->translate('noItemsFound') ?></h1>
+<?php endif; ?>

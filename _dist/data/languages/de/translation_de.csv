@@ -1,0 +1,8 @@
+# This is the translation language file.
+
+configFiles;		"Übersetzungsdateien"
+configFilesEdit;	"Übersetzungsdatei bearbeiten"
+overview;			"Übersicht"
+save;				"Speichern"
+translationfileUpdateSuccess;   "Übersetzungdatei erfolgreich erweitert"
+translationfileUpdateFailed;	"Bearbeiten der Übersetzungsdatei fehlgeschlagen"

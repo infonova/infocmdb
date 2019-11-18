@@ -1,0 +1,11 @@
+parameters:
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    bootstrap: %rootDir%/../../../phpstan-bootstrap.php
+    ignoreErrors:
+        - '#Casting to .+ something that.s already .+\.#'
+        - '#Variable \$hostname might not be defined\.#'
+        - '#Variable \$context in isset\(\) always exists and is not nullable\.#'
+        - '#Call to an undefined method object::__toString\(\)\.#'
+        - '#Strict comparison using === between .+ and null will always evaluate to false\.#'

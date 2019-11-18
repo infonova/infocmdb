@@ -1,0 +1,90 @@
+<div id="nav_project_list_dropdown">
+    <div id="small_project_list_container" class="">
+        <?php
+        $currentProjectId         = $this->currentProjectId;
+        $currentProject           = null;
+        $projectArray             = array();
+        $projectArray['projects'] = array();
+
+
+        foreach ($this->projects as $project) {
+            if ($project[Db_Project::ID] == $currentProjectId) {
+                $currentProject = $project;
+                break;
+            }
+        }
+
+        $pinned_project_tabs = '';
+        // do not display dropdown if user has no projects or only one
+        $pinned_project_tabs =
+            "<div class=\"pinned_project_tab pinned_project_tab_selected\" id='project_dropdown_trigger'>" .
+            "<a href='" . APPLICATION_URL . "project/change/projectid/" . $this->projects[0][Db_Project::ID] .
+            "/typeId/" . $this->projectTypeId . "/ciid/" . $this->ciId .
+            "' title='" . $currentProject[Db_Project::DESCRIPTION] . "'>" .
+            $currentProject[Db_Project::DESCRIPTION] .
+            "</a>" .
+            "</div>";
+
+        if (count($this->projects) > 1) {
+            $pinned_project_tabs =
+                "<div class=\"pinned_project_tab pinned_project_tab_selected\" id='project_dropdown_trigger'>" .
+                "<a href='javascript:toggleProjectDropdown();' title='" . $currentProject[Db_Project::DESCRIPTION] . "'>" . $currentProject[Db_Project::DESCRIPTION] .
+                "<i id='project_toggle_indicator' class=\"fa fa-caret-down\" aria-hidden=\"true\"></i>" .
+                "</a>" .
+                "</div>";
+            echo "    <ul class='small_project_list hidden'>";
+
+            $first = true;
+            foreach ($this->projects as $project) {
+                if (!$project[Db_Project::ID]) {
+                    echo "<li class='small_project_list_element' id='display_all_projects'>";
+                } else {
+                    echo "<li class='small_project_list_element'>";
+                }
+                $href              = APPLICATION_URL . "project/change/projectid/" . $project[Db_Project::ID] .
+                    "/typeId/" . $this->projectTypeId .
+                    "/ciid/" . $this->ciId;
+                $projectChangeLink = "<a class='project_list_element_link' href='" . $href . "/' title='" .
+                    (isset($project[Db_Project::NOTE]) ? $project[Db_Project::NOTE] : $project[Db_Project::DESCRIPTION]) .
+                    "'>" . $project[Db_Project::DESCRIPTION] .
+                    "</a>" .
+                    "<span class='project_favorite_container'><a class='project_list_element_favorite' " .
+                    "id='pin_project_" . $project[Db_Project::ID] . "' data-projectid='" . $project[Db_Project::ID] . "'>" .
+                    "<i class='fa fa-star-o'></i>" .
+                    "</a></span>";
+                if ($project[Db_Project::ID] == $currentProjectId) {
+                    echo "<b>";
+                    echo $projectChangeLink;
+                    echo "</b>";
+                } else {
+                    echo $projectChangeLink;
+                }
+                echo "</li>";
+                $reducedProjectInfo = array(
+                    "id"    => $project[Db_Project::ID],
+                    "title" => $project[Db_Project::DESCRIPTION],
+                    "href"  => $href,
+                );
+                array_push($projectArray['projects'], $reducedProjectInfo);
+                if ($project[Db_Project::ID] == $currentProjectId) {
+                    $pinned_project_tabs .= "<div class=\"pinned_project_tab pinned_project_tab_selected hidden\" id=\"pinned_project_" . $reducedProjectInfo['id'] .
+                        "\">" .
+                        "<a href='" . $href . "' title='" . $reducedProjectInfo['title'] . "'>" . $reducedProjectInfo['title'] . "</a>" .
+                        "</div>";
+                } else {
+                    $pinned_project_tabs .= "<div class=\"pinned_project_tab hidden\" id=\"pinned_project_" . $reducedProjectInfo['id'] .
+                        "\">" .
+                        "<a href='" . $href . "' title='" . $reducedProjectInfo['title'] . "'>" . $reducedProjectInfo['title'] . "</a>" .
+                        "</div>";
+                }
+            }
+
+            echo "    </ul>";
+        }
+        $projectArray['pinned_projects'] = json_decode($this->pinnedProjects, true);
+
+        echo "<script type='text/javascript'>project_data = " . json_encode($projectArray) . ";</script>";
+        ?>
+    </div>
+    <?php echo $pinned_project_tabs; ?>
+</div>

@@ -1,0 +1,37 @@
+# This is the language file for validation interaction.
+match;			"übernehmen"
+overwrite;		"überschreiben"
+validation;		"Validierung"
+attributes;		"Attribute"
+created;		"Erstellt"
+newValue;		"neuer Wert"
+currentValue;	"aktueller Wert"
+note;			"Notiz"
+status;			"Status"
+delete;			"löschen"
+name;			"Name"
+type;			"Typ"
+validationDetail;	"Validierung Detail"
+overview;		"Übersicht"
+project;                "Projekt"
+ciType;                 "CI Typ"
+
+importFileMatchSuccess;		"Validierung erfolgreich übernommen"
+
+validationDetailInsert; "Validierung Detailansicht"
+noValidationFound;	"Keine Objekte zur Validierung vorhanden."
+noValidationAttributesFound;"Keine Attribute zur Validierung vorhanden."
+
+numberOfResults;	"Anzahl der Ergebnisse:"
+attributesMatchSuccess; "Validierung erfolgreich!"
+importFileDeleteSuccess; "Validierung erfolgreich gelöscht!"
+
+buttonMatch;	"Übernehmen"
+buttonDelete;	"Löschen"
+
+checkAll;		"Alle Auswählen"
+uncheckAll;		"Alle Abwählen"
+checkAllnew;	"Alle neuen Attribute Auswählen"
+
+checkDeleteValidation;"Wollen Sie die importierten Daten wirklich verwerfen?"
+checkMatchValidation;"Wollen Sie die importierten Daten wirklich übernehmen?"

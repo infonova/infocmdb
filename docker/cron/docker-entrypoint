@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -e
+
+/bootstrap/wait
+rm -f /var/run/lock/infocmdb_cron
+
+exec "$@"

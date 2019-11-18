@@ -1,0 +1,20 @@
+
+# index page
+ticketTitle;"Tickets"
+ticketId;"Ticket ID"
+ciId;"CI ID"
+ticketName;"Ticket Name"
+
+validFrom;"Gültg von"
+validTo;"Gültig bis"
+validToUnlimited;"unbegrenzt"
+
+back;			"Zurück"
+createTicketForCi;	"Ticket anlegen für CI "
+
+# filter
+search;"Filter" 
+
+areYouSureClose;	"Ticket wirklich schließen?"
+
+numberOfResults;			"Anzahl der Ergebnisse:"

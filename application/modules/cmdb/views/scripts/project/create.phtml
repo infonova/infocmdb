@@ -1,0 +1,133 @@
+<script type="text/javascript">
+    function reset() {
+
+        window.location.href = '<?php echo APPLICATION_URL . 'project/index'; ?>';
+
+    }
+
+    function submit() {
+        document.forms['create'].submit();
+    }
+
+    function next() {
+        var selected = $("#tabs").tabs("option", "active");
+        var next = getNextEnabledTab(selected);
+        $("#tabs").tabs({active: 1});
+    }
+
+    function back() {
+        var selected = $("#tabs").tabs("option", "active");
+        var last = getLastEnabledTab(selected);
+        $("#tabs").tabs({active: 0});
+    }
+
+    $(document).ready(function () {
+        $(document).ready(function () {
+            $("form#create input").keypress(function (e) {
+                if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                    submit();
+                }
+            });
+            $("form#create select").keypress(function (e) {
+                if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                    submit();
+                }
+            });
+        });
+
+        $("#tabs").tabs({active: 0});
+    })
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>project/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('projectCreate') ?></h1>
+
+<div id="tabs">
+    <ul>
+        <li>
+            <a href="#fragment-1"><span class="att_nr">1</span><span class="att_desc"><?php echo $this->translate('createProject') ?></span></a>
+        </li>
+        <li>
+            <a href="#fragment-2"><span class="att_nr">2</span><span class="att_desc"><?php echo $this->translate('user') ?></span></a>
+        </li>
+    </ul>
+    <fieldset class="create_form steps">
+        <form widgetid="create" id="create" enctype="multipart/form-data" method="post" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
+
+            <div id="fragment-1">
+                <fieldset class="lordVader">
+                    <table>
+                        <?php echo $this->form->name ?>
+                        <?php echo $this->form->description ?>
+                        <?php echo $this->form->note ?>
+                        <?php echo $this->form->order ?>
+                    </table>
+                </fieldset>
+            </div>
+
+            <div id="fragment-2">
+                <fieldset class="lordVader">
+                    <table style="padding-right:0px;">
+                        <tr>
+                            <th width="25px">
+                                <a class="all check" href="#"><span title="<?php echo $this->translate('roleUserCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('userName') ?>"><?php echo $this->translate('user') ?></span>
+                            </th>
+
+                            <th width="25px">
+                                <a class="all check" href="#"><span title="<?php echo $this->translate('roleUserCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('userName') ?>"><?php echo $this->translate('user') ?></span>
+                            </th>
+
+                            <th width="25px">
+                                <a class="all check" href="#"><span title="<?php echo $this->translate('roleUserCheckDescription') ?>">x</span></a>
+                            </th>
+                            <th>
+                                <span title="<?php echo $this->translate('userName') ?>"><?php echo $this->translate('user') ?></span>
+                            </th>
+                        </tr>
+                        <?php
+                        $count = 0;
+                        foreach ($this->users as $user) {
+                            if (!$count)
+                                echo '<tr>';
+                            ?>
+                            <td width="20px" style="padding-right:0px;"><?php echo $this->form->{$user[Db_User::ID]} ?></td>
+                            <td>
+                                <span title="<?php echo $user[Db_User::NOTE] ?>"><?php echo $user[Db_User::USERNAME] ?></span>
+                            </td>
+                            <?php
+                            $count++;
+                            if ($count == 3) {
+                                echo '</tr>';
+                                $count = 0;
+                            }
+                        }
+                        ?>
+                    </table>
+                </fieldset>
+            </div>
+
+        </form>
+        <div class="buttonCon">
+            <input type="submit" class="cancel_button" value="<?php echo $this->translate('cancel') ?>" onClick="javascript:reset()">
+            <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javacript:submit()">
+        </div>
+    </fieldset>
+
+</div>

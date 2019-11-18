@@ -1,0 +1,122 @@
+# This is the language file for user interaction.
+
+user;					"User"
+username;				"Username"
+password;				"Password"
+passwordConfirm;		"Confirm Password"
+theme;					"Theme"
+ciDeleteAllowed;		"Deleting CIs allowed"
+relationDeleteAllowed;	"Modifing Relations allowed"
+firstname;				"Firstname"
+lastname;				"Lastname"
+description;			"Description"
+comment;				"Comment"
+language;				"Language"
+mailaddress;			"E-Mail-Address"
+valid;					"Status"
+active;					"active"
+inactive;				"inactive"
+layout;					"Layout"
+projects;				"Projects"
+roles;					"Roles"
+numberOfResults;		"Number of Results:"
+
+theme_desc;					"Theme assigned for this user"
+name_desc;					"Username used for login (keine Sonder Zeichen erlaubt)"
+email_desc;					"E-Mail of the user"
+password_desc;				"Password for local authentication"
+password_confirm_desc;		"Password confirmation"
+firstname_desc;				"Givenname of the User"
+lastname_desc;				 "Lastname of the User"
+description_desc;			"Description for this user, e.g. Role 'Serveradministrator'"
+note_desc;					"Description shown for mouseover"
+language_desc;				"Initial language for the user, can be changed by the user."
+layout_desc;				"CMDB Layout for this user"
+ciDelete_desc;				"Can delete cis"
+relationDelete_desc;		"Can delete relations"
+ldapAuth_desc;				"Use LDAP for authentication, password set here is ineffective"
+allowAdminMode;             "Admin-Mode enabled"
+isRoot_desc;                "User can enable Admin-Mode to show internal labels for items, attributes, etc."
+
+userEdit;				"Edit User"
+userCreate;				"Create User"
+userSummary;			"User Summary"
+ValidatorPasswortStrength_NOT_VALID;    "The password has to be at least 8 characters long..."
+
+#wizard
+yes;					"Yes"
+no;						"No"
+
+assignProjects;			"Assign Projects"
+assignRoles;			"Assign Roles"
+
+overview;				"Overview"
+save;					"Save"
+delete;					"Delete"
+abort;					"Cancel"
+back;					"Back"
+next;					"Next"
+duplicate;				"Duplicate"
+
+
+projectName;			"Project's name"
+project;				"Project"
+
+userCreateSuccess;		"User created successfully!"
+userCreateFailed;		"Couldn't create User!"
+userDeactivationSuccess;"User assigned to records => deactivated successfully!"
+
+userDeleteSuccess;		"User deleted successfully!"
+userDeleteFailed;		"Couldn't delete User!"
+userActivationSuccess;	"User activated successfully!"
+userUpdateSuccess;		"User edited successfully!"
+
+areYouSureActivate;		"Do you really want to activate this User?"
+
+projectAssignSuccess;	"Assigning projects succeeded."
+roleAssignSuccess;		"Assigning roles succeeded."
+
+areYouSureDelete;		"Do you really want to delete this User?"
+
+userProjectCheckDescription;"Assign project to user?"
+userProjectCheckName;		"x"
+userCreateCancled;"User creation cancelled"
+
+allowAdminMode;             "allow Admin-Mode"
+isRoot_desc;                "User is allowed to enable Admin-Mode. If Admin-Mode is enabled the attribute-name instead of the attribute-description is displayed."
+userLdapAuthTitle;			"LDAP Auth"
+ldapAuth; "LDAP"
+
+# view messages
+is_two_factor_auth;             "Use 2 Factor Authentication"
+2FA;                      "2 Factor Authentication"
+2FASetup;                       "Set up 2 Factor Authentication for your account"
+2FAGoogleAuthInstall;           "If you haven't already, install the Google Authenticator App"
+2FAGoogleAuthOpen;              "Open the Google Authenticator App"
+2FAGoogleAuthSetupAccount;      "Tap 'Menu' and then 'Set up account'. Now either scan the code below or manually enter the secret"
+2FASecret;                      "Secret"
+2FAactive;               "You have activated 2 Factor Authentication! At every login you will be required to enter the Code currently displayed in the Google Authenticator App"
+2FAFinishSetup;                 "To finish the setup enter the 6-digit code displayed in the Google Authenticator App and press 'Verify Code'"
+2FAVerifyCode;                  "Verify Code"
+general;                        "General"
+wait;                           "Please wait.."
+
+# error messages returned by activateTFA Action
+2FAErrorNoUser;             "ERROR no matching user!"
+2FAErrorAlreadyActive;      "ERROR 2 Factor Auth is already activated for this account"
+2FAErrorNoSecret;           "ERROR no secret given"
+2FAErrorCodeInvalid;        "ERROR the code is invalid! Please try again"
+UnexpectedError;            "ERROR unexpected error, please contact admin"
+
+# admin mode edit user
+2FAenabled;                 "User has 2 Factor Authentication enabled"
+2FAdisabled;                "User has 2 Factor Authentication disabled"
+2FAdisable;                 "disable 2 Factor Authentication"
+2FAreallyDisable;           "Are you sure you want to disable 2 Factor Authentication for this user?"
+
+noUserFound;   "No entries found!"
+PasswordsDoNotMatch;        "The passwords do not match"
+
+noPassExpireLabel;          "Password never expires"
+noPassExpireTitle;          "Password expire off"
+noPassExpireDesc;           "If password expiration is enabled this turns off password expiration for this user. Useful for API users."

@@ -1,0 +1,9 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "json_decode", "json_last_error", "JSON_ERROR_NONE", "JSON_ERROR_DEPTH", "JSON_ERROR_CTRL_CHAR", "JSON_ERROR_SYNTAX", "json_encode",
+    "mb_convert_encoding"
+  ]
+}

@@ -1,0 +1,11 @@
+# Codeception Test Suite Configuration
+#
+# Suite for unit (internal) tests.
+
+class_name: UnitTester
+modules:
+    enabled:
+        - \Helper\ZF1AppHelper
+        - Asserts
+        - \Helper\Unit
+        - Db

@@ -1,0 +1,31 @@
+<div class="button_row">
+    <a href="<?php echo APPLICATION_URL ?>workflow/index"><?php echo $this->translate('overview'); ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('workflowRebuildLong'); ?></h1>
+
+<br/>
+
+
+<table class="padded no-border">
+    <thead>
+    <tr>
+        <th><?php echo $this->translate('workflowBuildStatus') ?></th>
+        <th><?php echo $this->translate('name') ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->workflows as $workflow) : ?>
+        <tr>
+            <td class="workflow-build-status workflow-build-status-<?php echo strtolower($workflow['build_status']) ?>">
+                <span><?php echo $workflow['build_status'] ?></span>
+            </td>
+            <td>
+                <a href="<?php echo APPLICATION_URL ?>workflow/detail/workflowId/<?php echo $workflow[Db_Workflow::ID] ?>">
+                    <?php echo $workflow[Db_Workflow::NAME] ?>
+                </a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+
+</table>

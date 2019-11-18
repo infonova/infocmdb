@@ -1,0 +1,66 @@
+/*
+ * The MIT License
+ * Copyright (c) 2012 Matias Meno <m@tias.me>
+ */
+.dropzone, .dropzone * {
+    box-sizing: border-box;
+}
+
+.dropzone {
+    min-height: 22px;
+    border: 3px solid rgba(0, 0, 0, 0.3);
+    background: white;
+    padding: 2px 20px;
+}
+
+.dropzone.dz-clickable {
+    cursor: pointer;
+}
+
+.dropzone.dz-clickable * {
+    cursor: default;
+}
+
+.dropzone.dz-clickable .dz-message, .dropzone.dz-clickable .dz-message * {
+    cursor: pointer;
+}
+
+.dropzone.dz-started .dz-message {
+    display: none;
+}
+
+.dropzone.dz-drag-hover {
+    border-style: dashed;
+}
+
+.dropzone.dz-drag-hover .dz-message {
+    opacity: 0.5;
+}
+
+.dropzone .dz-message {
+    text-align: center;
+    margin: 0.4em 0;
+}
+
+.dropzone .dz-preview.dz-error .dz-error-message {
+    display: block;
+}
+
+.dz-error {
+    background-color: #D49C90;
+}
+
+.dz-success {
+    background-color: #A1D490;
+}
+
+.dzFileView {
+    display: inline-block;
+    margin-right: 5px;
+    padding: 3 5;
+    /* font-size: 13px; */
+}
+
+.dzFileView .fa {
+    font-size: 18px;
+}

@@ -1,0 +1,14 @@
+parameters:
+    level: 0
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        # need to remove 4th param
+        - '#Class Zend_Oauth_Client constructor invoked with 4 parameters, 1-3 required\.#'
+        # vary on type of params accepted
+        - '#Zend_Oauth_Token_AuthorizedRequest::__construct\(\) does not call parent constructor from Zend_Oauth_Token\.#'
+        # some classes extending Zend_Oauth_Http have this method, Zend_Oauth_Http should probably have an empty one added
+        - '#Call to an undefined method Zend_Oauth_Http::_attemptRequest\(\)\.#'

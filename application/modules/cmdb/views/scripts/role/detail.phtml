@@ -1,0 +1,72 @@
+<script type="text/javascript">
+    function delete_role(role_id) {
+        if (confirm('<? echo $this->translate("areYouSureDelete"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>role/delete/roleId/' + role_id;
+        }
+    }
+
+    function activate_role(role_id) {
+        if (confirm('<? echo $this->translate("areYouSureActivate"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>role/activate/roleId/' + role_id;
+        }
+    }
+</script>
+
+<div class="button_row">
+    <a class="link button" href='<?php echo APPLICATION_URL ?>role/edit/roleId/<?php echo $this->role[Db_Role::ID] ?>'><?php echo $this->translate('edit'); ?></a>
+    <?php if ($this->role[Db_Role::IS_ACTIVE]): ?>
+        <a class="link button cancel" href="javascript:delete_role(<?php echo $this->role[Db_Role::ID] ?>)"><?php echo $this->translate('delete'); ?></a>
+    <?php else: ?>
+        <a class="link button activate" href="javascript:activate_role(<?php echo $this->role[Db_Role::ID] ?>)"><?php echo $this->translate('activate'); ?></a>
+    <?php endif; ?>
+    <a class="link button" href="<?php echo APPLICATION_URL ?>role/index"><?php echo $this->translate('overview'); ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('detailRole'); ?></h1>
+
+<fieldset class="lordVader">
+    <table>
+        <tr>
+            <td><strong><?php echo $this->translate('roleId'); ?></strong></td>
+            <td><?php echo $this->role[Db_Role::ID] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('name'); ?></strong></td>
+            <td><?php echo $this->role[Db_Role::NAME] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('description'); ?></strong></td>
+            <td><?php echo $this->role[Db_Role::DESCRIPTION] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('note'); ?></strong></td>
+            <td><?php echo $this->role[Db_Role::NOTE] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('active'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->role[Db_Role::IS_ACTIVE]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+    </table>
+    <?php if ($this->users && count($this->users) > 0) : ?>
+        <fieldset class="detail_fieldset">
+            <legend><strong><?php echo $this->translate('users'); ?></strong></legend>
+            <ul>
+                <?php foreach ($this->users as $user): ?>
+                    <li><?php echo($user[Db_User::USERNAME]); ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </fieldset>
+    <?php endif; ?>
+    <?php if ($this->permissions && count($this->permissions) > 0) : ?>
+        <fieldset class="detail_fieldset">
+            <legend><strong><?php echo $this->translate('permissions'); ?></strong></legend>
+            <ul>
+                <?php foreach ($this->permissions as $permission): ?>
+                    <li><?php if ($permission[Db_AttributeRole::PERMISSION_WRITE]) echo '<strong>'; ?><?php echo($permission[Db_Attribute::NAME]); ?><?php if ($permission[Db_AttributeRole::PERMISSION_WRITE]) echo '</strong>'; ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </fieldset>
+    <?php endif; ?>
+</fieldset>

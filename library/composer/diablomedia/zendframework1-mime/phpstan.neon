@@ -1,0 +1,13 @@
+parameters:
+    level: 7
+    paths: 
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        # $parts could be null here, so should probably be validated beforehand (or method should return empty array instead of null)
+        # Zend_Mime_Message:254
+        - '#Argument of an invalid type array\|null supplied for foreach, only iterables are supported\.#'
+        -
+            message: '#Parameter \#1 \$headers of function iconv_mime_decode_headers expects string, string\|null given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Mime/Decode.php

@@ -1,0 +1,155 @@
+<style type="text/css">
+    span.placeholder {
+        background-color: #fff111;
+    }
+</style>
+
+<div class="button_row">
+    <a class="<?php echo $class; ?>"
+       href="<?php echo APPLICATION_URL ?>mail/index"><?php echo $this->translate('overview') ?></a> |
+    <a class="link" href="<?php echo APPLICATION_URL ?>mail/edit/mailId/<?php echo $this->mail[Db_Mail::ID]; ?>"><?php echo $this->translate('edit') ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('sendTestMail') ?></h1>
+<form action="#" method="post" onsubmit="sendMail(event)" class="testMailForm">
+    <fieldset class="lordVader">
+
+        <table>
+            <tr>
+                <td><b><?php echo $this->translate('name') ?>:</b></td>
+                <td><?php echo $this->mail[Db_Mail::NAME]; ?></td>
+            </tr>
+            <tr>
+                <td><b><?php echo $this->translate('description') ?>:</b></td>
+                <td> <?php echo $this->mail[Db_Mail::DESCRIPTION]; ?></td>
+            </tr>
+            <tr>
+                <td><b><?php echo $this->translate('note') ?>:</b></td>
+                <td> <?php echo $this->mail[Db_Mail::NOTE]; ?></td>
+            </tr>
+            <tr>
+                <td><b><?php echo $this->translate('recipients'); ?>:</b></td>
+                <td>
+                    <?php foreach ($this->recipients as $recipient): ?>
+                        <i><?php echo $recipient[Db_Notification::ADDRESS]; ?> </i>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+            <tr>
+                <td><b><?php echo $this->translate('subject') ?>:</b></td>
+                <td> <?php echo $this->mail[Db_Mail::SUBJECT]; ?></td>
+            </tr>
+            <tr>
+                <td><b><?php echo $this->translate('body') ?>:</b></td>
+                <td><span id="mailbody"><?php echo $this->mail[Db_Mail::BODY] ?></span></td>
+            </tr>
+            <?php foreach ($this->inputs as $input): ?>
+                <tr>
+                    <td><b><?php echo $input; ?> </b></td>
+                    <td>
+                        <input type="text" class="inputPlaceholder" name="placeholder[<?php echo $input; ?>]" data-name="<?php echo $input; ?>" size="40"></p>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td colspan="2">
+                    <hr style="border-top: 1px solid #8c8b8b">
+                </td>
+            </tr>
+            <tr>
+
+                <td><b><?php echo $this->translate('add_recipient'); ?>:</b></td>
+                <td>
+                    <input type="text" name="Recipients" placeholder="<?php echo $this->translate('add_recipient'); ?>" size="40">
+                </td>
+            </tr>
+            <input type="hidden" name="emailname" value="<?php echo $this->mail[Db_Mail::NAME]; ?>">
+            <!-- hidden inputs, data is required in controller -->
+            <input type="hidden" name="subject" value="<?php echo $this->mail[Db_Mail::SUBJECT]; ?>">
+            <tr>
+                <td>
+                    <input type="submit" name="submit" id="sendButton" value="<?php echo $this->translate('sendTestMail') ?>" />
+                </td>
+                <td>    
+		<span class="returnMessage">
+		    <img id="loading" src="<?php echo APPLICATION_URL . "/images/icon/loading.gif"; ?>" alt="loading" style="display: none;">
+		</span>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+
+</form>
+
+<script type="text/javascript">
+    (function () {
+        /* setup the placeholders to be replaced by spans with class placeholder and the name of the placeholder */
+        var mailbody = $('#mailbody');  // we only want to search the actuall mail body, not the whole page
+
+        var placeholders_temp = mailbody.text().match(/(:[A-z0-9]*:)/g); // find all placeholders
+        /* remove placeholder duplicates */
+        var placeholders = [];
+        $.each(placeholders_temp, function (i, el) {
+            if ($.inArray(el, placeholders) === -1) placeholders.push(el);
+        });
+
+        $.each(placeholders, function (i, element) {
+            var element_tmp = element; // for use in regex to also replace ':' and not just the word
+            var element = element.replace(/:/g, ''); // regex to replace the : in the placeholders with ''
+            mailbody.html(mailbody.html().replace(new RegExp(element_tmp, 'g'), "<span class='placeholder " + element + "'>" + element + "</span>")); //replace every occourrence of the placeholder with a span 
+        });
+
+        /* update value of the placeholders with value from inputs */
+        $('input.inputPlaceholder').bind('change', function (event) {
+            var input = $(this);  // get the input that fired the event
+            var placeholder = input.data('name');  // get the data-attribute data-name (contains the name of the placeholder
+            var match_spans = $('span.' + placeholder); // get all spans matching the input
+
+            if (input.val() === '') {
+                match_spans.text(placeholder);
+            } else {
+                match_spans.text(input.val());
+            }
+        });
+    })();
+
+    /* setting up a loading gif */
+    $.ajaxSetup({
+        beforeSend: function () {
+            $("#loading").show();
+        },
+        complete: function () {
+            $("#loading").hide();
+        }
+    });
+
+    /* API call */
+    function sendMail(event) {
+        var sendBtn = $('#sendButton');
+        var notification = $('.returnMessage');
+
+        /* remove previous ajax return note (in case user sends mail multiple times */
+        $('.note').remove();
+        /* disable submit button to prevent multiple clicks and therefor multiple mail transports ; NOTE: jQuery 1.6.6 and upwards should use element.prop('disabled', boolean)*/
+        sendBtn.attr('disabled', true);
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '<?php echo APPLICATION_URL . "api/notification/notify/" . $this->mail[Db_Mail::NAME] . "/method/json"; ?>',
+            data: $('form.testMailForm').serialize(),
+            success: function () {
+                notification.append("<span style='color: green' class='note'> <b><?php echo $this->translate('mailSuccess'); ?></b> </span>");
+            },
+            error: function (data) {
+                resp = JSON.parse(data.responseText);
+                notification.append("<span style='color: red' class='note'> <b><?php echo $this->translate('unexpectedError'); ?>:</b> " + resp.message + " </span>");
+            },
+            complete: function () {
+                sendBtn.attr('disabled', false);
+                $("#loading").hide();
+            }
+        });
+        event.preventDefault(); //prevent FORM from submitting
+    }
+</script>

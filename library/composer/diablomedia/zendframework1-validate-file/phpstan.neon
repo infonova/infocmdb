@@ -1,0 +1,15 @@
+parameters:
+    level: 4
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    bootstrap: %rootDir%/../../../phpstan-bootstrap.php
+    ignoreErrors:
+        - '#Zend_Validate_File_Crc32::__construct\(\) does not call parent constructor from Zend_Validate_File_Hash\.#'
+        - '#Zend_Validate_File_Sha1::__construct\(\) does not call parent constructor from Zend_Validate_File_Hash\.#'
+        - '#Zend_Validate_File_Md5::__construct\(\) does not call parent constructor from Zend_Validate_File_Hash\.#'
+        - '#Strict comparison using === between .+ and null will always evaluate to false\.#'
+        - '#Strict comparison using === between string\|false and 1 will always evaluate to false\.#'
+        - '#Strict comparison using === between string and false will always evaluate to false\.#'

@@ -1,0 +1,50 @@
+<?php if ($this->pageCount): ?>
+    <div class="paginationControl">
+
+        <!-- Erster Seitenlink -->
+        <?php if (isset($this->first) && isset($this->previous)): ?>
+            <a style="margin-right: 10px;" class="link pageButton"
+               href="<?php echo $this->url(array('page' => $this->first)); ?>">&lt; <?php echo $this->translate('first') ?> </a>
+        <?php else: ?>
+            <span style="margin-right: 10px;" class="disabled">&lt; <?php echo $this->translate('first') ?></span>
+        <?php endif; ?>
+
+        <!-- Vorheriger Seitenlink -->
+        <?php if (isset($this->previous)): ?>
+            <a style="margin-right: 10px;" class="link pageButton"
+               href="<?php echo $this->url(array('page' => $this->previous)); ?>">&lt; <?php echo $this->translate('previous') ?> </a>
+        <?php else: ?>
+            <span style="margin-right: 30px;" class="disabled"> &lt; <?php echo $this->translate('previous') ?></span>
+        <?php endif; ?>
+
+        <!-- Anzahl an Seitenlinks -->
+        <?php
+        foreach ($this->pagesInRange as $page):
+            if ($page != $this->current):
+                ?>
+                <a style="margin-right: 3px;" class="link pageButton"
+                   href="<?php echo $this->url(array('page' => $page)); ?>"><?php echo $page; ?></a>
+            <?php else: ?>
+                <span style="margin-right: 3px;" class="page"><?php echo $page; ?></span>
+            <?php endif; ?>
+        <?php endforeach; ?>
+
+        <!-- Nächster Seitenlink -->
+        <?php if (isset($this->next)): ?>
+            <a style="margin: 0 10px 0 30px;" class="link pageButton"
+               href="<?php echo $this->url(array('page' => $this->next)); ?>"><?php echo $this->translate('next') ?>
+                &gt;</a>
+        <?php else: ?>
+            <span style="margin: 0 10px 0 30px;" class="disabled"><?php echo $this->translate('next') ?> &gt;</span>
+        <?php endif; ?>
+
+        <!-- Letzter Seitenlink -->
+        <?php if (isset($this->last) && isset($this->next)): ?>
+            <a class="link pageButton"
+               href="<?php echo $this->url(array('page' => $this->last)); ?>"><?php echo $this->translate('last') ?>
+                &gt;</a>
+        <?php else: ?>
+            <span class="disabled"><?php echo $this->translate('last') ?>&gt;</span>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

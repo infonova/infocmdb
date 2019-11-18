@@ -1,0 +1,18 @@
+A new comment was saved in the infocmdb. Here are the details:
+==================================================================
+
+<?php echo $this->escape($this->data['title']) . "\n"; ?>
+<?php echo str_pad('-', strlen($this->data['title']), '-') . "\n"; ?>
+
+From    : <?php echo (strlen($this->data['username']) > 0) ? $this->escape($this->data['username']) : "system"; ?>
+E-Mail  : <?php echo (strlen($this->data['mail']) > 0) ? $this->escape($this->data['mail']) : "-"; ?>
+Homepage: <?php echo (strlen($this->data['homepage']) > 0) ? $this->escape($this->data['homepage']) : "-"; ?>
+Date    : <?php echo $this->escape($this->data['date']); ?>
+
+Content:
+<?php echo wordwrap($this->escape($this->data['text']), 66, "\n"); ?>
+
+==================================================================
+Change: http://infocmdb.at/comment/change/<?php echo $this->escape($this->data['id']); ?>
+Delete: http://infocmdb.at/comment/delete/<?php echo $this->escape($this->data['id']); ?>
+==================================================================

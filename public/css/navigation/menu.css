@@ -1,0 +1,485 @@
+/* Nornix TreeMenu stylesheet */
+/* Default theme */
+
+/* container for the menu */
+.menu {
+    width: 15em;
+    padding: 0 0 5px 0.75em;
+    position: relative;
+    overflow: visible;
+}
+
+/* icons for opening/closing all folders */
+.closeTree, .openTree, a.closeTree:hover, a.openTree:hover,
+a.closeTree:link, a.openTree:link, a.closeTree:active, a.openTree:active {
+    display: block;
+    float: right;
+    height: 24px;
+    width: 24px;
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -74px;
+
+    /* background: transparent url(../../images/navigation/nornix-close-icon.png) 3px 3px no-repeat ;*/
+    cursor: pointer;
+    border: none;
+}
+
+.openTree, a.openTree:hover, a.openTree:link, a.openTree:active {
+    right: 8.2ex;
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -493px;
+
+    /*background-image: url(../../images/navigation/nornix-open-icon.png)*/;
+}
+
+/* clean up defaults */
+.menu ul, .menu li, .menu a {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    list-style: none outside none;
+}
+
+.menu li {
+    background-image: none;
+}
+
+.menu ul {
+    margin-left: 8px;
+    position: relative;
+}
+
+/* common <li> settings */
+.menu li {
+    position: relative;
+    border-left: 1px solid #bbbbbb;
+    padding-left: 12px;
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -743px;
+
+    /*background: url(../../images/navigation/nornix-treemenu-line.png) 0 10px no-repeat*/;
+}
+
+/* get the line right on the last item (when no class is set) */
+.menu ul li:last-child {
+    border-left: none;
+    padding-left: 13px; /* compensate the 1px border */
+    /*background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -619px*/;
+
+    background: url(../../images/navigation/nornix-treemenu-corner.png) 0 0 no-repeat;
+}
+
+/* same as above, but with a class set */
+.menu ul li.last {
+    border-left: none;
+    padding-left: 13px; /* compensate the 1px border */
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -619px;
+
+    /*background: url(../../images/navigation/nornix-treemenu-corner.png) 0 0 no-repeat*/;
+}
+
+/* hide content of folders */
+.menu li.folder > ul {
+    display: none;
+}
+
+/* show content of folder, when class "open" is set */
+.menu li.folder.open > ul {
+    display: block;
+}
+
+/* display toggle icon, default to closed state */
+.menu li.folder > span {
+    display: block;
+    position: absolute;
+    left: -4px;
+    top: 4px;
+    height: 15px;
+    width: 15px;
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -560px;
+
+    /*background: url(../../images/navigation/nornix-plus-node.png) 3px 3px no-repeat*/;
+    cursor: pointer;
+}
+
+/* set toggle icon for open state */
+.menu li.open > span {
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -434px;
+
+    /*background-image: url(../../images/navigation/nornix-minus-node.png)*/;
+}
+
+/* position toggle icon on last element */
+.menu li.last > span {
+    left: -7px;
+}
+
+/* display marker on current item */
+.menu a.current span {
+    display: block;
+    position: absolute;
+    left: 22px;
+    top: 3px;
+    height: 13px;
+    width: 14px;
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -680px;
+
+    /*background: url(../../images/navigation/nornix-treemenu-current.png)*/;
+}
+
+/* set default values for <a> elements */
+.menu li a, .menu a.root, .menu li a.current {
+    display: block;
+    padding-left: 24px;
+    min-height: 18px;
+    border: none;
+    color: #000000;
+    text-decoration: underline;
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -142px;
+
+    /*background: url(../../images/navigation/nornix-doc-node-icon.png) no-repeat*/;
+    /*background-position: 2px 2px*/;
+}
+
+/* if the class is "closed", then it's a folder, too */
+.menu li.closed > a {
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -208px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+.menu li.closed1 > a {
+    background: url(../../images/navigation/users.gif) no-repeat top left;
+    /*background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+.menu li.closed1.open > a {
+    background: url(../../images/navigation/users.gif) no-repeat top left;
+    /*background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+.menu li.closed2 > a {
+    background: url(../../images/navigation/database.png) no-repeat top left;
+    /*background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+.menu li.closed2.open > a {
+    background: url(../../images/navigation/database.png) no-repeat top left;
+    /*background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+.menu li.closed3 > a {
+    background: url(../../images/navigation/gear.gif) no-repeat top left;
+    /*background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+.menu li.closed3.open > a {
+    background: url(../../images/navigation/gear.gif) no-repeat top left;
+    /*background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+.menu li.closed4 > a {
+    background: url(../../images/navigation/cable.png) no-repeat top left;
+    /*background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+.menu li.closed4.open > a {
+    background: url(../../images/navigation/cable.png) no-repeat top left;
+    /*background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+.menu li.closed5 > a {
+    background: url(../../images/navigation/settings.png) no-repeat top left;
+    /*background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+.menu li.closed5.open > a {
+    background: url(../../images/navigation/settings.png) no-repeat top left;
+    /*background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-closed-icon.png) ;
+    background-position: 0 2px;
+*/
+}
+
+/* menu folder in open state */
+.menu li.open > a {
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -273px;
+
+    /*background-image: url(../../images/navigation/nornix-folder-open-icon.png) ;
+    background-position: 0 2px ;
+*/
+}
+
+/* change properties for <a> elements with the href attribute set
+-- the current page will not have a href value */
+.menu a:link, .menu a:visited, .menu a:active, .menu a:hover {
+    color: #000000;
+    text-decoration: none;
+}
+
+/* change icon and some settings on the root element of the menu */
+body .menu a.root {
+    min-height: 24px;
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left;
+    background-position: 0 -363px;
+
+    /*background: url(../../images/navigation/nornix-home-icon.png) 0 0 no-repeat*/;
+    width: 9ex;
+    margin-bottom: -4px;
+}
+
+/* :hover styling on <a> elements */
+.menu a:hover, .menu li.folder a:hover, .menu ul li.open > a:hover {
+    text-decoration: underline;
+}
+
+.menu a:active, .menu a.root:active {
+    background-color: #e8e8e8;
+}
+
+.menu a:focus, .menu a.root:focus {
+    background-color: #e8e8e8;
+}
+
+.spriteNavUser {
+    background: url(../../images/sprite/navigation_user.png) no-repeat top left !important;
+}
+
+/* new navigation */
+
+.rootSprite {
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left !important;
+}
+
+/* customized settings */
+#fancytree .favourites > span.spriteNavUser {
+    background-position: 0 0 !important;
+}
+
+#fancytree .attribute > span.spriteNavUser {
+    background-position: 0 -264px !important;
+}
+
+#fancytree .ciType > span.spriteNavUser {
+    background-position: 0 -528px !important;
+}
+
+#fancytree .config > span.spriteNavUser {
+    background-position: 0 -726px !important;
+}
+
+#fancytree .createCi > span.spriteNavUser {
+    background-position: 0 -462px !important;
+}
+
+#fancytree .fileImport > span.spriteNavUser {
+    background-position: 0 -132px !important;
+}
+
+#fancytree .history > span.spriteNavUser {
+    background-position: 0 -660px !important;
+}
+
+#fancytree .mailImport > span.spriteNavUser {
+    background-position: 0 -858px !important;
+}
+
+#fancytree .map > span.spriteNavUser {
+    background-position: 0 -1320px !important;
+}
+
+#fancytree .project > span.spriteNavUser {
+    background-position: 0 -924px !important;
+}
+
+#fancytree .relationType > span.spriteNavUser {
+    background-position: 0 -990px !important;
+}
+
+#fancytree .role > span.spriteNavUser {
+    background-position: 0 -1056px !important;
+}
+
+#fancytree .search > span.spriteNavUser {
+    background-position: 0 -1122px !important;
+}
+
+#fancytree .searchList > span.spriteNavUser {
+    background-position: 0 -792px !important;
+}
+
+#fancytree .theme > span.spriteNavUser {
+    background-position: 0 -1188px !important;
+}
+
+#fancytree .user > span.spriteNavUser {
+    background-position: 0 -396px !important;
+}
+
+#fancytree .attributeGroup > span.spriteNavUser {
+    background-position: 0 -330px !important;
+}
+
+#fancytree .translation > span.spriteNavUser {
+    background-position: 0 -1518px !important;
+}
+
+#fancytree .menu_konfiguration > span.spriteNavUser {
+    background-position: 0 -594px !important;
+}
+
+#fancytree .cql_interface > span.spriteNavUser {
+    background-position: 0 -66px !important;
+}
+
+#fancytree .notification > span.spriteNavUser {
+    background-position: 0 -1386px !important;
+}
+
+#fancytree .logfiles > span.spriteNavUser {
+    background-position: 0 -198px !important;
+}
+
+#fancytree .visualization > span.spriteNavUser {
+    background-position: 0 -1254px !important;
+}
+
+#fancytree .reporting > span.spriteNavUser {
+    background-position: 0 -1452px !important;
+}
+
+#fancytree .validation > span.spriteNavUser {
+    background-position: 0 -1584px !important;
+}
+
+#fancytree .workflows > span.spriteNavUser {
+    background-position: 0 -1650px !important;
+}
+
+#fancytree .attribute_type > span.spriteNavUser {
+    background-position: 0 -1722px !important;
+}
+
+#fancytree .announcement > span.spriteNavUser {
+    background-position: 0 -1804px !important;
+}
+
+#fancytree .root > span.rootSprite {
+    background-position: 0 -363px !important;
+}
+
+.fancytree-container {
+    border: none !important;
+}
+
+#fancytree .closed1 > span.spriteNavUser {
+    background: url(../../images/navigation/users.gif) no-repeat top left !important;
+}
+
+#fancytree .closed2 > span.spriteNavUser {
+    background: url(../../images/navigation/database.png) no-repeat top left !important;
+}
+
+#fancytree .closed3 > span.spriteNavUser {
+    background: url(../../images/navigation/gear.gif) no-repeat top left !important;
+}
+
+#fancytree .closed4 > span.spriteNavUser {
+    background: url(../../images/navigation/cable.png) no-repeat top left !important;
+}
+
+#fancytree .closed5 > span.spriteNavUser {
+    background: url(../../images/navigation/settings.png) no-repeat top left !important;
+}
+
+.fancytree-ext-filter-dimm span.fancytree-node span.fancytree-title > a {
+    color: silver !important;
+}
+
+#fancytree .spriteCi {
+    background: url(../../images/sprite/navigation_nornix.png) no-repeat top left !important;
+    background-position: 0 -208px !important;
+}
+
+#fancytree .fancytree-expanded > span.spriteCi {
+    background-position: 0 -273px !important;
+}
+
+.hide {
+    display: none !important;
+}
+
+.fancytree-title > a {
+    color: black !important;
+}
+
+#fancytree .root {
+    margin-left: 13px;
+}
+
+#fancytree .menu-element {
+    font-size: 0.9em;
+}
+
+.fancytree-focused {
+    color: black;
+}
+
+#menutree-controls {
+    width: 200px;
+    height: 24px;
+    position: absolute;
+    top: 5px;
+    left: -35px;
+}
+
+#fancytree {
+    margin-left: -10px;
+}

@@ -1,0 +1,333 @@
+<script type="text/javascript" src="<?php echo APPLICATION_URL ?>js/attributeCombobox.js"></script>
+<script type="text/javascript" src="<?php echo APPLICATION_URL ?>js/multiselect/plugins/tmpl/jquery.tmpl.1.1.1.js"></script>
+<script type="text/javascript" src="<?php echo APPLICATION_URL ?>/js/multiselect/ui.multiselect.js"></script>
+<script type="text/javascript" src="<?php echo APPLICATION_URL ?>/js/multiselect/locale/ui-multiselect-<?php echo ($this->language === 'de' ? 'de' : 'en'); ?>.js"></script>
+
+<link type="text/css" href="<?php echo APPLICATION_URL ?>/js/multiselect/css/ui.multiselect.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    DROPZONE_LANG_STRINGS = {
+        dictDefaultMessage: "<?php echo $this->translate('dictDefaultMessage')?>",
+        dictFallbackMessage: "<?php echo $this->translate('dictFallbackMessage')?>",
+        dictFallbackText: "<?php echo $this->translate('dictFallbackText')?>",
+        dictInvalidFileType: "<?php echo $this->translate('dictInvalidFileType')?>",
+        dictFileTooBig: "<?php echo $this->translate('dictFileTooBig')?>",
+        dictResponseError: "<?php echo $this->translate('dictResponseError')?>",
+        dictCancelUpload: "<?php echo $this->translate('dictCancelUpload')?>",
+        dictCancelUploadConfirmation: "<?php echo $this->translate('dictCancelUploadConfirmation')?>",
+        dictRemoveFile: "<?php echo $this->translate('dictRemoveFile')?>",
+        dictMaxFilesExceeded: "<?php echo $this->translate('dictMaxFilesExceeded')?>",
+        dictDeleteUploadConfirmation: "<?php echo $this->translate('dictDeleteUploadConfirmation')?>",
+        dictTooManyFiles: "<?php echo $this->translate('dictTooManyFiles')?>",
+        dictOverrideFile: "<?php echo $this->translate('dictOverrideFile') ?>"
+    };
+
+    function reset_create() {
+        if (confirm('<?php echo $this->translate("areYouSureabort") ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL . 'ci/index/typeid/' . $this->currentCiTypeId . '/sessionID/' . $this->sessionID; ?>';
+
+        }
+    }
+
+    function updateCiForm(createForm) {
+        createForm.action = "<?php echo APPLICATION_URL . 'ci/create/formFinished/0/isRefresh/1/showCiTypeElem/' . $this->showCiTypeElem; ?>";
+        createForm.submit();
+    }
+
+    function submitCiForm() {
+        document.forms['CreateForm'].action = "<?php echo APPLICATION_URL . 'ci/create/'?>";
+        document.forms['CreateForm'].submit();
+    }
+
+    function removeAttributeWindow(aId, isUpdate, sessionID) {
+
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        var url = "<?php echo APPLICATION_URL ?>ci/removeattribute/genId/" + aId + "/sessionID/" + sessionID + "";
+        xmlhttp.open("GET", url, false);
+        xmlhttp.send(null);
+
+        var merge = "<?php echo APPLICATION_URL . 'ci/create/formFinished/0/isRefresh/0/showCiTypeElem/' . $this->showCiTypeElem . '/sessionID/'?>" + sessionID;
+
+        document.forms['CreateForm'].action = merge;
+        document.forms['CreateForm'].submit();
+    }
+
+    function completeCiTypeAttribute(element, attributeID, ciID) {
+        $.ajax({
+            url: "<?php echo APPLICATION_URL?>ci/autocompleteattributeid/attributeId/" + attributeID + "/ciId/" + ciID,
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                var select = $('#' + element + '');
+                $('#' + element + '').append($('<option selected="selected"></option>').val(data.id).html(data.value));
+            }
+        });
+    }
+
+    // ui-dialog when clicking on plus-icon for adding attribute
+    function loadAttributeForm(attributeGroupId) {
+        $.ajax({
+            url: "<?php echo APPLICATION_URL?>attribute/addattributeform/sessionID/<?php
+                echo $this->sessionID ?>/attributegroupid/" + attributeGroupId,
+            cache: false
+        })
+            .done(function (result) {
+                showInfocmdbDialog("&nbsp;", result, {height: 600, width: 540});  // title, content, settings
+                $('.attributeSelect').combobox({
+                    source: "<?php echo APPLICATION_URL ?>attribute/autocompleteactive/attributeGroupId/" + attributeGroupId,
+                })
+            })
+
+            .fail(function (result) {
+                console.log("loadAttributeForm ajax error", result);
+            });
+    }
+
+    function completeMultiselectAttribute(element, attributeID, selected_ciids) {
+        var element = $('#' + element);
+        var multiselectType = element.data('ismultiselect');
+        var itemIncreaseable = false;
+        if (multiselectType == 2) {
+            itemIncreaseable = true;
+        }
+        element.multiselect({
+            itemIncreasable: itemIncreaseable,
+            remoteUrl: '<?php echo APPLICATION_URL ?>ci/autocompletemultiselect?attributeId=' + attributeID + '&values=' + selected_ciids
+
+        });
+    }
+
+
+    $(document).ready(function () {
+
+        $("#tabs").tabs({active: 0});
+
+        // disable submit button do prevent double submit
+        $('#CreateForm').submit(function () {
+            $('input[type=submit]', this).prop('disabled', true);
+        });
+
+        $('.unique-check').keyup(function () {
+            $('.uniquemessage').remove();
+            var element = $(this);
+            var attribute_id = $(this).attr('id');
+            var value = encodeURIComponent($.trim($(this).val()));
+            var baseUrl = "<?php echo APPLICATION_URL ?>";
+            var requestUrl = baseUrl
+                + "ci/checkuniqueinput"
+                + "/attributeId/" + attribute_id
+                + "/value/" + value
+            ;
+
+            $.get(requestUrl,
+                function (data) {
+                    if (data.cnt != 0) {
+                        $('<span class="uniquemessage"><?php echo $this->translate('checknotunique'); ?></span>').insertAfter(element);
+                    }
+                }, "json");
+        });
+
+
+        <?php if($this->jsScripts && ($this->jsScripts['autocomplete'] || $this->jsScripts['multiselect'])) : ?>
+
+        <?php if($this->jsScripts['autocomplete']) : ?>
+        <?php foreach($this->jsScripts['autocomplete'] as $formKey => $attributeId) : ?>
+
+        <?php if($this->formData && $this->formData[$formKey]) : ?>
+        <?php $val = (is_array($this->formData[$formKey])) ? $this->formData[$formKey][0] : $this->formData[$formKey]; ?>
+
+        completeCiTypeAttribute('<?php echo $formKey?>', '<?php echo $attributeId?>', '<?php echo $val ?>');
+
+        <?php endif; ?>
+
+        $("#<?php echo $formKey?>").combobox({
+            applicationUrl: '<?php echo APPLICATION_URL ?>',
+            attributeId: <?php echo $attributeId ?>,
+            ciId: null,
+            lang: {
+                'inputClear': "<?php echo $this->translate("inputClear") ?>",
+                'inputShowAllOptions': "<?php echo $this->translate("inputShowAllOptions") ?>",
+            }
+        });
+
+        <?php endforeach; ?>
+        <?php endif; ?>
+
+
+        <?php if($this->jsScripts['multiselect']) : ?>
+        <?php foreach($this->jsScripts['multiselect'] as $formKey => $attributeId) : ?>
+
+        <?php if($this->formData && $this->formData[$formKey]) : ?>
+        <?php $val = (is_array($this->formData[$formKey])) ? implode(",", $this->formData[$formKey]) : $this->formData[$formKey]; ?>
+
+        completeMultiselectAttribute('<?php echo $formKey?>', '<?php echo $attributeId?>', '<?php echo $val;?>');
+
+        <?php else:  ?>
+        completeMultiselectAttribute('<?php echo $formKey?>', '<?php echo $attributeId?>', '');
+        <?php endif; ?>
+
+        <?php endforeach; ?>
+        <?php endif; ?>
+
+        <?php endif; ?>
+
+    }); // $(document).ready - end
+</script>
+
+
+<h1 class="pageName">
+    <?php echo ($this->ciCreateButtonDescription) ? $this->ciCreateButtonDescription : $this->translate('ciCreate') ?>
+</h1>
+
+<?php if (!$this->isCiAttachAllowed && $this->currentCiTypeId) : ?>
+    <div class="error"><strong><?php echo $this->translate('ciCreateCiAttachNotAllowed') ?></strong></div>
+<?php endif; ?>
+
+
+<form
+    <?php foreach ($this->form->getAttribs() as $key => $value) {
+        echo $key . '="' . $this->escape($value) . '" ';
+    } ?>
+>
+    <?php
+    if ($this->form->ciId) {
+        echo $this->form->ciId->setDecorators(array('ViewHelper'));
+    }
+    ?>
+
+    <fieldset id="ci_form" class="create_form">
+        <table id="ci_basic_data">
+            <tr>
+                <td>
+                    <table>
+
+                        <?php if ($this->showCiTypeElem) : ?>
+                    <tr>
+                    <?php else : ?>
+                        <tr style="display: none;">
+                            <?php endif; ?>
+                            <?php echo $this->form->parentCiType; ?>
+                        </tr>
+
+                        <!-- CI-Type Childs -->
+                        <?php
+                        $child       = 1;
+                        $childString = 'child_' . $child;
+
+                        $childExists = true;
+                        while ($childExists) {
+                            if ($this->form->$childString) {
+                                if ($this->showCiTypeElem) {
+                                    echo '<tr>';
+                                } else {
+                                    echo '<tr style="display: none;">';
+                                }
+                                echo $this->form->$childString . '</tr>';
+                                $child++;
+                                $childString = 'child_' . $child;
+                            } else {
+                                $childExists = false;
+                            }
+                        }
+                        ?>
+
+                        <!-- Project -->
+                        <tr>
+                            <?php echo $this->form->project; ?>
+                        </tr>
+
+                        <!-- CIID -->
+                        <tr>
+                            <td><?php echo $this->translate('ciId') ?>:</td>
+                            <td><strong><?php if ($this->ciId) {
+                                        echo $this->ciId;
+                                    } else {
+                                        echo 'new';
+                                    } ?></strong></td>
+                        </tr>
+
+                        <!-- CI Type Name -->
+                        <tr>
+                            <td><?php echo $this->translate('ciType') ?>:</td>
+                            <td><strong><?php if ($this->ciTypeDescription) {
+                                        echo $this->ciTypeDescription;
+                                    } else {
+                                        echo 'new';
+                                    } ?></strong></td>
+                        </tr>
+
+                    </table>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td nowrap="nowrap" style="float: right; text-align: center;">
+                                <div class="pillar_icon">
+                                    <img class="image" src="<?php echo $this->icon ?>" />
+
+                                    <?php
+                                    $this->form->ciicon->removeDecorator('Label');
+                                    echo $this->form->ciicon;
+                                    echo $this->form->ciicon_delete;
+                                    ?>
+
+                                    <a href="#" onclick="$('#ciicon').trigger('click');">
+                                        <?php echo $this->translate('uploadIcon') ?>
+                                    </a>
+
+                                    <p id="ciicon_delete_link" style="<?php echo (strpos($this->icon, 'ci.png') === false) ? '' : 'display: none' ?>">
+                                        <a href="#" onclick="deleteCiIcon($('#ciicon').get(0));" class="link"><?php echo $this->translate('deleteIcon') ?></a>
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+
+        <?php if ($this->tabs) : ?>
+        <div id="tabs">
+            <ul>
+                <?php foreach ($this->attributeList as $key => $value) : ?>
+                    <li>
+                        <a href="#fragment-<?php echo $value['name'] ?>">
+                            <span class="att_desc"><?php echo $value['description'] ?></span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <fieldset class="create_form steps">
+                <?php endif; ?>
+
+                <!-- Attribute Groups and Attributes -->
+                <?php echo $this->partial('ci/_formAttributeGroup.phtml', array('attributeList' => $this->attributeList, 'form' => $this->form, 'tabs' => $this->tabs)); ?>
+
+
+                <?php if ($this->tabs) : ?>
+            </fieldset>
+        </div>
+    <?php endif; ?>
+
+
+        <input type="hidden" name="sessionID" value="<?php echo $this->sessionID; ?>" />
+        <div class="submit_table">
+            <?php
+            if ($this->isCiAttachAllowed && $this->currentCiTypeId) {
+                $this->form->create->removeDecorator('Label');
+                $this->form->cancle->removeDecorator('Label');
+                echo $this->form->create->setDecorators(array('ViewHelper'));
+                echo $this->form->cancle->setDecorators(array('ViewHelper'));
+            }
+            ?>
+        </div>
+    </fieldset>
+</form>
+<br />

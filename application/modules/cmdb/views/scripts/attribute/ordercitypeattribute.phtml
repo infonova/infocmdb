@@ -1,0 +1,82 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/table/jquery.tablednd_0_5.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // Initialise the first table (as before)
+        $("#table-1").tableDnD();
+
+        // Make a nice striped effect on the table
+        $("#table-2 tr:even").addClass('alt');
+
+        // Initialise the second table specifying a dragClass and an onDrop function that will display an alert
+        $("#table-2").tableDnD({
+            onDragClass: "myDragClass",
+            onDrop: function (table, row) {
+                var rows = table.tBodies[0].rows;
+                var debugStr = "";
+                for (var i = 0; i < rows.length; i++) {
+                    debugStr += rows[i].id + ";";
+                }
+                $("#orderstring").val(debugStr);
+            }
+
+        });
+    });
+
+</script>
+
+<STYLE type="text/css">
+    .myDragClass {
+        border-width: 1;
+        background-color: grey;
+    }
+</STYLE>
+
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button overview";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>attribute/index"><?php echo $this->translate('back') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('attributes') ?></h1>
+
+<div class="break"></div>
+
+<table id="table-2" class="list" cellpadding="0" cellspacing="0" width="100%">
+    <tr class="headline">
+        <th><?php echo $this->translate("sortingId"); ?></th>
+        <th><?php echo $this->translate("attributeId"); ?></th>
+        <th><?php echo $this->translate("attributeName"); ?></th>
+    </tr>
+    <?php
+    $cnt = 1;
+    if ($this->attributes && is_array($this->attributes) && count($this->attributes) > 0) {
+        foreach ($this->attributes as $attribute) {
+            ?>
+            <tr id="<?php echo $cnt ?>">
+                <td><?php echo $cnt ?></td>
+                <td><?php echo $attribute[Db_Attribute::ID] ?></td>
+                <td><?php echo $attribute[Db_Attribute::NAME] ?></td>
+            </tr>
+            <?php
+            $cnt++;
+        }
+    }
+    ?>
+</table>
+
+<br>
+<form method="POST" action="<?php echo APPLICATION_URL ?>attribute/ordercitypeattribute/attributeId/<?php echo $this->attributeId ?>">
+    <div id="debugDiv">
+        <input type="hidden" id="orderstring" name="orderstring" value="test">
+    </div>
+    <input class="standard_button" type="submit" value="<?php echo $this->translate("save"); ?>">
+</form>

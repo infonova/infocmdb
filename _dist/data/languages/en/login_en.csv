@@ -1,0 +1,80 @@
+#Language file for Login Page (en)
+productDescription;		"Configuration Management"
+
+#Form elements
+username;				"Username"
+password;				"Password"
+login;					"Login"
+password_input;			"password_input_en"
+username_input;			"username_input_en"
+
+#Exception messages
+exceptionTitle;			"Login failed!"
+exceptionNotFound;		" couldn't be found!"
+exceptionInvalid;		" is invalid! Please try again"
+exceptionDefault;		"Unexpected Exception!"
+
+exceptionSolution;		"Please call Bearingpoint Customer Support"
+
+#Form validation
+isEmpty;				"Field must not be empty!"
+
+usernameTooShort;		"Given Username is too short!"
+usernameTooLong;		"Given Username is too long!"
+
+usernameRegexNotMatch;	"Username is invalid (regex)"
+
+passwordTooShort;		"Password is too short"
+passwordTooLong;		"Passwort is too long"
+
+loginPasswordRecoveryUser;				"Verify Username"
+loginPasswordRecoverySubmit;			"Send"
+loginPasswordRecoveryNewPassword;               "New Password"
+loginPasswordRecoveryNewPasswordConfirm;        "Confirm new Password"
+loginPasswordRecoveryTFA;                       "2 Factor Code"
+
+loginPasswordRecoveryForgotPassword;	"Password forgotten?"
+loginPasswordRecoveryBackToLogin;		"Back to Login Page"
+
+loginPasswordRecoveryTitel;				"Password forgotten?"
+loginPasswordRecoveryMessage;			"Please insert Username in the field and we will send you a password reset link!"
+
+loginPasswordRecoveryErrorTitel;		"An error has been thrown!"
+loginPasswordRecoveryInvalidUsername;	"Invalid username!"
+loginPasswordRecoveryNoAddressFound;	"Couldn't find e-mail-address to given user!"
+loginPasswordRecoveryConnectionException;"Unexpected Exception. Please contact customer support!"
+
+loginPasswordRecoverySuccessTitel;		"Passwort-Recovery Mail has been sent to you!"
+loginPasswordRecoverySuccessMessage;	"Please check your Mailbox."
+loginPasswordRecoveryLdapUser;			"Single sign-on is activated for your account. Please contact your administrator."
+
+loginPasswordRecoverySuccessRecoveredTitel;		"Your new password has been set!"
+loginPasswordRecoverySuccessRecoveredMessage;	"Please log in with your new credentials."
+
+loginPasswordRecoveryHashInvalid;				"The used link is invalid."
+loginPasswordRecoveryUnexpectedException;		"Unexpected Exception! Please contact Support!"
+
+loginPasswordRecoveryRequestAlreadyOpen;           "You already created a password recovery request! Please handle that request!"
+loginPasswordRecoveryRequestTimeout;    "You recently had a password reset request! Please wait"
+loginPasswordRecoveryResetFailed;       "Setting your password failed. Check that you entered your data correctly!"
+
+loginPasswordRecoveryAccessDenied;      "Access denied! Are you sure you entered the correct URL?"
+loginPasswordRecoveryClientTimeout;     "There are too many requests coming from your client. Please wait"
+
+loginPasswordRecoveryGlobalTimeout;     "Password Reset is disabled for an hour. Please try again later or contact your admin"
+
+
+# user login
+2FAenterCode;                   "Please enter the Code currently displayed in the Google Authenticator App"
+2FAErrorCodeInvalid;            "ERROR the code is invalid! Please try again"
+2FACodeInvalidTooOften;         "Code entered incorrectly too often! Please try again"
+2FACode;                        "2-Factor Code"
+wait;                           "Please wait!"
+
+# password change action (reset with hash)
+resetPasswordHelpText;          "Enter your username and set a new password"
+
+serverError;                    "There was a server error while sending login information to the server!"
+
+passwordExpired;                "Your password has expired. <a href='%s'>Click here to request a new one.</a>"
+passwordAboutToExpire;          "Your password will expire in %s days. <a href='%s'>Click here to change your password.</a>"

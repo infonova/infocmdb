@@ -1,0 +1,26 @@
+<?php
+$case      = $this->case;
+$cssClass  = "fa-check bg-color-grey";
+$iconTitle = $this->translate('workflowSolveStatusNoError');
+
+if ($case[Db_WorkflowCase::SOLVE_STATUS] == 1) {
+    $cssClass  = "fa-exclamation-triangle bg-color-red";
+    $iconTitle = $this->translate('workflowSolveStatusUnsolvedError');
+} elseif ($case[Db_WorkflowCase::SOLVE_STATUS] == 2) {
+    $cssClass  = "fa-check bg-color-green";
+    $iconTitle = $this->translate('workflowSolveStatusSolvedError');
+}
+?>
+
+<i class="fa fa-light fa-rounded <?php echo $cssClass ?>" title="<?php echo $iconTitle ?>"></i>
+
+<?php if ($case[Db_WorkflowCase::SOLVE_STATUS] != 2) : ?>
+    <a
+            href="<?php echo APPLICATION_URL ?>/workflow/solvecase/id/<?php echo $case[Db_WorkflowCase::ID] ?>"
+            title="<?php echo $this->translate('workflowMarkAsSolvedError'); ?>"
+    >
+        <i class="fa fa-light fa-rounded fa-ticket bg-color-blue"></i>
+    </a>
+<?php endif; ?>
+
+<?php echo $case[Db_WorkflowCase::STATUS] ?>

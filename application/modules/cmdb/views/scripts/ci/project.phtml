@@ -1,0 +1,53 @@
+<h1 class="pageName"><?php echo $this->translate('ciProjects');
+    echo "<a href=" . APPLICATION_URL . '/ci/detail/ciid/' . $this->ciId . "><strong> " . $this->ciId . "</strong></a>"; ?></h1>
+
+<form name="<?php echo $this->escape($this->form->getName()) ?>" action="<?php echo $this->escape($this->form->getAction()) ?>"
+      method="<?php echo $this->escape($this->form->getMethod()) ?>">
+    <fieldset class="create_form">
+        <table style="padding-right:0px;">
+            <tr>
+                <th width="25px"><span title="<?php echo $this->translate('addProjectCheck') ?>"> x </span></th>
+                <th>
+                    <span title="<?php echo $this->translate('projectName') ?>"><?php echo $this->translate('project') ?></span>
+                </th>
+                <th width="25px"><span title="<?php echo $this->translate('addProjectCheck') ?>"> x </span></th>
+                <th>
+                    <span title="<?php echo $this->translate('projectName') ?>"><?php echo $this->translate('project') ?></span>
+                </th>
+                <th width="25px"><span title="<?php echo $this->translate('addProjectCheck') ?>"> x </span></th>
+                <th>
+                    <span title="<?php echo $this->translate('projectName') ?>"><?php echo $this->translate('project') ?></span>
+                </th>
+            </tr>
+            <?php
+            $count = 0;
+            foreach ($this->projects as $project) {
+                if (!$count) {
+                    ?>
+                    <tr>
+                <?php } ?>
+                <td width="20px" style="padding-right:0px;"><?php echo $this->form->{$project[Db_Project::ID]} ?></td>
+                <?php if ($this->isAdmin) : ?>
+                    <td>
+                        <span title="<?php echo $project[Db_Project::DESCRIPTION] ?>"><?php echo $project[Db_Project::NAME] ?></span>
+                    </td>
+                <?php else : ?>
+                    <td>
+                        <span title="<?php echo $project[Db_Project::NOTE] ?>"><?php echo $project[Db_Project::DESCRIPTION] ?></span>
+                    </td>
+                <?php endif; ?>
+                <?php
+                $count++;
+                if ($count == 3) {
+                    ?>
+                    </tr>
+                    <?php
+                    $count = 0;
+                }
+            }
+            ?>
+        </table>
+        <?php //echo $this->form->csrf_token ?>
+        <?php echo $this->form->project; ?>
+    </fieldset>
+</form>

@@ -1,0 +1,31 @@
+<phpunit
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    backupGlobals="true"
+    stderr="true"
+    colors="true">
+    <php>
+        <const name="TESTS_ZEND_HTTP_CLIENT_BASEURI" value="false" />
+        <const name="TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY" value="false" />
+        <const name="TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER" value="" />
+        <const name="TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS" value="" />
+        <const name="TESTS_ZEND_HTTP_USERAGENT_WURFL_LIB_DIR" value="false" />
+        <const name="TESTS_ZEND_HTTP_USERAGENT_WURFL_CONFIG_FILE" value="false" />
+        <const name="TESTS_ZEND_HTTP_USERAGENT_DEVICEATLAS_LIB_DIR" value="false" />
+        <const name="TESTS_ZEND_HTTP_USERAGENT_DEVICEATLAS_DATA_FILE" value="false" />
+        <const name="TESTS_ZEND_HTTP_USERAGENT_TERAWURFL_LIB_DIR" value="false" />
+        <const name="TESTS_ZEND_HTTP_ZF1_FULL_SUITE" value="false" />
+    </php>
+    <testsuites>
+        <testsuite name="default">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>

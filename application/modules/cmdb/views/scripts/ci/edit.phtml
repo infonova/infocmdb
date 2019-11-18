@@ -1,0 +1,300 @@
+<script type="text/javascript" src="<?php echo APPLICATION_URL ?>js/attributeCombobox.js"></script>
+<script type="text/javascript" src="<?php echo APPLICATION_URL ?>js/multiselect/plugins/tmpl/jquery.tmpl.1.1.1.js"></script>
+<script type="text/javascript" src="<?php echo APPLICATION_URL ?>/js/multiselect/ui.multiselect.js"></script>
+<script type="text/javascript" src="<?php echo APPLICATION_URL ?>/js/multiselect/locale/ui-multiselect-<?php echo ($this->language === 'de' ? 'de' : 'en'); ?>.js"></script>
+<link type="text/css" href="<?php echo APPLICATION_URL ?>/js/multiselect/css/ui.multiselect.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    DROPZONE_LANG_STRINGS = {
+        dictDefaultMessage: "<?php echo $this->translate('dictDefaultMessage')?>",
+        dictFallbackMessage: "<?php echo $this->translate('dictFallbackMessage')?>",
+        dictFallbackText: "<?php echo $this->translate('dictFallbackText')?>",
+        dictInvalidFileType: "<?php echo $this->translate('dictInvalidFileType')?>",
+        dictFileTooBig: "<?php echo $this->translate('dictFileTooBig')?>",
+        dictResponseError: "<?php echo $this->translate('dictResponseError')?>",
+        dictCancelUpload: "<?php echo $this->translate('dictCancelUpload')?>",
+        dictCancelUploadConfirmation: "<?php echo $this->translate('dictCancelUploadConfirmation')?>",
+        dictRemoveFile: "<?php echo $this->translate('dictRemoveFile')?>",
+        dictMaxFilesExceeded: "<?php echo $this->translate('dictMaxFilesExceeded')?>",
+        dictDeleteUploadConfirmation: "<?php echo $this->translate('dictDeleteUploadConfirmation')?>",
+        dictTooManyFiles: "<?php echo $this->translate('dictTooManyFiles')?>",
+        dictOverrideFile: "<?php echo $this->translate('dictOverrideFile') ?>"
+    };
+
+    LOCK_LANG_STRINGS = {
+        expired: "<?php echo $this->translate('lockExpired'); ?>",
+        error: "<?php echo $this->translate('lockError'); ?>",
+    };
+    <?php
+    $locking_config = Zend_Registry::get('lockingConfig');
+    ?>
+
+    function removeAttributeWindow(aId, isUpdate, sessionID, ciid) {
+
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        var url = "<?php echo APPLICATION_URL ?>ci/removeattribute/genId/" + aId + "/mark/1/sessionID/" + sessionID;
+        xmlhttp.open("GET", url, false);
+        xmlhttp.send(null);
+
+        if (ciid) {
+            var merge = "<?php echo APPLICATION_URL . 'ci/edit/ciid/'?>" + ciid + "/isRefresh/1/sessionID/" + sessionID;
+        } else {
+            var merge = "<?php echo APPLICATION_URL . 'ci/validate/isRefresh/1/sessionID/'?>" + sessionID;
+        }
+        document.forms['CreateForm'].action = merge;
+        document.forms['CreateForm'].submit();
+    }
+
+    function completeCiTypeAttribute(element, attributeID, ciid) {
+        $.ajax({
+            url: "<?php echo APPLICATION_URL?>ci/autocompleteattributeid/attributeId/" + attributeID + "/ciId/" + ciid,
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                var select = $('#' + element + '');
+                $('#' + element + '').append($('<option selected="selected"></option>').val(data.id).html(data.value));
+            }
+        });
+    }
+
+    // ui-dialog when clicking on plus-icon for adding attribute
+    function loadAttributeForm(attributeGroupId) {
+        $.ajax({
+            url: "<?php echo APPLICATION_URL?>attribute/addattributeform/sessionID/<?php
+                echo $this->sessionID ?>/ciid/<?php echo $this->ciId ?>/attributegroupid/" + attributeGroupId,
+            cache: false
+        })
+            .done(function (result) {
+                showInfocmdbDialog("&nbsp;", result, {height: 600, width: 540});
+                $('.attributeSelect').combobox({
+                    source: "<?php echo APPLICATION_URL ?>attribute/autocompleteactive/attributeGroupId/" + attributeGroupId,
+                })
+            })
+
+            .fail(function (result) {
+                console.log("loadAttributeForm ajax error", result);
+            });
+    }
+
+    function completeMultiselectAttribute(element, attributeID, selected_ciids) {
+        var element = $('#' + element);
+        var multiselectType = element.data('ismultiselect');
+        var itemIncreaseable = false;
+        if (multiselectType == 2) {
+            itemIncreaseable = true;
+        }
+        element.multiselect({
+            itemIncreasable: itemIncreaseable,
+            remoteUrl: '<?php echo APPLICATION_URL ?>ci/autocompletemultiselect?ciId=<?php echo $this->ciId ?>&attributeId=' + attributeID + '&values=' + selected_ciids
+
+        });
+    }
+
+    prevent_resubmit = false; // flag to prevent multiple submit of form data
+    $(document).ready(function () {
+        refreshLock('<?php echo $this->lockId ?>', '<?php echo $locking_config->getValue('lock.refresh.rate', 60, Util_Config::INT) * 1000; ?>', LOCK_LANG_STRINGS);
+        // tab selection
+        <?php if(empty($this->tabIndex)) : ?>
+        var selected_tab = 0;
+        <?php else : ?>
+        var selected_tab = $("#tabs li a[href='#<?php echo $this->tabIndex; ?>']").parent().index()
+        <?php endif; ?>
+        $("#tabs").tabs({active: selected_tab});
+
+
+        $('#CreateForm input[type=submit]').click(function () {
+            // if cancel is clicked do not refresh token
+            if ($(this).hasClass('cancel_button')) {
+                return true;
+            }
+
+            // do not submit if sumbit already in progress
+            if (prevent_resubmit) {
+                return false;
+            }
+
+            // prevent multiple submit
+            prevent_resubmit = true;
+
+            // refresh lock before sending data to server to check if token is valid
+            // and to prevent expiring during request
+            var lock_id = '<?php echo $this->lockId ?>';
+            var refresh_rate = '<?php echo $locking_config->getValue('lock.refresh.rate', 60, Util_Config::INT) * 1000; ?>';
+            var refreshSuccess = refreshLock(lock_id, refresh_rate, LOCK_LANG_STRINGS);
+            invalidLocks[lock_id] = lock_id;
+
+            // continue submit if lock refresh worked
+            return refreshSuccess;
+        });
+
+        // update tab-index when changing tab
+        $("ul.ui-tabs-nav li a").click(function () {
+            var tab_index = $(this).attr("href").substr(1, $(this).attr("href").length);
+            $("#tab_index").text(tab_index);
+            var form_action = $("#CreateForm").attr("action");
+            form_action = form_action.substr(0, form_action.indexOf("tab_index"));
+            $("#CreateForm").attr("action", form_action + "tab_index/" + tab_index);
+        });
+
+        $('.unique-check').keyup(function () {
+            $('.uniquemessage').remove();
+            var element = $(this);
+            var attribute_id = $(this).attr('id');
+            var value = encodeURIComponent($.trim($(this).val()));
+            var baseUrl = "<?php echo APPLICATION_URL ?>";
+            var requestUrl = baseUrl
+                + "ci/checkuniqueinput"
+                + "/attributeId/" + attribute_id
+                + "/ciid/<?php echo $this->ciId ?>"
+                + "/value/" + value
+            ;
+
+            $.get(requestUrl,
+                function (data) {
+                    if (data.cnt != 0) {
+                        $('<span class="uniquemessage"><?php echo $this->translate('checknotunique'); ?></span>').insertAfter(element);
+                    }
+                }, "json");
+        });
+
+        <?php if($this->jsScripts && ($this->jsScripts['autocomplete'] || $this->jsScripts['multiselect'])) : ?>
+
+        <?php if($this->jsScripts['autocomplete']) : ?>
+        <?php foreach($this->jsScripts['autocomplete'] as $formKey => $attributeId) : ?>
+
+        <?php if($this->formData && $this->formData[$formKey]) : ?>
+        <?php $val = (is_array($this->formData[$formKey])) ? $this->formData[$formKey][0] : $this->formData[$formKey]; ?>
+
+        completeCiTypeAttribute('<?php echo $formKey?>', '<?php echo $attributeId?>', '<?php echo $val;?>');
+
+        <?php endif; ?>
+
+        $("#<?php echo $formKey?>").combobox({
+            applicationUrl: '<?php echo APPLICATION_URL ?>',
+            attributeId: <?php echo $attributeId ?>,
+            ciId: <?php echo $this->ciId;?>,
+            lang: {
+                'inputClear': "<?php echo $this->translate("inputClear") ?>",
+                'inputShowAllOptions': "<?php echo $this->translate("inputShowAllOptions") ?>",
+            }
+        });
+
+        <?php endforeach; ?>
+        <?php endif; ?>
+
+
+        <?php if($this->jsScripts['multiselect']) : ?>
+        <?php foreach($this->jsScripts['multiselect'] as $formKey => $attributeId) : ?>
+
+        <?php if($this->formData && $this->formData[$formKey]) : ?>
+        <?php $val = (is_array($this->formData[$formKey])) ? implode(",", $this->formData[$formKey]) : $this->formData[$formKey]; ?>
+
+        completeMultiselectAttribute('<?php echo $formKey?>', '<?php echo $attributeId?>', '<?php echo $val;?>');
+
+        <?php else:  ?>
+        completeMultiselectAttribute('<?php echo $formKey?>', '<?php echo $attributeId?>', '');
+        <?php endif; ?>
+
+        <?php endforeach; ?>
+        <?php endif; ?>
+
+        <?php endif; ?>
+
+    }); // $(document).ready - end
+</script>
+
+<span id="tab_index" style="display:none"><?php echo $this->tabIndex ?></span>
+
+<div id="breadcrumbs_row">
+
+    <div class="breadcrumb">
+        <?php echo $this->ciBreadcrumb($this->breadcrumbs, $this->breadcrumbDepth); ?>
+    </div>
+
+    <div class="button_row" style="margin-right:10px;">
+
+        <?php if ($config->ci->detail->buttons->print) { ?>
+            <a class="<?php echo $class; ?>" onclick="window.open(this.href,this.target,'width=600,height=850,scrollbars=1'); return false;" target="_blank" href="<?php echo APPLICATION_URL . 'ci/print/ciid/' . $this->ciId; ?>/"><img src="<?php echo APPLICATION_URL ?>images/icon/print.png" style="vertical-align:top;">&nbsp;<?php echo $this->translate('print') ?>
+            </a>&nbsp;&nbsp;
+        <?php }
+        if ($config->ci->detail->buttons->edit) { ?>
+            <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL . 'ci/edit/ciid/' . $this->ciId; ?>/"><img src="<?php echo APPLICATION_URL ?>images/icon/edit.png" style="vertical-align:top;">&nbsp;<?php echo $this->translate('edit') ?>
+            </a>&nbsp;&nbsp;
+        <?php }
+        if ($config->ci->detail->buttons->delete) { ?>
+            <a class="<?php echo $class; ?>" href="javascript:delete_ci_entry(<?php echo $this->ciId; ?>)"><img src="<?php echo APPLICATION_URL ?>images/icon/delete.gif" height="13" width="13" style="vertical-align:middle;">&nbsp;<b><?php echo $this->translate('delete') ?></b></a>
+        <?php } ?>
+
+        <?php
+        $this->form->cancle_top->removeDecorator('Label');
+        $this->form->create_top->removeDecorator('Label');
+        echo $this->form->create_top->setDecorators(array('ViewHelper'));
+        echo $this->form->cancle_top->setDecorators(array('ViewHelper'));
+        ?>
+    </div>
+
+</div>
+
+<form
+    <?php foreach ($this->form->getAttribs() as $key => $value) {
+        echo $key . '="' . $this->escape($value) . '" ';
+    } ?>
+>
+
+    <?php
+    if ($this->form->ciId) {
+        echo $this->form->ciId->setDecorators(array('ViewHelper'));
+    }
+    ?>
+
+    <fieldset>
+
+        <div id="ci_form" class="update_form ciType<?php echo ucfirst($this->ciType[Db_CiType::NAME]) ?>" data-ciid="<?php echo $this->ciid; ?>" data-citype="<?php echo $this->ciType[Db_CiType::NAME] ?>">
+
+            <?php if ($this->tabs) : ?>
+            <div id="tabs">
+                <ul>
+                    <?php foreach ($this->attributeList as $key => $value) : ?>
+                        <li>
+                            <a href="#fragment-<?php echo $value['name'] ?>">
+                                <span class="att_desc"><?php echo $value['description'] ?></span>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+
+                <fieldset class="create_form steps">
+                    <?php endif; ?>
+
+                    <!-- Attribute Groups and Attributes -->
+                    <?php echo $this->partial('ci/_formAttributeGroup.phtml', array('attributeList' => $this->attributeList, 'form' => $this->form, 'tabs' => $this->tabs)); ?>
+
+
+                    <?php if ($this->tabs) : ?>
+                </fieldset>
+            </div>
+        <?php endif; ?>
+
+        </div>
+
+        <!-- Pillar Right -->
+        <?php echo $this->render('ci/_pillar.phtml'); ?>
+
+        <input type="hidden" name="sessionID" value="<?php echo $this->sessionID; ?>" />
+        <div class="submit_table">
+            <?php
+            $this->form->create->removeDecorator('Label');
+            $this->form->cancle->removeDecorator('Label');
+            echo $this->form->create->setDecorators(array('ViewHelper'));
+            echo $this->form->cancle->setDecorators(array('ViewHelper'));
+            ?>
+        </div>
+
+    </fieldset>
+</form>

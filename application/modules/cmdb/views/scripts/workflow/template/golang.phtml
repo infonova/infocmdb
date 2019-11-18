@@ -1,0 +1,50 @@
+package main
+
+//////////////////////// DOCHEAD ////////////////////////
+// DO NOT EDIT - This part will be set automatically
+//////////////////////// /DOCHEAD ////////////////////////
+
+import "os"
+import "encoding/json"
+import "log"
+import "fmt"
+
+type WorkflowParams struct {
+	Apikey              string `json:"apikey"`
+	TriggerType         string `json:"triggerType"`
+	WorkflowItemId      int    `json:"workflow_item_id"`
+	WorkflowInstanceId  int    `json:"workflow_instance_id"`
+	CiId                int    `json:"ciid"`
+	CiAttributeId       int    `json:"ciAttributeId"`
+	CiRelationId        int    `json:"ciRelationId"`
+	CiProjectId         int    `json:"ciProjectId"`
+	FileImportHistoryId int    `json:"fileImportHistoryId"`
+}
+
+func main() {
+	params, parseErr := parseParams()
+	if parseErr != nil {
+		log.Fatal(parseErr)
+	}
+
+	err := Run(params)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func parseParams() (WorkflowParams, error) {
+	jsonParam := os.Args[1]
+	var params WorkflowParams
+	jsonErr := json.Unmarshal([]byte(jsonParam), &params)
+	if jsonErr != nil {
+		return params, jsonErr
+	}
+
+	return params, nil
+}
+
+func Run(p WorkflowParams) error {
+	fmt.Printf("%+v", p)
+	return nil
+}

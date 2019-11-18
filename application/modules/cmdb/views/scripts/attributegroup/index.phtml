@@ -1,0 +1,138 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+<script type="text/javascript">
+    function updatePage(page) {
+        <?php
+        $url = $this->url(array('orderBy' => $this->orderBy, 'direction' => $this->direction, 'filter' => $this->filter, 'page' => null));
+        if (!strstr($url, 'index'))
+            $url .= '/index';
+        ?>
+        var filterDefault = 'Filter';
+        if ($("#search").val() == filterDefault)
+            $("#search").val('');
+        document.forms['searchForm'].action = "<?php echo $url; ?>/page/" + page;
+        document.forms['searchForm'].submit();
+
+        return false;
+    }
+
+
+    function delete_attributegroup(attributegroup_id) {
+        if (confirm('<?php echo $this->translate('areYouSureDelete') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>attributegroup/delete/attributeGroupId/' + attributegroup_id;
+        }
+    }
+
+    function activate_attributegroup(attributegroup_id) {
+        if (confirm('<?php echo $this->translate("areYouSureActivate"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>attributegroup/activate/attributeGroupId/' + attributegroup_id;
+        }
+    }
+
+</script>
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?> create" href="<?php echo APPLICATION_URL ?>attributegroup/create"><?php echo $this->translate('attributegroupCreate') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('attributegroups') ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+              action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+              method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterButton;
+            ?>
+        </form>
+    </div>
+</div>
+
+<div class="clearBoth"></div>
+<div class="break"></div>
+
+<table class="list" cellpadding="0" cellspacing="0" width="100%">
+    <tr class="headline">
+        <th>
+            <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+            <a href="<?php echo APPLICATION_URL ?>attributegroup/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_AttributeGroup::NAME ?>/direction/<?php echo(($this->orderBy == Db_AttributeGroup::NAME) ? $urlDirection : "DESC"); ?>">
+                <?php echo $this->translate('name'); ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo APPLICATION_URL ?>attributegroup/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_AttributeGroup::DESCRIPTION ?>/direction/<?php echo(($this->orderBy == Db_AttributeGroup::DESCRIPTION) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('description'); ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo APPLICATION_URL ?>attributegroup/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_AttributeGroup::PARENT_ATTRIBUTE_GROUP_ID ?>/direction/<?php echo(($this->orderBy == Db_AttributeGroup::PARENT_ATTRIBUTE_GROUP_ID) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('attributegroupParent'); ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo APPLICATION_URL ?>attributegroup/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_AttributeGroup::ORDER_NUMBER ?>/direction/<?php echo(($this->orderBy == Db_AttributeGroup::ORDER_NUMBER) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('sorting'); ?>
+            </a>
+        </th>
+        <th>
+            <a href="<?php echo APPLICATION_URL ?>attributegroup/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_AttributeGroup::IS_ACTIVE ?>/direction/<?php echo(($this->orderBy == Db_AttributeGroup::IS_ACTIVE) ? $urlDirection : "ASC"); ?>">
+                <?php echo $this->translate('valid'); ?>
+            </a>
+        </th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php
+    if (count($this->paginator)):
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <?php
+            if (!$item[Db_AttributeGroup::IS_ACTIVE]) {
+                ?>
+                <tr  class="inactive" >
+                <?php
+            } else {
+                ?>
+                <tr>
+                <?php
+            }
+            ?>
+            <td>
+                <a class="link" href="<?php echo APPLICATION_URL ?>attributegroup/detail/attributeGroupId/<?php echo $item[Db_AttributeGroup::ID]; ?>"><?php echo $item[Db_AttributeGroup::NAME]; ?></a>
+            </td>
+            <td><?php echo $item[Db_AttributeGroup::DESCRIPTION]; ?></td>
+            <td><?php echo $item['parent']; ?></td>
+            <td><?php echo $item[Db_AttributeGroup::ORDER_NUMBER]; ?></td>
+            <td><?php if ($item[Db_AttributeGroup::IS_ACTIVE]) {
+                    echo $this->translate('active');
+                } else {
+                    echo $this->translate('inactive');
+                } ?></td>
+            <td>
+                <div class="rfloater">
+                    <a class="edit_list buttonLink" href='<?php echo APPLICATION_URL ?>attributegroup/edit/attributeGroupId/<?php echo $item[Db_AttributeGroup::ID]; ?>' title="<?php echo $this->translate('edit') ?>">&nbsp;</a>
+                    <?php if ($item[Db_AttributeGroup::IS_ACTIVE]) { ?>
+                        <a class="delete_list" href='javascript:delete_attributegroup(<?php echo $item[Db_AttributeGroup::ID]; ?>);' title="<?php echo $this->translate('delete') ?>"></a>
+                    <?php } else { ?>
+                    <a href="#" onclick="javascript:activate_attributegroup(<?php echo $item[Db_AttributeGroup::ID]; ?>);">
+                        <img class="delete_list" src='<?php echo APPLICATION_URL . "images/icon/activate.png" ?>' title="<?php echo $this->translate('activate') ?>">
+                        </a><?php } ?>
+                </div>
+            </td>
+            </tr>
+        <?php
+        endforeach;
+    endif;
+    ?>
+</table>
+<?php echo $this->paginator; ?>

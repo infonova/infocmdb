@@ -1,0 +1,28 @@
+<phpunit
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    backupGlobals="true"
+    stderr="true"
+    colors="true">
+    <php>
+        <const name="TESTS_ZEND_DB_ADAPTER_PDO_MYSQL_ENABLED" value="false" />
+        <const name="TESTS_ZEND_DB_ADAPTER_MYSQLI_ENABLED" value="false" />
+        <const name="TESTS_ZEND_DB_ADAPTER_MYSQL_HOSTNAME" value="127.0.0.1" />
+        <const name="TESTS_ZEND_DB_ADAPTER_MYSQL_USERNAME" value="" />
+        <const name="TESTS_ZEND_DB_ADAPTER_MYSQL_PASSWORD" value="" />
+        <const name="TESTS_ZEND_DB_ADAPTER_MYSQL_DATABASE" value="test" />
+        <const name="TESTS_ZEND_DB_ADAPTER_MYSQL_PORT" value="3306" />
+    </php>
+    <testsuites>
+        <testsuite name="default">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>

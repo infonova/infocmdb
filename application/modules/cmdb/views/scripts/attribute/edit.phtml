@@ -1,0 +1,493 @@
+<script language="JavaScript" type="text/javascript"
+        src="<?php echo APPLICATION_URL; ?>js/tooltip/wz_tooltip.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/flexBox.js"></script>
+<script type="text/javascript" src="<?php echo APPLICATION_URL ?>js/combobox.js"></script>
+<script src="/js/ace/src-min-noconflict/ace.js" type="text/javascript"
+        charset="utf-8"></script>
+
+<script type="text/javascript">
+    function next() {
+        var selected = $("#tabs").tabs("option", "active");
+        var next = getNextEnabledTab(selected);
+        $("#tabs").tabs({active: next});
+        hideUselessButtons();
+    }
+
+    function getNextEnabledTab(index) {
+        index += 1;
+        var disabled = $("#tabs").tabs("option", "disabled");
+        for (var i = 0; i < disabled.length; i++) {
+            if (disabled[i] == index)
+                index = getNextEnabledTab(index);
+        }
+
+        return index;
+    }
+
+    function getLastEnabledTab(index) {
+        index -= 1;
+        var disabled = $("#tabs").tabs("option", "disabled");
+        for (var i = 0; i < disabled.length; i++) {
+            if (disabled[i] == index)
+                index = getLastEnabledTab(index);
+        }
+
+        return index;
+    }
+
+    function back() {
+        var selected = $("#tabs").tabs("option", "active");
+        var last = getLastEnabledTab(selected);
+        $("#tabs").tabs({active: last});
+        hideUselessButtons();
+    }
+
+    function validateForm() {
+        document.forms['create'].action = "<?php echo APPLICATION_URL?>attribute/wizard-validate/";
+        submit();
+    }
+
+    function reset() {
+
+        window.location.href = '<?php echo APPLICATION_URL . 'attribute/index'; ?>';
+
+    }
+
+    function submit() {
+        $("input[id^=citypeId]").prop('disabled', false);
+        $("input[id^=roleId]").prop('disabled', false);
+        $('#create').submit();
+    }
+
+    function addOption() {
+        var option = $("input#option").get(0).value;
+        var order = $("input#ordernumber").get(0).value;
+        $.post("<?php echo $this->url(array('action' => 'addoption')); ?>/option/" + option + "/order/" + order,
+            function (response) {
+                $("div#attributes").html(response);
+            },
+            "html"
+        );
+    }
+
+    $(function () {
+
+        $("#tabs").tabs({active: <?php echo $this->tab; ?> , activate: hideUselessButtons});
+    })
+
+    function getContent(id) {
+        $.post("<?php echo $this->url(array('action' => 'assigncitypeattribute')); ?>/id/" + id,
+            function (response) {
+                $("tr#attributesRow").remove();
+                $("div#attributes").html(response);
+            },
+            "html"
+        );
+    }
+
+
+    function hideUselessButtons() {
+        if ($("#tabs").tabs('option', 'active') == 0) {
+            $('#back').hide();
+            $('#next').show();
+        } else if ($("#tabs").tabs('option', 'active') == 4) {
+            $('#next').hide();
+            $('#back').show();
+        } else {
+            $('#next').show();
+            $('#back').show();
+        }
+    }
+
+
+    function getAttributeTypeHint(id) {
+        if (!id) {
+            $("span#atHint").html('<img class="elementHint" onmouseover="Tip(\' \')" onmouseout="UnTip()" src="<?php echo APPLICATION_URL; ?>/images/icon/info.png" alt="info">');
+            return false;
+        }
+
+        $.post("<?php echo $this->url(array('action' => 'attributetypehint')); ?>/attributeTypeId/" + id,
+            function (response) {
+                if (response && response.length > 0) {
+                    $("span#atHint").html(response);
+                } else {
+                    $("span#atHint").html('');
+                }
+            },
+            "html"
+        );
+    }
+
+    function getOptionWizard() {
+        $.post("<?php echo $this->url(array('action' => 'optionwizard')); ?>",
+            function (response) {
+                $("#tabs").tabs({disabled: []});
+                $("div#fragment-3").html(response);
+            },
+            "html"
+        );
+    }
+
+    $(window).resize(function () {
+        insertDynamicHeader('rightsTab');
+    });
+
+    $(document).ready(function () {
+
+        insertDynamicHeader('rightsTab');
+        $('.combobox').combobox();
+
+        $(document).keypress(function (e) {
+            if (e.which == 13 && $(e.target).attr('id') == 'searchStringAttributes') {
+                searchAttributesFunction();
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        hideUselessButtons();
+        getAttributeTypeHint($("select#attributeType").get(0).value);
+
+        <?php if (!$this->individualform) { ?>
+        getOptionWizard();
+        <?php } ?>
+
+        //editor for script
+        var scriptEditor = initAceEditor('#script-script_text', 'perl');
+
+        //editor for sql
+        var queryEditor = initAceEditor('#query-query', 'mysql');
+
+        //editor for sql persistent
+        var queryPersistentEditor = initAceEditor('#queryPersist-query', 'mysql');
+
+        $("select#attributeType").change(function () {
+            getAttributeTypeHint($("select#attributeType").get(0).value);
+            var type = $("select#attributeType").get(0).value;
+            if (type == 4 || type == 5 || type == 6) {
+                getOptionWizard();
+            } else {
+                $.post("<?php echo $this->url(array('action' => 'individualwizardtab')); ?>/attributeTypeId/" + $(this).get(0).value,
+                    function (response) {
+                        if (response && response.length > 0) {
+                            $("#tabs").tabs({disabled: []});
+                            $("div#fragment-3").html(response);
+                        } else {
+                            $("#tabs").tabs({disabled: [2]});
+                            $("div#fragment-3").html('');
+                        }
+
+                        $("select#citype-ciType").change(function () {
+                            if ($(this).get(0).value != 0) {
+                                getContent($(this).get(0).value);
+                            } else {
+                                $("div#attributes").html('');
+                            }
+                        });
+
+                        setup_tinymce("<?php echo $this->translate()->getLocale(); ?>");
+                        $('.combobox').combobox();
+                        addValidationOptions();
+
+                    },
+                    "html"
+                );
+            }
+
+        });
+
+        $("select#citype-ciType").change(function () {
+            if ($(this).get(0).value != 0) {
+                getContent($(this).get(0).value);
+            } else {
+                $("div#attributes").html('');
+            }
+        });
+
+    });
+
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button overview";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>"
+       href="<?php echo APPLICATION_URL ?>attribute/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('editAttribute') ?></h1>
+<?php
+
+// Error Messages
+$errors = $this->form->getMessages();
+// get messages from individual form if available
+if (null !== $this->individualform) {
+    $indiMessages = $this->individualform->getMessages();
+    if (!empty($indiMessages)) {
+        $errors = array_merge($errors, current($indiMessages));
+    }
+}
+
+if ($errors) {
+?>
+<div class="error_message">
+    <?php
+
+    echo $outputText = "<p>" . $this->translate('formInvalid') . "</p><ul>";
+
+    foreach ($errors as $key => $value) {
+        $messages = array_values($value);
+        echo "<li>" . $this->translate($key) . ": " . $messages[0] .
+            "</li>";
+    }
+    echo "</ul>";
+    }
+
+    ?>
+</div>
+<?php $step = 1; ?>
+
+<div id="tabs">
+    <ul>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span
+                        class="att_desc"><?php echo $this->translate('general') ?></span></a></li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span
+                        class="att_desc"><?php echo $this->translate('optional') ?></span></a></li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span
+                        class="att_desc" id="individual"><?php echo $this->translate('individual') ?></span></a></li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span
+                        class="att_desc"><?php echo $this->translate('ciTypesAdd') ?></span></a></li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span
+                        class="att_desc"><?php echo $this->translate('permissionsAdd') ?></span></a></li>
+    </ul>
+
+    <fieldset class="create_form steps">
+        <form widgetid="create" id="create" enctype="multipart/form-data"
+              method="post" dojoattachpoint="containerNode"
+              dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
+
+            <div id="fragment-1">
+                <fieldset class="lordVader">
+                    <table>
+                        <tbody>
+                        <?php
+                        echo $this->form->name;
+                        echo $this->form->description;
+                        echo $this->form->note;
+                        ?>
+                        <tr>
+                            <td><?php echo $this->form->attributeType->setDecorators(array('Label')); ?></td>
+                            <td style="float: left;"><?php echo $this->form->attributeType->setDecorators(array('ViewHelper', 'Errors')); ?>
+                                <span id="atHint" class="atHint">
+								<?php echo $this->form->attributeType->setDecorators(array(new Form_Decorator_MyTooltip())); ?>
+							</span></td>
+                        </tr>
+                        <?php
+                        echo $this->form->displayType;
+                        echo $this->form->sorting;
+                        ?>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+
+            <div id="fragment-2">
+                <fieldset class="lordVader">
+                    <table>
+                        <tbody>
+                        <?php
+                        echo $this->form->hint;
+                        echo $this->form->column;
+                        echo $this->form->highlightAttribute;
+                        echo $this->form->xml;
+
+                        ?>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+
+            <div id="fragment-3">
+                <fieldset class="lordVader">
+                    <table>
+                        <tbody>
+                        <?php
+                        if ($this->individualform) {
+                            foreach ($this->individualform->getElements() as $field) {
+                                echo $field;
+                            }
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                    <div id="attributes">
+                        <?php if ($this->options) echo '<span>' . $this->translate('optionsSaved') . ':</span>'; ?>
+                    </div>
+                    <?php
+                    if ($this->individualform) :
+                        $formDesc = $this->individualform->getDescription();
+                        if (!empty($formDesc)) : ?>
+                            <div class="slidebox">
+                                <h3 class="slidebox-header"><?php echo $this->translate('formHelp') ?></h3>
+                                <div class="slidebox-content">
+                                    <?php echo $formDesc ?>
+                                </div>
+                            </div>
+                        <?php endif;
+                    endif; ?>
+                </fieldset>
+            </div>
+
+            <div id="fragment-4">
+                <fieldset class="lordVader">
+                    <div id="permissionFilter">
+                        <?php echo $this->partial('templates/_permission_filter.phtml',
+                            array('dropdown_options_permission' => $this->filterOptionsPermission,
+                                  'default_option_permission'   => $this->defaultOptionPermission)) ?>
+                    </div>
+
+                    <!-- dynamic header section -->
+                    <table>
+                        <div id="xmoHeaderRow">
+                            <div id="dynamicXmOciTypeHeader">
+                                <div class="radio_group ">
+                                    <div class="radio_label"><a class="all citype first" href="#">
+                                            <span title="<?php echo $this->translate("off"); ?>">			x </span></a>
+                                    </div>
+                                    <div class="radio_label"><a class="all citype second" href="#">
+                                            <span title="<?php echo $this->translate("mandatory"); ?>">	m </span></a>
+                                    </div>
+                                    <div class="radio_label"><a class="all citype third" href="#">
+                                            <span title="<?php echo $this->translate("optional"); ?>">		o </span></a>
+                                    </div>
+                                </div>
+                                <span title="<?php echo $this->translate("ciType"); ?>"><?php echo $this->translate("ciType"); ?></span>
+                            </div>
+                        </div>
+                    </table><!-- end of dynamic header section -->
+
+                    <div class="flexBox">
+                        <div class="parent parentPermissions">
+                            <?php foreach ($this->citypes as $citype): ?>
+                                <?php $formfield = 'citypeId_' . $citype[Db_CiType::ID]; ?>
+                                <div class="child">
+                                    <?php echo $this->form->$formfield ?>
+                                    <span class="attributeTitle"
+                                          title="<?php echo $citype[Db_CiType::DESCRIPTION] ?>"><?php echo $citype[Db_CiType::NAME] ?></span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div id="fragment-5">
+                <fieldset class="lordVader">
+                    <table style="padding-right: 0px; width: 100%;">
+                        <tr>
+                            <th style="width: 33%;">
+                                <div class="radio_group">
+                                    <div class="radio_label">
+                                        <a class="all role first" href="#"><span
+                                                    title="<?php echo $this->translate("off"); ?>">x</span></a>
+                                    </div>
+                                    <div class="radio_label">
+                                        <a class="all role second" href="#"><span
+                                                    title="<?php echo $this->translate("read"); ?>">r</span></a>
+                                    </div>
+                                    <div class="radio_label">
+                                        <a class="all role third" href="#"><span
+                                                    title="<?php echo $this->translate("read_write"); ?>">r/w</span></a>
+                                    </div>
+                                </div>
+                                <span title="<?php echo $this->translate("roles"); ?>"><?php echo $this->translate("roles"); ?></span>
+                            </th>
+                            <th style="width: 33%;">
+                                <div class="radio_group">
+                                    <div class="radio_label">
+                                        <a class="all role first" href="#"><span
+                                                    title="<?php echo $this->translate("off"); ?>">x</span></a>
+                                    </div>
+                                    <div class="radio_label">
+                                        <a class="all role second" href="#"><span
+                                                    title="<?php echo $this->translate("read"); ?>">r</span></a>
+                                    </div>
+                                    <div class="radio_label">
+                                        <a class="all role third" href="#"><span
+                                                    title="<?php echo $this->translate("read_write"); ?>">r/w</span></a>
+                                    </div>
+                                </div>
+                                <span title="<?php echo $this->translate("roles"); ?>"><?php echo $this->translate("roles"); ?></span>
+                            </th>
+                            <th style="width: 33%;">
+                                <div class="radio_group">
+                                    <div class="radio_label">
+                                        <a class="all role first" href="#"><span
+                                                    title="<?php echo $this->translate("off"); ?>">x</span></a>
+                                    </div>
+                                    <div class="radio_label">
+                                        <a class="all role second" href="#"><span
+                                                    title="<?php echo $this->translate("read"); ?>">r</span></a>
+                                    </div>
+                                    <div class="radio_label">
+                                        <a class="all role third" href="#"><span
+                                                    title="<?php echo $this->translate("read_write"); ?>">r/w</span></a>
+                                    </div>
+                                </div>
+                                <span title="<?php echo $this->translate("roles"); ?>"><?php echo $this->translate("roles"); ?></span>
+                            </th>
+                        </tr>
+                        <?php
+                        $count = 0;
+                        foreach ($this->roles as $role) {
+                            if ($count == 0) {
+                                echo "<tr>";
+                            }
+                            $formfield = 'roleId_' . $role[Db_Role::ID];
+                            ?>
+                            <td style="padding-right: 0px;">
+                                <?php echo $this->form->$formfield ?>
+                                <span style="width: 76%;"
+                                      title="<?php echo $role[Db_Role::DESCRIPTION] ?>"><?php echo $role[Db_Role::NAME] ?></span>
+                            </td>
+                            <?php
+                            $count++;
+                            if ($count == 3) {
+                                echo "</tr>";
+                                $count = 0;
+                            }
+                        }
+                        ?>
+                    </table>
+                </fieldset>
+            </div>
+
+        </form>
+        <div class="buttonCon">
+            <input type="button" class="standard_button" id="back"
+                   value="<?php echo $this->translate('back') ?>"
+                   onClick="javascript:back()"> <input type="submit"
+                                                       class="cancel_button"
+                                                       value="<?php echo $this->translate('abort') ?>"
+                                                       onClick="javascript:reset()"> <input type="submit"
+                                                                                            class="standard_button"
+                                                                                            value="<?php echo $this->translate('save') ?>"
+                                                                                            onClick="javacript:submit()">
+            <input type="button"
+                   class="standard_button" id="next"
+                   value="<?php echo $this->translate('next') ?>"
+                   onClick="javacript:next()">
+        </div>
+    </fieldset>
+</div>

@@ -1,0 +1,57 @@
+<?php
+$version = $this->cmdbVersion['build number'];
+$request = Zend_Controller_Front::getInstance()->getRequest();
+$config  = new Zend_Config_Ini(APPLICATION_PATH . '/configs/individualization.ini', APPLICATION_ENV);
+?>
+<?php
+// this file is used for all pages without additional content. zb: login-page
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="locale" content="<?php echo $this->localeLang ?>" />
+    <?php echo $this->headTitle(); ?>
+
+    <script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/jquery/jquery-1.12.4.min.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/jquery/jquery-ui-1.11.4.min.js?v=<?php echo $version ?>"></script>
+
+    <link type="text/css" href="<?php echo APPLICATION_URL; ?>css/global.css" rel="stylesheet">
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>js/jquery/css/jquery-ui.min.css?v=<?php echo $version ?>" type="text/css" media="screen" />
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>js/jquery/css/jquery-ui-infocmdb.min.css?v=<?php echo $version ?>" type="text/css" media="screen" />
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>css/navigation/menu.css" type="text/css" media="screen" />
+    <!--[if lte IE 6]>
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>css/navigation/ie.css" type="text/css" media="screen" />
+    <![endif]-->
+    <!--[if lte IE 6]>
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>css/navigation/ie-menu.css" type="text/css" media="screen" />
+    <![endif]-->
+    <!--[if IE 7]>
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>css/navigation/ie7-menu.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link rel="Shortcut Icon" type="image/x-icon" href="<?php echo APPLICATION_URL; ?>/images/favicon.ico" />
+    <link rel="Icon" type="image/x-icon" href="<?php echo APPLICATION_URL; ?>/images/favicon.ico" />
+
+    <script type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/treemenu/nornix-treemenu.js"></script>
+
+    <?php echo $this->partial('_customization.phtml', array(
+        'version'                 => $version,
+        'individualizationConfig' => $config,
+    )); ?>
+</head>
+<body
+        class="
+            popup-layout
+            <?php echo $request->getControllerName(); ?>-controller
+            <?php echo $request->getActionName(); ?>-action
+        "
+>
+<?php
+// fetch 'content' key using layout helper:
+echo $this->layout()->content;
+
+?>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<script type="text/javascript">
+    function delete_attributegroup(attributegroup_id) {
+        if (confirm('<?php echo $this->translate('areYouSureDelete') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>attributegroup/delete/attributeGroupId/' + attributegroup_id;
+        }
+    }
+
+    function activate_attributegroup(attributegroup_id) {
+        if (confirm('<?php echo $this->translate('areYouSureActivate') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>attributegroup/activate/attributeGroupId/' + attributegroup_id;
+        }
+    }
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+$pre   = '';
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+} else {
+    $pre .= " | ";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href='<?php echo APPLICATION_URL ?>attributegroup/edit/attributeGroupId/<?php echo $this->attributeGroup[Db_AttributeGroup::ID] ?>'><?php echo $this->translate('edit'); ?></a>
+    <?php if ($this->attributeGroup[Db_AttributeGroup::IS_ACTIVE]): ?>
+        <?php echo $pre; ?>
+        <a class="<?php echo $class; ?>" href="javascript:delete_attributegroup(<?php echo $this->attributeGroup[Db_AttributeGroup::ID] ?>)"><?php echo $this->translate('delete'); ?></a>
+    <?php else: ?>
+        <?php echo $pre; ?>
+        <a class="<?php echo $class; ?>" href="javascript:activate_attributegroup(<?php echo $this->attributeGroup[Db_AttributeGroup::ID] ?>)"><?php echo $this->translate('activate'); ?></a>
+    <?php endif; ?>
+    <?php echo $pre; ?>
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>attributegroup/index"><?php echo $this->translate('overview'); ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('attributegroupDetail'); ?></h1>
+
+<fieldset class="lordVader">
+    <table>
+        <tr>
+            <td><strong><?php echo $this->translate('attributeGroupId'); ?></strong></td>
+            <td><?php echo $this->attributeGroup[Db_AttributeGroup::ID] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('name'); ?></strong></td>
+            <td><?php echo $this->attributeGroup[Db_AttributeGroup::NAME] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('description'); ?></strong></td>
+            <td><?php echo $this->attributeGroup[Db_AttributeGroup::DESCRIPTION] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('note'); ?></strong></td>
+            <td><?php echo $this->attributeGroup[Db_AttributeGroup::NOTE] ?></td>
+        </tr>
+        <?php if ($this->parent): ?>
+            <tr>
+                <td><strong><?php echo $this->translate('parent'); ?></strong></td>
+                <td>
+                    <a class="link" href="<?php echo APPLICATION_URL ?>attributegroup/detail/attributeGroupId/<?php echo $this->attributeGroup[Db_AttributeGroup::PARENT_ATTRIBUTE_GROUP_ID] ?>"><?php echo $this->parent['parentname'] ?></a>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <tr>
+            <td><strong><?php echo $this->translate('order'); ?></strong></td>
+            <td><?php echo $this->attributeGroup[Db_AttributeGroup::ORDER_NUMBER] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('active'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->attributeGroup[Db_AttributeGroup::IS_ACTIVE]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+    </table>
+</fieldset>

@@ -1,0 +1,55 @@
+<!-- Workaround for Chrome removes first nested form -->
+<form></form>
+<form method="<?php echo $this->form->getMethod() ?>" name="<?php echo $this->form->getName() ?>" action="<?php echo $this->form->getAction() ?>">
+    <table>
+        <tr>
+            <td style="padding-right:0px;"><?php echo $this->form->optionName->setDecorators(array('Label')); ?></td>
+            <td style="padding-right:0px;"><?php echo $this->form->optionName->setDecorators(array('ViewHelper', 'Errors')); ?></td>
+            <td rowspan="2"><?php echo $this->form->create->setDecorators(array('ViewHelper')); ?></td>
+        </tr>
+        <tr>
+            <td style="padding-right:0px;"><?php echo $this->form->ordernumber->setDecorators(array('Label')); ?></td>
+            <td style="padding-right:0px;"><?php echo $this->form->ordernumber->setDecorators(array('ViewHelper', 'Errors')); ?></td>
+        </tr>
+    </table>
+</form>
+<div class="break" style="border-bottom: 1px #ccc solid; margin-bottom:20px"></div>
+<?php echo $this->translate('optionssaved'); ?>
+<form name="<?php echo $this->escape($this->optionForm->getName()) ?>" action="<?php echo $this->escape($this->optionForm->getAction()) ?>"
+      method="<?php echo $this->escape($this->optionForm->getMethod()) ?>">
+    <?php //echo $this->optionForm->csrf_token ?>
+    <table style="padding-right:0px;">
+        <?php
+        $count = 0;
+        foreach ($this->storedAttributesOptions as $attribute) {
+
+            if ($count == 0)
+                echo '<tr>';
+            ?>
+            <td style="padding-right:0px;">
+                <?php if (!$attribute[Db_AttributeDefaultValues::IS_ACTIVE]) { ?>
+                    <a href="<?php echo APPLICATION_URL ?>attribute/activateoption/optionId/<?php echo $attribute[Db_AttributeDefaultValues::ID] ?>/attributeId/<?php echo $this->attributeId ?>">
+                        <span style="color:red;"><img class="form_icon" src="<?php echo APPLICATION_URL ?>/images/icon/active.png" alt="<?php echo $this->translate('unused') ?>" /> </span>
+                    </a>
+                <?php } ?>
+                <a href="<?php echo APPLICATION_URL ?>attribute/removeoption/optionId/<?php echo $attribute[Db_AttributeDefaultValues::ID] ?>/attributeId/<?php echo $this->attributeId ?>">
+                    <span style="color:red;"><img class="form_icon" src="<?php echo APPLICATION_URL ?>/images/icon/inactive.png" alt="<?php echo $this->translate('unused') ?>" /> </span>
+                </a>
+            </td>
+            <?php
+            $order = $attribute['id'] . 'ordernumber';
+            $attributeId = $attribute['id'];
+            ?>
+            <td style="padding-right:0px;"><?php echo $this->optionForm->$attributeId; ?><?php echo $this->optionForm->$order; ?></td>
+            <?php $save = $attribute['id'] . 'save'; ?>
+            <td><?php echo $this->optionForm->$save; ?></td>
+            <?php
+            $count++;
+            if ($count == 3) {
+                echo '</tr>';
+                $count = 0;
+            }
+        }
+        ?>
+    </table>
+</form>

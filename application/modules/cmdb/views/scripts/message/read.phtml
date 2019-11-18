@@ -1,0 +1,12 @@
+<a href="<?php echo APPLICATION_URL ?>message/index"><?php echo $this->translate('messagesReceived') ?></a>
+<h1 class="pageName"><?php echo $this->translate('message') ?></h1>
+
+<div><?php echo $this->translate('sent') ?>: <?php echo $this->message[Db_PrivateMessage::SENT]; ?></div>
+<div><?php echo $this->translate('sender') ?>: <?php echo $this->message[Db_User::USERNAME]; ?></div>
+<div class="break"></div>
+<div><?php echo $this->translate('subject') ?>:
+    <strong><?php echo $this->message[Db_PrivateMessage::SUBJECT]; ?></strong>
+    <div>
+        <div class="mail_body">
+            <?php echo $this->message[Db_PrivateMessage::MESSAGE]; ?>
+        </div>

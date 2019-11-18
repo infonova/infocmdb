@@ -1,0 +1,158 @@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("img.fadeout").click(function () {
+            var img = $(this);
+            var fieldset = img.closest('.fieldset');
+            if (fieldset.hasClass('noPrint')) {
+                // remove layer-div
+                var fieldsetLayer = $('#fieldsetLayer_' + fieldset.attr('id'));
+                fieldsetLayer.remove();
+
+                // mark fieldset-div as printable
+                fieldset.removeClass('noPrint');
+
+                // switch image and title
+                img.attr('src', "<?php echo APPLICATION_URL?>images/icon/delete.png");
+                img.attr('title', '<?php echo $this->translate('fadeOut') ?>');
+            } else {
+                // create new layer-div
+                var fieldsetLayer = $('<div id="fieldsetLayer_' + fieldset.attr('id') + '" style="display: none; position: absolute;" class="invisible"></div>');
+                var fieldsetContent = fieldset.find('.fieldset_content');
+
+                // calculate and set postion of layer-div
+                var layerOffset = fieldsetContent.offset();
+                layerOffset.top = layerOffset.top + fieldset.find('legend').outerHeight() + 14;
+                layerOffset.left = layerOffset.left + 3;
+                fieldsetLayer.offset(layerOffset);
+
+                // calculate and set size of layer-div
+                fieldsetLayer.width(fieldset.outerWidth() - 14);
+                fieldsetLayer.height(fieldset.outerHeight() - fieldset.find('fieldset_content').outerHeight() - 40);
+
+                // show layer-div and mark fieldset-div as not printable
+                fieldsetLayer.insertAfter($('#ci_print'));
+                fieldsetLayer.show();
+                fieldset.addClass('noPrint');
+
+                // switch image and title
+                img.attr('src', "<?php echo APPLICATION_URL?>images/icon/add.png");
+                img.attr('title', '<?php echo $this->translate('fadeIn') ?>');
+            }
+        });
+
+        initCiPrint();
+
+    });
+</script>
+
+<div id="printControlHeader" class="noPrint">
+
+    <a href="#" onclick="window.print();">
+        <span class="VAlignTop">
+            <img src="<?php echo APPLICATION_URL ?>images/icon/print.png" style="vertical-align:top;">&nbsp;<?php echo $this->translate('print'); ?>
+        </span>
+    </a>
+    &nbsp;&nbsp;
+    <a href="#" onclick="window.close();">
+        <img src="<?php echo APPLICATION_URL ?>images/icon/delete_ci.png" style="vertical-align:top;" width="16" height="16">&nbsp;<?php echo $this->translate('close'); ?>
+    </a>
+
+</div>
+
+<div id="ci_print" class="print ciType<?php echo ucfirst($this->ciType[Db_CiType::NAME]) ?>" data-ciid="<?php echo $this->ciId; ?>" data-citype="<?php echo $this->ciType[Db_CiType::NAME] ?>">
+    <div id="ci_print_additional_content_before"><!-- use custom.js to add some custom content here --></div>
+
+    <h1 class="pageName"><?php echo $this->ciBreadcrumb($this->breadcrumbs, 15); ?></h1>
+    <div class='lordVader'>
+        <table class="detail_header">
+            <tr>
+                <td width="100%">
+                    <table width="100%" border="0">
+                        <tr style="line-height:15px">
+                            <td style="width: 15%;"><strong>CIID</strong></td>
+                            <td style="width: 25%;"><?php echo $this->ciId; ?></td>
+                            <?php if (!$this->historyView) : ?>
+                                <td style="width: 15%;"><strong><?php echo $this->translate('created') ?></strong></td>
+                                <td style="width: 25%;"><?php echo $this->historyCreated; ?></td>
+                            <?php endif; ?>
+                        </tr>
+                        <tr style="line-height:15px">
+                            <td><span><strong><?php echo $this->translate('ciType') ?></strong></span></td>
+                            <td><?php echo $this->ciType[Db_CiType::DESCRIPTION]; ?></td>
+                            <?php if (!$this->historyView) : ?>
+                                <td><strong><?php echo $this->translate('changed') ?></strong></td>
+                                <td><?php echo $this->historyChanged; ?></td>
+                            <?php endif; ?>
+
+                        </tr>
+                        <tr style="line-height:15px">
+                            <td><span><strong><?php echo $this->translate('projectOrProjects') ?></strong></span></td>
+                            <td>
+                                <?php
+                                $isFirst = true;
+                                foreach ($this->projectList as $project):
+                                    if ($isFirst) {
+                                        $isFirst = false;
+                                        echo $project[Db_Project::DESCRIPTION];
+                                    } else {
+                                        echo ', ' . $project[Db_Project::DESCRIPTION];
+                                    }
+                                endforeach;
+                                ?>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <?php if (!$this->historyView) : ?>
+                            <tr style="line-height:15px">
+                                <?php
+                                $relations = array();
+                                foreach ($this->relations as $relation) {
+                                    if (!$relation['base'] && $relation[Db_CiRelationType::DESCRIPTION_OPTIONAL])
+                                        $description = $relation[Db_CiRelationType::DESCRIPTION_OPTIONAL];
+                                    else
+                                        $description = $relation[Db_CiRelationType::DESCRIPTION];
+
+                                    if ($relation['relationsCount'] > 1)
+                                        $url = $this->url(array('controller' => 'relation', 'action' => 'detail', 'relationtype' => $relation['ci_relation_type_id']));
+                                    else
+                                        $url = $this->url(array('controller' => 'ci', 'action' => 'detail', 'ciid' => (($this->ciId == $relation['ci_id_1']) ? $relation['ci_id_2'] : $relation['ci_id_1'])));
+                                    $relations[] = '<span>' . $description . ' (' . $relation['relationsCount'] . ')</span>';
+                                }
+                                ?>
+                                <td><span><strong><?php echo $this->translate('relations') ?></strong></span></td>
+                                <td>
+                                    <?php if ($relations) {
+                                        echo implode(', ', $relations);
+                                    } ?>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        <?php endif; ?>
+                    </table>
+                </td>
+                <td>
+                    <img class="image" src="<?php echo $this->icon ?>" />
+                </td>
+            </tr>
+        </table>
+
+        <?php echo $this->partial('ci/_detailAttributeGroup.phtml', array(
+            'attributeList' => $this->attributeList,
+            'isAdmin'       => $this->isAdmin,
+            'ciid'          => $this->ciid,
+            'tabs'          => false,
+            'form'          => null,
+            'ciAttributeId' => null,
+            'historyView'   => $this->historyView,
+        )); ?>
+
+
+    </div>
+
+    <div id="ci_print_additional_content_after"><!-- use custom.js to add some custom content here --></div>
+
+</div>

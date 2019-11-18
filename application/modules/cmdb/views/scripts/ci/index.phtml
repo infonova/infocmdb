@@ -1,0 +1,506 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/tooltip/wz_tooltip.js"></script>
+
+
+<script type="text/javascript">
+    var lang = '<?php echo $this->language;?>';
+    function delete_ci_entry(id) {
+        $.post("<?php echo APPLICATION_URL?>ci/checkdelete/", {ciid: id},
+            function (response) {
+                if (response == 'OK') {
+                    if (confirm('<?php echo $this->translate('areYouSureDelete'); ?>')) {
+                        window.location.href = '<?php echo APPLICATION_URL . 'ci/'; ?>delete/ciid/' + id + '/';
+                    }
+
+                } else if (response == 'NOK') {
+                    alert('<?php echo $this->translate('cantDeleteBecauseOfRelations');?>');
+                } else {
+                    if (confirm('<?php echo $this->translate("areYouSureDeleteWithRelations") ?>'.replace(/%s/, response))) {
+                        window.location.href = '<?php echo APPLICATION_URL . 'ci/'; ?>delete/ciid/' + id + '/';
+                    }
+                }
+            }
+        );
+    }
+
+    function delete_ci_relation(id) {
+        if (confirm('<?php echo $this->translate('relationAreYouSureDelete'); ?>')) {
+            var url = '<?php echo APPLICATION_URL?>/relation/delete/relationId/' + id;
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (result) {
+                    if (result == 'finished') {
+                        location.reload();
+                    }
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+
+        $(".btn-slide").click(function () {
+            $("#panel").slideToggle("slow");
+            $(this).toggleClass("active");
+            var btn_slide_active = $(this).hasClass("active");
+            if (btn_slide_active == true) {
+                $(this).val("<?php echo $this->translate('attribute_filter_off'); ?>");
+            } else {
+                $("#panel td input").val("");//clear all attribute filters
+                $("#panel td input").closest("form").submit();
+                $(this).val("<?php echo $this->translate('attribute_filter_on'); ?>");
+            }
+        });
+
+        $("#clear_filter").click(function () {
+            $("#panel td input").val("");//clear all attribute filters
+            $("#search").val("");
+            $("#panel td input").closest("form").submit();
+        });
+
+        $("#clear_sorting").click(function () {
+            <?php if($this->ciRelationTypeId !== null) : ?>
+            window.location = "<?php echo APPLICATION_URL . '/ci/index/typeid/' . $this->typeId . '/ciRelationTypeId/' . $this->ciRelationTypeId . '/sourceCiid/' . $this->sourceCiid; ?>";
+            <?php else: ?>
+            window.location = "<?php echo APPLICATION_URL . '/ci/index/typeid/' . $this->typeId; ?>";
+            <?php endif; ?>
+
+        });
+
+        $("#panel td select").change(function () {
+            $(this).closest("form").submit();
+        });
+
+        $('.edit_list_index.writable').click(function () {
+            var myId = this.id;
+            var ciid = this.coords;
+            var parent = $('#' + myId).parent();
+
+            var dataString = '/ciid/' + ciid + '/ciAttributeId/' + myId + '/type/<?php echo $this->typeId ?>/page/<?php echo $this->page ?>';
+
+            $('.edit_list_index').each(function (k) {
+                $('.edit_list_index').contents().unwrap();
+
+            });
+
+            var url = "<?php echo APPLICATION_URL?>ci/singleedit" + dataString;
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                async: true,
+                url: url,
+                success: function (result) {
+                    if (result.success) {
+                        parent.html(result.msg);
+                    }
+                    else {
+                        window.location = "<?php echo APPLICATION_URL?>" + "ci/detail/ciid/<?php echo $this->ciId;?>/tab_index/" + $("#tab_index").text();
+                    }
+
+                },
+                error: function (request, status, error) {
+                    window.location = "<?php echo APPLICATION_URL?>" + "ci/detail/ciid/<?php echo $this->ciId;?>/tab_index/" + $("#tab_index").text();
+                }
+            });
+
+            return false;
+        });
+
+        //change width of input fields to width of td-elemnt in headline
+        $("#panel td input").hide();//hide cause sometimes the input is wider than the ohter things
+        $("#panel td input").each(function () {
+            var index = $(this).parent().parent().children().index($(this).parent());
+            var width = $(".headline td:eq(" + index + ")").width();
+            $(this).width(width);
+        });
+        $("#panel td input").show();
+
+
+    }); // document ready
+
+
+    function coloringCi($this, ciId, color) {
+        var url = "<?php echo APPLICATION_URL?>ci/color/ciid/" + ciId;
+        color = color.replace('#', '');
+        if (color === '' || color === 'delete') {
+            color = '';
+            url += "/delete/1";
+        } else {
+            url += ("/color/%23" + color);
+        }
+
+        $.ajax({
+            type: "GET",
+            dataType: "text",
+            url: url,
+            context: $this,
+            success: function (result) {
+                $(this).closest('tr').css('background-color', (color !== '' ? '#' : '' ) + color)
+            }
+        });
+        return false;
+    }
+</script>
+
+<script type="text/javascript" src="/js/jquery/jquery.colorbox.js"></script>
+<script>
+    jQuery(document).ready(function($) {
+        $(".colorpickerHolder").colorbox({
+            onSelect: function ($this, color, index, label) {
+                let ciId = $this.parent().parent().attr('id').split('-')[1];
+                coloringCi($this, ciId, color);
+            }
+        })
+    });
+</script>
+
+<div class="button_row">
+    <?php
+    $config        = Zend_Registry::get('viewConfig');
+    $exportEnabled = $config->ci->list->export;
+
+    $class = "link";
+    $pre   = "";
+    if ($config->ci->detail->buttons->button) {
+        $class .= " button";
+    } else {
+        $pre .= " | ";
+    }
+    ?>
+
+    <?php if ($exportEnabled) : ?>
+        <a class="<?php echo $class; ?>" href="<?php echo $this->url(array('action' => 'export', 'type' => 'xlsx', 'all' => 1)) ?>" target="_blank"><?php echo $this->translate('exportCiType') ?></a> |
+        <a class="<?php echo $class; ?>" href="<?php echo $this->url(array('action' => 'export', 'type' => 'xlsx', 'all' => 0)) ?>" target="_blank"><?php echo $this->translate('exportCiList') ?></a>
+    <?php endif; ?>
+
+    <?php if ($this->ciTypeAttach) : ?>
+        <?php if ($exportEnabled) {
+            echo $pre;
+        } ?>
+        <a class="<?php echo $class; ?> create" href="<?php echo APPLICATION_URL ?>ci/create/citype/<?php echo $this->typeId ?>">
+            <?php echo $this->createButtonDescription ? $this->createButtonDescription : $this->translate('createCiButtonEN') . ' ' . $this->typeName . ' ' . $this->translate('createCiButton') ?>
+        </a>
+    <?php endif; ?>
+
+</div><!-- /button_row -->
+
+<h1 class="pageName" style="font-size: 11px;">
+
+    <?php
+    $ciDetailUrl = $this->url(array(
+        'controller' => 'ci',
+        'action'     => 'detail',
+        'ciid'       => $this->sourceCiid,
+    ), null, true);
+
+    $relationDetailUrl = $this->url(array(
+        'controller' => 'relation',
+        'action'     => 'detail',
+        'sourceCiid' => $this->sourceCiid,
+    ), null, true);
+    ?>
+
+
+    <?php if ($this->viewType === 'ciRelationList') : ?>
+        <a href="<?php echo $ciDetailUrl ?>">
+            <?php echo $this->defaultAttributeValue ?>
+        </a>
+        &gt;
+        <?php $relationTypeString = $this->ciRelationType[Db_CiRelationType::DESCRIPTION]; ?>
+        <?php
+        if (!empty($this->ciRelationType[Db_CiRelationType::DESCRIPTION_OPTIONAL])) {
+            $relationTypeString .= "&nbsp;<i class='fa fa-arrows-h'></i>&nbsp; " . $this->ciRelationType[Db_CiRelationType::DESCRIPTION_OPTIONAL];
+        } ?>
+        <?php echo $relationTypeString ?>:
+
+    <?php endif; ?>
+
+    <?php echo $this->ciBreadcrumb($this->breadcrumbs, $this->breadcrumbDepth); ?>
+</h1>
+
+
+<div class="numberResult">(<?php echo $this->translate('numberOfResults') ?> <?php echo $this->totalItemCount ?>)</div>
+
+
+<form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+      action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+      method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+
+    <div id="filter">
+        <div class="filter-box">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterButton;
+            ?>
+            <input class="btn-slide attribute_search_button <?php echo ($this->display) ? "active" : ""; ?>" type="button" value="<?php echo $this->translate(($this->display) ? 'attribute_filter_off' : 'attribute_filter_on'); ?>">
+            <input id="clear_filter" class="attribute_search_button" type="button" value="<?php echo $this->translate("filter_clear"); ?>">
+            <input id="clear_sorting" class="attribute_search_button" type="button" value="<?php echo $this->translate("sorting_clear"); ?>">
+        </div>
+    </div>
+
+
+    <div class="clearBoth" style="margin-bottom: 15px;"></div>
+
+
+    <?php if ($this->scrollbar) : ?>
+    <div id="tableContainer" class="tableContainer">
+        <?php endif; ?>
+
+        <table id="ciListTable" class="list hidden_row_list" cellpadding="0" cellspacing="0" border="0" style=" table-layout:<?php echo ($this->scrollbar) ? 'fixed' : 'auto'; ?>;">
+
+            <colgroup>
+                <?php if ($this->viewType === 'ciRelationList') : ?>
+                    <col style="width:0.5%">
+                <?php endif; ?>
+                <col width="60">
+                <?php foreach ($this->attributeList as $att) : ?>
+                    <col <?php echo ($att['width']) ? ' width="' . $att['width'] . '"' : ''; ?>>
+                <?php endforeach; ?>
+
+                <?php if ($this->isQuery == false && $this->viewType !== 'ciRelationList') : ?>
+                    <col width="100">
+                <?php endif; ?>
+            </colgroup>
+
+            <tr class="headline" style="background-color:transparent;">
+                <?php //if not query, display ID-column ?>
+                <?php if ($this->isQuery == false) : ?>
+                    <?php if ($this->viewType === 'ciRelationList') : ?>
+                        <?php
+                        $cssDirectionClass = '';
+                        if (isset($this->orderBy['ciRelationDirection']) && $this->orderBy['ciRelationDirection'] == "ASC") {
+                            $cssDirectionClass = 'tableHeaderSortingUp';
+                        } elseif (isset($this->orderBy['ciRelationDirection']) && $this->orderBy['ciRelationDirection'] == "DESC") {
+                            $cssDirectionClass = 'tableHeaderSortingDown';
+                        }
+
+                        $orderBy = $this->orderBy;
+                        $orderBy = array_reverse($orderBy, true);
+                        $newDirection = '';
+                        if (isset($this->orderBy['ciRelationDirection']) && $this->orderBy['ciRelationDirection'] == 'ASC') {
+                            $newDirection = 'DESC';
+                        }
+                        if (isset($this->orderBy['ciRelationDirection']) && $this->orderBy['ciRelationDirection'] == 'DESC') {
+                            $newDirection = '';
+                        }
+                        if (empty($this->orderBy['ciRelationDirection'])) {
+                            $newDirection = 'ASC';
+                        }
+
+                        $orderBy['ciRelationDirection'] = $newDirection;
+                        $orderBy = array_reverse($orderBy, true);
+                        ?>
+
+                        <td class="tableHeaderSorting <?php echo $cssDirectionClass ?>">
+                            <a href="<?php echo $this->url(array('page' => APPLICATION_URL . 'ci/index/', 'typeid' => $this->typeId, 'page' => 1, 'orderBy' => serialize($orderBy), 'filter' => $this->filter['search'])); ?>">
+                                <?php echo $this->translate('reltionDirectonHeader') ?>
+                            </a>
+                        </td>
+                    <?php endif; ?>
+
+
+                    <?php
+
+                    ?>
+                    <td class="tableHeaderSorting tableHeaderSorting<?php
+                    if ((isset($this->orderBy[Db_Attribute::ID]) && $this->orderBy[Db_Attribute::ID] == "ASC")) {
+                        echo "Up";
+                    } elseif ((isset($this->orderBy[Db_Attribute::ID]) && $this->orderBy[Db_Attribute::ID] == "DESC")) {
+                        echo "Down";
+                    }
+                    ?>">
+                        <?php //reverse order direction
+                        $orderBy = $this->orderBy;
+                        $orderBy = array_reverse($orderBy, true);
+
+                        if (isset($this->orderBy[Db_Attribute::ID]) && $this->orderBy[Db_Attribute::ID] == 'ASC') {
+                            $newDirection = 'DESC';
+                        }
+                        if (isset($this->orderBy[Db_Attribute::ID]) && $this->orderBy[Db_Attribute::ID] == 'DESC') {
+                            $newDirection = 'ASC';
+                        }
+                        if (empty($this->orderBy[Db_Attribute::ID])) {
+                            $newDirection = 'ASC';
+                        }
+
+                        if (!empty($newDirection)) {
+                            $orderBy[Db_Attribute::ID] = $newDirection;
+                        }
+                        $orderBy = array_reverse($orderBy, true);
+                        ?>
+                        <a href="<?php echo $this->url(array('page' => APPLICATION_URL . 'ci/index/', 'typeid' => $this->typeId, 'page' => 1, 'orderBy' => serialize($orderBy), 'filter' => $this->filter['search'])); ?>">
+                            ID
+                        </a>
+                    </td>
+                <?php endif; ?>
+
+
+                <?php //display (remaining) columns of list
+                $columnCounter = 1;
+                foreach ($this->attributeList as $att) : ?>
+                    <?php if ($att[Db_Attribute::NAME] !== 'ciRelationDirection') : ?>
+                        <?php $attName = ($this->isQuery) ? $columnCounter : $att[Db_Attribute::NAME]; ?>
+
+                        <td nowrap="nowrap" class="tableHeaderSorting tableHeaderSorting<?php
+                        if (isset($this->orderBy[$attName]) && $this->orderBy[$attName] == "ASC") {
+                            echo "Up";
+                        } elseif (isset($this->orderBy[$attName]) && $this->orderBy[$attName] == "DESC") {
+                            echo "Down";
+                        }
+                        ?>">
+                            <?php //reverse order direction, clicked column got highest priority
+                            $orderBy = $this->orderBy;
+                            unset($orderBy[($this->isQuery) ? $columnCounter : $att[Db_Attribute::NAME]]);
+                            $orderBy      = array_reverse($orderBy, true);
+                            $newDirection = (($this->isQuery) ? $this->orderBy[$columnCounter] : (isset($this->orderBy[$att[Db_Attribute::NAME]]) ? $this->orderBy[$att[Db_Attribute::NAME]] : 'DESC')) == 'ASC' ? 'DESC' : 'ASC';
+                            if ($this->isQuery) {
+                                if ($this->orderBy[$columnCounter] == 'ASC') {
+                                    $newDirection = 'DESC';
+                                }
+                                if ($this->orderBy[$columnCounter] == 'DESC') {
+                                    $newDirection = '';
+                                }
+                                if (empty($this->orderBy[$columnCounter])) {
+                                    $newDirection = 'ASC';
+                                }
+                            } else {
+                                if (isset($this->orderBy[$att[Db_Attribute::NAME]]) && $this->orderBy[$att[Db_Attribute::NAME]] == 'ASC') {
+                                    $newDirection = 'DESC';
+                                }
+                                if (isset($this->orderBy[$att[Db_Attribute::NAME]]) && $this->orderBy[$att[Db_Attribute::NAME]] == 'DESC') {
+                                    $newDirection = '';
+                                }
+                                if (empty($this->orderBy[$att[Db_Attribute::NAME]])) {
+                                    $newDirection = 'ASC';
+                                }
+                            }
+                            $orderBy[($this->isQuery) ? $columnCounter : $att[Db_Attribute::NAME]] = $newDirection;
+                            $orderBy = array_reverse($orderBy, true);
+                            ?>
+                            <a title="<?php echo htmlspecialchars($att[Db_Attribute::NOTE]) ?>" href="<?php echo $this->url(array('page' => APPLICATION_URL . 'ci/index/', 'typeid' => $this->typeId, 'page' => 1, 'orderBy' => rawurlencode(serialize($orderBy)), 'filter' => $this->filter['search'])); ?>">
+                                <?php
+                                if ($this->adminMode) {
+                                    echo $att[Db_Attribute::NAME];
+                                } else {
+                                    echo $att[Db_Attribute::DESCRIPTION];
+                                } ?>
+                            </a>
+                        </td>
+
+                        <?php $columnCounter++; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+                <?php //add empty column instead of edit-, remove-, ... buttons?>
+                <?php if ($this->isQuery == false) : ?>
+                    <td></td>
+                <?php endif; ?>
+
+            </tr>
+
+            <?php //search form row ?>
+            <tr id="panel" class="headline" <?php if ($this->display) echo 'style="display:table-row;"'; ?>>
+                <?php if ($this->viewType === 'ciRelationList') : ?>
+                    <td>&nbsp;</td>
+                <?php endif; ?>
+                <?php if ($this->isQuery == false) {
+                    echo "<td></td>";
+                } ?>
+                <?php
+                foreach ($this->attributeList as $att):?>
+                    <?php if ($att[Db_Attribute::NAME] !== 'ciRelationDirection') : ?>
+
+                        <td nowrap="nowrap"><?php
+
+                            if ($this->isQuery) {
+                                $f = Service_Ci_Get::convertColumnNameString($att[Db_Attribute::NAME], 'encode');
+                            } else {
+                                $f = $att[Db_Attribute::NAME];
+                            }
+                            echo $this->searchForm->$f;
+
+                            ?></td>
+
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+                <td></td>
+
+            </tr>
+
+            <?php
+            $row_count = 0;
+            foreach ($this->ciList as $item) : ?>
+                <tr <?php if (isset($item[Db_CiHighlight::COLOR])) echo "style ='background-color: " . Db_CiHighlight::getHexColor($item[Db_CiHighlight::COLOR]) . "'"; ?> >
+                    <?php if ($this->viewType === 'ciRelationList') : ?>
+                        <td nowrap="nowrap">
+                            <?php echo $this->relationDirection($item, $this->ciRelationType) ?>
+                        </td>
+                    <?php endif; ?>
+                    <?php if ($this->isQuery == false) : ?>
+                        <td>
+                            <a class="link" href="<?php echo APPLICATION_URL; ?>ci/detail/ciid/<?php echo $item[Db_Ci::ID]; ?>/"><?php echo $item[Db_Ci::ID] ?></a>
+                        </td>
+                    <?php endif; ?>
+                    <td><?php
+                    $i = 0;
+                    foreach ($this->attributeList as $att) {
+                        if ($att[Db_Attribute::NAME] !== 'ciRelationDirection') {
+
+                            // create the table structure
+                            if ($i > 0) {
+                                echo ' </td><td>';
+                            }
+
+                            if ($this->listEdit) {
+                                $permissionWrite = ($att["permission_write"] === '1' ? ' writable' : '');
+                                ?><a style="color:black;" class="edit_list_index<?php echo $permissionWrite; ?>" title="<?php echo $this->translate('edit'); ?>"
+                                   id="<?php echo $item[$att[Db_Attribute::NAME] . 'ID'] ?>"
+                                   coords="<?php echo $item[Db_Ci::ID] ?>"
+                                   href="<?php echo APPLICATION_URL ?>ci/index/typeid/<?php echo $this->typeId ?>/"><?php
+                                echo $item[$att[Db_Attribute::NAME]];
+                                ?></a><?php
+                            } else {
+                                echo $item[$att[Db_Attribute::NAME]];
+                            }
+                            $i++;
+                        }
+                    }
+                    ?></td>
+                    <?php if ($this->isQuery == false) : ?>
+                        <td>
+                            <?php if ($this->viewType === 'ciList' && $this->isDeleteAllowed) : ?>
+                                <div onmouseover="Tip('<?php echo $this->translate('deleteCi') ?>');" onmouseout="UnTip();">
+                                    <a class="delete_list" href="javascript:delete_ci_entry(<?php echo $item[Db_Ci::ID]; ?>);">&nbsp;</a>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="rfloater" style="min-width: 100px;">
+						<span onmouseover="Tip('<?php echo $this->translate('edit') ?>');" onmouseout="UnTip();">
+							<a class="edit_list buttonLink" href="<?php echo APPLICATION_URL . 'ci/edit/ciid/' . $item[Db_Ci::ID]; ?>/">&nbsp;</a>
+						</span>
+                                <span id="colorPicker-<?php echo $item[Db_Ci::ID]; ?>">
+                                    <span class="link buttonLink colorpickerHolder" id="<?php echo $item[Db_Ci::ID]; ?>">&nbsp;</span>
+                                </span>
+                                <?php if ($this->viewType === 'ciRelationList' && $this->isRelationEditAllowed) : ?>
+                                    <span onmouseover="Tip('<?php echo $this->translate('deleteRelation') ?>');" onmouseout="UnTip();">
+								<a class="buttonLink" href="javascript:delete_ci_relation(<?php echo $item['ciRelationId']; ?>);">
+									<i class="fa fa-chain-broken" aria-hidden="true"></i>
+								</a>
+							</span>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                    <?php endif; ?>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+        <?php if ($this->scrollbar) : ?>
+    </div>
+<?php endif; ?>
+
+    <?php echo $this->paginator; ?>
+
+</form>

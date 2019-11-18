@@ -1,0 +1,18 @@
+<script src="/js/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //editor
+        ace.config.set("modePath", "/js/ace/src-min-noconflict/");
+        ace.config.set("workerPath", "/js/ace/src-min-noconflict/");
+        ace.config.set("themePath", "/js/ace/src-min-noconflict/");
+
+        var editor = initAceEditor('#query', 'mysql');
+    });
+</script>
+
+<table>
+    <tr>
+        <?php echo $this->form->query ?>
+        <td class="query"><em><?php echo $this->translate('reportingInputSQLExample'); ?></em></td>
+    </tr>
+</table>

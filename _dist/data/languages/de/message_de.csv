@@ -1,0 +1,18 @@
+messageSend;		"Nachricht senden"
+messageInbox;		"Nachrichten Eingang"
+messageOutbox;		"Nachrichten Ausgang"
+
+receiver;			"Empfänger"
+subject;			"Betreff"
+message;			"Nachricht"
+submit;				"Abschicken"
+
+messageCreate;		"Nachricht erstellen"
+messagesSent;		"Gesendete Nachrichten"
+messagesReceived;	"Empfangene Nachrichten"
+
+messageId;			"ID"
+sender;				"Absender"
+sent;				"Gesendet"
+read;				"Lesen"
+delete;				"Löschen"

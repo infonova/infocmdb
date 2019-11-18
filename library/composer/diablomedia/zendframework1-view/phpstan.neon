@@ -1,0 +1,11 @@
+parameters:
+    level: 0
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        # This is allowed, tried to document, but phpstan ignores it since it's not defined on the signature (Zend_View uses func_get_args to retrieve the param)
+        # I'm not sure why it wasn't just defined as an optional parameter
+        - '#Method Zend_View_Abstract::_run\(\) invoked with 1 parameter, 0 required\.#'

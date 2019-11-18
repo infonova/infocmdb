@@ -1,0 +1,23 @@
+parameters:
+    level: 4
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        - '#Variable \$number might not be defined\.#'
+        - '#Variable \$plocale might not be defined\.#'
+        # These methods use func_get_args if first param isn't array|Zend_Config, hard to document
+        - '#PHPDoc tag @param references unknown parameter: \$content#'
+        - '#PHPDoc tag @param references unknown parameter: \$locale#'
+        - '#PHPDoc tag @param references unknown parameter: \$args#'
+        -
+            message: '#Offset .+ does not exist on array\(.+\)\.#'
+            path: %currentWorkingDirectory%/src/Zend/Translate/Adapter.php
+        -
+            message: '#If condition is always false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Translate/Adapter.php
+        -
+            message: '#Strict comparison using !== between true and true will always evaluate to false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Translate/Adapter.php

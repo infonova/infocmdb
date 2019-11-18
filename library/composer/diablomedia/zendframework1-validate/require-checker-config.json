@@ -1,0 +1,10 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "iconv_strlen",
+    "ctype_digit", "ctype_xdigit",
+    "idn_to_ascii", "INTL_IDNA_VARIANT_UTS46"
+  ]
+}

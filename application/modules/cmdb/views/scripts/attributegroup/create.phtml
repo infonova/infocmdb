@@ -1,0 +1,58 @@
+<script type="text/javascript">
+    function reset() {
+
+        window.location.href = '<?php echo APPLICATION_URL . 'attributegroup/index'; ?>';
+
+    }
+
+    function submit() {
+        document.forms['create'].submit();
+    }
+
+    function next() {
+        var selected = $("#tabs").tabs("option", "active");
+        var next = getNextEnabledTab(selected);
+        $("#tabs").tabs({active: 1});
+    }
+
+    function back() {
+        var selected = $("#tabs").tabs("option", "active");
+        var last = getLastEnabledTab(selected);
+        $("#tabs").tabs({active: 0});
+    }
+
+    $(document).ready(function () {
+        $(document).ready(function () {
+            $("form#create input").keypress(function (e) {
+                if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                    submit();
+                }
+            });
+            $("form#create select").keypress(function (e) {
+                if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                    submit();
+                }
+            });
+        });
+
+        $("#tabs").tabs({active: 0});
+    })
+</script>
+<div class="button_row">
+    <a href="<?php echo APPLICATION_URL ?>attributegroup/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('attributegroupCreate') ?></h1>
+<div id="tabs">
+    <ul>
+        <li>
+            <a href="#fragment-1"><span class="att_nr">1</span><span class="att_desc"><?php echo $this->translate('createattributegroup') ?></span></a>
+        </li>
+
+    </ul>
+    <fieldset class="create_form steps">
+        <div id="fragment-1">
+            <fieldset class="lordVader">
+                <?php echo $this->form ?>
+            </fieldset>
+        </div>
+    </fieldset>

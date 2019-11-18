@@ -1,0 +1,425 @@
+<script src="/js/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    function triggerDisabled(trigger) {
+        if ($("#" + trigger + "_radio-0").is(":checked")) {
+            document.forms["create"][trigger].disabled = true;
+        } else {
+            document.forms["create"][trigger].disabled = false;
+        }
+    }
+
+    function validateForm() {
+        document.forms['create'].action = "<?php echo APPLICATION_URL?>workflow/wizard-validate/";
+        document.forms['create'].submit();
+    }
+
+    function reset() {
+
+        window.location.href = '<?php echo APPLICATION_URL . 'workflow/index'; ?>';
+
+    }
+
+    function submit() {
+        if (checkScript() || confirm('<?php echo $this->translate('scriptErrors'); ?>')) {
+            document.forms['create'].submit();
+        }
+    }
+
+    function next() {
+        var selected = $("#tabs").tabs("option", "active");
+        var next = getNextEnabledTab(selected);
+        $("#tabs").tabs({active: next});
+        hideUselessButtons();
+    }
+
+    function getNextEnabledTab(index) {
+        index += 1;
+        var disabled = $("#tabs").tabs("option", "disabled");
+        for (var i = 0; i < disabled.length; i++) {
+            if (disabled[i] == index)
+                index = getNextEnabledTab(index);
+        }
+
+        return index;
+    }
+
+    function getLastEnabledTab(index) {
+        index -= 1;
+        var disabled = $("#tabs").tabs("option", "disabled");
+        for (var i = 0; i < disabled.length; i++) {
+            if (disabled[i] == index)
+                index = getLastEnabledTab(index);
+        }
+
+        return index;
+    }
+
+    function back() {
+        var selected = $("#tabs").tabs("option", "active");
+        var last = getLastEnabledTab(selected);
+        $("#tabs").tabs({active: last});
+        hideUselessButtons();
+    }
+
+    function changeTriggerMappingTab(type, index) {
+        if ($("input#trigger_" + type).is(':checked')) {
+            $("#tabs").tabs({disabled: []});
+            if (index == 5) {
+                $.post("<?php echo $this->url(array('action' => 'fileimporttriggermapping')); ?>",
+                    function (response) {
+                        $('#innertabs').tabs('enable', index);
+                        $('#innertabs').tabs({active: index});
+                        $('div#fragment-' + type).html(response);
+                    },
+                    "html"
+                );
+            }
+            else {
+                $.post("<?php echo $this->url(array('action' => 'mapping')); ?>/type/" + type,
+                    function (response) {
+                        $('#innertabs').tabs('enable', index);
+                        $('#innertabs').tabs({active: index});
+                        $('div#fragment-' + type).html(response);
+                    },
+                    "html"
+                );
+            }
+        } else {
+            $("#innertabs").tabs('disable', index);
+            $("div#fragment-" + type).html('');
+        }
+    }
+
+    function hideUselessButtons() {
+        if ($("#tabs").tabs('option', 'active') == 0) {
+            $('#back').hide();
+            $('#next').show();
+        } else if ($("#tabs").tabs('option', 'active') == 3) {
+            $('#next').hide();
+            $('#back').show();
+        } else {
+            $('#next').show();
+            $('#back').show();
+        }
+    }
+
+    function changeCodeEditorLanguage() {
+        lang = $('#lang_selector').val();
+
+        $('.ace-editor-wrapper').each(function (index, elem) {
+            var editorId = $(elem).attr('id');
+            var editor = ace.edit(editorId);
+            var type = $(elem).attr('data-editor-type');
+            editor.getSession().setMode("ace/mode/" + lang);
+            $.ajax({
+                url: "<?php echo APPLICATION_URL?>workflow/scripttemplate/lang/" + lang + "/type/" + type,
+                type: "GET",
+                success: function (data) {
+                    editor.setValue(data);
+                    editor.clearSelection();
+                }
+            });
+        });
+
+        if(lang === 'perl') {
+            $('#script-tabs').tabs("disable", 1);
+        } else {
+            $('#script-tabs').tabs("enable", 1);
+        }
+    }
+
+    function validateScript() {
+        var lang = $('#lang_selector').val();
+        var script = $('#script').val();
+        var scriptTest = $('#script_test').val();
+
+        var result;
+
+        $.ajax({
+            url: "<?php echo APPLICATION_URL?>workflow/validatescript",
+            async: false,
+            data: {
+                "lang": lang,
+                "script": script,
+                "script_test": scriptTest,
+            },
+            dataType: "json",
+            type: "POST",
+            success: function (data) {
+                result = data
+            },
+        });
+
+        return result
+    }
+
+    function checkScript() {
+        var outputElem = $('#script_check_output');
+        var checkButton = $('#script_validate');
+
+        outputElem.html('');
+        checkButton.prop('disabled', true);
+
+        var result = validateScript();
+        var color = 'green';
+
+        if (result.success !== true) {
+            color = 'red';
+        }
+
+        output = result.output.join("\n");
+
+        $('.ace_editor').css('border', "1px solid " + color);
+        outputElem.text(output).show();
+        checkButton.prop('disabled', false);
+
+        return result.success
+    }
+
+    $(document).ready(function () {
+        $("form#create input").keypress(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                next();
+                return false;
+            }
+        });
+        $("form#create select").keypress(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                next();
+                return false;
+            }
+        });
+
+
+        $("#tabs").tabs({load: hideUselessButtons});
+        $("#tabs").tabs({active: 0, disabled: [1, 2], activate: hideUselessButtons});
+        $('#script-tabs').tabs();
+
+        $("select#trigger").change(function () {
+            var val = $(this).val();
+            if (val == 'activity') {
+                $("#tabs").tabs({disabled: [2]});
+
+                $.post("<?php echo $this->url(array('action' => 'mappingform')); ?>",
+                    function (response) {
+                        $("div#fragment-2").html(response);
+                        $("#innertabs").tabs({disabled: [0, 1, 2, 3, 4]});
+
+                        $("input#trigger_ci").change(function () {
+                            changeTriggerMappingTab('ci', 0);
+                        });
+                        $("input#trigger_ci_type_change").change(function () {
+                            changeTriggerMappingTab('ci_type_change', 1);
+                        });
+                        $("input#trigger_attribute").change(function () {
+                            changeTriggerMappingTab('attribute', 2);
+                        });
+                        $("input#trigger_relation").change(function () {
+                            changeTriggerMappingTab('relation', 3);
+                        });
+                        $("input#trigger_project").change(function () {
+                            changeTriggerMappingTab('project', 4);
+                        });
+                        $("input#trigger_fileimport").change(function () {
+                            changeTriggerMappingTab('fileimport', 5);
+                        });
+                    },
+                    "html"
+                );
+
+            } else if (val == 'time') {
+                $("#tabs").tabs({disabled: [2]});
+
+                $.post("<?php echo $this->url(array('action' => 'cronform')); ?>",
+                    function (response) {
+                        $("div#fragment-2").html(response);
+                    },
+                    "html"
+                );
+            } else {
+                $("#tabs").tabs({disabled: [1, 2]});
+                $("div#fragment-2").html('');
+            }
+        });
+        hideUselessButtons();
+
+        //editor
+        lang = $('#lang_selector').val();
+        var scriptEditor = initAceEditor('#script', lang);
+        $(scriptEditor.container).attr('data-editor-type', 'script');
+        var testEditor = initAceEditor('#script_test', lang);
+        $(testEditor.container).attr('data-editor-type', 'test');
+
+        $("#script-label").width("2%");
+        $("#script_test-label").width("2%");
+
+
+        if(lang === 'perl') {
+            $('#script-tabs').tabs("disable", 1);
+        }
+
+    })
+
+    function getCronform() {
+        $("tr#subform").remove();
+    }
+
+    function getMappingform() {
+        $("tr#subform").remove();
+    }
+</script>
+
+<div class="button_row">
+    <a href="<?php echo APPLICATION_URL ?>workflow/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('createWorkflow') ?></h1>
+<div class="break"></div>
+
+<div id="tabs">
+    <ul>
+        <li>
+            <a href="#fragment-1"><span class="att_nr">1</span><span class="att_desc"><?php echo $this->translate('createWorkflow') ?></span></a>
+        </li>
+        <li>
+            <a href="#fragment-2"><span class="att_nr">2</span><span class="att_desc"><?php echo $this->translate('trigger') ?></span></a>
+        </li>
+        <li>
+            <a href="#fragment-2b"><span class="att_nr">2b</span><span class="att_desc"><?php echo $this->translate('triggerMapping') ?></span></a>
+        </li>
+        <li>
+            <a href="#fragment-3"><span class="att_nr">3</span><span class="att_desc"><?php echo $this->translate('script') ?></span></a>
+        </li>
+    </ul>
+    <fieldset class="create_form steps">
+        <form widgetid="create" id="create" enctype="multipart/form-data" method="post" action="<?php echo APPLICATION_URL; ?>/workflow/create" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
+
+            <div id="fragment-1">
+                <fieldset class="lordVader">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <?php echo $this->form->name; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->description; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->note; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->user; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->trigger; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->responseFormat; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->asynch; ?>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->active; ?>
+                        </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+
+            <div id="fragment-2">
+                <fieldset class="lordVader">
+                    <table>
+                    </table>
+                </fieldset>
+            </div>
+
+            <div id="fragment-2b">
+                <div id="innertabs">
+                    <ul>
+                        <li>
+                            <a href="#fragment-ci"><span class="att_desc"><?php echo $this->translate('cis') ?></span></a>
+                        </li>
+                        <li>
+                            <a href="#fragment-ci_type_change"><span class="att_desc"><?php echo $this->translate('ci_type_change') ?></span></a>
+                        </li>
+                        <li>
+                            <a href="#fragment-attribute"><span class="att_desc"><?php echo $this->translate('attributes') ?></span></a>
+                        </li>
+                        <li>
+                            <a href="#fragment-relation"><span class="att_desc"><?php echo $this->translate('relations') ?></span></a>
+                        </li>
+                        <li>
+                            <a href="#fragment-project"><span class="att_desc"><?php echo $this->translate('projects') ?></span></a>
+                        </li>
+                        <li>
+                            <a href="#fragment-fileimport"><span class="att_desc"><?php echo $this->translate('fileimport') ?></span></a>
+                        </li>
+                    </ul>
+                    <fieldset class="create_form steps">
+                        <div id="fragment-ci"></div>
+                        <div id="fragment-ci_type_change"></div>
+                        <div id="fragment-attribute"></div>
+                        <div id="fragment-relation"></div>
+                        <div id="fragment-project"></div>
+                        <div id="fragment-fileimport"></div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="fragment-3">
+                <fieldset>
+                    <div id="script-tabs">
+                        <ul>
+                            <li>
+                                <a href="#script-content"><span class="att_desc"><?php echo $this->translate('script') ?></span></a>
+                            </li>
+                            <li>
+                                <a href="#script-test"><span class="att_desc"><?php echo $this->translate('scriptTest') ?></span></a>
+                            </li>
+                        </ul>
+                        <fieldset class="create_form steps">
+                            <div id="script-content">
+                                <table>
+                                    <tbody>
+                                    <tr><?php echo $this->form->script_lang ?></tr>
+                                    <tr><?php echo $this->form->script; ?></tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <button id="script_validate" onclick="checkScript(); return false"><?php echo $this->translate("scriptValidate") ?></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <pre id="script_check_output" class="terminal-window"></pre>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div id="script-test">
+                                <div id="script-test-content">
+                                    <table>
+                                        <tbody>
+                                        <tr><?php echo $this->form->script_test; ?></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </fieldset>
+                </fieldset>
+            </div>
+
+
+        </form>
+        <div class="buttonCon">
+            <input type="submit" class="standard_button" id="back" value="<?php echo $this->translate('back') ?>" onClick="javacript:back()">
+            <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:reset()">
+            <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javacript:submit()">
+            <input type="submit" class="standard_button" id="next" value="<?php echo $this->translate('next') ?>" onClick="javacript:next()">
+        </div>
+    </fieldset>
+
+</div>

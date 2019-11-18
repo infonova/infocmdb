@@ -1,0 +1,40 @@
+<fieldset class="lordVader">
+    <table>
+        <tbody>
+        <tr id="subform">
+            <td>
+                <fieldset class="execution_time">
+                    <div class="execution_time_part">
+                        <h3><?php echo $this->translate('minutes'); ?></h3>
+                        <?php echo $this->form->minutes_radio; ?>
+                        <?php echo $this->form->minutes; ?>
+                    </div>
+                    <div class="execution_time_part">
+                        <h3><?php echo $this->translate('hours'); ?></h3>
+                        <?php echo $this->form->hours_radio; ?>
+                        <?php echo $this->form->hours; ?>
+                    </div>
+                    <div class="execution_time_part">
+                        <h3><?php echo $this->translate('days'); ?></h3>
+                        <?php echo $this->form->days_radio; ?>
+                        <?php echo $this->form->days; ?>
+                    </div>
+                    <div class="execution_time_part">
+                        <h3><?php echo $this->translate('months'); ?></h3>
+                        <?php echo $this->form->months_radio; ?>
+                        <?php echo $this->form->months; ?>
+                    </div>
+                    <div class="execution_time_part">
+                        <h3><?php echo $this->translate('weekdays'); ?></h3>
+                        <?php echo $this->form->weekdays_radio; ?>
+                        <?php echo $this->form->weekdays; ?>
+                    </div>
+                </fieldset>
+            </td>
+            <td>
+                <?php echo $this->translate('workflowCronExample'); ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>		

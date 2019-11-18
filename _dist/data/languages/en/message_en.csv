@@ -1,0 +1,18 @@
+messageSend;		"Send Message"
+messageInbox;		"Inbox"
+messageOutbox;		"Outbox"
+
+receiver;			"Receiver"
+subject;			"Subject"
+message;			"Message"
+submit;				"Submit"
+
+messageCreate;		"Create Message"
+messagesSent;		"Sent Messages"
+messagesReceived;	"Received Messages"
+
+messageId;			"ID"
+sender;				"Sender"
+sent;				"Sent"
+read;				"Read"
+delete;				"Delete"

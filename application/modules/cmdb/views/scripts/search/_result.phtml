@@ -1,0 +1,71 @@
+<script type="text/javascript">
+    function updatePage(page) {
+        $('#search_result').html("");
+        var searchstring = $('#searchstringAjax').val();
+        searchstring = encodeURIComponent(searchstring);
+        var dataString = '?searchstring=' + searchstring + '&page=' + page + '&session=<?php echo $this->session;?>&history=<?php echo $this->history ? 'true' : 'false';?>';
+
+
+        var url = "<?php echo APPLICATION_URL?>/search/searchajax" + dataString;
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function (result) {
+                $('#search_result').html(result);
+            }
+        });
+        return false;
+    }
+</script>
+
+<?php
+if ($this->valueList && count($this->valueList)):
+    $row_count = 0;
+    ?>
+    <div class="break"></div>
+    <p class="headline" align="right"><?php echo $this->translate('numberOfResults') . ' ' . $this->numberRows ?></p>
+    <h1 class="pageName"><?php echo $this->history ? $this->translate('searchResultHistory') : $this->translate('searchResult'); ?></h1>
+    <p align="right"><?php echo $this->searchTime . ' ' . $this->translate('seconds'); ?></p>
+
+
+    <?php foreach ($this->valueList as $typeId => $ciType): ?>
+    <?php if (count($ciType['ciList'])): ?>
+        <div class="break"></div>
+        <span title="<?php echo $ciType['citype_name'] ?>"><a href="<?php echo APPLICATION_URL ?>ci/index/typeid/<?php echo $typeId ?>"><strong><?php echo $ciType['citype_description']; ?></strong></a></span>
+        <table class="list" cellpadding="0" cellspacing="0" width="100%" <?php echo $this->history ? 'style="background-color:#E0E0E0;"' : ''; ?>>
+            <tr class="headline">
+                <th width="40px"><?php echo $this->translate('ciId'); ?></th>
+                <?php foreach ($ciType['attribList'] as $attrib): ?>
+                    <th>
+                        <span title="<?php echo $attrib['name'] ?>"><?php echo $this->escape($attrib['description']) ?></span>
+                    </th>
+                <?php endforeach; ?>
+            </tr>
+
+            <?php foreach ($ciType['ciList'] as $ci): ?>
+                <tr>
+                    <?php if ($this->history) { ?>
+                        <td>
+                            <a class="link" href="<?php echo APPLICATION_URL ?>history/ci/ciid/<?php echo $ci['id'] ?>"><?php echo $ci['id'] ?></a>
+                        </td>
+                    <?php } else { ?>
+                        <td>
+                            <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $ci['id'] ?>"><?php echo $ci['id'] ?></a>
+                        </td>
+                    <?php } ?>
+                    <?php foreach ($ciType['attribList'] as $attrib): ?>
+                        <td><?php echo $ci[$attrib['name']] ?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php
+    endif;
+endforeach;
+
+    echo $this->paginator;
+
+elseif ($this->posted):
+    echo $this->escape($this->translate('noEntriesFound'));
+endif;
+?>

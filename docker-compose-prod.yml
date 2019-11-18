@@ -1,0 +1,33 @@
+version: "3.4"
+
+services:
+
+  mariadb:
+    volumes:
+      - 'database-volume:/var/lib/mysql'
+    restart: always
+
+  php:
+    build:
+      args:
+        - APPLICATION_ENV=production
+    volumes:
+      - "data-volume:/app/data"
+    restart: always
+
+  cron:
+    environment:
+      - APPLICATION_ENV=production
+    restart: always
+
+  web:
+    volumes:
+      - "data-volume:/app/data"
+    ports:
+      - "${DOCKER_WEB_PORT}:80"
+      - "${DOCKER_WEB_SSL_PORT}:443"
+    restart: always
+
+volumes:
+  data-volume:
+  database-volume:

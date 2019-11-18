@@ -1,0 +1,9 @@
+# This is the translation language file.
+
+# This is the translation language file.
+
+configFiles;		"Translation Files"
+configFilesEdit;	"Edit Translation File"
+overview;			"Overview"
+save;				"Save"
+translationfileUpdateSuccess;   "Translation File successfully updated"

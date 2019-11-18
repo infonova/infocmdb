@@ -1,0 +1,23 @@
+class_name: ApiTester
+modules:
+    enabled:
+        - \Helper\ApiV2
+        - \Helper\MailCatcher
+        - REST
+        - Db
+        - Asserts
+        - PhpBrowser
+    config:
+        PhpBrowser:
+            url: http://cmdb.test.local/
+            curl:
+                CURLOPT_TIMEOUT: 60
+                CURLOPT_TIMEOUT_MS: 60000
+        REST:
+            depends: PhpBrowser
+        \Helper\MailCatcher:
+            url: "http://mailcatcher"
+            port: '1080'
+            guzzleRequestOptions:
+              verify: false
+              debug: true

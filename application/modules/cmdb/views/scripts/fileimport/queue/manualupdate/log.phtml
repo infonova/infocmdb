@@ -1,0 +1,37 @@
+<script type="text/javascript">
+
+    window.setTimeout("refresh()", 5000);
+
+    function refresh() {
+        $.ajax({
+            url: '<?php echo APPLICATION_URL?>/fileimport/queue/type/manualupdate/method/ajaxlog/file/<?php echo $this->file?>',
+            success: function (data) {
+                $('#logtext').val(data);
+                window.setTimeout("refresh()", 2000);
+            }
+        });
+    }
+
+</script>
+
+<style type="text/css">
+    textarea.html-text-box {
+        background-color: #ffffff;
+        background-image: url(http://);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        border-width: 1;
+        border-style: solid;
+        border-color: #cccccc;
+        font-family: Arial;
+        font-size: 8pt;
+        color: #000000;
+    }
+</style>
+<a class="button overview" href="<?php echo APPLICATION_URL . '/download/file/type/fileimport/method/manualupdate/status/log/file/' . $this->file ?>"><?php echo $this->translate('downloadLog') ?></a>
+
+<h1 class="pageName">&nbsp;<?php echo $this->file ?></h1>
+<form method="post" action="http://" style="padding-left: 3px">
+    <textarea name="logtext" id="logtext" cols="100" rows="31" class="html-text-box" readonly="readonly"><?php echo $this->log ?></textarea>
+</form>
+<br>

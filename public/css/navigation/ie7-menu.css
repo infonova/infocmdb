@@ -1,0 +1,6 @@
+/* Nornix TreeMenu IE 7 stylesheet  */
+
+/* fixes line-height issue */
+.menu li {
+    line-height: 1.2;
+}

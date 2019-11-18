@@ -1,0 +1,55 @@
+<table class="calborder" bgcolor="white" width="170" cellspacing="0" cellpadding="3"
+       border="0">
+    <tbody>
+    <tr>
+        <td class="sideback" align="center">
+            <div style="height: 16px;">
+                <div style="float: left; width: 20%;" align="left"><a
+                            href="<?php echo APPLICATION_URL ?>dashboard/index/year/<?php echo($this->prevYear) ?>/month/<?php echo($this->prevMonth) ?>"><<</a>
+                </div>
+                <div style="float: left; width: 60%;" align="center"><b><?php echo $this->monthName ?>
+                        <?php echo $this->year ?></b></div>
+                <div style="float: left; width: 20%;" align="right"><a
+                            href="<?php echo APPLICATION_URL ?>dashboard/index/year/<?php echo($this->nextYear) ?>/month/<?php echo($this->nextMonth) ?>">>></a>
+                </div>
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td align="center">
+            <table cellspacing="1" cellpadding="1" border="0" width="100%">
+                <thead>
+                <tr>
+                    <th style="text-align: center;" title="Sunday" scope="col"
+                        abbr="Sunday"><?php echo $this->calendar[0][0] ?></th>
+                    <th style="text-align: center;" title="Monday" scope="col"
+                        abbr="Monday"><?php echo $this->calendar[1][0] ?></th>
+                    <th style="text-align: center;" title="Tuesday" scope="col"
+                        abbr="Tuesday"><?php echo $this->calendar[2][0] ?></th>
+                    <th style="text-align: center;" title="Wednesday" scope="col"
+                        abbr="Wednesday"><?php echo $this->calendar[3][0] ?></th>
+                    <th style="text-align: center;" title="Thursday" scope="col"
+                        abbr="Thursday"><?php echo $this->calendar[4][0] ?></th>
+                    <th style="text-align: center;" title="Friday" scope="col"
+                        abbr="Friday"><?php echo $this->calendar[5][0] ?></th>
+                    <th style="text-align: center;" title="Saturday" scope="col"
+                        abbr="Saturday"><?php echo $this->calendar[6][0] ?></th>
+                </tr>
+                </thead>
+                <tbody valign="center">
+                <?php for ($x = 1; $x < 7; $x++): ?>
+                    <tr>
+                        <?php
+                        for ($i = 0; $i < 7; $i++) {
+                            echo $this->calendar[$i][$x];
+                        }
+                        ?>
+                    </tr>
+                <?php endfor; ?>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>

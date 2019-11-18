@@ -1,0 +1,44 @@
+#SetEnv APPLICATION_ENV development
+
+RewriteEngine On
+
+RewriteRule \.(js|css)$ - [NC,L,PT]
+
+#check for custom files --> xy.png = custom_xy.png
+RewriteCond %{REQUEST_URI} \.(png|jpg|jpeg|gif)$
+RewriteRule ^(.*)/(.*)\.(.*)$ $1/custom_$2.$3
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)/custom_(.*)\.(.*)$ $1/$2.$3
+
+
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^.*$ index.php [NC,L]
+
+
+<FilesMatch ".(html|htm|php)$">
+<ifModule mod_headers.c>
+Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+Header set Pragma "no-cache"
+Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+</ifModule>
+</FilesMatch>
+
+
+<ifModule mod_expires.c>
+ExpiresActive On
+ExpiresByType text/js "access plus 1 days"
+ExpiresByType text/javascript "access plus 1 days"
+ExpiresByType application/javascript "access plus 1 days"
+ExpiresByType application/x-javascript "access plus 1 days"
+ExpiresByType text/css "access plus 1 weeks"
+ExpiresByType image/* "access plus 1 weeks"
+ExpiresDefault "access plus 1 seconds"
+</ifModule>
+
+FileETag None
+<ifModule mod_headers.c>
+Header unset ETag
+</ifModule>

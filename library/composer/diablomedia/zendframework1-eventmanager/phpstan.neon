@@ -1,0 +1,22 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        - '#Access to an undefined property Zend_EventManager_FilterChain::\$responses\.#'
+        - '#Method Zend_EventManager_GlobalEventManager::getEventCollection\(\) should return Zend_EventManager_EventCollection but returns Zend_EventManager_EventCollection\|null\.#'
+        - '#Method Zend_EventManager_ListenerAggregate::attach\(\) invoked with 2 parameters, 1 required\.#'
+        - '#Parameter \#1 \$identifiers of method Zend_EventManager_EventManager::setIdentifiers\(\) expects array\|int\|string\|Traversable, array\|int\|string\|Traversable\|null given\.#'
+        - '#Parameter \#3 \$callback of method Zend_EventManager_EventManager::triggerListeners\(\) expects \(callable\)\|null, array\|\(callable\)\|object\|string\|null given\.#'
+        -
+            message: '#Parameter \#1 \$params \(array\|object\) of method Zend_EventManager_Event::setParams\(\) should be compatible with parameter \$params \(string\) of method Zend_EventManager_EventDescription::setParams\(\)#'
+            path: %currentWorkingDirectory%/src/Zend/EventManager/Event.php
+        -
+            message: '#Cannot cast \(callable\(\): mixed\)\|int\|null to int\.#'
+            path: %currentWorkingDirectory%/src/Zend/EventManager/EventManager.php
+        -
+            message: '#Return type \(Zend_EventManager_Filter_FilterIterator\) of method Zend_EventManager_FilterChain::getFilters\(\) should be compatible with return type \(array\) of method Zend_EventManager_Filter::getFilters\(\)#'
+            path: %currentWorkingDirectory%/src/Zend/EventManager/FilterChain.php

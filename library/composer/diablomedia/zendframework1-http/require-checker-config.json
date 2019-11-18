@@ -1,0 +1,19 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "TeraWurfl",
+    "Mobi_Mtld_DA_Api",
+    "mb_internal_encoding",
+    "gzinflate", "gzuncompress",
+    "CURLOPT_HTTPGET", "CURLOPT_POST", "CURLOPT_PUT", "CURLOPT_CUSTOMREQUEST", "CURLOPT_HEADER", "CURLOPT_RETURNTRANSFER",
+    "CURLOPT_HTTPHEADER", "CURLOPT_POSTFIELDS", "CURLOPT_INFILE", "CURLOPT_INFILESIZE", "CURLOPT_PORT", "CURLOPT_MAXREDIRS",
+    "CURLOPT_CONNECTTIMEOUT", "CURL_HTTP_VERSION_1_1", "CURL_HTTP_VERSION_1_0", "CURLOPT_PROXYUSERPWD", "CURLOPT_PROXY",
+    "CURLOPT_PROXYPORT", "curl_init", "curl_setopt", "CURLOPT_TIMEOUT", "CURLOPT_SSLCERT", "CURLOPT_SSLCERTPASSWD",
+    "CURLOPT_URL", "CURLOPT_HTTP_VERSION", "CURLOPT_HEADERFUNCTION", "CURLOPT_FILE", "CURLINFO_HEADER_OUT", "curl_exec",
+    "curl_getinfo", "curl_error", "curl_close",
+    "ctype_xdigit",
+    "finfo_open", "FILEINFO_MIME", "finfo_file", "mime_content_type"
+  ]
+}

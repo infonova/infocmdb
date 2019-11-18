@@ -1,0 +1,48 @@
+# This is the language file for view type interaction.
+
+# General
+overview;					"Overview"
+
+
+# Index Page
+attributegroups;					"Attribute Groups"
+attributegroupDetail		"Attribute Group Detail"
+name;						"Name"
+description;				"Description"
+attributegroupParent;				"Parent Attribute Group"
+note;						"Note"
+sorting;					"Sorting"
+valid;						"Status"
+active;						"active"
+inactive;					"inactive"
+numberOfResults;			"Number of Results:"
+
+attributegroupCreate;				"Create Attribute Group"
+attributegroupEdit;				"Edit Attribute Group"
+
+save;						"Save"
+edit;						"Edit"
+activate;					"Activate"
+delete;						"Delete"
+
+
+
+# Form Validation
+nameTooShort;				"Name's too short!"
+nameTooLong;				"Name's too long!"
+
+
+
+# Messages
+attributegroupDeactivateSuccess;	"Attribute Group in use => deactivated successfully!"
+attributegroupActivateSuccess;		"Attribute Group activated successfully!"
+attributegroupUpdateFailed;		"Couldn't update Attribute Group!"
+
+attributegroupInsertSuccess;		"Attribute Group created successfully!"
+attributegroupInsertFailed;		"Couldn't create Attribute Group!"
+
+attributegroupDeleteSuccess;		"Attribute Group deleted successfully!"
+attributegroupDeleteFailed;		"Couldn't delete Attribute Group!"
+
+areYouSureDelete;				"Do you really want to delete this Attribute Group?"
+areYouSureActivate;				"Do you really want to activate this Attribute Group?"

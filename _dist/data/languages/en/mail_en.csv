@@ -1,0 +1,67 @@
+﻿# Index page
+
+indexTitle;"Notifications"
+mailCreate;"Create Notification Template"
+mailUpdate;"Edit Notification Template"
+overview;"Overview"
+numberOfResults;	"Number of Results"
+viewMail; "View mail"
+
+# index template list
+
+listName;"Name"
+listDescription;"Description"
+listNote;"Note"
+listSubject;"Subject"
+listMimeType;"Type"
+mailMimeTypeTextHtml;"HTML"
+mailMimeTypeTextPlain;"Text"
+
+listDelete; "Delete"
+
+
+# Forms
+
+name;"Name"
+description;"Description"
+note;"Note"
+
+openRecipients;"Empfänger bearbeiten"
+addRecipients;"Empfänger hinzufügen"
+recipients;"Recipients"
+userRecipients;"email addresses from users"
+customRecipients;"custom email addresses"
+recipientsHelp; "new line, new addresses"
+
+subject;"Subject"
+mimeType;"Type"
+mailEditor;"Editor"
+template;"Template"
+body;"Body"
+
+save;"Save"
+
+mailMimeTypeTitle;"MIME-Type of Mail"
+mailEditorTitle;"Editor on/off"
+
+# Create
+
+createTitle;"Template Anlegen"
+
+# Notifications
+
+notificationDeleteSuccess;"Mail deleted successfully!"
+notificationDeleteFailed;"Mail could not be deleted!"
+
+notificationInsertSuccess;"Mail inserted successfully!"
+notificationInsertFailed;"Mail could not be inserted!"
+
+recipientUpdateSuccess;"Mail updated successfully!"
+recipientUpdateFailed;"Mail could not be updated!"
+
+# view (sendTestMail)
+sendTestMail;   "Send test mail"
+mailSuccess;    "Mail sent successfully"
+unexpectedError; "An unexpected error occurred"
+edit;           "Edit mail"
+add_recipient;  "Additional recipient"

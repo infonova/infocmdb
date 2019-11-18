@@ -1,0 +1,78 @@
+<?php
+$version = $this->cmdbVersion['build number'];
+$request = Zend_Controller_Front::getInstance()->getRequest();
+$config  = new Zend_Config_Ini(APPLICATION_PATH . '/configs/individualization.ini', APPLICATION_ENV);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="locale" content="<?php echo $this->localeLang ?>" />
+    <?php echo $this->headTitle(); ?>
+    <link rel="StyleSheet" type="text/css" href="<?php echo APPLICATION_URL; ?>css/global.css" />
+    <link rel="StyleSheet" type="text/css" href="<?php echo APPLICATION_URL; ?>css/slider.css" />
+    <link rel="Shortcut Icon" type="image/x-icon" href="<?php echo APPLICATION_URL; ?>/images/favicon.ico" />
+    <link rel="Icon" type="image/x-icon" href="<?php echo APPLICATION_URL; ?>/images/favicon.ico" />
+
+    <script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/jquery/jquery-1.12.4.min.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/jquery/jquery-ui-1.11.4.min.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/jquery/jquery.coda-slider-3.0.js"></script>
+    <script>
+        $().ready(function () {
+            $('#slider-id').codaSlider({
+                autoSlide: true,
+                autoHeight: true,
+                autoSlideInterval: 12000,
+                dynamicArrows: false,
+                dynamicTabs: false
+            });
+
+        });
+
+
+    </script>
+
+    <style type="text/css">
+        a:link,
+        a:visited,
+        .ui-widget-content a.linked,
+        .ui-widget-content a.linked a:visited,
+        a.add,
+        a.addRelation,
+        a.add_headline,
+        a.link,
+        a.pageButton,
+        tr.headline th a,
+        tr.headline td a,
+        div#addReceiver a {
+            color: <?php echo $this->linkColor; ?>;
+        }
+
+        a.logoLink,
+        div.logo,
+        .att_tab {
+            color: <?php echo $this->mainColor; ?>;
+        }
+
+        #nav_project_list div.tab {
+            background-color: <?php echo $this->mainColor; ?>;
+            border-color: <?php echo $this->mainColor; ?>;
+        }
+
+    </style>
+    <?php echo $this->partial('_customization.phtml', array(
+        'version'                 => $version,
+        'individualizationConfig' => $config,
+    )); ?>
+</head>
+<body
+        class="
+            login-layout
+            <?php echo $request->getControllerName(); ?>-controller
+            <?php echo $request->getActionName(); ?>-action
+        "
+>
+<?php echo $this->layout()->content; ?>
+</body>
+</html>

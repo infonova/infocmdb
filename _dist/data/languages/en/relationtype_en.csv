@@ -1,0 +1,76 @@
+#Language file for Relations
+# relationt type create
+name;					"Name"
+description;			"Description"
+description2;			"Description optional"
+note;					"Note"
+color;					"Color"
+active;					"active"
+inactive;				"inactive"
+valid;					"Status"
+visualizeCiType;		"Visualize CI Type"
+numberOfResults;		"Number of Results:"
+
+relationType;			"Relation Types"
+overview;				"Overview"
+
+name_desc;				"internal name"
+description_desc;		"Description of the relation of the 'from'-CI"
+description2_desc;		"Description of the relation of the 'receiving'-CI"
+note_desc;				"Note to describe the type of relation between CIs"
+color_desc;				"Color for use in visualization"
+visualize_desc;			"Visualize relation?"
+
+relationTypeEdit;		"Edit Relation Type"
+relationTypeCreate;		"Create Relation Type"
+
+#navigation
+addCiTypes;				"Add CI Types"
+
+save;					"Save"
+abort;					"Cancel"
+next;					"Next"
+back;					"Back"
+
+#ci types
+ciType;				    "CI Type"
+assignCiTypes;			"Assign CI Types"
+assigned;				"assigned"
+unused;					"unused"
+type;					"Type"
+ciTypeName;				"CI Type Name"
+
+#finalize
+assignedCiTypes;		"Assigned CI Types"
+none;					"None"
+
+pickColor;				"Farbe wählen:"
+red;					"rot"
+green;					"grün"
+blue;					"blau"
+purple;					"violett"
+clear;					"clear"
+
+areYouSureDelete;				"Do you really want to delete this Relation Type?"
+areYouSureActivate;				"Do you really want to activate this Relation Type?"
+relationtypeUpdateSuccess;		"Relation Type edited successfully!"
+
+relationCreateWizardSuccess;	"Relation Type created successfully!"
+relationTypeDeleteSuccess;		"Relation Type wurde erfolgreich gelöscht!"
+relationTypeDactivateSuccess;	"Relation Type konnte nicht gelöscht werden, da er noch verwendet wird. <br>Er wurde stattdessen deaktiviert!"
+relationCreateWizardFailed;		"Relation Type konnte nicht angelegt werden!"
+relationTypeEditSuccess;		"Relation Type wurde erfolgreich geändert!"
+relationtypeDeactivateSuccess;	"Relation Type in use => deactivated successfully!"
+relationtypeActivationSuccess;	"Relation Type activated successfully!"
+
+relationtypeDeleteSuccess;		"Relation Type deleted successfully!"
+relationCreateSuccess;			"Relation wurde erfolgreich angelegt!"
+relationCreateFailed;			"Relation konnte nicht angelegt werden!"
+relationDeleteSuccess;			"Relation wurde erfolgreich gelöscht!"
+relationDeleteFailed;			"Relation konnte nicht gelöscht werden!"
+
+relationAddError1;				"Der Benutzer ist nicht dazu berechtigt, Relationen zu verändern!"
+relationAddError2;				"Das CI hat die maximale Anzahl an Relationen dieses Typs erreicht!"
+relationAddError3;				"Das verlinkte CI hat die maximale Anzahl an Relationen dieses Typs erreicht!"
+relationAddError4;				"Es wurden keine Relationen gefunden, die dem CI Typ des ausgewählten CI's zugeordet wurden!"
+relationtypeCreateCancled; "Create Relation cancelled"

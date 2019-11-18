@@ -1,0 +1,77 @@
+{
+    "name": "diablomedia/zendframework1-filter",
+    "description": "Zend Framework 1 Filter component",
+    "type": "library",
+    "keywords": [
+        "framework",
+        "zf1"
+    ],
+    "homepage": "http://framework.zend.com/",
+    "license": "BSD-3-Clause",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.0.0",
+        "diablomedia/zendframework1-exception": "^1.0.0",
+        "diablomedia/zendframework1-config": "^1.0.0",
+        "diablomedia/zendframework1-loader": "^1.0.0",
+        "diablomedia/zendframework1-crypt": "^1.0.0",
+        "diablomedia/zendframework1-date": "^1.0.0",
+        "diablomedia/zendframework1-locale": "^1.0.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Zend_Filter_": "src/"
+        },
+        "classmap": [
+            "src/Zend/Filter.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "Zend_": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "no-api": true,
+            "url": "https://github.com/diablomedia/phpstorm-stubs"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "phpstan/phpstan": "^0.11.2",
+        "jetbrains/phpstorm-stubs": "dev-phpstan",
+        "pear/archive_tar": "^1.4.6",
+        "friendsofphp/php-cs-fixer": "^2.11",
+        "maglnet/composer-require-checker": "^1.1.0",
+        "phpro/grumphp": "^0.14.0"
+    },
+    "include-path": [
+        "src/"
+    ],
+    "archive": {
+        "exclude": ["/tests"]
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-with-coverage": "phpunit --coverage-clover=clover.xml",
+        "phpstan": "phpstan analyze -c phpstan.neon --no-progress --ansi",
+        "style-check": "php-cs-fixer fix --dry-run -vv"
+    },
+    "suggest": {
+        "ext-iconv": "Optionally used in the Zend_Filter_HtmlEntities filter",
+        "ext-ctype": "Used in the Zend_Filter_Encrypt_Openssl filter",
+        "ext-mbstring": "Optionally used in the Zend_Filter_StringToLower/Upper filters",
+        "ext-mcrypt": "Used in the Zend_Filter_Encrypt_Mcrypt filter",
+        "ext-zlib": "Used in the Zend_Filter_Compress_Gz filter",
+        "ext-openssl": "Used in the Zend_Filter_Encrypt_Openssl filter",
+        "ext-bz2": "Used in the Zend_Filter_Compress_Bz2 and (optionally) in the Zend_Filter_Compress_Tar filters",
+        "ext-zip": "Used in the Zend_Filter_Compress_Zip filter",
+        "ext-rar": "Used in the Zend_Filter_Compress_Rar filter",
+        "ext-lzf": "Used in the Zend_Filter_Compress_Lzf filter",
+        "pear/archive_tar": "For the Zend_Filter_Compress_Tar filter",
+        "diablomedia/zendframework1-filter-input": "Provides the separate Zend_Filter_Input component"
+    }
+}

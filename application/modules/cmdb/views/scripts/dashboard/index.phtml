@@ -1,0 +1,97 @@
+<script type="text/javascript">
+    $(function () {
+        $("#dialogEvent").draggable();
+        $("#dialogEvent").resizable();
+    });
+
+    $(function () {
+        $("#calendar").draggable();
+    });
+</script>
+
+
+<h1 class="pageName"><?php echo $this->translate('dashboard'); ?></h1>
+
+<div align="center" style="width: 100%;">
+    <div name="content" style="float:left; width: 80%">
+        <table class="list content" style="position:relative;" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr class="headline">
+                <th style="width:20px;">&nbsp;</th>
+                <th style="width:140px;"><?php echo $this->translate('created'); ?></th>
+                <th style="width:45px;"><?php echo $this->translate('prio'); ?></th>
+                <th><?php echo $this->translate('todo'); ?></th>
+                <th style="width:20px;">&nbsp;</th>
+            </tr>
+            <?php if ($this->todoList): ?>
+                <?php foreach ($this->todoList as $todo): ?>
+                    <tr class="<?php echo $todo->getStatus(); ?>">
+                        <td>
+                            <?php if ($todo->getStatus() == 'done'): ?>
+                                <span class="done_list" href="<?php echo APPLICATION_URL . 'dashboard/done/ciattribute/' . $todo->getId(); ?>/">&nbsp;</span>
+                            <?php else: ?>
+                                <a class="done_list" href="<?php echo APPLICATION_URL . 'dashboard/complete/ciattribute/' . $todo->getId(); ?>/">&nbsp;</a>
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo $todo->getCreateDate(); ?></td>
+                        <td>
+                            <?php for ($i = 0; $i < 3; $i++) : ?>
+                                <?php if ($todo->getPriority() != $i) : ?>
+                                    <a class="ghost" href="<?php echo APPLICATION_URL . 'dashboard/change-prio/ciattribute/' . $todo->getId() . '/prio/' . $i; ?>"><?php echo $i; ?></a>
+                                <?php else: ?>
+                                    <span><?php echo $i; ?></span>
+                                <?php endif; ?>
+                            <?php endfor; ?>
+                        </td>
+                        <td>
+                            <a href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $todo->getCiId(); ?>"><?php echo $todo; ?></a>
+                        </td>
+                        <td>
+                            <a class="delete_list" href="<?php echo APPLICATION_URL . 'dashboard/delete/ciattribute/' . $todo->getId(); ?>/">&nbsp;</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </table>
+
+        <br>
+    </div>
+    <div name="control" align="right" style="float:right;">
+
+        <div id="calendar">
+            <?php echo $this->calendar ?>
+        </div>
+        <br>
+        <div id="dialogEvent" style="background-color: #fff; border: 1px solid #A1A5A9; width: 170px;" title="<?php echo $this->translate('nextEvents'); ?>">
+            <table class="widgetborder" width="100%" cellspacing="0" cellpadding="3" border="0">
+                <tbody>
+                <tr>
+                    <td align="center">
+                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tbody>
+                            <?php if ($this->eventList): // TODO: implement me?>
+                                <?php foreach ($this->eventList as $event): ?>
+                                    <tr>
+                                        <td><?php echo $event['time'] ?></td>
+                                        <td>
+                                            <a href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $event['ciid'] ?>"><?php echo $event['text'] ?></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <hr>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        <a href="<?php echo APPLICATION_URL ?>/statistics/index"><?php echo $this->translate('statistics'); ?></a>
+    </div>
+</div>

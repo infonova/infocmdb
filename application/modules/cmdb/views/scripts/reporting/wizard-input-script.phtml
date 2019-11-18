@@ -1,0 +1,25 @@
+<div id="innerTabs">
+    <ul>
+        <li><a href="#tabs-1"><h1 class="pageName"><?php echo $this->translate('upload') ?></h1></a></li>
+        <li><a href="#tabs-2"><h1 class="pageName"><?php echo $this->translate('create') ?></h1></a></li>
+    </ul>
+    <div id="tabs-1">
+        <table>
+            <?php echo $this->form->script; ?>
+            <?php echo $this->form->scriptdescription; ?>
+            <?php echo $this->form->scriptfilename; ?>
+
+            <?php echo $this->form->back; ?>
+            <?php echo $this->form->submit; ?>
+        </table>
+    </div>
+    <div id="tabs-2">
+        <table>
+            <?php echo $this->form->name; ?>
+            <?php echo $this->form->content; ?>
+
+            <?php echo $this->form->back; ?>
+            <?php echo $this->form->save; ?>
+        </table>
+    </div>
+</div>

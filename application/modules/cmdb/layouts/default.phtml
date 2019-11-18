@@ -1,0 +1,179 @@
+<?php
+$version = $this->cmdbVersion['build number'];
+$request = Zend_Controller_Front::getInstance()->getRequest();
+$layout  = $this->layout()->getLayout();
+$config  = new Zend_Config_Ini(APPLICATION_PATH . '/configs/individualization.ini', APPLICATION_ENV);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+    <script type="text/javascript">
+        var searchDefault = "<?php echo $this->searchTerm;?>";
+
+    </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="locale" content="<?php echo $this->localeLang ?>"/>
+    <?php echo $this->headTitle(); ?>
+    <link type="text/css" href="<?php echo APPLICATION_URL; ?>/css/global.css?v=<?php echo $version ?>"
+          rel="stylesheet"/>
+    <link type="text/css" href="<?php echo APPLICATION_URL; ?>/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>js/jquery/css/jquery-ui.min.css?v=<?php echo $version ?>"
+          type="text/css" media="screen"/>
+    <link rel="StyleSheet"
+          href="<?php echo APPLICATION_URL; ?>js/jquery/css/jquery-ui-infocmdb.min.css?v=<?php echo $version ?>"
+          type="text/css" media="screen"/>
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>css/navigation/menu.css?v=<?php echo $version ?>"
+          type="text/css" media="screen"/>
+    <link rel="StyleSheet"
+          href="<?php echo APPLICATION_URL; ?>js/fancytree/skin-lion/infocmdb.fancytree.css?v=<?php echo $version ?>"
+          type="text/css" media="screen"/>
+    <link rel="stylesheet"
+          href="<?php echo APPLICATION_URL; ?>js/flatpickr/plugins/confirmDate/confirmDate.min.css?v=<?php echo $version ?>"
+          type="text/css" media="screen"/>
+    <link rel="stylesheet"
+          href="<?php echo APPLICATION_URL; ?>js/flatpickr/themes/infocmdb_datepicker_theme.css?v=<?php echo $version ?>"
+          type="text/css" media="screen"/>
+    <!--[if lte IE 6]>
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>css/navigation/ie-menu.css?v=<?php echo $version ?>"
+          type="text/css" media="screen"/>
+    <![endif]-->
+    <!--[if IE 7]>
+    <link rel="StyleSheet" href="<?php echo APPLICATION_URL; ?>css/navigation/ie7-menu.css?v=<?php echo $version ?>"
+          type="text/css" media="screen"/>
+    <![endif]-->
+    <?php if ($this->headLink()) echo $this->headLink() . "\r\n"; ?>
+
+    <link rel="Shortcut Icon" type="image/x-icon"
+          href="<?php echo APPLICATION_URL; ?>images/favicon.ico?v=<?php echo $version ?>"/>
+    <link rel="Icon" type="image/x-icon"
+          href="<?php echo APPLICATION_URL; ?>images/favicon.ico?v=<?php echo $version ?>"/>
+    <link rel="search" href="<?php echo APPLICATION_URL; ?>opensearchdescription.php"
+          type="application/opensearchdescription+xml" title="<?php echo $config->title; ?>"/>
+
+    <script type="text/javascript">language = "<?php echo $this->language; ?>";</script>
+
+    <script language="JavaScript" type="text/javascript"
+            src="<?php echo APPLICATION_URL; ?>js/jquery/jquery-1.12.4.min.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="<?php echo APPLICATION_URL; ?>js/jquery/jquery-ui-1.11.4.min.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="<?php echo APPLICATION_URL; ?>js/table/jquery.tablehover.pack.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="<?php echo APPLICATION_URL; ?>js/utils/util.min.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="<?php echo APPLICATION_URL; ?>js/fancytree/jquery.fancytree.min.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="<?php echo APPLICATION_URL; ?>js/flatpickr/flatpickr.min.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="<?php echo APPLICATION_URL; ?>js/flatpickr/plugins/confirmDate/confirmDate.min.js?v=<?php echo $version ?>"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="<?php echo APPLICATION_URL; ?>js/flatpickr/l10n/<?php echo $this->language; ?>.js?v=<?php echo $version ?>"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            $(window).scroll(function () {
+                var top = $(window).scrollTop();
+                if ($('.top_pad').height() + 56 <= $(window).height()) {
+                    $('.top_pad').css("padding-top", top + 'px');
+                    $('.left_menu').css("background-color", 'white');
+                } else {
+                    $('.top_pad').css("padding-top", "0");
+                }
+            });
+        });
+        //]]>
+    </script>
+
+    <?php if ($this->headScript()) echo $this->headScript() . "\r\n"; ?>
+    <style type="text/css">
+        a:link,
+        a:visited,
+        .ui-widget-content a.linked,
+        .ui-widget-content a.linked a:visited,
+        a.add,
+        a.addRelation,
+        a.add_headline,
+        a.link,
+        a.pageButton,
+        tr.headline th a,
+        tr.headline td a,
+        div#addReceiver a {
+            color: <?php echo $this->linkColor; ?>;
+        }
+
+        a.logoLink,
+        div.logo,
+        .att_tab {
+            color: <?php echo $this->mainColor; ?>;
+        }
+
+        #nav_project_list div.tab {
+            background-color: #D3D3D3;
+            border-color: #D3D3D3;
+        }
+
+        .attribute_search_button_color {
+            color: <?php echo $this->mainColor; ?>;
+        }
+    </style>
+    <?php echo $this->partial('_customization.phtml', array(
+        'version'                 => $version,
+        'individualizationConfig' => $config,
+    )); ?>
+</head>
+<body
+    <?php if ($this->onLoad) echo ' onLoad="' . $this->onLoad . '"' ?>
+        class="
+            <?php echo $layout ?>-layout
+            <?php echo $request->getControllerName(); ?>-controller
+            <?php echo $request->getActionName(); ?>-action
+        "
+>
+<?php
+if ($this->headScript()) echo $this->inlineScript() . "\r\n";
+
+// fetch headline
+echo $this->layout()->headline;
+?>
+<?php
+// fetch projects
+echo $this->layout()->project;
+?>
+
+<div id="content">
+    <table class="content" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width='200px' class="left_menu"><?php echo $this->layout()->menu; ?></td>
+            <td align="left" class="content_content">
+                <?php
+                // displays the exception message if required
+                echo $this->layout()->exception;
+                echo $this->flashMessenger();
+
+                if (preg_match("/MSIE 6.+Win./", getenv("HTTP_USER_AGENT"))) {
+                    ?>
+                    <div style="width: 97%;	border: 1px solid red;	margin-bottom: 15px; padding: 8px;">
+                        <h1>Wir empfehlen die folgenden Browser:</h1>
+                        <span>Um das bestmögliche Erlebnis zu gewährleisten, empfehlen wir Ihnen einen der folgenden unterstützten Browser:</span>
+                        <ul style="list-style: disc inside;">
+                            <li><a href="http://www.mozilla-europe.org/firefox/">Firefox 3 oder neuer</a></li>
+                            <li><a href="http://www.microsoft.com/internet-explorer/">Internet Explorer 7 oder neuer</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <?php
+                }
+
+                // fetch 'content' key using layout helper:
+                echo $this->layout()->content;
+                ?>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="infocmdb-modal-container" style="display:none;">
+
+</div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+logs;				"Log-Files"
+detail;				"Detail Ansicht"
+import;				"Import-Logs"
+main;				"Application-Logs"
+overview;			"Übersicht"

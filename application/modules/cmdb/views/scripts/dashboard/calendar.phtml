@@ -1,0 +1,116 @@
+<script type="text/javascript">
+    $(function () {
+        $("#dialogEvent").draggable();
+        $("#dialogEvent").resizable();
+    });
+
+    $(function () {
+        $("#dialogTodo").draggable();
+        $("#dialogTodo").resizable();
+    });
+
+    $(function () {
+        $("#calendar").draggable();
+    });
+</script>
+
+
+<h1 class="pageName"><?php echo $this->translate('dashboard'); ?></h1>
+
+<div align="center" style="width: 100%;">
+    <div name="content" style="float:left; width: 80%">
+
+        <table class="calborder" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+            <tr>
+                <td class="titleborder" valign="middle" align="center" height="50">
+                    <div class="spacer"></div>
+                    <span class="titlecontent"><?php echo $this->selectedDate ?></span>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" align="center" colspan="3">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tbody>
+
+                        <?php foreach ($this->timeList as $time): ?>
+                            <?php echo $time; ?>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br>
+    </div>
+    <div name="control" align="right" style="float:right;">
+
+        <div id="calendar">
+            <?php echo $this->calendar ?>
+        </div>
+        <br>
+        <div id="dialogTodo" style="background-color: #fff; border: 1px solid #A1A5A9;  width: 170px" title="<?php echo $this->translate('toDoList'); ?>">
+            <table class="widgetborder" width="100%" cellspacing="0" cellpadding="3" border="0">
+                <tbody>
+                <tr>
+                    <td align="center">
+                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tbody>
+                            <?php if ($this->todoList): ?>
+                                <?php foreach ($this->todoList as $todo): ?>
+                                    <tr>
+                                        <td><?php echo $todo ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <hr>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <br>
+        <div id="dialogEvent" style="background-color: #fff; border: 1px solid #A1A5A9; width: 170px;" title="<?php echo $this->translate('nextEvents'); ?>">
+            <table class="widgetborder" width="100%" cellspacing="0" cellpadding="3" border="0">
+                <tbody>
+                <tr>
+                    <td align="center">
+                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                            <tbody>
+                            <?php if ($this->eventList): // TODO: implement me?>
+                                <?php foreach ($this->eventList as $event): ?>
+                                    <tr>
+                                        <td><?php echo $event['time'] ?></td>
+                                        <td>
+                                            <a href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $event['ciid'] ?>"><?php echo $event['text'] ?></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <hr>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        <a href="<?php echo APPLICATION_URL ?>/statistics/index"><?php echo $this->translate('statistics'); ?></a>
+    </div>
+</div>

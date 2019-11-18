@@ -1,0 +1,140 @@
+
+.multiselect {
+		width: 600px;
+		height: 150px;
+	}
+
+/* Multiselect
+----------------------------------*/
+
+.ui-multiselect {
+	border: 1px solid;
+	font-size: 0.8em;
+}
+
+.ui-multiselect ul {
+	-moz-user-select: none;
+}
+
+.ui-multiselect div.list-container {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	float: left;
+}
+
+.ui-multiselect ul.list {
+	position: relative;
+	padding: 0;
+	overflow: auto;
+	overflow-x: hidden;
+	margin: 0;
+	list-style: none;
+	width: 100%;
+	overflow-y: scroll;
+}
+
+.ui-multiselect li {
+	margin: 0;
+	padding: 0;
+	cursor: default;
+	line-height: 20px;
+	height: 20px;
+	font-size: 11px;
+	list-style: none;
+	padding-left: 10px;
+	white-space: normal;
+	overflow: hidden;
+}
+
+.ui-multiselect li div.option-text {
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.ui-multiselect li a, .ui-multiselect li input {
+	color: #999;
+	text-decoration: none;
+	padding: 0;
+	display: inline;
+	float: left;
+	cursor: pointer;
+	border: 1px solid #CCCCCC;
+	border-radius: 0;
+	text-align: center;
+}
+
+.ui-multiselect .ui-icon {
+	border: 1px solid #eeeeee;
+	background-color: #cccccc;
+	border-raduis: 12px;
+}
+
+.ui-multiselect li input {
+	margin-top: 2px;
+}
+
+.ui-multiselect ul.ui-state-highlight {
+	border: none;
+}
+
+.ui-multiselect li.ui-draggable-dragging {
+	border: 1px solid;
+	padding-left: 10px;
+	z-index: 99999;
+}
+
+.ui-multiselect div.available {
+	border-left: 1px solid;
+}
+
+.ui-multiselect .ui-state-default {
+	border: none;
+	margin-bottom: 1px;
+	position: relative;
+}
+
+.ui-multiselect .ui-state-hover {
+	border: none;
+}
+
+.ui-multiselect .ui-widget-header {
+	border: none;
+	font-size: 11px;
+	margin-bottom: 1px;
+}
+
+.ui-multiselect .add-all {
+	float: right;
+	padding: 7px;
+	white-space: nowrap;
+}
+
+.ui-multiselect .remove-all {
+	float: right;
+	padding: 7px;
+	white-space: nowrap;
+}
+
+.ui-multiselect .count {
+	cursor: default;
+	float: left;
+	padding: 5px;
+	max-height: 60px;
+}
+
+.ui-multiselect .search {
+	float: left;
+	padding: 1px;
+	opacity: 0.7;
+	margin: 4px;
+	height: 14px;
+}
+
+.ui-multiselect .overlay {
+	background: #aaaaaa;
+	opacity: .30;
+	filter: Alpha(Opacity=30);
+}

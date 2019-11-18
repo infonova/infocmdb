@@ -1,0 +1,3 @@
+queryUnknown;			"Unerwartete Exception beim bearbeiten der Query"
+queryNotTransmitted;	"Fehler beim Lesen der Query. Es wurde keine Query gefunden. Bitte überprüfen Sie ihren Request"
+queryNotSelect;			"Die empfangene Query war keine SELECT Query"

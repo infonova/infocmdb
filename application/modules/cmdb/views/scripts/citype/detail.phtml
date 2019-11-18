@@ -1,0 +1,144 @@
+<script type="text/javascript">
+    function delete_citype(ciid) {
+        if (confirm('<?php echo $this->translate("areYouSureDelete"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>citype/delete/citypeId/' + ciid;
+        }
+    }
+
+    function activate_citype(ciid) {
+        if (confirm('<?php echo $this->translate("areYouSureActivate"); ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>citype/activate/citypeId/' + ciid;
+        }
+    }
+</script>
+
+<div class="button_row">
+    <a class="link button" href='<?php echo APPLICATION_URL ?>citype/edit/citypeId/<?php echo $this->ciType[Db_CiType::ID] ?>'><?php echo $this->translate('edit'); ?></a>
+    <?php if ($this->ciType[Db_CiType::IS_ACTIVE]): ?>
+        <a class="link button cancel" href="javascript:delete_citype(<?php echo $this->ciType[Db_CiType::ID] ?>)"><?php echo $this->translate('delete'); ?></a>
+    <?php else: ?>
+        <a class="link button activate" href="javascript:activate_citype(<?php echo $this->ciType[Db_CiType::ID] ?>)"><?php echo $this->translate('activate'); ?></a>
+    <?php endif; ?>
+    <a class="link button" href="<?php echo APPLICATION_URL ?>citype/index"><?php echo $this->translate('overview'); ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('ciTypeDetail'); ?></h1>
+
+<fieldset class="lordVader">
+    <table>
+        <tr>
+            <td><strong><?php echo $this->translate('ciTypeId'); ?></strong></td>
+            <td><?php echo $this->ciType[Db_CiType::ID] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('name'); ?></strong></td>
+            <td><?php echo $this->ciType[Db_CiType::NAME] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('description'); ?></strong></td>
+            <td><?php echo $this->ciType[Db_CiType::DESCRIPTION] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('createButtonDescription'); ?></strong></td>
+            <td><?php echo $this->ciType[Db_CiType::CREATE_BUTTON_DESCRIPTION] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('note'); ?></strong></td>
+            <td><?php echo $this->ciType[Db_CiType::NOTE] ?></td>
+        </tr>
+        <?php if ($this->parent): ?>
+            <tr>
+                <td><strong><?php echo $this->translate('parentCiType'); ?></strong></td>
+                <td>
+                    <a class="link" href="<?php echo APPLICATION_URL ?>citype/detail/citypeId/<?php echo $this->parent[Db_CiType::ID]; ?>"><?php echo $this->parent[Db_CiType::NAME] ?></a>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if ($this->defaultProject): ?>
+            <tr>
+                <td><strong><?php echo $this->translate('defaultProject'); ?></strong></td>
+                <td>
+                    <a class="link" href="<?php echo APPLICATION_URL ?>project/detail/projectId/<?php echo $this->defaultProject[Db_Project::ID]; ?>"><?php echo $this->defaultProject[Db_Project::NAME] ?></a>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if ($this->defaultAttribute): ?>
+            <tr>
+                <td><strong><?php echo $this->translate('defaultAttribute'); ?></strong></td>
+                <td>
+                    <a class="link" href="<?php echo APPLICATION_URL ?>attribute/detail/attributeId/<?php echo $this->defaultAttribute[Db_Attribute::ID]; ?>"><?php echo $this->defaultAttribute[Db_Attribute::NAME] ?></a>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if ($this->defaultSortAttribute): ?>
+            <tr>
+                <td><strong><?php echo $this->translate('defaultSortAttribute'); ?></strong></td>
+                <td>
+                    <a class="link" href="<?php echo APPLICATION_URL ?>attribute/detail/attributeId/<?php echo $this->defaultSortAttribute[Db_Attribute::ID]; ?>"><?php echo $this->defaultSortAttribute[Db_Attribute::NAME] ?></a>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <tr>
+            <td><strong><?php echo $this->translate('order'); ?></strong></td>
+            <td><?php echo $this->ciType[Db_CiType::ORDER_NUMBER] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('allowCiAttach'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->ciType[Db_CiType::IS_CI_ATTACH]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('allowAttributeAttach'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->ciType[Db_CiType::IS_ATTRIBUTE_ATTACH]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('xml'); ?></strong></td>
+            <td><?php echo $this->ciType[Db_CiType::TAG] ?></td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('eventEnabled'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->ciType[Db_CiType::IS_EVENT_ENABLED]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('ticketEnabled'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->ciType[Db_CiType::IS_TAB_ENABLED]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+        <tr>
+            <td><strong><?php echo $this->translate('active'); ?></strong></td>
+            <td>
+                <input type="checkbox" disabled="disabled" <?php if ($this->ciType[Db_CiType::IS_ACTIVE]) echo 'checked="checked"'; ?> />
+            </td>
+        </tr>
+    </table>
+    <?php if ($this->attributes && count($this->attributes) > 0) : ?>
+        <fieldset class="detail_fieldset">
+            <legend><strong><?php echo $this->translate('attributes'); ?></strong></legend>
+            <ul>
+                <?php foreach ($this->attributes as $attribute): ?>
+                    <li>
+                        <a class="link" href="<?php echo APPLICATION_URL ?>attribute/detail/attributeId/<?php echo($attribute[Db_Attribute::ID]); ?>"><?php if ($attribute[Db_CiTypeAttribute::IS_MANDATORY]) echo '<strong>'; ?><?php echo($attribute[Db_Attribute::NAME]); ?><?php if ($attribute[Db_CiTypeAttribute::IS_MANDATORY]) echo '</strong>'; ?></a></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </fieldset>
+    <?php endif; ?>
+    <?php if ($this->relations && count($this->relations) > 0) : ?>
+        <fieldset class="detail_fieldset">
+            <legend><strong><?php echo $this->translate('relations'); ?></strong></legend>
+            <ul>
+                <?php foreach ($this->relations as $relation): ?>
+                    <li>
+                        <a class="link" href="<?php echo APPLICATION_URL ?>relationtype/detail/relationTypeId/<?php echo($relation[Db_CiRelationType::ID]); ?>"><?php if ($relation[Db_CiTypeRelationType::MAX_AMOUNT]) echo $this->translate('maximum') . ' ' . $relation[Db_CiTypeRelationType::MAX_AMOUNT] . ' '; ?><?php echo($relation[Db_CiRelationType::NAME]); ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </fieldset>
+    <?php endif; ?>
+</fieldset>

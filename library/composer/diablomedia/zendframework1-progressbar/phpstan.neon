@@ -1,0 +1,16 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    universalObjectCratesClasses:
+    	- Zend_Session_Namespace
+    ignoreErrors:
+        -
+            message: '#Default value of the parameter \#2 \$min \(0\) of method Zend_ProgressBar::__construct\(\) is incompatible with type float\.#'
+            path: %currentWorkingDirectory%/src/Zend/ProgressBar.php
+        -
+            message: '#Default value of the parameter \#3 \$max \(100\) of method Zend_ProgressBar::__construct\(\) is incompatible with type float\.#'
+            path: %currentWorkingDirectory%/src/Zend/ProgressBar.php

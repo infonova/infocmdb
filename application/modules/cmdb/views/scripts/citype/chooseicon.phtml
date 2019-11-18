@@ -1,0 +1,28 @@
+<script type="text/javascript">
+    function selectIcon(iconName) {
+        var storedIconText = $('#stored_icon_name');
+        var storedIconInput = $('#storedIcon');
+
+        if (storedIconText.length > 0) {
+            storedIconText.html(iconName + '*');
+        }
+
+        if (storedIconInput.length > 0) {
+            storedIconInput.val(iconName);
+        }
+
+        $('#infocmdb-dialog').dialog('close');
+    }
+</script>
+
+<?php
+if ($this->images) {
+    foreach ($this->images as $image) : ?>
+        <a href="#" onclick="selectIcon('<?php echo $image ?>')">
+            <img src="<?php echo $this->path . $image ?>" title="<?php echo $image ?>" class="image">
+        </a>
+    <?php endforeach;
+} else {
+    echo $this->translate('noIconsInStock');
+}
+?>

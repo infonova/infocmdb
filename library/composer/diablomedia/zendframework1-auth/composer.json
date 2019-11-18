@@ -1,0 +1,53 @@
+{
+    "name": "diablomedia/zendframework1-auth",
+    "description": "Zend Framework 1 Auth component",
+    "type": "library",
+    "keywords": [
+        "framework",
+        "zf1"
+    ],
+    "homepage": "http://framework.zend.com/",
+    "license": "BSD-3-Clause",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.0.0",
+        "diablomedia/zendframework1-exception": "^1.0.0",
+        "diablomedia/zendframework1-session": "^1.0.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Zend_Auth_": "src/"
+        },
+        "classmap": [
+            "src/Zend/Auth.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "Zend_": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "phpstan/phpstan": "^0.11.2",
+        "friendsofphp/php-cs-fixer": "^2.11",
+        "maglnet/composer-require-checker": "^1.1.0",
+        "phpro/grumphp": "^0.14.0"
+    },
+    "archive": {
+        "exclude": ["/tests"]
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-with-coverage": "phpunit --coverage-clover=clover.xml",
+        "phpstan": "phpstan analyze -c phpstan.neon --no-progress --ansi",
+        "style-check": "php-cs-fixer fix --dry-run -vv"
+    },
+    "suggest": {
+        "diablomedia/zendframework1-auth-adapter-dbtable": "DbTable based auth adapter",
+        "diablomedia/zendframework1-auth-adapter-openid": "OpenId based auth adapter",
+        "diablomedia/zendframework1-auth-adapter-ldap": "Ldap based auth adapter",
+        "diablomedia/zendframework1-auth-adapter-http": "Http based auth adapter"
+    }
+}

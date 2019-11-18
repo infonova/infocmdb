@@ -1,0 +1,82 @@
+<div id=login_background></div>
+<div class='logo_topright'></div>
+<div class='login_slider' <?php echo $this->backgroundStyle; ?>>
+    <div class="coda-slider" id="slider-id">
+        <?php
+        //Image Pfad
+        $path  = APPLICATION_PATH . "/../public/images/slider_pictures";
+        $files = scandir($path);
+        for ($i = 0; $i < count($files); $i++) {
+            //Verzeichnis auslesen
+            if ($files[$i] != "." && $files[$i] != ".." && !is_dir($files[$i])) {
+                // Nur Bilder durch lassen (Filter)
+                if (strstr($files[$i], ".gif") || strstr($files[$i], ".png") || strstr($files[$i], ".jpg")) {
+                    //Pfad zum aktuellen Bild
+                    $path       = APPLICATION_URL . "/images/slider_pictures";
+                    $image_path = $path . "/" . $files[$i];
+                    //Bild anzeigen
+                    echo "<div><p><img src=\"$image_path\"></p></div>";
+                }
+            }
+        }
+        ?>
+
+    </div>
+</div>
+<div class='login_table_wrapper'>
+    <div class="login_infocmdb">
+
+        <?php echo $this->render('login/_logo.phtml'); ?>
+
+        <h6 class="configuration">Configuration Management</h6>
+    </div>
+
+    <?php if (isset($this->notification['message'])) : ?>
+
+        <div class="recovery">
+            <?php if ($this->notification['error']) {
+                echo $this->translate('loginPasswordRecoveryErrorTitel');
+            } ?><br>
+            <?php echo $this->notification['message'] ?>
+        </div>
+
+    <?php endif; ?>
+
+    <div class='login_form'>
+        <form action="<?php echo $this->actionUrl; ?>" method="POST">
+            <table>
+                <tr>
+                    <td><?php echo $this->form->username; ?></td>
+                    <td rowspan="<?php echo $this->rowspan; ?>"><?php echo $this->form->submit; ?></td>
+                </tr>
+                <tr>
+                    <td>
+                        <hr style="border: 0; border-bottom: 1px dashed #ccc; background: #999;">
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->form->password; ?></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->form->password_confirm; ?></td>
+                    <td></td>
+                </tr>
+                <?php if (isset($this->form->verify_code)) : ?>
+                    <tr>
+                        <td>
+                            <hr style="border: 0; border-bottom: 1px dashed #ccc; background: #999;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->form->verify_code; ?></td>
+                        <td></td>
+                    </tr>
+                <?php endif; ?>
+
+            </table>
+        </form>
+    </div>
+
+</div>
+

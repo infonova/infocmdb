@@ -1,0 +1,140 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+<script type="text/javascript">
+    function updatePage(page) {
+        <?php
+        $url = $this->url(array('orderBy' => $this->orderBy, 'direction' => $this->direction, 'filter' => $this->filter, 'page' => null));
+        if (!strstr($url, 'index'))
+            $url .= '/index';
+        ?>
+        var filterDefault = 'Filter';
+        if ($("#search").val() == filterDefault)
+            $("#search").val('');
+        document.forms['searchForm'].action = "<?php echo $url; ?>/page/" + page;
+        document.forms['searchForm'].submit();
+        return false;
+    }
+
+    function delete_relationstypes(relationtype_id) {
+        if (confirm('<?php echo $this->translate('areYouSureDelete') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>relationtype/delete/relationTypeId/' + relationtype_id;
+        }
+    }
+
+    function activate_relationstypes(relationtype_id) {
+        if (confirm('<?php echo $this->translate('areYouSureActivate') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>relationtype/activate/relationTypeId/' + relationtype_id;
+        }
+    }
+
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?> create" href="<?php echo APPLICATION_URL . 'relationtype/create' ?>"><?php echo $this->translate('relationTypeCreate') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('relationType') ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+              action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+              method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterButton;
+            ?>
+        </form>
+    </div>
+</div>
+
+<div class="clearBoth"></div>
+<div class="break"></div>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th>
+                <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_CiRelationType::NAME, 'direction' => (($this->orderBy == Db_CiRelationType::NAME) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('name'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_CiRelationType::DESCRIPTION, 'direction' => (($this->orderBy == Db_CiRelationType::DESCRIPTION) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('description'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_CiRelationType::DESCRIPTION_OPTIONAL, 'direction' => (($this->orderBy == Db_CiRelationType::DESCRIPTION_OPTIONAL) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('description2'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_CiRelationType::NOTE, 'direction' => (($this->orderBy == Db_CiRelationType::NOTE) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('note'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_CiRelationType::IS_ACTIVE, 'direction' => (($this->orderBy == Db_CiRelationType::IS_ACTIVE) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                    <?php echo $this->translate('valid'); ?>
+                </a>
+            </th>
+            <th style="width:120px;">&nbsp;</th>
+        </tr>
+        <?php
+        $row_count = 0;
+        foreach ($this->paginator as $item):
+            ?>
+            <?php
+            if (!$item[Db_CiRelationType::IS_ACTIVE]) {
+                ?>
+                <tr class="inactive">
+                <?php
+            } else {
+                ?>
+                <tr>
+                <?php
+            }
+            ?>
+            <td>
+                <a class="link" href="<?php echo APPLICATION_URL . "relationtype/edit/relationTypeId/" . $item[Db_CiRelationType::ID]; ?>"><?php echo $item[Db_CiRelationType::NAME]; ?></a>
+            </td>
+            <td><?php echo $item[Db_CiRelationType::DESCRIPTION]; ?></td>
+            <td><?php echo $item[Db_CiRelationType::DESCRIPTION_OPTIONAL]; ?></td>
+            <td><?php echo $item[Db_CiRelationType::NOTE]; ?></td>
+            <td><?php if ($item[Db_CiRelationType::IS_ACTIVE]) {
+                    echo $this->translate('active');
+                } else {
+                    echo $this->translate('inactive');
+                } ?></td>
+            <td>
+                <?php if ($item[Db_CiRelationType::IS_ACTIVE]): ?>
+                    <a class="delete_list" href="javascript:delete_relationstypes(<?php echo $item[Db_CiRelationType::ID]; ?>);" title="<?php echo $this->translate('delete'); ?>"></a>
+                <?php endif; ?>
+                <div class="rfloater">
+                    <a class="edit_list buttonLink" href='<?php echo APPLICATION_URL . "relationtype/edit/relationTypeId/" . $item[Db_CiRelationType::ID]; ?>'>&nbsp;</a>
+                    <?php if (!$item[Db_CiRelationType::IS_ACTIVE]): ?>
+                        <a href="#" onclick="javascript:activate_relationstypes(<?php echo $item[Db_CiRelationType::ID]; ?>);"><img class="delete_list" src='<?php echo APPLICATION_URL . "images/icon/activate.png" ?>' title="<?php echo $this->translate('activate') ?>"></a>
+                    <?php endif; ?>
+                </div>
+            </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php echo $this->paginator; ?>
+<?php else: ?>
+    <div class="empty_message">
+        <?php echo $this->translate('noRelationtypeFound') ?>
+    </div>
+<?php endif; ?>

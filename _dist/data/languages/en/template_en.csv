@@ -1,0 +1,14 @@
+# Index page
+
+indexTitle;"Templates"
+linkCreate;"Template anlegen"
+
+
+# index template list
+
+listName;"Name"
+listDescription;"Beschreibung"
+listNote;"Notiz"
+listFile;"File"
+
+listDelete;"Löschen"

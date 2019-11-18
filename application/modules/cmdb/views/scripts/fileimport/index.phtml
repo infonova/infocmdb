@@ -1,0 +1,246 @@
+<script type="text/javascript">
+
+    window.setTimeout("refresh()", 5000);
+
+    $(function () {
+        $("#tabs").tabs({selected: 0}, {disabled: [1, 2, 3]});
+    });
+
+    function next() {
+        var selected = $("#tabs").tabs("option", "active");
+        var next = getNextEnabledTab(selected);
+        $("#tabs").tabs({active: next});
+    }
+
+    function last() {
+        var next = $("#tabs").tabs("option", "active") + 1;
+        $("#tabs").tabs({disabled: []});
+        $("#tabs").tabs({active: next});
+    }
+
+    function getNextEnabledTab(index) {
+        index += 1;
+        var disabled = $("#tabs").tabs("option", "disabled");
+        for (var i = 0; i < disabled.length; i++) {
+            if (disabled[i] == index)
+                index = getNextEnabledTab(index);
+        }
+
+        return index;
+    }
+
+    function getLastEnabledTab(index) {
+        index -= 1;
+        var disabled = $("#tabs").tabs("option", "disabled");
+        for (var i = 0; i < disabled.length; i++) {
+            if (disabled[i] == index)
+                index = getLastEnabledTab(index);
+        }
+
+        return index;
+    }
+
+    function back() {
+        var selected = $("#tabs").tabs("option", "active");
+        var last = getLastEnabledTab(selected);
+        $("#tabs").tabs({active: last});
+    }
+
+    var popupStatus = 0;
+
+    //loading popup with jQuery magic!
+    function loadPopup() {
+        //loads popup only if it is disabled
+        if (popupStatus == 0) {
+            $("#popupDetailError").fadeIn("slow");
+            popupStatus = 1;
+        }
+    }
+
+    //disabling popup with jQuery magic!
+    function disablePopup() {
+        //disables popup only if it is enabled
+        if (popupStatus == 1) {
+            $("#popupDetailError").fadeOut("slow");
+            popupStatus = 0;
+        }
+    }
+
+    function importFile(fileId, modus) {
+        $.post('<?php echo APPLICATION_URL?>fileimport/ajaximport/fileId/' + fileId + '/modus/' + modus + '/start/1',
+            function (response) {
+                $("div#fragment-4").html(response);
+                $("#tabs").tabs({disabled: [4]});
+                $("#tabs").tabs({active: 3});
+            },
+            "html"
+        );
+    }
+
+    $(document).ready(function () {
+
+        $(".modus").change(function () {
+            $("#tabs").tabs('enable', 1);
+        });
+
+        <?php if ($this->upload) { ?>
+        $("#tabs").tabs({disabled: [3, 4]});
+        $("#tabs").tabs({active: 1});
+        <?php } ?>
+
+
+        //LOADING POPUP
+        //Click the button event!
+        $("#button").click(function () {
+            //centering with css
+            //centerPopup();
+            //load popup
+            loadPopup();
+        });
+
+        //centering popup
+        function centerPopup() {
+            //request data for centering
+            var windowWidth = document.documentElement.clientWidth;
+            var windowHeight = document.documentElement.clientHeight;
+            var popupHeight = $("#popupDetailError").height();
+            var popupWidth = $("#popupDetailError").width();
+            //centering
+            $("#popupDetailError").css({
+                "position": "absolute",
+                "top": popupHeight / 2,
+                "left": popupWidth / 2
+            });
+            //only need force for IE6
+
+            $("#backgroundPopup").css({
+                "height": windowHeight
+            });
+        }
+
+        //CLOSING POPUP
+        //Click the x event!
+        $("#popupDetailErrorClose").click(function () {
+            disablePopup();
+        });
+        //Click out event!
+        $("#backgroundPopup").click(function () {
+            //disablePopup();
+        });
+        //Press Escape event!
+        $(document).keypress(function (e) {
+            if (e.keyCode == 27 && popupStatus == 1) {
+                disablePopup();
+            }
+        });
+
+    });
+
+    function cancel() {
+
+        window.location.href = '<?php echo APPLICATION_URL . 'fileimport/index/'; ?>';
+
+    }
+
+    function submitForm() {
+        document.forms['createForm'].submit();
+    }
+
+    function submitUpload() {
+        document.forms['createForm'].action = "<?php echo APPLICATION_URL . 'fileimport/index/upload/1' ?>";
+        document.forms['createForm'].submit();
+    }
+
+    function refresh() {
+        $.post('<?php echo APPLICATION_URL?>fileimport/ajaximport/fileId/<?php echo $this->fileId; ?>/modus/<?php echo $this->modus; ?>',
+            function (response) {
+                $("div#fragment-4").html(response);
+                window.setTimeout("refreshInternal()", 2000);
+            },
+            "html"
+        );
+    }
+
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class = " button";
+}
+
+?>
+
+<h1 class="pageName"><?php echo $this->translate('fileimport') ?></h1>
+<div class="break"></div>
+
+<?php $step = 1; ?>
+
+<div id="tabs">
+    <ul>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('wizardImportType') ?></span></a>
+        </li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('wizardUpload') ?></span></a>
+        </li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('wizardSummary') ?></span></a>
+        </li>
+        <li><a href="#fragment-<?php echo $step ?>"><span class="att_nr"><?php echo $step;
+                    $step++; ?></span><span class="att_desc"><?php echo $this->translate('wizardLog') ?></span></a></li>
+    </ul>
+
+    <fieldset class="create_form steps">
+        <form widgetid="createForm" id="createForm" enctype="multipart/form-data" method="post" action="">
+            <div id="fragment-1" class="import_wizard_step">
+                <?php echo $this->form->modus; ?>
+                <div class="buttonCon">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel();return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:next();return false;">
+                </div>
+            </div>
+            <div id="fragment-2" class="import_wizard_step">
+                <?php
+                if (isset($this->filename)) {
+                    echo $this->translate('uploadedFileName') . ': <b>' . $this->filename . '</b>';
+                    ?>
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('delete') ?>" onClick="window.location.href = '<?php echo APPLICATION_URL . 'fileimport/deletefile/fileId/' . $this->fileId; ?>';">
+
+                    <?php
+                } else {
+                    echo $this->uploadform;
+                    ?>
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('upload') ?>" onClick="javascript:submitUpload();">
+                    <?php
+                }
+                ?>
+                <div class="buttonCon">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel();return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back();return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:next();return false;">
+                </div>
+            </div>
+            <div id="fragment-3" class="import_wizard_step">
+                <h1 class="pageName"><?php echo $this->translate('summary') ?>:</h1>
+                <?php echo $this->translate('ImportModus') ?>: <?php echo $this->modus; ?><br>
+                <?php echo $this->translate('File') ?>: <?php echo $this->filename; ?><br>
+                <?php echo $this->translate('Filetyp') ?>: <b><?php echo $this->filetype; ?></b><br>
+                <div class="buttonCon">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel();return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back();return false;">
+                    <input type="submit" class="standard_button start" value="<?php echo $this->translate('start') ?>" onClick="javascript:importFile(<?php echo $this->fileId; ?>,'<?php echo $this->modus; ?>');return false;">
+                </div>
+            </div>
+            <div id="fragment-4" class="import_wizard_step">
+            </div>
+        </form>
+    </fieldset>
+</div>
+<div>
+    <?php echo $this->history; ?>
+</div>
+
+

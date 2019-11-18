@@ -1,0 +1,1426 @@
+#!/usr/bin/env bash
+#
+#                                                 .___
+#   ____  ____   _____   _____ _____    ____    __| _/______
+# _/ ___\/  _ \ /     \ /     \\__  \  /    \  / __ |/  ___/
+# \  \__(  <_> )  Y Y  \  Y Y  \/ __ \|   |  \/ /_/ |\___ \
+#  \___  >____/|__|_|  /__|_|  (____  /___|  /\____ /____  >
+#      \/            \/      \/     \/     \/      \/    \/
+#
+# Boilerplate for creating a bash program with commands.
+#
+# Depends on:
+#  list
+#  of
+#  programs
+#  expected
+#  in
+#  environment
+#
+# Bash Boilerplate: https://github.com/alphabetum/bash-boilerplate
+#
+# Copyright (c) 2015 William Melody • hi@williammelody.com
+
+# Notes #######################################################################
+
+# Extensive descriptions are included for easy reference.
+#
+# Explicitness and clarity are generally preferable, especially since bash can
+# be difficult to read. This leads to noisier, longer code, but should be
+# easier to maintain. As a result, some general design preferences:
+#
+# - Use leading underscores on internal variable and function names in order
+#   to avoid name collisions. For unintentionally global variables defined
+#   without `local`, such as those defined outside of a function or
+#   automatically through a `for` loop, prefix with double underscores.
+# - Always use braces when referencing variables, preferring `${NAME}` instead
+#   of `$NAME`. Braces are only required for variable references in some cases,
+#   but the cognitive overhead involved in keeping track of which cases require
+#   braces can be reduced by simply always using them.
+# - Prefer `printf` over `echo`. For more information, see:
+#   http://unix.stackexchange.com/a/65819
+# - Prefer `$_explicit_variable_name` over names like `$var`.
+# - Use the `#!/usr/bin/env bash` shebang in order to run the preferred
+#   Bash version rather than hard-coding a `bash` executable path.
+# - Prefer splitting statements across multiple lines rather than writing
+#   one-liners.
+# - Group related code into sections with large, easily scannable headers.
+# - Describe behavior in comments as much as possible, assuming the reader is
+#   a programmer familiar with the shell, but not necessarily experienced
+#   writing shell scripts.
+
+###############################################################################
+# Strict Mode
+###############################################################################
+
+# Treat unset variables and parameters other than the special parameters ‘@’ or
+# ‘*’ as an error when performing parameter expansion. An 'unbound variable'
+# error message will be written to the standard error, and a non-interactive
+# shell will exit.
+#
+# This requires using parameter expansion to test for unset variables.
+#
+# http://www.gnu.org/software/bash/manual/bashref.html#Shell-Parameter-Expansion
+#
+# The two approaches that are probably the most appropriate are:
+#
+# ${parameter:-word}
+#   If parameter is unset or null, the expansion of word is substituted.
+#   Otherwise, the value of parameter is substituted. In other words, "word"
+#   acts as a default value when the value of "$parameter" is blank. If "word"
+#   is not present, then the default is blank (essentially an empty string).
+#
+# ${parameter:?word}
+#   If parameter is null or unset, the expansion of word (or a message to that
+#   effect if word is not present) is written to the standard error and the
+#   shell, if it is not interactive, exits. Otherwise, the value of parameter
+#   is substituted.
+#
+# Examples
+# ========
+#
+# Arrays:
+#
+#   ${some_array[@]:-}              # blank default value
+#   ${some_array[*]:-}              # blank default value
+#   ${some_array[0]:-}              # blank default value
+#   ${some_array[0]:-default_value} # default value: the string 'default_value'
+#
+# Positional variables:
+#
+#   ${1:-alternative} # default value: the string 'alternative'
+#   ${2:-}            # blank default value
+#
+# With an error message:
+#
+#   ${1:?'error message'}  # exit with 'error message' if variable is unbound
+#
+# Short form: set -u
+set -o nounset
+
+# Exit immediately if a pipeline returns non-zero.
+#
+# NOTE: this has issues. When using read -rd '' with a heredoc, the exit
+# status is non-zero, even though there isn't an error, and this setting
+# then causes the script to exit. read -rd '' is synonymous to read -d $'\0',
+# which means read until it finds a NUL byte, but it reaches the EOF (end of
+# heredoc) without finding one and exits with a 1 status. Therefore, when
+# reading from heredocs with set -e, there are three potential solutions:
+#
+# Solution 1. set +e / set -e again:
+#
+# set +e
+# read -rd '' variable <<EOF
+# EOF
+# set -e
+#
+# Solution 2. <<EOF || true:
+#
+# read -rd '' variable <<EOF || true
+# EOF
+#
+# Solution 3. Don't use set -e or set -o errexit at all.
+#
+# More information:
+#
+# https://www.mail-archive.com/bug-bash@gnu.org/msg12170.html
+#
+# Short form: set -e
+set -o errexit
+
+# Print a helpful message if a pipeline with non-zero exit code causes the
+# script to exit as described above.
+trap 'echo "Aborting due to errexit on line $LINENO. Exit code: $?" >&2' ERR
+
+# Allow the above trap be inherited by all functions in the script.
+#
+# Short form: set -E
+set -o errtrace
+
+# Return value of a pipeline is the value of the last (rightmost) command to
+# exit with a non-zero status, or zero if all commands in the pipeline exit
+# successfully.
+set -o pipefail
+
+# Set $IFS to only newline and tab.
+#
+# http://www.dwheeler.com/essays/filenames-in-shell.html
+IFS=$'\n\t'
+
+###############################################################################
+# Globals
+###############################################################################
+
+# $_VERSION
+#
+# Manually set this to to current version of the program. Adhere to the
+# semantic versioning specification: http://semver.org
+_VERSION="1.0"
+
+# $DEFAULT_COMMAND
+#
+# The command to be run by default, when no command name is specified. If the
+# environment has an existing $DEFAULT_COMMAND set, then that value is used.
+DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
+
+# $OPENSSL_IMAGE_NAME
+#
+# Name of the docker image which will be used for openssl cli
+OPENSSL_IMAGE_NAME="openssl"
+
+
+###############################################################################
+# Debug
+###############################################################################
+
+# _debug()
+#
+# Usage:
+#   _debug printf "Debug info. Variable: %s\\n" "$0"
+#
+# A simple function for executing a specified command if the `$_USE_DEBUG`
+# variable has been set. The command is expected to print a message and
+# should typically be either `echo`, `printf`, or `cat`.
+__DEBUG_COUNTER=0
+_debug() {
+  if [[ "${_USE_DEBUG:-"0"}" -eq 1 ]]
+  then
+    __DEBUG_COUNTER=$((__DEBUG_COUNTER+1))
+    # Prefix debug message with "bug (U+1F41B)"
+    printf "🐛  %s " "${__DEBUG_COUNTER}"
+    "${@}"
+    printf "――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――\\n"
+  fi
+}
+# debug()
+#
+# Usage:
+#   debug "Debug info. Variable: $0"
+#
+# Print the specified message if the `$_USE_DEBUG` variable has been set.
+#
+# This is a shortcut for the _debug() function that simply echos the message.
+debug() {
+  _debug echo "${@}"
+}
+
+###############################################################################
+# Die
+###############################################################################
+
+# _die()
+#
+# Usage:
+#   _die printf "Error message. Variable: %s\\n" "$0"
+#
+# A simple function for exiting with an error after executing the specified
+# command. The command is expected to print a message and should typically
+# be either `echo`, `printf`, or `cat`.
+_die() {
+  # Prefix die message with "cross mark (U+274C)", often displayed as a red x.
+  printf "❌  "
+  "${@}" 1>&2
+  exit 1
+}
+# die()
+#
+# Usage:
+#   die "Error message. Variable: $0"
+#
+# Exit with an error and print the specified message.
+#
+# This is a shortcut for the _die() function that simply echos the message.
+die() {
+  _die echo "${@}"
+}
+
+###############################################################################
+# Options
+#
+# NOTE: The `getops` builtin command only parses short options and BSD `getopt`
+# does not support long arguments (GNU `getopt` does), so the most portable
+# and clear way to parse options is often to just use a `while` loop.
+#
+# For a pure bash `getopt` function, try pure-getopt:
+#   https://github.com/agriffis/pure-getopt
+#
+# More info:
+#   http://wiki.bash-hackers.org/scripting/posparams
+#   http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
+#   http://stackoverflow.com/a/14203146
+#   http://stackoverflow.com/a/7948533
+#   https://stackoverflow.com/a/12026302
+#   https://stackoverflow.com/a/402410
+###############################################################################
+
+# Get raw options for any commands that expect them.
+_RAW_OPTIONS="${*:-}"
+
+# Parse Options ###############################################################
+
+# Initialize $_COMMAND_ARGV array
+#
+# This array contains all of the arguments that get passed along to each
+# command. This is essentially the same as the program arguments, minus those
+# that have been filtered out in the program option parsing loop. This array
+# is initialized with $0, which is the program's name.
+_COMMAND_ARGV=("${0}")
+# Initialize $_CMD and `$_USE_DEBUG`, which can continue to be blank depending
+# on what the program needs.
+_CMD=""
+_USE_DEBUG=0
+_INTERACTIVE=1
+
+while [[ ${#} -gt 0 ]]
+do
+  __opt="${1}"
+  shift
+  case "${__opt}" in
+    -h|--help)
+      _CMD="help"
+      ;;
+    --version)
+      _CMD="version"
+      ;;
+    --debug)
+      _USE_DEBUG=1
+      ;;
+    --non-interactive)
+      _INTERACTIVE=0
+      ;;
+    *)
+      # The first non-option argument is assumed to be the command name.
+      # All subsequent arguments are added to $_COMMAND_ARGV.
+      if [[ -n "${_CMD}" ]]
+      then
+        _COMMAND_ARGV+=("${__opt}")
+      else
+        _CMD="${__opt}"
+      fi
+      ;;
+  esac
+done
+
+# Set $_COMMAND_PARAMETERS to $_COMMAND_ARGV, minus the initial element, $0. This
+# provides an array that is equivalent to $* and $@ within each command
+# function, though the array is zero-indexed, which could lead to confusion.
+#
+# Use `unset` to remove the first element rather than slicing (e.g.,
+# `_COMMAND_PARAMETERS=("${_COMMAND_ARGV[@]:1}")`) because under bash 3.2 the
+# resulting slice is treated as a quoted string and doesn't easily get coaxed
+# into a new array.
+_COMMAND_PARAMETERS=(${_COMMAND_ARGV[*]})
+unset "_COMMAND_PARAMETERS[0]"
+
+_debug printf "\${_CMD}: %s\\n" "${_CMD}"
+_debug printf "\${_RAW_OPTIONS} (one per line):\\n%s\\n" "${_RAW_OPTIONS}"
+_debug printf "\${_COMMAND_ARGV[*]}: %s\\n" "${_COMMAND_ARGV[*]}"
+_debug printf \
+  "\${_COMMAND_PARAMETERS[*]:-}: %s\\n" \
+  "${_COMMAND_PARAMETERS[*]:-}"
+
+###############################################################################
+# Environment
+###############################################################################
+
+# $_ME
+#
+# Set to the program's basename.
+_ME=$(basename "${0}")
+
+_debug printf "\${_ME}: %s\\n" "${_ME}"
+
+###############################################################################
+# Load Commands
+###############################################################################
+
+# Initialize $_DEFINED_COMMANDS array.
+_DEFINED_COMMANDS=()
+
+# _load_commands()
+#
+# Usage:
+#   _load_commands
+#
+# Loads all of the commands sourced in the environment.
+_load_commands() {
+
+  _debug printf "_load_commands(): entering...\\n"
+  _debug printf "_load_commands() declare -F:\\n%s\\n" "$(declare -F)"
+
+  # declare is a bash built-in shell function that, when called with the '-F'
+  # option, displays all of the functions with the format
+  # `declare -f function_name`. These are then assigned as elements in the
+  # $function_list array.
+  local _function_list
+  _function_list=($(declare -F))
+
+  _debug printf \
+    "_load_commands() \${_function_list[@]}: %s\\n" \
+    "${_function_list[@]}"
+
+  for __name in "${_function_list[@]}"
+  do
+    _debug printf \
+      "_load_commands() \${__name}: %s\\n" \
+      "${__name}"
+    # Each element has the format `declare -f function_name`, so set the name
+    # to only the 'function_name' part of the string.
+    local _function_name
+    _function_name=$(printf "%s" "${__name}" | awk '{ print $3 }')
+
+    _debug printf \
+      "_load_commands() \${_function_name}: %s\\n" \
+      "${_function_name}"
+
+    # Add the function name to the $_DEFINED_COMMANDS array unless it starts
+    # with an underscore or is one of the desc(), debug(), or die() functions,
+    # since these are treated as having 'private' visibility.
+    if ! ( [[ "${_function_name}" =~ ^_(.*)  ]] || \
+           [[ "${_function_name}" == "desc"  ]] || \
+           [[ "${_function_name}" == "debug" ]] || \
+           [[ "${_function_name}" == "die"   ]]
+    )
+    then
+      _DEFINED_COMMANDS+=("${_function_name}")
+    fi
+  done
+
+  _debug printf \
+    "commands() \${_DEFINED_COMMANDS[*]:-}:\\n%s\\n" \
+    "${_DEFINED_COMMANDS[*]:-}"
+}
+
+###############################################################################
+# Main
+###############################################################################
+
+# _main()
+#
+# Usage:
+#   _main
+#
+# The primary function for starting the program.
+#
+# NOTE: must be called at end of program after all commands have been defined.
+_main() {
+  _debug printf "main(): entering...\\n"
+  _debug printf "main() \${_CMD} (upon entering): %s\\n" "${_CMD}"
+
+  # If $_CMD is blank, then set to `$DEFAULT_COMMAND`
+  if [[ -z "${_CMD}" ]]
+  then
+    _CMD="${DEFAULT_COMMAND}"
+  fi
+
+  # Load all of the commands.
+  _load_commands
+
+  # If the command is defined, run it, otherwise return an error.
+  if _contains "${_CMD}" "${_DEFINED_COMMANDS[*]:-}"
+  then
+    # Pass all comment arguments to the program except for the first ($0).
+    ${_CMD} "${_COMMAND_PARAMETERS[@]:-}"
+  else
+    _die printf "Unknown command: %s\\n" "${_CMD}"
+  fi
+}
+
+###############################################################################
+# Utility Functions
+###############################################################################
+
+# _function_exists()
+#
+# Usage:
+#   _function_exists "possible_function_name"
+#
+# Returns:
+#   0  If a function with the given name is defined in the current environment.
+#   1  If not.
+#
+# Other implementations, some with better performance:
+# http://stackoverflow.com/q/85880
+_function_exists() {
+  [ "$(type -t "${1}")" == 'function' ]
+}
+
+# _command_exists()
+#
+# Usage:
+#   _command_exists "possible_command_name"
+#
+# Returns:
+#   0  If a command with the given name is defined in the current environment.
+#   1  If not.
+#
+# Information on why `hash` is used here:
+# http://stackoverflow.com/a/677212
+_command_exists() {
+  hash "${1}" 2>/dev/null
+}
+
+# _contains()
+#
+# Usage:
+#   _contains "$item" "${list[*]}"
+#
+# Returns:
+#   0  If the item is included in the list.
+#   1  If not.
+_contains() {
+  local _test_list=(${*:2})
+  for __test_element in "${_test_list[@]:-}"
+  do
+    _debug printf "_contains() \${__test_element}: %s\\n" "${__test_element}"
+    if [[ "${__test_element}" == "${1}" ]]
+    then
+      _debug printf "_contains() match: %s\\n" "${1}"
+      return 0
+    fi
+  done
+  return 1
+}
+
+# _join()
+#
+# Usage:
+#   _join <separator> <array>
+#
+# Examples:
+#   _join , a "b c" d     => a,b c,d
+#   _join / var local tmp => var/local/tmp
+#   _join , "${FOO[@]}"   => a,b,c
+#
+# More Information:
+#   http://stackoverflow.com/a/17841619
+_join() {
+  local IFS="${1}"
+  shift
+  printf "%s\\n" "${*}"
+}
+
+# _command_argv_includes()
+#
+# Usage:
+#   _command_argv_includes "an_argument"
+#
+# Returns:
+#   0  If the argument is included in `$_COMMAND_ARGV`, the program's command
+#      argument list.
+#   1  If not.
+#
+# This is a shortcut for simple cases where a command wants to check for the
+# presence of options quickly without parsing the options again.
+_command_argv_includes() {
+  _contains "${1}" "${_COMMAND_ARGV[*]}"
+}
+
+# _blank()
+#
+# Usage:
+#   _blank "$an_argument"
+#
+# Returns:
+#   0  If the argument is not present or null.
+#   1  If the argument is present and not null.
+_blank() {
+  [[ -z "${1:-}" ]]
+}
+
+# _present()
+#
+# Usage:
+#   _present "$an_argument"
+#
+# Returns:
+#   0  If the argument is present and not null.
+#   1  If the argument is not present or null.
+_present() {
+  [[ -n "${1:-}" ]]
+}
+
+# _interactive_input()
+#
+# Usage:
+#   _interactive_input
+#
+# Returns:
+#   0  If the current input is interactive (eg, a shell).
+#   1  If the current input is stdin / piped input.
+_interactive_input() {
+  [[ -t 0 ]]
+}
+
+# _piped_input()
+#
+# Usage:
+#   _piped_input
+#
+# Returns:
+#   0  If the current input is stdin / piped input.
+#   1  If the current input is interactive (eg, a shell).
+_piped_input() {
+  ! _interactive_input
+}
+
+###############################################################################
+# desc
+###############################################################################
+
+# desc()
+#
+# Usage:
+#   desc <name> <description>
+#   desc --get <name>
+#
+# Options:
+#   --get  Print the description for <name> if one has been set.
+#
+# Examples:
+# ```
+#   desc "list" <<HEREDOC
+# Usage:
+#   ${_ME} list
+#
+# Description:
+#   List items.
+# HEREDOC
+#
+# desc --get "list"
+# ```
+#
+# Set or print a description for a specified command or function <name>. The
+# <description> text can be passed as the second argument or as standard input.
+#
+# To make the <description> text available to other functions, `desc()` assigns
+# the text to a variable with the format `$___desc_<name>`.
+#
+# When the `--get` option is used, the description for <name> is printed, if
+# one has been set.
+#
+# NOTE:
+#
+# The `read` form of assignment is used for a balance of ease of
+# implementation and simplicity. There is an alternative assignment form
+# that could be used here:
+#
+# var="$(cat <<'HEREDOC'
+# some message
+# HEREDOC
+# )
+#
+# However, this form appears to require trailing space after backslases to
+# preserve newlines, which is unexpected. Using `read` simply requires
+# escaping backslashes, which is more common.
+desc() {
+  _debug printf "desc() \${*}: %s\\n" "$@"
+  [[ -z "${1:-}" ]] && _die printf "desc(): No command name specified.\\n"
+
+  if [[ "${1}" == "--get" ]]
+  then # get ------------------------------------------------------------------
+    [[ -z "${2:-}" ]] && _die printf "desc(): No command name specified.\\n"
+
+    local _name="${2:-}"
+    local _desc_var="___desc_${_name}"
+
+    if [[ -n "${!_desc_var:-}" ]]
+    then
+      printf "%s\\n" "${!_desc_var}"
+    else
+      printf "No additional information for \`%s\`\\n" "${_name}"
+    fi
+  else # set ------------------------------------------------------------------
+    if [[ -n "${2:-}" ]]
+    then # argument is present
+      read -r -d '' "___desc_${1}" <<HEREDOC
+${2}
+HEREDOC
+
+      _debug printf "desc() set with argument: \${___desc_%s}\\n" "${1}"
+    else # no argument is present, so assume piped input
+      # `read` exits with non-zero status when a delimeter is not found, so
+      # avoid errors by ending statement with `|| true`.
+      read -r -d '' "___desc_${1}" || true
+
+      _debug printf "desc() set with pipe: \${___desc_%s}\\n" "${1}"
+    fi
+  fi
+}
+
+###############################################################################
+# Default Commands
+###############################################################################
+
+# Version #####################################################################
+
+desc "version" <<HEREDOC
+Usage:
+  ${_ME} ( version | --version )
+
+Description:
+  Display the current program version.
+
+  To save you the trouble, the current version is ${_VERSION}
+HEREDOC
+version() {
+  printf "%s\\n" "${_VERSION}"
+}
+
+# Help ########################################################################
+
+desc "help" <<HEREDOC
+Usage:
+  ${_ME} help [<command>]
+
+Description:
+  Display help information for ${_ME} or a specified command.
+HEREDOC
+help() {
+  if [[ "${1:-}" ]]
+  then
+    desc --get "${1}"
+  else
+    cat <<HEREDOC
+
+####################
+# infoCMDB Console #
+####################
+
+Utility for handling an infoCMDB installation
+
+Usage:
+  ${_ME} <command> [--non-interactive] [--command-options] [<arguments>]
+  ${_ME} -h | --help
+
+Options:
+  -h --help           Display this help information.
+  --non-interactive   Run without asking questions and apply configuration defaults
+
+Help:
+  ${_ME} help [<command>]
+
+$(commands)
+HEREDOC
+  fi
+}
+
+# Command List ################################################################
+
+desc "commands" <<HEREDOC
+Usage:
+  ${_ME} commands [--raw]
+
+Options:
+  --raw  Display the command list without formatting.
+
+Description:
+  Display the list of available commands.
+HEREDOC
+commands() {
+  if _command_argv_includes "--raw"
+  then
+    printf "%s\\n" "${_DEFINED_COMMANDS[@]}"
+  else
+    printf "Available commands:\\n"
+    printf "  %s\\n" "${_DEFINED_COMMANDS[@]}"
+  fi
+}
+
+desc "setup_env" <<HEREDOC
+Usage:
+    ${_ME} setup_env
+
+Description:
+    Create .env file if not exists
+HEREDOC
+setup_env() {
+    echo "Running setup_env..."
+
+    if [ -e .env ]; then
+        echo ".env File Already exists"
+        return
+    fi
+
+    echo "Create .env file..."
+    given_image_tag=${IMAGE_TAG:-}
+    if [[ "${given_image_tag:-}" == "" ]]; then
+        given_image_tag=latest
+        if [[ "${_INTERACTIVE}" == 1 ]]; then
+            read -rp "Choose an IMAGE_TAG you want to use [Env: IMAGE_TAG][latest]: " given_image_tag
+            given_image_tag=${given_image_tag:-latest}
+        fi
+    fi
+
+    cp -v .env.example .env
+
+    echo "Setting image tag: ${given_image_tag}"
+    sed -i -e "s/IMAGE_TAG=.*/IMAGE_TAG=${given_image_tag}/" .env
+
+    echo "Generating random Root Password"
+    MYSQL_ROOT_PW=$(head -c100 < /dev/random | base64 | tr -dc _A-Z-a-z-0-9 | head -c 40)
+    sed -i -e "s/DB_ROOT_PASSWORD=.*/DB_ROOT_PASSWORD=${MYSQL_ROOT_PW}/" .env
+    echo "Generating random 'infocmdb' User Password"
+    MYSQL_PW=$(head -c100 < /dev/random | base64 | tr -dc _A-Z-a-z-0-9 | head -c 40)
+    sed -i -e "s/DB_PASSWORD=.*/DB_PASSWORD=${MYSQL_PW}/" .env
+}
+
+desc "setup_docker" <<HEREDOC
+Usage:
+    ${_ME} setup_docker [<env>]
+
+Description:
+    Setup docker-compose
+    Possible environment values: prod / dev / test
+HEREDOC
+setup_docker() {
+
+    check_env_exists
+
+    echo "Running setup_docker..."
+
+    if [ -e docker-compose.override.yml ]; then
+        echo "docker-compose.override.yml  Already exists."
+        return
+    fi
+
+    echo "Setting up docker override per environment."
+
+    config_file="docker-compose-prod.yml"
+    given_env=${COMPOSE_ENV:-""}
+    if [[ ${given_env} == '' && "${_INTERACTIVE}" == 1 ]]; then
+        read -rp "Choose Environment [Env: COMPOSE_ENV] (prod/dev/test) [prod]: " given_env
+        given_env=${given_env:-prod}
+    fi
+
+    case "${given_env}" in
+      "prod")
+        ;;
+      "dev")
+        config_file="docker-compose-dev.yml"
+        ;;
+      "test")
+       config_file="docker-compose-test.yml"
+       ;;
+      *)
+        echo "please choose 'prod', 'dev' or 'test'!"
+        exit 1
+    esac
+
+    echo "  Creating symlink: ${config_file} --> docker-compose.override.yml"
+    ln -sf "${config_file}" docker-compose.override.yml
+}
+
+desc "setup_lib" <<HEREDOC
+Usage:
+    ${_ME} setup_lib
+
+Description:
+    Install Perl libs
+HEREDOC
+setup_lib() {
+    echo "Setup perl modules"
+    if [ -e library/perl ]; then
+        echo "	Already installed."
+        return
+    fi
+
+    check_env_exists
+    source .env
+
+    git clone "${APP_LIBRARY_PERL_REPO}" library/perl
+
+}
+
+desc "setup_nginx" <<HEREDOC
+Usage:
+    ${_ME} setup_nginx
+
+Description:
+    Create config for nginx
+HEREDOC
+setup_nginx() {
+    echo "Running setup_nginx..."
+
+    check_env_exists
+
+    ENV_DOCKER_WEB_HOSTNAME=${DOCKER_WEB_HOSTNAME:-}
+
+    # .env is the authority if it must be changed do it in the .env file
+    source .env
+
+    # if an env DOCKER_WEB_HOSTNAME is set and the .env is not yet defined use the env-var
+    if [[ "${DOCKER_WEB_HOSTNAME:-}" == "" && ! "${ENV_DOCKER_WEB_HOSTNAME}" == "" ]]; then
+      DOCKER_WEB_HOSTNAME=${ENV_DOCKER_WEB_HOSTNAME}
+    fi
+
+    if [[ "${DOCKER_WEB_HOSTNAME}" == "" && "${_INTERACTIVE}" == 1 ]]; then
+        read -rp "Choose hostname for nginx vhost [Env: DOCKER_WEB_HOSTNAME][localhost]: " given_web_hostname
+        DOCKER_WEB_HOSTNAME=${given_web_hostname:-localhost}
+    fi
+
+    echo "Set '${DOCKER_WEB_HOSTNAME}' as DOCKER_WEB_HOSTNAME in .env file"
+    sed -i -e "s/DOCKER_WEB_HOSTNAME.*$/DOCKER_WEB_HOSTNAME=${DOCKER_WEB_HOSTNAME}/" .env
+    rm -f .env-e # on mac -i is used for the backup extension, thus needs to clean the -e files
+
+    if [[ -e "docker/nginx/custom-conf/conf.d/default.conf" ]]; then
+        echo "[WARNING] Your 'docker/nginx/custom-conf/conf.d/default.conf' overrides the generated vhost config!"
+    fi
+}
+
+desc "generate_dhparam" <<HEREDOC
+Usage:
+    ${_ME} generate_dhparam
+
+Description:
+    Create dhparam for nginx
+HEREDOC
+generate_dhparam() {
+    echo "Running generate_dhparam..."
+    DHPARAM_FILE="docker/nginx/custom-conf/conf.d/ssl/dhparam.pem"
+
+    if [[ -e ${DHPARAM_FILE} ]]; then
+        echo "  Already exists '${DHPARAM_FILE}'."
+        return
+    fi
+
+    echo "Create Diffie Hellman param for nginx"
+    docker build -t "${OPENSSL_IMAGE_NAME}" docker/openssl
+    docker run -it --rm -v "$(pwd):/app" "${OPENSSL_IMAGE_NAME}" \
+      openssl dhparam -out /app/${DHPARAM_FILE} 4096
+}
+
+desc "setup" <<HEREDOC
+Usage:
+    ${_ME} setup
+
+Description:
+    is an alias for setup_all
+
+HEREDOC
+setup() {
+    setup_all
+}
+
+desc "setup_all" <<HEREDOC
+Usage:
+    ${_ME} setup_all
+
+Description:
+    * setup environment - .env file with random db-passwords
+    * setup nginx  - .env vhost configuration used by the nginx/web container
+    * setup docker - based on the choosen environment prod/dev/test
+
+HEREDOC
+setup_all() {
+    setup_env
+    setup_nginx
+    setup_docker
+
+    source .env
+
+    echo
+    echo "Use this command to start application:"
+    echo " ./run up "
+    echo
+}
+
+desc "up" <<HEREDOC
+Usage:
+    ${_ME} up
+
+Description:
+    starts the docker-compose
+HEREDOC
+up() {
+    setup
+
+    echo "starting up..."
+    docker-compose up -d
+
+    CONTAINER_PHP=$(./run container_name php)
+    RETRY_COUNT=10
+    RETRIES=0
+    RETRY_WAIT=10
+    while [[ ${RETRIES} -lt ${RETRY_COUNT} ]]; do
+      STATUS=$(docker inspect --format '{{.State.Health.Status}}' "${CONTAINER_PHP}")
+      if [[ ${STATUS} == "healthy" ]]; then
+        welcome_prompt
+        exit 0
+      fi
+
+      RETRIES=$((RETRIES + 1))
+      echo "waiting for php container to startup. (sleeping ${RETRY_WAIT}) [${RETRIES}/${RETRY_COUNT}]"
+      sleep 10
+    done
+
+    echo "Container didn't become healthy within $((RETRY_WAIT * RETRY_COUNT)) seconds."
+    exit 1
+}
+
+desc "down" <<HEREDOC
+Usage:
+    ${_ME} down
+
+Description:
+    stops the docker-compose
+HEREDOC
+down() {
+    docker-compose down
+}
+
+desc "restart" <<HEREDOC
+Usage:
+    ${_ME} restart
+
+Description:
+    restart the docker-compose
+HEREDOC
+restart() {
+    docker-compose restart
+}
+
+desc "destroy" <<HEREDOC
+Usage:
+    ${_ME} destroy
+
+Description:
+    stops and deletes docker data!!!!
+HEREDOC
+destroy() {
+    echo "THIS WILL DELETE ALL DATA IN DOCKER VOLUMES!"
+    echo "ARE YOU SURE? ctrl+c TO STOP!"
+    read -r
+    echo "ARE YOU REALLY SURE? ctrl+c TO STOP!"
+    read -r
+    docker-compose down -v --remove-orphans
+}
+
+desc "build" <<HEREDOC
+Usage:
+    ${_ME} build
+
+Description:
+    stops the docker-compose
+HEREDOC
+build() {
+    docker-compose build
+}
+
+desc "down" <<HEREDOC
+Usage:
+    ${_ME} down
+
+Description:
+    stops the docker-compose
+HEREDOC
+down() {
+    docker-compose down
+}
+
+desc "restart" <<HEREDOC
+Usage:
+    ${_ME} restart
+
+Description:
+    restart the docker-compose
+HEREDOC
+restart() {
+    docker-compose restart
+}
+
+desc "destroy" <<HEREDOC
+Usage:
+    ${_ME} destroy
+
+Description:
+    stops and deletes docker data!!!!
+HEREDOC
+destroy() {
+    echo "THIS WILL DELETE ALL DATA IN DOCKER VOLUMES!"
+    echo "ARE YOU SURE? ctrl+c TO STOP!"
+    read -r
+    echo "ARE YOU REALLY SURE? ctrl+c TO STOP!"
+    read -r
+    docker-compose destroy -v
+}
+
+desc "gencert" <<HEREDOC
+Usage:
+    ${_ME} gencert <hostname>
+
+Description:
+    Generate a self signed certificate for nginx
+HEREDOC
+gencert() {
+    check_env_exists
+
+    CERT_HOSTNAME=${1}
+    if [[ -z ${CERT_HOSTNAME} ]]; then
+        echo "You must specify a hostname!"
+        help gencert
+    fi
+
+    generate_dhparam
+
+    CONFD_PATH=docker/nginx/custom-conf/conf.d
+    CERT_PATH=docker/nginx/custom-conf/conf.d/ssl
+    CERT_HOSTNAME_CLEAN="${CERT_HOSTNAME//\./_}"
+    CERT_CONF_FULL_PATH=${CONFD_PATH}/ssl_${CERT_HOSTNAME_CLEAN}.conf
+
+    if [[ -e ${CERT_PATH}/${CERT_HOSTNAME_CLEAN}.crt ]]; then
+      echo "ERROR: certificate already exists: '${CERT_PATH}/${CERT_HOSTNAME_CLEAN}.crt', exiting."
+      exit 1
+    fi
+
+    echo "Generating certificate for ${CERT_HOSTNAME}"
+    docker run -it --rm -v "$(pwd):/app" "${OPENSSL_IMAGE_NAME}" \
+      openssl req -x509 -newkey rsa:4096 \
+      -days 1825 -nodes -subj "/CN=${CERT_HOSTNAME}" -addext "subjectAltName=DNS:${CERT_HOSTNAME}" \
+      -out    /app/"${CERT_PATH}"/"${CERT_HOSTNAME_CLEAN}".crt \
+      -keyout /app/"${CERT_PATH}"/"${CERT_HOSTNAME_CLEAN}".key
+
+    echo "Saved certificate to ${CERT_PATH}/${CERT_HOSTNAME_CLEAN}... key/crt"
+
+    source .env
+    if [[ "${APPLICATION_ENV:-}" == "" ]]; then
+      echo "Warning: no APPLICATION_ENV set, falling back to 'production'"
+      APPLICATION_ENV="production"
+    fi
+
+    export PHP_DISABLE_FUNCTIONS="fastcgi_param PHP_VALUE disable_functions='phpinfo';"
+    if [ "${APPLICATION_ENV}" = "testing" ] || [ "${APPLICATION_ENV}" = "development" ] ; then
+        export PHP_DISABLE_FUNCTIONS=""
+    fi
+
+    cp ${CONFD_PATH}/ssl_sample.domain.at.conf.dist     "${CERT_CONF_FULL_PATH}"
+    sed -i -e "s|#APPLICATION_ENV#|${APPLICATION_ENV}|" "${CERT_CONF_FULL_PATH}"
+    sed -i -e "s|#CERT_HOSTNAME#|${CERT_HOSTNAME}|"     "${CERT_CONF_FULL_PATH}"
+    sed -i -e "s|#PHP_DISABLE_FUNCTIONS#|${PHP_DISABLE_FUNCTIONS}|" "${CERT_CONF_FULL_PATH}"
+    sed -i -e "s|#CERT_KEY_FILE#|/etc/nginx/conf.d/ssl/${CERT_HOSTNAME_CLEAN}.key|" "${CERT_CONF_FULL_PATH}"
+    sed -i -e "s|#CERT_CRT_FILE#|/etc/nginx/conf.d/ssl/${CERT_HOSTNAME_CLEAN}.crt|" "${CERT_CONF_FULL_PATH}"
+    rm -f "${CERT_CONF_FULL_PATH}-e"
+
+    echo "Created ${CERT_CONF_FULL_PATH}"
+}
+
+desc "bash" <<HEREDOC
+Usage:
+    ${_ME} bash <service-name>
+
+Description:
+    Open bash console in a service container.
+
+    service-name   Name of the service in docker-compose (optional, default: php)
+HEREDOC
+bash() {
+    CONTAINER=${1:-php}
+    docker-compose exec "${CONTAINER}" bash
+}
+
+desc "cron" <<HEREDOC
+Usage:
+    ${_ME} cron
+
+Description:
+    Execute cron.php every 10 seconds
+HEREDOC
+cron() {
+    set +e
+    trap "" ERR
+
+    check_env_exists
+    source .env
+
+    if [[ "${APPLICATION_ENV}" == "testing" ]]
+    then
+      echo "Not running starting cron in testing environment."
+      exit 0
+    fi
+
+    while true; do
+        WEB_USER=${DOCKER_WEB_USERNAME:-apache}
+        export LANG="en_US.UTF-8"
+
+        # start listener
+        su -s /bin/sh "$WEB_USER" -c "php public/index.php /scheduler/listen/listener/file 2>&1 &"
+        su -s /bin/sh "$WEB_USER" -c "php public/index.php /scheduler/listen/listener/mail 2>&1 &"
+        su -s /bin/sh "$WEB_USER" -c "php public/index.php /scheduler/listen/listener/workflow 2>&1 &"
+        su -s /bin/sh "$WEB_USER" -c "php public/index.php /scheduler/listen/listener/reporting 2>&1 &"
+
+        # start processor
+        su -s /bin/sh "$WEB_USER" -c "php public/index.php /scheduler/process/type/import/processor/file 2>&1 &"
+        su -s /bin/sh "$WEB_USER" -c "php public/index.php /scheduler/process/type/import/processor/mail 2>&1 &"
+        su -s /bin/sh "$WEB_USER" -c "php public/index.php /scheduler/process/type/process/processor/workflow 2>&1 &"
+        su -s /bin/sh "$WEB_USER" -c "php public/index.php /scheduler/process/type/process/processor/reporting 2>&1 &"
+
+        # start session cleaner
+        su -s /bin/sh "$WEB_USER" -c "php public/index.php /scheduler/sprocess/type/process/processor/session 2>&1 &"
+        su -s /bin/sh "$WEB_USER" -c "php public/index.php /scheduler/sprocess/type/process/processor/cleanup 2>&1 &"
+
+        sleep 10
+    done
+}
+
+desc "mysql" <<HEREDOC
+Usage:
+    ${_ME} mysql [mysql options]
+
+Description:
+    Execute mysql command in container
+HEREDOC
+mysql() {
+    source .env
+    docker-compose exec mariadb mysql -uroot -p"${DB_ROOT_PASSWORD}" "$@"
+}
+
+desc "mysql_dump" <<HEREDOC
+Usage:
+    ${_ME} mysql_dump <dump options>
+
+Description:
+    Execute mysql_dump command in container
+HEREDOC
+mysql_dump() {
+    source .env
+
+    docker-compose exec mariadb mysqldump -uroot -p"${DB_ROOT_PASSWORD}" "$@"
+}
+
+desc "mysql_import" <<HEREDOC
+Usage:
+    ${_ME} mysql_import <file>
+
+Description:
+    Execute mysql command in container
+HEREDOC
+mysql_import() {
+    source .env
+
+    FILENAME=$1
+    shift
+
+    MYSQL_CONTAINER_NAME=$(container_name mariadb)
+    if [[ "$FILENAME" == *gz ]]; then
+      gunzip -c "${FILENAME}" | docker exec -i "${MYSQL_CONTAINER_NAME}" mysql -uroot -p"${DB_ROOT_PASSWORD}"
+    else
+      docker exec -i "${MYSQL_CONTAINER_NAME}" mysql -uroot -p"${DB_ROOT_PASSWORD}" < "${FILENAME}"
+    fi
+}
+
+desc "mysql_backup" <<HEREDOC
+Usage:
+    ${_ME} mysql_backup <destination file>
+
+Description:
+    Create (uncompressed) mysql dump with default dump options
+
+    destination file    Path to dump file (optional, default: dump-<date>.sql)
+HEREDOC
+mysql_backup() {
+    source .env
+
+    DATE=$(date +%Y-%m-%d_%H%M%S)
+    FILE=${1:-dump-${DATE}.sql.gz}
+
+    docker-compose exec -T mariadb su -c "mysqldump -uroot -p\"${DB_ROOT_PASSWORD}\" --opt --allow-keywords --complete-insert --create-options --single-transaction --events --all-databases --routines --comments | gzip" > "${FILE}"
+    echo "Completed mysql_dump: ${FILE}"
+}
+
+desc "mysql_reset_passwords" <<HEREDOC
+Usage:
+    ${_ME} mysql_reset_passwords
+
+Description:
+    Resets the mariadb root and user passwords to the values from the .env file
+HEREDOC
+mysql_reset_passwords() {
+    check_env_exists
+    source .env
+
+    echo "THIS WILL RESET THE MARIADB ROOT AND USER PASSWORDS!"
+    echo "DO NOT USE THIS IN PRODUCTION ENVIRONMENTS!"
+    echo "ARE YOU SURE? ctrl+c TO STOP!"
+    read -r
+    echo "ARE YOU REALLY SURE? ctrl+c TO STOP!"
+    read -r
+
+    echo "Stopping mariadb"
+    docker-compose stop mariadb
+    echo "Starting temporary container without mariadb root password"
+    docker-compose run -d mariadb --skip-grant-tables
+    echo "Updating root and user passwords"
+    docker exec -it "$(./run container_name mariadb)" mysql -uroot -e "
+use mysql;
+update mysql.user set Password=PASSWORD('${DB_ROOT_PASSWORD}') where User='${DB_ROOT_USERNAME}';
+update mysql.user set Password=PASSWORD('${DB_PASSWORD}') where User='${DB_USERNAME}';
+flush privileges;
+quit
+"
+    echo "Stopping temporary container"
+    docker stop "$(./run container_name mariadb)"
+    echo "Restarting mariadb"
+    docker-compose start mariadb
+}
+
+desc "data_backup" <<HEREDOC
+Usage:
+    ${_ME} data_backup <destination file>
+
+Description:
+    Create (compressed) tar backup of the data directory
+
+    destination file    Path to dump file (optional, default: dump-<date>.tar.gz)
+HEREDOC
+data_backup() {
+    DATE=$(date +%Y-%m-%d_%H%M%S)
+    FILE=${1:-data-${DATE}.tar.gz}
+
+    docker-compose exec -T php su -c "cd /app; tar -czf - --exclude=data/library/golang/pkg/mod/cache --exclude=data/cache/* --exclude=data/tmp/* data  | cat "  > "${FILE}"
+
+    echo "Completed data_backup: ${FILE}"
+}
+
+desc "data_import" <<HEREDOC
+Usage:
+    ${_ME} data_import <source file>
+
+Description:
+    Restore a (compressed) tar backup to the data directory
+
+HEREDOC
+data_import() {
+    FILE=$1
+    shift
+
+    PHP_CONTAINER_NAME=$(container_name php)
+    if [[ ! -e "${FILE}" ]]; then
+      echo "Import filename missing."
+      exit 1
+    fi
+
+    docker exec -i "${PHP_CONTAINER_NAME}" su -c "cd /app; tar -xzf - " < "${FILE}"
+
+    echo "Completed data_import: ${FILE}"
+}
+
+desc "edit" <<HEREDOC
+Usage:
+    ${_ME} edit <service> <filepath in container>
+
+Description:
+    Edit a file in container
+
+    service                 Name of docker compose service
+    filepath in container   Absolute path to file in container
+HEREDOC
+edit() {
+    SERVICE=${1}
+    FILENAME=${2}
+
+    CONTAINER_NAME=$(container_name "${SERVICE}")
+
+    EDITOR=${EDITOR:-vim}
+
+    TMPFILE="$(mktemp)"
+    docker exec "${CONTAINER_NAME}" cat "$FILENAME" > "$TMPFILE"
+    $EDITOR "$TMPFILE"
+    docker exec -i "${CONTAINER_NAME}" sh -c 'cat > '"$FILENAME" < "$TMPFILE"
+    rm "$TMPFILE"
+}
+
+desc "container_name" <<HEREDOC
+Usage:
+    ${_ME} container_name <service>
+
+Description:
+    Get name of container of given docker compose service
+HEREDOC
+container_name() {
+    docker-compose ps "$1" | tail -n 1 | awk '{print $1}'
+}
+
+desc "update_run" <<HEREDOC
+Usage:
+    ${_ME} update_run
+
+Description:
+    will update the run-script from the php container after an docker image update
+
+HEREDOC
+update_run() {
+    docker-compose exec -T php su -c "cat /app/run" > run.new
+    cp run.new run && rm run.new
+}
+
+desc "clean_cache" <<HEREDOC
+Usage:
+    ${_ME} clean_cache
+
+Description:
+    will clean the data cache directory
+
+HEREDOC
+clean_cache() {
+    (echo -e "!!!! ATTENTION: Delete the following files:"; find ./data/cache -type f -not -name ".gitkeep") | less -R
+    echo "Continue? or Ctrl+C"
+    read -r
+    find ./data/cache -type f -not -name ".gitkeep" -exec rm "{}" \;
+}
+
+desc "execute_tests" <<HEREDOC
+Usage:
+    ${_ME} execute_tests <test_group>
+
+Description:
+    executes tests inside the php container, tests/<test_group>/
+
+    Groups:
+      * api
+      * apiV2
+      * functional
+      * acceptance
+      * unit
+
+HEREDOC
+execute_tests() {
+    TEST_GROUP=${1:?'must define a test_group ARGV-1'}
+    case "${TEST_GROUP}" in
+      "api")
+        ;;
+      "apiV2")
+        ;;
+      "functional")
+        ;;
+      "acceptance")
+        ;;
+      "unit")
+        ;;
+      *)
+        echo "chose an test_group api, apiV2, functional, acceptance, unit!"
+        exit 1
+    esac
+
+    docker-compose exec -T php ./codecept.phar run "tests/${TEST_GROUP}" "${@:3}"
+}
+
+check_env_exists() {
+    if [[ ! -e .env ]]; then
+      echo ".env not found, you must run ./run setup_env prior to setup_nginx"
+      exit 1
+    fi
+}
+
+welcome_prompt() {
+    echo
+    echo "Instance is ready!"
+    echo
+    echo "Login at: http://${DOCKER_WEB_HOSTNAME} || https://${DOCKER_WEB_HOSTNAME}"
+}
+
+###############################################################################
+# Run Program
+###############################################################################
+
+# Call the `_main` function after everything has been defined.
+_main

@@ -1,0 +1,761 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/tooltip/wz_tooltip.js"></script>
+<script type="text/javascript">
+
+    function restore_ci_entry(ciid, historyId) {
+        if (confirm('<?php echo $this->translate('confirmRestoreCi') ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>history/restore/ciid/' + ciid + '/historyId/' + historyId;
+        }
+    };
+
+    /**
+     *    returns all selected values
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function selectedValues() {
+        var selected = $('select').map(function () {
+            return this.value
+        }).get();
+        return selected;
+    }
+
+    /**
+     *    Calls addInitialOptionRows() and hideElements()
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    $(document).ready(function () {
+
+        addInitialOptionRows();
+        hideElements();
+
+        var dateFormat = "yy-mm-dd";
+
+        $(".fromDate").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat: dateFormat
+        });
+
+        $(".toDate").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat: dateFormat
+        });
+
+    });
+
+    /**
+     *    Calls addAnotherOptionRow()
+     *
+     *    $this->selectedAttributeOptions =>
+     *                            '0' => 'default',
+     *                            '1' => '...'
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function addInitialOptionRows() {
+
+        var selectedAttributeOptions = ["<?php echo implode('", "', $this->selectedAttributeOptions) ?>"];
+
+        $.each(selectedAttributeOptions, function (index, value) {
+            addAnotherOptionRow(value);
+        });
+
+    }
+
+    /**
+     *  Adds an additional Attribute Option Row
+     *
+     *  1. clone template
+     *  2. set tr id and data attribute "selected"
+     *  3. set id for delete Button and hide it if option is 'default'
+     *  4. disable option for other dropdowns
+     *  5. select option in current dropdown
+     *  6. insert the cloned row after #tbody_table_attribute_changes and make it visible
+     *
+     *    @param        option            string
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function addAnotherOptionRow(option) {
+
+        //clone attributeOptionRow_ , set id, set data attribute (needed for selection change)
+        var row = $('#attributeRow').clone();
+        row.attr('id', 'attributeOptionRow_' + $('#table_attribute_changes').find('tr').length);
+        row.data('selected', option);
+
+        //deleteButton
+        var idOfDeleteButton = 'deleteButton_' + $('#table_attribute_changes').find('tr').length;
+        $(row).find('#deleteButton_').attr('id', idOfDeleteButton);
+        if (option === 'default') {
+            $(row).find('#' + idOfDeleteButton).hide();
+        }
+
+        //disable options
+        var selectedOptions = selectedValues();
+        $.each(selectedOptions, function (index, option) {
+            row.find('option[value="' + option + '"]').attr('disabled', 'disabled');
+        });
+
+        //select option
+        var optgroup = 'td select.attributeOptions optgroup';
+        row.find(optgroup + '#additionalAttributes' + '> option[value="' + option + '"]').attr('selected', 'selected');
+        row.find(optgroup + '#ciTypeAttributes' + '> option[value="' + option + '"]').attr('selected', 'selected');
+
+        //insert cloned row and show it
+        row.insertAfter($('#tbody_table_attribute_changes').find('tr:last')).show();
+
+    }
+
+    /**
+     *    show filterSection if the filter is set
+     *    hides the template
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function hideElements() {
+
+        //hide filterSectionContent
+        if ('<?php echo $this->filterSet ?>' !== '1') {
+            $('#filterSectionContent').hide();
+        } else {
+            $('#filterSectionButton').click();
+        }
+        //hide template
+        $('#attributeRow').hide();
+
+    }
+
+    /**
+     *  Function for selecting a date range
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function dateRange(element) {
+
+        var fromDate = $(".fromDate");
+        var toDate = $(".toDate");
+
+        fromDate.on("change", function () {
+            toDate.datepicker("option", "minDate", getDate(this));
+        });
+        toDate.on("change", function () {
+            fromDate.datepicker("option", "maxDate", getDate(this));
+        });
+
+        function getDate(element) {
+            var date;
+            try {
+                date = $.datepicker.parseDate(dateFormat, element.value);
+            } catch (error) {
+                date = null;
+            }
+            return date;
+        }
+    };
+
+    /**
+     *  Show and Hide Filter Section
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function showFilterSection() {
+        var textValue = $('#filterSectionButton').html();
+        var show = '<?php echo $this->translate('filterSectionShow') ?>';
+        var hide = '<?php echo $this->translate('filterSectionHide') ?>';
+        if (textValue === show) {
+            $('#filterSectionContent').show();
+            $('#filterSectionButton').html(hide);
+
+        } else {
+            $('#filterSectionContent').hide();
+            $('#filterSectionButton').html(show);
+        }
+    };
+
+    /**
+     *    gets the number of rows in the filter table
+     *    gets the number of attribute options
+     *    and compares both numbers
+     *
+     *    addRowIsAllowed if there are less table rows than attribute options
+     *
+     *    @returns    addRowIsAllowed        Boolean
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function addRowIsAllowed() {
+        var rows = $('#table_attribute_changes').find('tr');
+        var numberOfRows = rows.length - 1;
+        var numberOfAttributeOptions = '<?php echo $this->optionCount;?>';
+        var addRowIsAllowed = false;
+
+        if (numberOfRows < numberOfAttributeOptions) {
+            addRowIsAllowed = true;
+        }
+        return addRowIsAllowed;
+    };
+
+    /**
+     *    gets all Seleted Values
+     *    counts the default entries
+     *
+     *    @returns    defaultCount    string
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function defaultCount() {
+        var defaultCount = 0;
+        var selectedOptions = selectedValues();
+        $.each(selectedOptions, function (index, option) {
+            if (option === "default") {
+                defaultCount++;
+            }
+        });
+        return defaultCount;
+
+    };
+
+    /**
+     *    Deletes an attribute row
+     *    adds a new row if the deleted row was the last
+     *    calls enableOption with the deleted option
+     *
+     *    @param        deleteButton        object
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function delete_attribute_row(deleteButton) {
+
+        //add another row
+        var selectedOptions = selectedValues();
+        var defaultCount = 0;
+        $.each(selectedOptions, function (index, option) {
+            if (option == 'default') {
+                defaultCount++;
+            }
+        });
+
+        if ($('#table_attribute_changes').find('tr').length === 1 || defaultCount === 1) {
+            addAnotherOptionRow('default');
+        }
+
+        //remove
+        var id = $(deleteButton).closest('td').attr('id');
+        $('#' + id).closest('tr').remove();
+
+        //enable
+        enableOption($(deleteButton).closest('tr').find('td select').val());
+
+        UnTip();
+    }
+
+    /**
+     *    reacts on option changes
+     *
+     *    - calls addAnotherOptionRow()        if an option changes from 'default' to another option
+     *    - calls enableOption()                if an option changes
+     *    - calls showOrHideDeleteButton()
+     *    - calls disalbeOption()
+     *
+     *    @param        option        string
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function optionSelected(select) {
+
+        var currentRow = $(select).closest('tr');
+        var option = $(currentRow).find('td select').val();
+
+        //add row if an option changes from 'default' to another option
+        var count = defaultCount();
+
+        if (addRowIsAllowed() === true && count !== 2) {
+            addAnotherOptionRow('default');
+        }
+
+        //enable option if an option changes
+        if (count === 2) {
+            var previousSelection = $(currentRow).data('selected');
+            enableOption(previousSelection);
+        }
+        $(currentRow).data('selected', option);
+
+        //hide or show delete button
+        var currentRowId = $(currentRow).attr('id');
+        var id = currentRowId.substr(19);
+        showOrHideDeleteButton(option, id);
+
+        //disable Option
+        var rows = $('#table_attribute_changes').find('tr');
+        disableOption(rows, currentRowId, option);
+
+    }
+
+    /**
+     *    Disables a selected option:
+     *
+     *    1. foreach other row in rows
+     *    2. find option value of other row
+     *    3. disable option
+     *
+     *    @param        rows            object
+     *    @param        currentRowId    string
+     *    @param        option            string
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function disableOption(rows, currentRowId, option) {
+        $.each(rows, function (index, value) {
+            var id = $(value).attr('id');
+            if (id !== currentRowId) {
+                $(value).find('option[value="' + option + '"]').attr('disabled', 'disabled');
+
+            }
+        });
+    }
+
+    /**
+     *    Hides the deleteButton if the option is "default"
+     *
+     *    @param        id                string
+     *    @param        option            string
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function showOrHideDeleteButton(option, id) {
+        if (option !== "default") {
+            $('#deleteButton_' + id).show();
+        } else {
+            $('#deleteButton_' + id).hide();
+        }
+    }
+
+    /**
+     *    Enables a deleted or changed option
+     *
+     *    @param        option        string
+     *
+     *    @author    Martina Reiter
+     *    @since    July 2016
+     */
+    function enableOption(option) {
+        $.each($('#table_attribute_changes').find('tr'), function (index, row) {
+            $.each($(row).find('select option'), function (index, opt) {
+                if ($(opt).attr('value') === option) {
+                    $(opt).attr("disabled", false);
+                }
+            });
+        });
+    }
+
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+$class  = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+?>
+
+
+<!-- Button Row with Filter and Overview Buttons -->
+<div class="button_row">
+    <a class="<?php echo $class; ?>" id="filterSectionButton" href="#" onclick="showFilterSection()"><?php echo $this->translate('filterSectionShow') ?></a>
+    |
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>history/index"><?php echo $this->translate('overview') ?></a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('ciHistory'); ?>
+    <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->ciId; ?>"><?php echo $this->ciId; ?></a>
+</h1>
+<div class="numberResult">(<?php echo $this->translate('numberOfResults') ?> <?php echo $this->totalItemCount ?>)</div>
+
+
+<!-- Filter History List Section -->
+<div id="filterSectionContent">
+    <form action="<?php echo APPLICATION_URL ?>history/ci/ciid/<?php echo $this->ciId; ?>" id="ciHistoryFilterForm" method="post">
+
+        <fieldset id="Filter History Entries" style="margin-bottom:15px;" class="detail_fieldset">
+            <legend><strong><?php echo $this->translate('filterHistoryEntries') ?></strong></legend>
+
+            <table id="table_date_range">
+                <!-- Date Range -->
+                <tr id="x" class="">
+                    <td class=""><label title=""><?php echo $this->translate('dateRange') ?></label></td>
+                    <td class="">
+                        <input onclick="dateRange(this)" id="fromDate" style="padding-left: 10px" placeholder="<?php echo $this->translate('fromDate') ?>" type="text" class="fromDate" name="fromDate" value="<?php echo $this->fromDate; ?>" />
+                        <input onclick="dateRange(this)" id="toDate" placeholder="<?php echo $this->translate('toDate') ?>" style="padding-left: 10px" type="text" class="toDate" name="toDate" value="<?php echo $this->toDate; ?>" />
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Show Changes -->
+            <fieldset id="changes" style="margin-bottom:15px;" class="detail_fieldset">
+                <legend><?php echo $this->translate('showChanges') ?></legend>
+                <table width="100%" cellspacing="0" cellpadding="0" class="list_detail">
+                    <tbody>
+
+                    <!-- Relation Changed -->
+                    <tr class="">
+                        <td class="">
+                            <input id="relationChange" type="checkbox" <?php if ($this->relationChanged) {
+                                echo 'checked="checked"';
+                            } ?> title="<?php echo $this->translate('relationChanges') ?>" value="1" name="relationChange" />
+                            <label for="relationChange" title=""><?php echo $this->translate('relationChanges') ?></label>
+                        </td>
+                    </tr>
+
+                    <!-- Project Changed -->
+                    <tr class="">
+                        <td class="">
+                            <input id="projectChanged" type="checkbox" <?php if ($this->projectChanged) {
+                                echo 'checked="checked"';
+                            } ?> title="<?php echo $this->translate('projectChanges') ?>" value="1" name="projectChanged" />
+                            <label title="" for="projectChanged"><?php echo $this->translate('projectChanges') ?></label>
+                        </td>
+                    </tr>
+
+                    <!-- CiType changed -->
+                    <tr class="">
+                        <td class="">
+                            <input id="ciTypeChanged" type="checkbox" <?php if ($this->ciTypeChanged) {
+                                echo 'checked="checked"';
+                            } ?> title="<?php echo $this->translate('ciTypesChanges') ?>" value="1" name="ciTypeChanged" />
+                            <label for="ciTypeChanged" title=""><?php echo $this->translate('ciTypesChanges') ?></label>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </fieldset>
+
+            <!-- Attribute Changes -->
+            <fieldset style="margin-bottom:15px;" class="detail_fieldset">
+                <legend><?php echo $this->translate('attributeChanges') ?></legend>
+
+                <table id="table_attribute_changes">
+                    <tbody id="tbody_table_attribute_changes">
+                    <!-- cloned template rows are added here-->
+                    <tr></tr>
+                    </tbody>
+                </table>
+            </fieldset>
+
+            <!-- Filter Buttons -->
+            <div>
+                <input type="submit" class="infocmdb_button" value="<?php echo $this->translate('filter') ?>" id="filterButton" />
+
+                <a href='<?php echo APPLICATION_URL ?>history/ci/ciid/<?php echo $this->ciId; ?>/resetFilter/0'
+                   class="infocmdb_button" id="filterResetButton">
+                    <?php echo $this->translate('filterReset') ?>
+                </a>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+
+
+<!-- History List Section -->
+<div id="historyList">
+
+    <?php if ($this->historyList):
+        foreach ($this->historyList as $history):
+
+            $revert_title = $this->translate('historyRevertButtonTitle');
+            $history_view_title = $this->translate('historyViewButtonTitle');
+
+            $restore = '<a href="#" onclick="restore_ci_entry(' . $this->ciId . ',' . $history[Db_History::ID] . ')" class="history-action"><i class="fa fa-undo" title="' . $revert_title . '"></i></a>';
+
+            $path_to_history_detail = APPLICATION_URL . "ci/historydetail/ciid/" . $this->ciId . "/historyid/" . $history[Db_History::ID];
+            $history_view           = '<a href="' . $path_to_history_detail . '" class="history-action"><i class="fa fa-search" title="' . $history_view_title . '"></i></a>'
+
+
+            ?>
+            <div id="history_list">
+                <div id="history_list_header">
+                    <span class="left"><?php echo $restore;
+                        echo $history_view; ?><strong><?php echo $history[Db_History::DATESTAMP]; ?></strong></span>
+                    <span class="center"><strong><?php echo $history[Db_History::NOTE] ?></strong></span>
+                    <span class="right"><strong><?php if ($history[Db_User::USERNAME]) {
+                                echo $history[Db_User::USERNAME];
+                            } else {
+                                echo "system";
+                            } ?></strong></span>
+                </div>
+                <div id="history_list_content">
+
+
+                    <?php if (($history['attributes'])) { ?>
+                        <table cellpadding="0" cellspacing="0" width="100%" style="table-layout:fixed;" border="0">
+                            <tr>
+                                <th style="width:150px;">Attribut</th>
+                                <th>Wert alt</th>
+                                <th>Wert neu</th>
+                            </tr>
+                            <?php
+                            $i = 0;
+                            foreach ($history['attributes'] as $attribute):
+
+                                if ($attribute['noEscape']) {
+                                    $value    = $attribute['value'];
+                                    $valueOld = $attribute['value_old'];
+                                } else {
+                                    $value    = $this->escape($attribute['value']);
+                                    $valueOld = $this->escape($attribute['value_old']);
+                                }
+
+                                if (!$valueOld)
+                                    $valueOld = '-';
+
+                                if ($i % 2 == 0) {
+                                    $style = "style=\"background-color:#E8E8E8 \"";
+                                } else {
+
+                                    $style = "";
+                                }
+
+                                $i++;
+                                ?>
+                                <tr>
+                                    <td <?php echo $style; ?> ><?php echo $attribute[Db_Attribute::DESCRIPTION] ?></td>
+                                    <td <?php echo $style; ?>><?php echo $valueOld ?></td>
+                                    <td <?php echo $style; ?>><?php echo $value ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    <?php } ?>
+
+
+
+
+                    <?php if ($history['citype']['new'] || $history['citype']['old']) { ?>
+                        <table cellpadding="0" cellspacing="0" width="100%">
+                            <?php if ($history['citype']['old']) { ?>
+                                <tr>
+                                    <td style="width:20%;">
+                                        <strong><?php echo $this->translate('ciTypeRemoved'); ?></strong>
+                                    </td>
+                                    <td style="width:80%;">
+                                        <?php foreach ($history['citype']['old'] as $citype): ?>
+                                            <div><span><?php echo $citype['description'] ?></span></div>
+                                        <?php endforeach; ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                            <?php if ($history['citype']['new']) { ?>
+                                <tr>
+                                    <td style="width:20%;">
+                                        <strong><?php echo $this->translate('ciTypeAdded'); ?></strong>
+                                    </td>
+                                    <td style="width:80%;">
+                                        <?php foreach ($history['citype']['new'] as $citype): ?>
+                                            <div><span><?php echo $citype['description'] ?></span></div>
+                                        <?php endforeach; ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    <?php } ?>
+
+
+
+                    <?php if ($history['projects'] || $history['projects_deleted']) { ?>
+                        <table cellpadding="0" cellspacing="0" width="100%">
+                            <?php if ($history['projects_deleted']) { ?>
+                                <tr>
+                                    <td style="width:20%;">
+                                        <strong><?php echo $this->translate('projectsDeleted'); ?></strong>
+                                    </td>
+                                    <td style="width:80%;">
+                                        <?php foreach ($history['projects_deleted'] as $project): ?>
+                                            <div>
+                                                <span class="added"><?php echo $project[Db_Project::DESCRIPTION] ?></span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+
+                            <?php if ($history['projects']) { ?>
+                                <tr>
+                                    <td style="width:20%;">
+                                        <strong><?php echo $this->translate('projectsAdded'); ?></strong>
+                                    </td>
+                                    <td style="width:80%;">
+                                        <?php foreach ($history['projects'] as $project): ?>
+                                            <div><?php echo $project[Db_Project::DESCRIPTION] ?></div>
+                                        <?php endforeach; ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    <?php } ?>
+
+
+                    <?php if ($history['relations']) { ?>
+                        <table cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <th>Beschreibung</th>
+                                <th>von/zu</th>
+                                <th>Detail</th>
+                            </tr>
+
+                            <?php $ciDao = new Dao_Ci(); ?>
+                            <?php foreach ($history['relations'] as $relation) {
+
+                                $ciToUse          = $relation[Db_CiRelation::CI_ID_2];
+                                $descriptionToUse = $relation[Db_CiRelationType::DESCRIPTION];
+
+                                if ($relation[Db_CiRelation::CI_ID_2] == $this->ciId) {
+                                    $ciToUse = $relation[Db_CiRelation::CI_ID_1];
+                                    if ($relation[Db_CiRelationType::DESCRIPTION_OPTIONAL]) {
+                                        $descriptionToUse = $relation[Db_CiRelationType::DESCRIPTION_OPTIONAL];
+                                    }
+                                }
+                                ?>
+
+                                <tr>
+                                    <td><?php echo $descriptionToUse; ?></td>
+                                    <td>
+                                        <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $ciToUse; ?>"><?php echo $ciDao->getCiTypeDescriptionForCi($ciToUse);
+                                            echo ' ' . $ciToUse ?></a></td>
+                                    <td><?php echo $relation['name']; ?></td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    <?php } ?>
+
+
+
+                    <?php if ($history['relations_deleted']) { ?>
+                        <table cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <th>Beschreibung</th>
+                                <th>von/zu</th>
+                                <th>Detail</th>
+                            </tr>
+
+                            <?php $ciDao = new Dao_Ci(); ?>
+                            <?php foreach ($history['relations_deleted'] as $relation) {
+
+                                $ciToUse          = $relation[Db_CiRelation::CI_ID_2];
+                                $descriptionToUse = $relation[Db_CiRelationType::DESCRIPTION];
+
+                                if ($relation[Db_CiRelation::CI_ID_2] == $this->ciId) {
+                                    $ciToUse = $relation[Db_CiRelation::CI_ID_1];
+                                    if ($relation[Db_CiRelationType::DESCRIPTION_OPTIONAL]) {
+                                        $descriptionToUse = $relation[Db_CiRelationType::DESCRIPTION_OPTIONAL];
+                                    }
+                                }
+                                ?>
+
+                                <tr>
+                                    <td><?php echo $descriptionToUse; ?></td>
+                                    <td>
+                                        <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $ciToUse; ?>"><?php echo $ciDao->getCiTypeDescriptionForCi($ciToUse);
+                                            echo ' ' . $ciToUse ?></a></td>
+                                    <td><?php echo $relation['name']; ?></td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    <?php } ?>
+
+
+                </div>
+            </div>
+            <div class="break"></div>
+        <?php endforeach; ?>
+
+        <?php echo $this->paginator; ?>
+        <!--  Hier kommt die neue detail-Anzeige -->
+
+    <?php else: // if($this->historyList)?>
+        <?php echo '<b>' . $this->translate('nohistoryfound') . '!</b>' ?>
+    <?php endif; // if($this->historyList)?>
+
+</div>
+
+<!-- Template -->
+<div>
+
+    <!-- Attributes -->
+    <tr id="attributeRow" data-selected="" class="">
+        <td class=""><label title=""><?php echo $this->translate('attributes') ?></label></td>
+
+        <!-- attribute optgroup -->
+        <td>
+            <select name="attributeOptions[]" class="attributeOptions" data-selected="" onchange="optionSelected(this)" tabindex="0" style="inline">
+
+
+                <optgroup id="ciTypeAttributes" label="<?php echo $this->translate('optGroupCiTypeAttributes') ?>">
+                    <?php echo '<option class="default" value="default">' . $this->translate('choose') . '</option>'; ?>
+                    <?php
+                    foreach ($this->standardAttributes as $id => $attribute) {
+                        if ($this->standardAttributes[$id]['hasHistory'] == 1) {
+                            $disabled = false;
+                            echo '<option value="' . $id . '" >' . $attribute['description'] . '</option>';
+                        } else {
+                            $disabled = 'disabled';
+                            echo '<option value="' . $id . '" disabled="' . $disabled . '">' . $attribute['description'] . '</option>';
+                        }
+                    }
+                    ?>
+                </optgroup>
+                <optgroup id="additionalAttributes" label="<?php echo $this->translate('optGroupAdditionalAttributes') ?>">
+                    <?php
+                    foreach ($this->additionalAttributes as $id => $attribute) {
+                        if ($this->additionalAttributes[$id]['hasHistory'] == 1) {
+                            $disabled = false;
+                            echo '<option value="' . $id . '" >' . $attribute['description'] . '</option>';
+                        } else {
+                            $disabled = 'disabled';
+                            echo '<option value="' . $id . '" disabled="' . $disabled . '">' . $attribute['description'] . '</option>';
+                        }
+                    }
+                    ?>
+                </optgroup>
+            </select>
+        </td>
+
+        <!-- delete attribute row -->
+        <td id="deleteButton_">
+            <div class="deleteButton" onmouseover="Tip('<?php echo $this->translate('delete') ?>');" onmouseout="UnTip();">
+                <a onclick="delete_attribute_row(this)" class="delete_list">&nbsp;</a>
+            </div>
+        </td>
+
+    </tr>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

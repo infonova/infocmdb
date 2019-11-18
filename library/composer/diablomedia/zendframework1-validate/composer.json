@@ -1,0 +1,73 @@
+{
+    "name": "diablomedia/zendframework1-validate",
+    "description": "Zend Framework 1 Validate component",
+    "type": "library",
+    "keywords": [
+        "framework",
+        "zf1"
+    ],
+    "homepage": "http://framework.zend.com/",
+    "license": "BSD-3-Clause",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.0.0",
+        "diablomedia/zendframework1-exception": "^1.0.1",
+        "diablomedia/zendframework1-config": "^1.0.0",
+        "diablomedia/zendframework1-loader": "^1.0.0",
+        "diablomedia/zendframework1-registry": "^1.0.0",
+        "diablomedia/zendframework1-date": "^1.0.0",
+        "diablomedia/zendframework1-filter": "^1.0.0",
+        "diablomedia/zendframework1-locale": "^1.0.0",
+        "diablomedia/zendframework1-translate": "^1.0.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Zend_Validate_": "src/"
+        },
+        "classmap": [
+            "src/Zend/Validate.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "Zend_": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "no-api": true,
+            "url": "https://github.com/diablomedia/phpstorm-stubs"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "phpstan/phpstan": "^0.9.2",
+        "jetbrains/phpstorm-stubs": "dev-phpstan",
+        "friendsofphp/php-cs-fixer": "^2.11",
+        "maglnet/composer-require-checker": "^0.2.1",
+        "phpro/grumphp": "^0.14.0"
+    },
+    "include-path": [
+        "src/"
+    ],
+    "archive": {
+        "exclude": ["/tests"]
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-with-coverage": "phpunit --coverage-clover=clover.xml",
+        "phpstan": "phpstan analyze -l4 -c phpstan.neon --no-progress ./ --ansi",
+        "style-check": "php-cs-fixer fix --dry-run -vv"
+    },
+    "suggest": {
+        "ext-iconv": "Used in Hostname and StringLength validators",
+        "ext-ctype": "Used in the CreditCard and Hex validators",
+        "ext-intl": "Optionally used in the EmailAddress validator",
+        "diablomedia/zendframework1-validate-db": "To use Zend_Db validations (RecordExists/NoRecordExists)",
+        "diablomedia/zendframework1-validate-ldap": "To use Zend_Ldap validations",
+        "diablomedia/zendframework1-validate-file": "To use Zend_File validations",
+        "diablomedia/zendframework1-validate-sitemap": "To use Zend_Sitemap validations"
+    }
+}

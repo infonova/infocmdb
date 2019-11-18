@@ -1,0 +1,13 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        # Zend_Layout uses __get and __set
+        - '#Access to an undefined property Zend_Layout::\$events\.#'
+        -
+            message: '#Parameter \#1 \$function of function call_user_func_array expects callable\(\): mixed, array\(Zend_Mail, mixed\) given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Log/Writer/Mail.php

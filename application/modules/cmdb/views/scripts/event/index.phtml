@@ -1,0 +1,76 @@
+<h1 class="pageName"><?php echo $this->translate('eventTitle'); ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<div id="filter">
+    <div class="filter-box">
+        <form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+              action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+              method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+            <?php
+            echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            echo $this->searchForm->filterEvents;
+            ?>
+        </form>
+    </div>
+</div>
+<div class="clearBoth" style="margin-bottom: 15px;"></div>
+
+<?php if (count($this->paginator)): ?>
+
+<table class="list" cellpadding="0" cellspacing="0" width="100%">
+    <tr class="headline">
+        <th>
+            <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+            <a class="link" href="<?php echo $this->url(array('orderBy' => Db_CiEvent::CI_ID, 'direction' => (($this->orderBy == Db_CiEvent::CI_ID) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                <?php echo $this->translate('ciId'); ?>
+            </a>
+        </th>
+        <th>
+            <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+            <a class="link" href="<?php echo $this->url(array('orderBy' => Db_CiEvent::EVENT_NAME, 'direction' => (($this->orderBy == Db_CiEvent::EVENT_NAME) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                <?php echo $this->translate('eventName'); ?>
+            </a>
+        </th>
+        <th>
+            <a class="link" href="<?php echo $this->url(array('orderBy' => Db_CiEvent::EVENT_LINK, 'direction' => (($this->orderBy == Db_CiEvent::EVENT_LINK) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                <?php echo $this->translate('eventLink'); ?>
+            </a>
+        </th>
+        <th>
+            <a class="link" href="<?php echo $this->url(array('orderBy' => Db_CiEvent::VALID_FROM, 'direction' => (($this->orderBy == Db_CiEvent::VALID_FROM) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                <?php echo $this->translate('validFrom'); ?>
+            </a>
+        </th>
+        <th>
+            <a class="link" href="<?php echo $this->url(array('orderBy' => Db_CiEvent::VALID_TO, 'direction' => (($this->orderBy == Db_CiEvent::VALID_TO) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                <?php echo $this->translate('validTo'); ?>
+            </a>
+        </th>
+    </tr>
+
+    <?php
+    $row_count = 0;
+    foreach ($this->paginator as $item):
+        ?>
+        <tr>
+            <td>
+                <a href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $item[Db_CiEvent::CI_ID]; ?>"><?php echo $item[Db_CiEvent::CI_ID]; ?></a>
+            </td>
+            <td><?php echo $item[Db_CiEvent::EVENT_NAME]; ?></td>
+            <td><a href="<?php echo $item[Db_CiEvent::EVENT_LINK]; ?>"><?php echo $item[Db_CiEvent::EVENT_LINK]; ?></a>
+            </td>
+            <td><?php echo $item[Db_CiEvent::VALID_FROM]; ?></td>
+
+            <td><?php if ($item[Db_CiEvent::VALID_TO]) {
+                    echo $item[Db_CiEvent::VALID_TO];
+                } else {
+                    echo $this->translate('validToUnlimited');
+                }; ?></td>
+        </tr>
+    <?php endforeach; ?>
+    <?php endif; ?>
+
+</table>
+<?php echo $this->paginator; ?>

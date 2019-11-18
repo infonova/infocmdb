@@ -1,0 +1,14 @@
+Hi,
+
+you receive this email because a password-reset has been requested for your cmdb account.
+
+If it wasn't you who has requested a password-reset please ignore this email.
+
+To set a new password please use this link:
+<?php echo $this->data['host']; ?>/login/change/hash/<?php echo $this->data['hash']; ?>
+
+This link is only valid for a short time!
+
+
+Best regards,
+<?php echo $this->data['cmdb'] ?> | <?php echo $this->data['host']; ?>

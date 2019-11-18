@@ -1,0 +1,80 @@
+<script type="text/javascript">
+    function delete_mail(mail_id) {
+        if (confirm('<?php echo $this->translate("areYouSureDelete")?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>mail/delete/mailId/' + mail_id;
+        }
+    }
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>mail/create"><?php echo $this->translate('mailCreate') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('indexTitle'); ?></h1>
+<div class="numberResult">
+    (<?php echo $this->translate('numberOfResults') ?> <?php echo($this->paginator->getTotalItemCount()) ?>)
+</div>
+
+<?php if (count($this->paginator)): ?>
+    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+        <tr class="headline">
+            <th>
+                <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+                <a href="<?php echo APPLICATION_URL ?>mail/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Mail::NAME ?>/direction/<?php echo(($this->orderBy == Db_Mail::NAME) ? $urlDirection : "DESC"); ?>">
+                    <?php echo $this->translate('listName'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>mail/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Mail::DESCRIPTION ?>/direction/<?php echo(($this->orderBy == Db_Mail::DESCRIPTION) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('listDescription'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>mail/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Mail::NOTE ?>/direction/<?php echo(($this->orderBy == Db_Mail::NOTE) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('listNote'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>mail/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Mail::SUBJECT ?>/direction/<?php echo(($this->orderBy == Db_Mail::SUBJECT) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('listSubject'); ?>
+                </a>
+            </th>
+            <th>
+                <a href="<?php echo APPLICATION_URL ?>mail/index/page/<?php echo $this->page ?>/orderBy/<?php echo Db_Mail::MIME_TYPE ?>/direction/<?php echo(($this->orderBy == Db_Mail::MIME_TYPE) ? $urlDirection : "ASC"); ?>">
+                    <?php echo $this->translate('listMimeType'); ?>
+                </a>
+            </th>
+            <th>&nbsp;</th
+        </tr>
+        <?php
+        $row_count = 0;
+
+        foreach ($this->paginator as $item):
+            ?>
+            <tr>
+                <td>
+                    <a class="link" href="<?php echo APPLICATION_URL ?>mail/edit/mailId/<?php echo $item[Db_Mail::ID]; ?>"><?php echo $item[Db_Mail::NAME]; ?></a>
+                </td>
+                <td><?php echo $item[Db_Mail::DESCRIPTION]; ?></td>
+                <td><?php echo $item[Db_Mail::NOTE]; ?> </td>
+                <td><?php echo $item[Db_Mail::SUBJECT]; ?></td>
+                <td><?php echo Service_Mail_Get::getMimeTranslation($item[Db_Mail::MIME_TYPE]); ?></td>
+                <td>
+                    <div class="rfloater">
+                        <a class="delete_list" href="#" onclick="javascript:delete_mail(<?php echo $item[Db_Mail::ID]; ?>);" title="<?php echo $this->translate('listDelete') ?>"></a>
+                        <a class="link buttonLink" href="<?php echo APPLICATION_URL ?>mail/view/mailId/<?php echo $item[Db_Mail::ID]; ?>" title="<?php echo $this->translate('viewMail') ?>"><?php echo $this->translate('viewMail') ?></a>
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php echo $this->paginator; ?>
+<?php endif; ?>

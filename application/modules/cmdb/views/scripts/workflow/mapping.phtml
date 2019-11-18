@@ -1,0 +1,54 @@
+<fieldset class="lordVader">
+    <?php if ($this->type == "ci_type_change") : ?>
+        <span id="ci_type_change_info" style="font-weight: bold"><?php echo $this->translate("ciTypeChangeInfo"); ?></span>
+    <?php endif; ?>
+    <table>
+        <tbody>
+        <tr>
+            <th style="width:33%;">
+                <div class="radio_group">
+                    <div class="radio_label"><span title="<?php echo $this->translate("create") ?>">c</span></div>
+                    <div class="radio_label"><span title="<?php echo $this->translate("update") ?>">u</span></div>
+                    <div class="radio_label"><span title="<?php echo $this->translate("delete") ?>">d</span></div>
+                </div>
+                <span title="<?php echo $this->translate("ciType") ?>"><?php echo $this->translate("type") ?></span>
+            </th>
+            <th style="width:33%;">
+                <div class="radio_group">
+                    <div class="radio_label"><span title="<?php echo $this->translate("create") ?>">c</span></div>
+                    <div class="radio_label"><span title="<?php echo $this->translate("update") ?>">u</span></div>
+                    <div class="radio_label"><span title="<?php echo $this->translate("delete") ?>">d</span></div>
+                </div>
+                <span title="<?php echo $this->translate("ciType") ?>"><?php echo $this->translate("type") ?></span>
+            </th>
+            <th style="width:33%;">
+                <div class="radio_group">
+                    <div class="radio_label"><span title="<?php echo $this->translate("create") ?>">c</span></div>
+                    <div class="radio_label"><span title="<?php echo $this->translate("update") ?>">u</span></div>
+                    <div class="radio_label"><span title="<?php echo $this->translate("delete") ?>">d</span></div>
+                </div>
+                <span title="<?php echo $this->translate("ciType") ?>"><?php echo $this->translate("type") ?></span>
+            </th>
+        </tr>
+        <?php
+        $count = 0;
+        foreach ($this->possibleMappings as $mapping) {
+            if ($count == 0)
+                echo "<tr>";
+            ?>
+            <td style="padding-right: 0px;">
+                <?php $formfield = $this->type . '__' . $mapping['id']; ?>
+                <?php echo $this->form->$formfield ?>
+                <span style="width:76%;" title="<?php echo $mapping['description'] ?>"><?php echo $mapping['name'] ?></span>
+            </td>
+            <?php
+            $count++;
+            if ($count == 3) {
+                echo "</tr>";
+                $count = 0;
+            }
+        }
+        ?>
+        </tbody>
+    </table>
+</fieldset>

@@ -1,0 +1,11 @@
+parameters:
+    level: 6
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        -
+            message: '#Offset .path. does not exist on array\(\)\|array\(.scheme. => string, .host. => string, .port. => int, .user. => string, .pass. => string, .path. => string, .query. => string, .fragment. => string\)\.#'
+            path: %currentWorkingDirectory%/src/Zend/Auth/Adapter/Http.php

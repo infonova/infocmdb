@@ -1,0 +1,10 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        - '#Method Zend_Acl::_roleDFSAllPrivileges\(\) invoked with 3 parameters, 1-2 required\.#'
+        - '#Method Zend_Acl::isAllowed\(\) should return bool but returns bool\|null\.#'

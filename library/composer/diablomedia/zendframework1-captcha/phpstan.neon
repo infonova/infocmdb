@@ -1,0 +1,21 @@
+parameters:
+    level: 6
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        - '#Access to an undefined property Zend_Session_Namespace::\$word\.#'
+        - '#Call to an undefined method Zend_View_Abstract::doctype\(\)\.#'
+        - '#Call to an undefined method Zend_View_Interface::.+\(\)\.#'
+        - '#Call to an undefined method Zend_Form\|Zend_Form_DisplayGroup\|Zend_Form_Element::get.+\(\)\.#'
+        -
+            message: '#Left side of && is always true\.#'
+            path: %currentWorkingDirectory%/src/Zend/Captcha/Image.php
+        -
+            message: '#Negated boolean expression is always false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Captcha/ReCaptcha.php
+        -
+            message: '#If condition is always true\.#'
+            path: %currentWorkingDirectory%/src/Zend/Captcha/Word.php

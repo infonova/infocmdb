@@ -1,0 +1,45 @@
+<script type="text/javascript">
+    if (typeof (ace) != 'object') {
+        $.getScript("/js/ace/src-min-noconflict/ace.js");
+    }
+
+    $(document).ready(function () {
+        //editor for script
+        var scriptEditor = initAceEditor('#script-script_text', 'perl');
+
+        //editor for sql
+        var queryEditor = initAceEditor('#query-query', 'mysql');
+
+        //editor for sql persistent
+        var queryPersistentEditor = initAceEditor('#queryPersist-query', 'mysql');
+
+        initSlidebox('#individual-slidebox');
+    });
+
+</script>
+
+<?php if ($this->form) { ?>
+    <fieldset class="lordVader">
+        <table id="individual_form">
+            <tbody>
+            <?php
+            foreach ($this->form->getElements() as $field)
+                echo $field;
+            ?>
+            </tbody>
+        </table>
+        <div id="attributes">
+            <?php if ($this->options) echo '<span>' . $this->translate('optionsSaved') . ':</span>'; ?>
+        </div>
+        <?php
+        $formDesc = $this->form->getDescription();
+        if (!empty($formDesc)) : ?>
+            <div id="individual-slidebox" class="slidebox">
+                <h3 class="slidebox-header"><?php echo $this->translate('formHelp') ?></h3>
+                <div class="slidebox-content">
+                    <?php echo $formDesc ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </fieldset>
+<?php } ?>

@@ -1,0 +1,24 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        - '#Class WeakRef not found\.#'
+        - '#Instantiated class WeakRef not found\.#'
+        - '#Property .+ has unknown class WeakRef as its type\.#'
+        - '#Call to method get\(\) on an unknown class WeakRef\.#'
+        - '#Variable \$key might not be defined\.#'
+        # Defensive coding
+        -
+            message: '#Negated boolean expression is always false\.#'
+            path: %currentWorkingDirectory%/src/Zend/Stdlib/CallbackHandler.php
+        # An array can be a callable: [$object, 'method']
+        -
+            message: '#Property Zend_Stdlib_CallbackHandler::\$callback \(\(callable\)\|WeakRef\) does not accept array<int, mixed>\.#'
+            path: %currentWorkingDirectory%/src/Zend/Stdlib/CallbackHandler.php
+        -
+            message: '#Method Zend_Stdlib_CallbackHandler::getCallback\(\) should return callable but returns array<int, mixed>\.#'
+            path: %currentWorkingDirectory%/src/Zend/Stdlib/CallbackHandler.php

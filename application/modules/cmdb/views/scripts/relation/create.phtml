@@ -1,0 +1,392 @@
+<script type="text/javascript" src="/js/jquery/jquery.colorbox.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('<p id="showroom" style="background-color:#000"></p>').insertAfter("#color");
+
+        $("input#searchstring").keypress(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                $('input#searchButton').click();
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        $("#tabs").tabs({active: <?php echo $this->tab; ?> });
+
+        if ($("select#relation").get(0).value != 0) {
+            var descriptions = $("select#relation :selected").text().split(" <> ");
+            if ($("input#switch").is(':checked')) {
+                $("div#description_1").html("<span>" + ((descriptions[1]) ? descriptions[1] : descriptions[0]) + "</span>");
+                $("div#description_2").html("<span>" + descriptions[0] + "</span>");
+            }
+            else {
+                $("div#description_1").html("<span>" + descriptions[0] + "</span>");
+                $("div#description_2").html("<span>" + ((descriptions[1]) ? descriptions[1] : descriptions[0]) + "</span>");
+            }
+        } else {
+            $("#tabs").tabs('disable', 1);
+            $("#tabs").tabs('disable', 2);
+            // disable tabs
+        }
+
+        $("select#relation").change(function () {
+            if ($(this).get(0).value != 0) {
+                $("#tabs").tabs('enable', 1);
+                $("#tabs").tabs('enable', 2);
+                var descriptions = $("select#relation :selected").text().split(" <> ");
+
+                if ($("input#switch").is(':checked')) {
+                    $("div#description_1").html("<span>" + ((descriptions[1]) ? descriptions[1] : descriptions[0]) + "</span>");
+                    $("div#description_2").html("<span>" + descriptions[0] + "</span>");
+                }
+                else {
+                    $("div#description_1").html("<span>" + descriptions[0] + "</span>");
+                    $("div#description_2").html("<span>" + ((descriptions[1]) ? descriptions[1] : descriptions[0]) + "</span>");
+                }
+            }
+            else {
+                $("#tabs").tabs('disable', 1);
+                $("#tabs").tabs('disable', 2);
+                $("div#description_1").html("<span></span>");
+                $("div#description_2").html("<span></span>");
+            }
+        });
+
+
+        $("#turnRelation").click(function () {
+            if ($(this).get(0).value != 0) {
+                var description1 = $("div#description_1 span").text();
+                var description2 = $("div#description_2 span").text();
+
+                $("div#description_1").html("<span>" + description2 + "</span>");
+                $("div#description_2").html("<span>" + description1 + "</span>");
+
+                if ($("#switch").prop("checked")) {
+                    $("#switch").prop('checked', false);
+                } else {
+                    $("#switch").prop('checked', true);
+                }
+            }
+
+        });
+
+        $("input#switch").click(function () {
+            if ($(this).get(0).value != 0) {
+                var description1 = $("div#description_1 span").text();
+                var description2 = $("div#description_2 span").text();
+
+                $("div#description_1").html("<span>" + description2 + "</span>");
+                $("div#description_2").html("<span>" + description1 + "</span>");
+            }
+        });
+
+    });
+
+
+    function resetButton() {
+        if (confirm('<?php echo $this->translate("areYouSureReset") ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL . 'ci/detail/ciid/' . $this->ciToLink; ?>';
+        }
+    }
+
+    function submitButton() {
+        document.create.action = '<?php echo APPLICATION_URL?>relation/addrelation/ciid/<?php echo $this->ciList['id']?>/create/1';
+        document.forms['create'].submit();
+    }
+
+    function next() {
+        var selected = $("#tabs").tabs("option", "active");
+        var next = getNextEnabledTab(selected);
+        $("#tabs").tabs({active: next});
+    }
+
+    function back() {
+        var selected = $("#tabs").tabs("option", "active");
+        var last = getLastEnabledTab(selected);
+        $("#tabs").tabs({active: last});
+    }
+
+    function getNextEnabledTab(index) {
+        index += 1;
+        var disabled = $("#tabs").tabs("option", "disabled");
+        for (var i = 0; i < disabled.length; i++) {
+            if (disabled[i] == index)
+                index = getNextEnabledTab(index);
+        }
+
+        return index;
+    }
+
+    function getLastEnabledTab(index) {
+        index -= 1;
+        var disabled = $("#tabs").tabs("option", "disabled");
+        for (var i = 0; i < disabled.length; i++) {
+            if (disabled[i] == index)
+                index = getLastEnabledTab(index);
+        }
+
+        return index;
+    }
+
+    function updatePage(page) {
+        document.forms['create']['page'].value = page;
+        document.forms['create']['session'].value = "<?php echo $this->session;?>";
+        document.forms['create'].submit();
+        return false;
+    }
+
+    function gotoAttributePage(ciid, linkedci) {
+        var merge = '<?php echo APPLICATION_URL ?>relation/create/ciid/' + ciid + '/linkciid/' + linkedci;
+        document.forms['create'].action = merge;
+        document.forms['create'].submit();
+    }
+
+    function verifyPage(ciid) {
+        var merge = '<?php echo APPLICATION_URL ?>relation/verifyrelation/ciid/' + ciid;
+        document.forms['create'].action = merge;
+        document.forms['create'].submit();
+    }
+
+    function removeAssigned(ciid) {
+        var merge = "<?php echo APPLICATION_URL ?>relation/deleteassignment/ciid/<?php echo $this->ciList['id']?>/ciDelete/" + ciid;
+
+        document.forms['create'].action = merge;
+        document.forms['create'].submit();
+    }
+
+    jQuery(document).ready(function($) {
+        $("#showroom").colorbox({
+            labels: [
+                'black', 'blue', 'green', 'purple', 'red',
+            ],
+            colors: [
+                '000000', '1E90FF', '00C417', '9370D8', 'F08080',
+            ],
+            width: 20, height: 20,
+            perLine: 2,
+            onSelect: function ($this, color, index, label) {
+                $("#color").val(color);
+            }
+        }).
+        colorbox('setColor', '<?php echo(($this->color) ? $this->color : '000'); ?>');
+    });
+</script>
+
+<h1 class="pageName"><?php echo $this->translate('relationCreate') ?></h1>
+
+
+<div id="tabs">
+    <ul>
+        <li>
+            <a href="#fragment-1"><span class="att_nr">1</span><span class="att_desc"><?php echo $this->translate('wizardSelectRelation') ?></span></a>
+        </li>
+        <li>
+            <a href="#fragment-2"><span class="att_nr">2</span><span class="att_desc"><?php echo $this->translate('wizardSearchCi') ?></span></a>
+        </li>
+        <li>
+            <a href="#fragment-3"><span class="att_nr">3</span><span class="att_desc"><?php echo $this->translate('wizardOptions') ?></span></a>
+        </li>
+    </ul>
+    <form id="create" name="create"
+          action="<?php echo $this->escape($this->form->getAction()) ?>"
+          method="<?php echo $this->escape($this->form->getMethod()) ?>">
+        <fieldset class="create_form steps">
+            <div id="fragment-1">
+                <fieldset class="create_form">
+                    <table width="100%">
+                        <tr>
+                            <td width="50%" style="padding-right: 0px; margin-right: 0px;">
+                                <table class="create_form">
+                                    <?php echo $this->form->session->setDecorators(array('ViewHelper')); ?>
+                                    <?php echo $this->form->page->setDecorators(array('ViewHelper', 'Label')); ?>
+                                    <?php echo $this->form->relation; ?>
+
+                                    <tr>
+                                        <td>
+                                            <?php echo $this->translate('createRelationTo') ?>
+                                        </td>
+                                        <td>
+                                            <div style="float:left" id="description_1"><span>&nbsp;</span></div>
+                                            <div style="float:left; margin-left: 10px">
+                                                <a href="" onclick="return false;">
+                                                    <img id="turnRelation" height="20px" src="<?php echo APPLICATION_URL ?>images/icon/relation_switch.png" height="35px" title="Relation drehen"></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <div style="visibility:hidden;">
+                                                <div style="float:left" id="description_2"><span>&nbsp;</span></div>
+                                                <?php echo $this->form->switch->setDecorators(array('ViewHelper'));; ?>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php echo $this->form->note; ?>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <br>
+                                <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:resetButton(); return false;">
+                                <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javacript:next(); return false;">
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+
+
+            <div id="fragment-2">
+                <table class="create_form">
+                    <tr>
+                        <td>
+                            <div align="left" style="float: left;">
+                                <?php echo $this->form->searchstring->setDecorators(array('ViewHelper', 'Label')); ?>
+                                <?php echo $this->form->searchButton->setDecorators(array('ViewHelper')); ?>
+                            </div>
+                            <div align="right">
+                                <?php if ($this->form->attributes2) echo $this->form->attributes2->setDecorators(array('ViewHelper', 'Label')); ?>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <?php
+                if (!$this->create) {
+                    if (count($this->valueList)):
+                        ?>
+                        <p class="headline" style="right: 0px; position: absolute; "><?php echo $this->translate('numberOfResults') . ' ' . $this->numberRows ?></p>
+                        <h1 style="text-align: left; clear: both;"></h1>
+                        <?php foreach ($this->valueList as $ciType): ?>
+                        <?php if (count($ciType['ciList'])): ?>
+                            <div class="tablelist">
+                                <h4 title="<?php echo $ciType['citype_name'] ?>"><?php echo $ciType['citype_description']; ?></h4>
+                                <table class="list" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr class="headline">
+                                        <th style="width: 40px;">&nbsp;</th>
+                                        <th><?php echo $this->translate('ci') ?></th>
+                                        <?php foreach ($ciType['attribList'] as $attrib): ?>
+                                            <th>
+                                                <span title="<?php echo $attrib['name'] ?>"><?php echo $attrib['description'] ?></span>
+                                            </th>
+                                        <?php endforeach; ?>
+                                    </tr>
+
+                                    <?php foreach ($ciType['ciList'] as $ci): ?>
+                                        <tr>
+                                            <td style="text-align:center;">
+                                                <input type="checkbox" name="ci_id[<?php echo $ci['id'] ?>]" value="<?php echo $ci['id'] ?>" <?php if ($this->ciids && $this->ciids[$ci['id']]) echo 'checked="checked"' ?>>
+                                            </td>
+                                            <td>
+                                                <a class="link" style="color: #8B0000;" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $ci['id'] ?>"><?php echo $ci['id'] ?></a>
+                                            </td>
+                                            <?php foreach ($ciType['attribList'] as $attrib): ?>
+                                                <td><?php echo $ci[$attrib['name']] ?></td>
+                                            <?php endforeach; ?>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                        <?php $row_count = 0; endforeach; ?>
+                        <?php echo $this->paginator; ?>
+
+                        <?php
+                        /**
+                         * <input type="submit" name="submitButton2"
+                         * id="submitButton2"
+                         * onClick="document.create.action='<?php echo APPLICATION_URL?>relation/create/ciid/<?php echo $this->ciList['id']?>/create/1';"
+                         * value="<?php echo $this->translate('addSelection') ?>">
+                         **/
+                        ?>
+                    <?php
+                    endif;
+                } else {
+                    if ($this->newValueList) {
+                        $row_count = 0;
+                        foreach ($this->newValueList as $ciType):
+                            if (count($ciType['ciList'])):
+                                ?>
+                                <div class="tablelist">
+                                    <h4 title="<?php echo $ciType['citype_name'] ?>"><?php echo $ciType['ciList'][0]['ciType']; ?></h4>
+                                    <table class="list" cellpadding="0" cellspacing="0" width="100%">
+                                        <tr class="headline">
+                                            <th width="40px"><?php echo $this->translate('ci') ?></th>
+                                            <?php foreach ($ciType['attribList'] as $attrib): ?>
+                                                <th>
+                                                    <span title="<?php echo $attrib['name'] ?>"><?php echo $attrib['description'] ?></span>
+                                                </th>
+                                            <?php endforeach; ?>
+                                            <th style="width: 50px;">&nbsp;</th>
+                                        </tr>
+
+                                        <?php foreach ($ciType['ciList'] as $ci): ?>
+                                            <tr>
+                                                <td>
+                                                    <a class="link" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $ci['id'] ?>"><?php echo $ci['id'] ?></a>
+                                                </td>
+                                                <?php foreach ($ciType['attribList'] as $attrib): ?>
+                                                    <td><?php echo $ci[$attrib['name']] ?></td>
+                                                <?php endforeach; ?>
+                                                <td>
+                                                    <a class="remove_list" title="<?php echo $this->translate('remove') ?>" href="javascript:removeAssigned(<?php echo $ci['id'] ?>)"></a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </table>
+                                </div>
+                            <?php
+                            endif;
+                        endforeach;
+                    }
+                }
+                ?>
+                <table class="create_form">
+                    <tr>
+                        <td>
+                            <div class="buttonCon">
+                                <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back(); return false;">
+                                <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:resetButton(); return false;">
+                                <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javacript:submitButton(); return false;">
+                                <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javacript:next(); return false;">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="fragment-3">
+                <fieldset class="create_form">
+                    <table class="create_form">
+                        <tr>
+                            <td><?php echo $this->form->color->setDecorators(array('Label')); ?></td>
+                            <td><div>
+                                    <div class="standardField">
+                                        <div style="float:left"><?php echo $this->form->color->setDecorators(array('ViewHelper')); ?></div>
+                                    </div>
+                                    <div class="standardField"><?php echo $this->form->direction; ?></div>
+                                    <div class="standardField"><?php echo $this->form->weight; ?></div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="buttonCon">
+                                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back(); return false;">
+                                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:resetButton(); return false;">
+                                    <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javacript:submitButton(); return false;">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+
+        </fieldset>
+    </form>
+</div>

@@ -1,0 +1,104 @@
+@CHARSET "UTF-8";
+
+* {
+    margin: 0;
+}
+
+html {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.invisible {
+    display: block;
+    opacity: 0.7;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.fadeout {
+    position: relative;
+    top: 1px;
+    cursor: pointer;
+}
+
+.noPrint {
+    display: block;
+}
+
+.print .edit_list {
+    display: none;
+}
+
+div#content {
+    padding: 10px;
+    width: auto;
+}
+
+.list > tbody > tr {
+    background-color: transparent !important;
+}
+
+.list > tbody > tr > td {
+    border-bottom: 1px dotted grey;
+}
+
+.list > tbody > tr:last-child > td {
+    border-bottom: none;
+}
+
+.attributeType {
+    page-break-inside: avoid;
+}
+
+a {
+    color: black !important;
+}
+
+.printControl {
+    display: inline;
+}
+
+#printControlHeader {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px
+}
+
+.settingsLink {
+    display: none;
+}
+
+@media print {
+    .pageName {
+        margin-top: 0;
+    }
+
+    .invisible {
+        display: none;
+    }
+
+    .fadeout {
+        display: none;
+    }
+
+    .noPrint {
+        display: none;
+    }
+
+    div#content {
+        padding: 0;
+    }
+
+    @page {
+        size: A4 portrait;
+        margin: 1cm;
+        margin-top: 1.6cm;
+        margin-bottom: 2cm;
+    }
+
+    .printControl {
+        display: none;
+    }
+
+}

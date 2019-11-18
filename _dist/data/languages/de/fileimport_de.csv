@@ -1,0 +1,176 @@
+importQueue;		"Anstehende Imports"
+importsSucceeded;	"Erfolgreiche Imports"
+importsFailed;		"Fehlgeschlagene Imports"
+
+noItemsFound;		"Keine Items gefunden"
+restart;			"Restart"
+
+importHistory;		"Import History"
+import;				"Import"
+overview;			"Übersicht"
+currentQueue;		"Aktuelle Queue"
+
+status;				"Status"
+method;				"Methode"
+queque;				"Queque"
+filename;			"Dateiname"
+linestotal;		"Zeilen gesamt"
+lineerrors;		"fehlerhafte Zeilen"
+dateProceeded;		"Verarbeitungsdatum"
+log;				"Log"
+linesProcessed;		"Importfortschritt"
+
+fileimportUploadTitle;	"Upload"
+fileimportModusTitle;	"Modus"
+summary;	"Übersicht"
+
+
+upload;				"Upload"
+historyfileDeleteSuccess; "History Eintrag erfolgreich gelöscht!"
+
+
+
+addField;			"Feld hinzufügen"
+removeField;		"Feld entfernen"
+hideForm;			"Fileupload Formular schließen"
+displayForm;		"Fileupload Formular anzeigen"
+
+fileserverConfiguration;	"Fileserver Konfiguration"
+numberOfResults;	"Anzahl der Ergebnisse:"
+
+config;				"Fileimport Konfiguration"
+createConfig;		"Konfiguration erstellen"
+fileimportConfig;	"Filesystem Import Konfiguration"
+
+configId;			"ID"
+name;				"Name"
+description;		"Beschreibung"
+note;				"Notiz"
+host;				"Host"
+
+edit;				"Bearbeiten"
+
+noConfigFound;		"Keine Konfiguration gefunden"
+
+idleTitle;			"Idle Queue"
+attributeTitle;		"Attribut Queue"
+attributeSuccessTitle;"Attribut Success Queue"
+attributeErrorTitle;	"Attribut Error Queue"
+
+insertTitle;		"Insert Queue"
+insertSuccessTitle;	"Insert Success Queue"
+insertErrorTitle;	"Insert Error Queue"
+
+updateTitle;		"Update Queue"
+updateAutoTitle;	"Update Auto Queue"
+updateAutoSuccessTitle;	"Update Auto Success Queue"
+updateAutoErrorTitle;	"Update Auto Error Queue"
+
+updateManualTitle;	"Update Manuell Queue"
+updateManualSuccessTitle;	"Update Manuell Success Queue"
+updateManualErrorTitle;	"Update Manuell Error Queue"
+
+pickImport;"Importart wählen"
+
+importAttribute;"Attribute anlegen"
+importInsert;"Insert"
+importUpdateAuto;"Auto-Update"
+importUpdateManual;"Manual-Update"
+attribute; "Attribute anlegen"
+
+downloadLog;"Download"
+
+importUpdateQueue;"Update Übersicht"
+
+webConfig;"Fileimport File Upload"
+webFormQueue;"Importaktion"
+webFormUpload;"Files"
+
+webQueueIdle;"Keine Aktion (Idle)"
+webQueueInsert;"Daten neu einfügen"
+webQueueAttribute;"Attribute importieren"
+webQueueUpdateAuto;"vorhandene Daten updaten (Automatisch)"
+webQueueUpdateManual;"vorhandene Daten updaten (Manuell)"
+
+importAttributes;		"Attribute importieren"
+importData;				"Daten importieren"
+relation;				"Relationen anlegen"
+
+detail;					"Detail"
+
+
+
+# NEU 
+chooseImportType;"Importart auswählen: "
+
+linkImportStatus;"Laufenden Import ansehen" 
+linkConfigMail;"Import per Mail einsehen"
+linkConfigFtp;"Import per FTP einsehen"
+
+functionImport;"AdHoc Import per Fileupload"
+functionMail;"Import per Mail konfigurieren"
+functionFtp;"Import per FTP konfigurieren"
+
+
+# WIZARD
+wizardImportType;"Importart"
+wizardUpload;"Fileupload"
+wizardModus;"Importmodus"
+wizardSummary;"Zusammenfassung"
+wizardLog;"Statuslog"
+wizardResult;"Ergebnis"
+abort;"Abbrechen"
+back;"Zurück"
+save;"Speichern"
+next;"Weiter"
+help;"Hilfe"
+ImportModus;"Importart"
+progress;"Fortschritt"
+success; "erfolgreich"
+failed;"Zeilen fehlerhaft"
+finished;"fertig"
+exporterrors;"Fehler CSV anzeigen"
+statusFailed;"Status: Fehler"
+statusRunning;"Status: l&auml;uft"
+statusSuccess;"Status: erfolgreich"
+statusPreparing;"Status: in Vorbereitung"
+uploadedFileName;"Name der hochgeladenen Datei"
+fileimportGetFilenameFailed;"Fehler: hochgeladene Datei nicht gefunden! Bitte nochmals hochladen!"
+fileDeleteSuccess;"Datei erfolgreich gelöscht"
+queueErrorTitle; "Fehlgeschlagene Imports"
+queueSuccessTitle; "Erfolgreiche Imports"
+queueTitle; "Austehende Imports"
+fileimport; "Datei Import"
+fileimportModusSelectfailed; "Bitte wählen Sie einen Import Modus aus"
+modusUpdateAuto; "Daten Import ohne manueller Validierung"
+modusUpdateManual; "Daten Import mit manueller Validierung"
+
+
+areYouSureCancel;			"Wollen Sie wirklich abbrechen?"
+successfullyImportedXFromYLines;	"Es wurden %s von %s erfolgreich importiert."
+importingXLinesFailed;				"Beim Import von %s Zeilen trat ein Fehler auf."
+
+
+line;"Zeile"
+column;"Spalte"
+
+
+676; "Import eines Attributes ist fehlgeschlagen"
+1; "CiType fehlt"
+2; "Allgemeiner Fehler (rotes X)"
+50; "Attribut ID fehlt fuer den Import"
+51; "Attribut ist mehrfach vorhanden (ist nicht Unique)"
+52; "Vorrausgesetztes Attribut fehlt"
+53; "Ungueltiger Attributwert"
+54; "Update fehlgeschlagen"
+55; "Einfuegen ist fehlgeschlagen"
+56; "Ungueltige Attribut"
+57; "Ungueltiges CI Typ"
+58; "Ungueltiges Projekt"
+59; "Attribut ist leer (ISNULL)"
+66; "Unerwarteter Fehler ist aufgetreten"
+677; "Saemtliche Attribute fehlgeschlagen"
+80; "Einfuegen des Attributes fehlgeschlagen"
+90; "Projekt oder CI Typ nicht vorhanden"
+666;"Attribut in Header existiert nicht in der CMDB"
+667;"Auswahlwert für Select Radio oder Checkbox nicht vorhanden"

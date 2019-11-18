@@ -1,0 +1,43 @@
+<div class="button_row">
+    <a class="link button" href='<?php echo APPLICATION_URL ?>workflow/detail/workflowId/<?php echo $this->workflowId ?>'><?php echo $this->translate('overview'); ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('workflowDetail'); ?></h1>
+
+<table>
+
+    <?php
+    foreach ($this->result as $res) { ?>
+        <tr>
+            <?php
+            switch ($res['type']) {
+                case 'arc':
+                    ?>
+                    <td>
+                    <div align="center"><img src="<?php echo APPLICATION_URL ?>images/icon/hide_arrow.jpeg"></div>
+                    </td><?php
+                    break;
+                case 'place':
+                    ?>
+                    <td style="background-color: yellow">
+                    <div align="center">
+                        <a href="<?php echo APPLICATION_URL ?>workflow/placedetail/placeId/<?php echo $res['id'] ?>"><?php echo $res['value']; ?></a>
+                    </div></td><?php
+                    break;
+                case 'transition':
+                    ?>
+                    <td style="background-color: green">
+                    <div align="center">
+                        <a href="<?php echo APPLICATION_URL ?>workflow/transitiondetail/transitionId/<?php echo $res['id'] ?>"><?php echo $res['value']; ?></a>
+                    </div></td><?php
+                    break;
+                default:
+                    ?>
+                    <td></td><?php
+                    break;
+
+            } ?>
+            <td></td>
+        </tr>
+
+    <?php } ?>
+</table>

@@ -1,0 +1,9 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../vendor/*
+        - %rootDir%/../../../tests/*
+    ignoreErrors:
+        - '#Call to an undefined method Zend_Controller_Request_Abstract::isXmlHttpRequest\(\)\.#'

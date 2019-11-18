@@ -1,0 +1,201 @@
+<script language="JavaScript" type="text/javascript" src="<?php echo APPLICATION_URL; ?>js/filter.js"></script>
+<script type="text/javascript">
+    function delete_cql(cqlid) {
+        if (confirm('<?php echo $this->translate("areYouSureDelete") ?>')) {
+            window.location.href = '<?php echo APPLICATION_URL ?>query/delete/queryId/' + cqlid;
+        }
+    }
+
+    $(document).ready(function () {
+
+        // get saved tab
+        var active_tab = localStorage.getItem('query.index.activeTab');
+        var selected_tab = 0;
+        if (active_tab != null) {
+            var selected_tab = $("#tabs li a[href='#" + active_tab + "']").parent().index();
+        }
+
+        // init tabs
+        $("#tabs").tabs({active: selected_tab});
+
+        // remember tab
+        $("ul.ui-tabs-nav li a").not('#project_toggle_trigger').click(function () {
+            var tab_index = $(this).attr("href").substr(1, $(this).attr("href").length);
+            localStorage.setItem('query.index.activeTab', tab_index);
+        });
+
+    });
+
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?> create" href="<?php echo APPLICATION_URL ?>query/create">
+        <?php echo $this->translate('queryCreate') ?>
+    </a>
+</div>
+
+<h1 class="pageName"><?php echo $this->translate('queryInterface') ?></h1>
+
+
+<div id="tabs">
+
+    <ul>
+        <li>
+            <a href="#fragment-individual-queries"><span class="att_desc"><?php echo $this->translate('cqlIndividual') ?></span></a>
+        </li>
+        <?php if (count($this->defaultQueries)): ?>
+            <li>
+            <a href="#fragment-default-queries"><span class="att_desc"><?php echo $this->translate('cqlDefault') ?></span></a>
+            </li><?php endif; ?>
+    </ul>
+
+    <fieldset class="create_form steps">
+        <div id="fragment-individual-queries">
+
+            <div id="filter">
+                <div class="filter-box">
+                    <form name="<?php echo $this->escape($this->searchForm->getName()) ?>"
+                          action="<?php echo $this->escape($this->searchForm->getAction()) ?>"
+                          method="<?php echo $this->escape($this->searchForm->getMethod()) ?>">
+                        <?php
+                        echo $this->searchForm->search->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+                        echo $this->searchForm->filterQuery;
+                        ?>
+                    </form>
+                </div>
+            </div>
+
+            <br />
+
+
+            <?php if (count($this->paginator) > 0) : ?>
+                <table class="list" cellpadding="0" cellspacing="0" width="100%">
+                    <tr class="headline">
+                        <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+
+                        <th>
+                            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_StoredQuery::NAME, 'direction' => (($this->orderBy == Db_StoredQuery::NAME) ? $urlDirection : "DESC"), 'filter' => $this->filter)); ?>">
+                                <?php echo $this->translate('name') ?> </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_StoredQuery::NAME, 'direction' => (($this->orderBy == Db_StoredQuery::NOTE) ? $urlDirection : "DESC"), 'filter' => $this->filter)); ?>">
+                                <?php echo $this->translate('queryDescription') ?> </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_StoredQuery::STATUS, 'direction' => (($this->orderBy == Db_StoredQuery::STATUS) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                                <?php echo $this->translate('status') ?></a>
+                        </th>
+                        <th>
+                            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_StoredQuery::IS_ACTIVE, 'direction' => (($this->orderBy == Db_StoredQuery::IS_ACTIVE) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                                <?php echo $this->translate('active') ?></a>
+                        </th>
+                        <th>&nbsp;</th>
+
+                        <?php $row_count = 0; ?>
+                        <?php foreach ($this->paginator as $item): ?>
+
+                    <tr>
+                        <td>
+                            <a href='<?php echo APPLICATION_URL ?>query/detail/queryId/<?php echo $item[Db_StoredQuery::ID] ?>'><?php echo $item[Db_StoredQuery::NAME]; ?></a>
+                        </td>
+                        <td style="width: 50%"><?php echo nl2br($item[Db_StoredQuery::NOTE]); ?></td>
+                        <td><img width="15" height="15" src="<?php echo APPLICATION_URL . '/images/icon/';
+                            if ($item[Db_StoredQuery::STATUS]) {
+                                echo 'accept_16.png';
+                            } else {
+                                if (!$item[Db_StoredQuery::STATUS_MESSAGE]) {
+                                    echo 'info_yellow.png';
+                                } else {
+                                    echo 'info_red.png';
+                                }
+                            } ?>" /></td>
+                        <td><?php if ($item[Db_StoredQuery::IS_ACTIVE]) {
+                                echo $this->translate('active');
+                            } else {
+                                echo $this->translate('inactive');
+                            } ?></td>
+                        <td>
+                            <a class="delete_list" href="#" onclick="javascript:delete_cql(<?php echo $item[Db_StoredQuery::ID]; ?>);"></a>
+                            <div class="rfloater">
+                                <a class="edit_list  buttonLink" href="<?php echo APPLICATION_URL . 'query/edit/queryId/' . $item[Db_StoredQuery::ID]; ?>/" title="<?php echo $this->translate('edit') ?>"></a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <?php endforeach; ?>
+
+                </table>
+                <?php echo $this->paginator; ?>
+
+            <?php else: ?>
+                <div class="empty_message">
+                    <?php echo $this->translate('noQueryFound') ?>
+                </div>
+            <?php endif; ?>
+
+        </div>
+
+        <?php if (count($this->defaultQueries)): ?>
+            <div id="fragment-default-queries">
+                <table class="list" cellpadding="0" cellspacing="0" width="100%">
+                    <tr class="headline">
+
+                        <?php $urlDirection = ($this->direction == "ASC") ? "DESC" : "ASC"; ?>
+
+                        <th>
+                            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_StoredQuery::NAME, 'direction' => (($this->orderBy == Db_StoredQuery::NAME) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                                <?php echo $this->translate('name') ?> </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_StoredQuery::NAME, 'direction' => (($this->orderBy == Db_StoredQuery::NOTE) ? $urlDirection : "DESC"), 'filter' => $this->filter)); ?>">
+                                <?php echo $this->translate('queryDescription') ?> </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_StoredQuery::STATUS, 'direction' => (($this->orderBy == Db_StoredQuery::STATUS) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                                <?php echo $this->translate('status') ?></a>
+                        </th>
+                        <th>
+                            <a href="<?php echo $this->url(array('page' => $this->page, 'orderBy' => Db_StoredQuery::IS_ACTIVE, 'direction' => (($this->orderBy == Db_StoredQuery::IS_ACTIVE) ? $urlDirection : "ASC"), 'filter' => $this->filter)); ?>">
+                                <?php echo $this->translate('active') ?></a>
+                        </th>
+
+                        <?php $row_count = 0; ?>
+                        <?php foreach ($this->defaultQueries as $item): ?>
+
+                    <tr>
+                        <td>
+                            <a href='<?php echo APPLICATION_URL ?>query/detail/queryId/<?php echo $item[Db_StoredQuery::ID] ?>'><?php echo $item[Db_StoredQuery::NAME]; ?></a>
+                        </td>
+                        <td><?php echo nl2br($item[Db_StoredQuery::NOTE]); ?></td>
+                        <td><img width="15" height="15" src="<?php echo APPLICATION_URL . '/images/icon/';
+                            if ($item[Db_StoredQuery::STATUS]) {
+                                echo 'accept_16.png';
+                            } else {
+                                if (!$item[Db_StoredQuery::STATUS_MESSAGE]) {
+                                    echo 'info_yellow.png';
+                                } else {
+                                    echo 'info_red.png';
+                                }
+                            } ?>" /></td>
+                        <td><?php if ($item[Db_StoredQuery::IS_ACTIVE]) {
+                                echo $this->translate('active');
+                            } else {
+                                echo $this->translate('inactive');
+                            } ?></td>
+                    </tr>
+
+                    <?php endforeach; ?>
+                </table>
+            </div>
+        <?php endif; ?>
+    </fieldset>
+</div>

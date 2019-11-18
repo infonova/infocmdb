@@ -1,0 +1,34 @@
+<!-- Functions -->
+<div style="margin-top:25px; margin-bottom: 5px;">
+    <b><?php echo $this->translate('functions') ?></b>
+</div>
+
+<div class="pillar_functions">
+    <div class="pillar_item">
+        <a class="link" href="<?php echo APPLICATION_URL . 'history/ci/ciid/' . $this->ciId; ?>/">
+            <?php echo $this->translate('history') ?>
+        </a>
+    </div>
+    <div class="pillar_item">
+        <a class="link" href="<?php echo APPLICATION_URL . 'relation/visualize/ciid/' . $this->ciId; ?>/">
+            <?php echo $this->translate('visualize') ?>
+        </a>
+    </div>
+    <?php /*
+        <div class="pillar_item">
+            <a class="link" href="<?php echo APPLICATION_URL . 'ci/pdfexport/ciid/' . $this->ciId; ?>/">
+                <?php echo $this->translate('pdfExport') ?>
+            </a>
+        </div>
+        */ ?>
+    <div class="pillar_item">
+        <a class="link" href="<?php echo APPLICATION_URL . 'ci/duplicate/ciid/' . $this->ciId; ?>/">
+            <?php echo $this->translate('duplicate') ?>
+        </a>
+    </div>
+    <div class="pillar_item">
+        <a class="link" href="<?php echo APPLICATION_URL . 'favourites/add/ciid/' . $this->ciId; ?>/">
+            <?php echo $this->translate('favourites') ?>
+        </a>
+    </div>
+</div>

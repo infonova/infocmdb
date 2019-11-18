@@ -1,0 +1,85 @@
+# Translation file
+
+roleId;					"ID"
+name;					"Name"
+userName;				"Name des Benutzers"
+description;			"Beschreibung"
+note;					"Notiz"
+valid;					"Gültig"
+active;					"aktiv"
+inactive;				"inaktiv"
+user;					"Benutzer"
+permissions;			"Berechtigungen"
+users;					"Benutzer"
+
+selectRight;            "Berechtigung"
+setFilter;              "Bezeichnung"
+result;                 "Suchergebnis"
+setFilterRandW;         "Lesen und Schreiben"
+setFilterR;             "Lesen"
+setFilterX;             "Keine Rechte"
+setFilterRorW;          "Lesen oder Schreiben"
+noFilter;               "Alle Rechte"
+attr;                   "Attribute"
+
+
+name_desc;				"Name der Rolle (CMDB intern)"
+description_desc;		"Bezeichnung der Rolle z.B. Administratorrolle"
+note_desc;				"Beschreibung welche durch Berührung mit dem Mouse Cursor angezeigt wird"
+
+
+
+roleNameTitle;			"Name der Rolle, kleingeschrieben, auf Englisch z.B.: role_name"
+roleDescriptionTitle;	"Name der Rolle auf Deutsch"
+roleNoteTitle;			"Hilfetext der durch Berührung mit dem Mouse Cursor angezeigt wird"
+
+roles;					"Rollen"
+roleCreate;				"Rolle anlegen"
+
+createRole;				"Allgemein"
+
+role;					"Rolle"
+read;					"Lesen"
+read_write;				"Lesen/Schreiben"
+off;					"Off"
+
+overview;				"Übersicht"
+save;					"Speichern"
+delete;					"Löschen"
+edit;					"Bearbeiten"
+duplicate;				"Duplizieren"
+next;					"Weiter"
+back;					"Zurück"
+cancel;					"Abbrechen"
+
+numberOfResults;	"Anzahl der Ergebnisse:"
+
+roleEdit;				"Rolle bearbeiten"
+permissionsAdd;			"Berechtigungen hinzufügen"
+userAdd;				"Benutzer hinzufügen"
+
+detailRole;				"Rolle Detail"
+
+roleUserCheckName;		"x"
+roleUserCheckDescription;"Soll der Benutzer der Rolle zugeordnet werden?"
+
+areYouSureActivate;			"Wollen Sie dir Rolle wirklich aktivieren?"
+
+roleDeactivationSuccess;		"Rolle in Verwendung => erfolgreich deaktiviert!"
+roleActivateSuccess;			"Rolle erfolgreich aktiviert!"
+roleInsertSuccess;				"Rolle erfolgreich angelegt!"
+roleUpdateUsersSuccess;			"roleUpdateUsersSuccess"
+roleUpdatePermissionSuccess;	"roleUpdatePermissionsSuccess"
+roleUpdateSuccess;				"Rolle erfolgreich bearbeitet!"
+roleDeleteSuccess;				"Rolle erfolgreich gelöscht!"
+
+areYouSureDelete;				"Wollen Sie die Rolle wirklich löschen?"
+areYouSureActivieren;			"Wollen Sie die Rolle wirklich aktivieren?"
+
+noRoleFound;   "Keine Einträge gefunden!"
+
+setFilterHasRole;               "User hat Rolle"
+setFilterHasRoleNot;            "User hat Rolle nicht"
+setFilterAllRoles;              "Alle User"
+setRoles;                       "User"
+setUserFilter;                  "User Name"

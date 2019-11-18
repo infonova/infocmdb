@@ -1,0 +1,177 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        var loginSubmit = $('.loginSubmit');                        // submit button
+        var base_url = '<?php echo APPLICATION_URL; ?>';            // base url for redirect url construction
+        var form = $('form#Login');                                 // login form
+        var verifyCodeInput = $('.verifyCodeInput');                // form input for TFA verify Code
+        var passwordInput = $('.passwordInput');                  // form input for user password
+        var usernameInput = $('.usernameInput');                  // form input for user username
+        var userErrorText = "<?php echo $this->translate('exceptionTitle'); ?> ";   // text used for error message title
+        var codeWrongTooOftenText = " <?php echo $this->translate('2FACodeInvalidTooOften'); ?>";   // text if user enteres TFA Code incorrectly too many times
+        var countVerifyCode = 0;                                    // keeping track of how many times user entered TFA code, when reaches 3 -> user has to reenter password
+        var recoveryDiv = $('div.recovery');                        // div for error message display
+
+        usernameInput.focus();      // put cursor in input field
+
+        function handleFormSubmit(evt) {
+            // url to post the form data to
+            var loginUrl = base_url + '/login/login';
+            // hide error messages
+            recoveryDiv.hide();
+
+            var data = form.serialize();
+
+            // post form to controller
+            $.post(loginUrl, data, function (resp) {
+                if (resp.success === undefined) { // invalid response
+                    recoveryDiv.text('<?php echo $this->translate('serverError'); ?>');
+                } else if (resp.success === true) { // no error -> redirect user to page specified in response object
+                    // user is successfully authenticated -> redirect browser to either *) URL originally wanted to navigate to, *) URL set in Theme *) index/index
+                    window.location = base_url + resp.redirect;
+                } else {
+                    if (resp.messages.TFAenabled === true) {
+                        // user has Two Factor active
+                        // track how many times user has already entered TFA Code, if more than 3 -> empty password-Input and username Input (security meassure)
+                        if (countVerifyCode >= 3) {
+                            passwordInput.val("");
+                            usernameInput.val("");
+                            countVerifyCode = 0;                // reset counter
+                            recoveryDiv.show();                 // show error message div
+
+                            verifyCodeInput.hide(); // hide input for TFA Code
+                            passwordInput.show(); // show input for password
+                            usernameInput.show(); // show input for username
+                            usernameInput.focus();  // cursor in username input
+                            recoveryDiv.html(userErrorText + "<br>" + codeWrongTooOftenText);    // write error message to div
+                            return;
+                        } else {
+                            // prompt user to enter TFA Code
+                            verifyCodeInput.show(); // show input for TFA Code
+                            verifyCodeInput.focus(); // focus (put cursor) in input field 
+                            verifyCodeInput.val("");    // empty the field
+                            passwordInput.hide(); // hide input for password
+                            usernameInput.hide(); // hide input for username
+                            countVerifyCode++;      // increase counter
+                            recoveryDiv.show(); // show field for information / error message
+                            recoveryDiv.html(resp.messages.TFAMessage);     // write message to div
+
+                        }
+                    }
+                    // error while authenticating user occurred -> display message and empty Inputs
+                    if (resp.messages.userError === true) {
+                        // error authenticating -> empty all inputs and put cursor in username Input
+                        passwordInput.val("");
+                        usernameInput.val("");
+                        verifyCodeInput.val("");
+                        usernameInput.focus();
+
+                        if (resp.messages.hideForm === true) {
+                            $('.login_form').detach();
+                        }
+                        recoveryDiv.show();         // show field for information / error message
+                        recoveryDiv.html(userErrorText + "<br>" + resp.messages.userErrorMessage);  // write information to div
+                    }
+
+                }
+            }).fail(function (ajaxObj) {
+                recoveryDiv.text('<?php echo $this->translate('serverError'); ?>');
+            });
+        }
+
+        // binding the handleFormSubmit function to form submit and  click
+        // preventing default so that browser does not submit form with HTTP POST
+        loginSubmit.bind('click', function (evt) {
+            handleFormSubmit(evt);
+            evt.preventDefault();
+        });
+
+        form.bind('submit', function (evt) {
+            handleFormSubmit(evt);
+            evt.preventDefault();
+        });
+
+        // showing "loading indicator"
+        $(document).ajaxStart(function () {
+            recoveryDiv.show();
+            recoveryDiv.text("<?php echo $this->translate('wait'); ?>")
+        });
+
+
+    });
+</script>
+
+<div id=login_background></div>
+<div class='logo_topright'></div>
+<div class='login_slider' <?php echo $this->backgroundStyle; ?>>
+    <div class="coda-slider" id="slider-id">
+        <?php
+        //Image Pfad
+        $path       = APPLICATION_PATH . "/../public/images/slider_pictures";
+        $customPath = APPLICATION_PATH . "/../public/images/slider_pictures/custom";
+        $url        = APPLICATION_URL . "/images/slider_pictures";
+        $customUrl  = APPLICATION_URL . "/images/slider_pictures/custom";
+        if (count(glob($customPath . "/*")) !== 0) {
+            $path = $customPath;
+            $url  = $customUrl;
+        }
+        $files = scandir($path);
+        for ($i = 0; $i < count($files); $i++) {
+            //Verzeichnis auslesen
+            if ($files[$i] != "." && $files[$i] != ".." && !is_dir($files[$i])) {
+                // Nur Bilder durch lassen (Filter)
+                if (strstr($files[$i], ".gif") || strstr($files[$i], ".png") || strstr($files[$i], ".jpg")) {
+                    //Pfad zum aktuellen Bild
+                    $image_path = $url . "/" . $files[$i];
+                    //Bild anzeigen
+                    echo '<div><p><img src="' . $image_path . '" height="110"></p></div>';
+                }
+            }
+        }
+        ?>
+
+    </div>
+</div>
+<div class='login_table_wrapper'>
+    <div class="login_infocmdb">
+
+        <?php echo $this->render('login/_logo.phtml');  ?>
+
+        <h6 class="configuration">Configuration Management</h6>
+    </div>
+
+
+    <div class="recovery">
+        <?php if ($this->exceptionTitle): ?>
+            <?php echo $this->exceptionTitle ?><br>
+            <?php echo $this->exceptionMessage ?>
+        <?php endif; ?>
+    </div>
+
+
+    <div class='login_form'>
+        <form action="#" method="post" id="Login">
+
+            <table>
+                <tr>
+                    <td>
+                        <?php echo $this->form->verifyCode; ?>
+                        <?php echo $this->form->username; ?>
+                    </td>
+                    <td rowspan="2"><?php echo $this->form->login; ?></td>
+                </tr>
+                <tr>
+                    <td><?php echo $this->form->password; ?></td>
+                    <td></td>
+                </tr>
+                <?php echo $this->form->url; ?>
+
+            </table>
+        </form>
+
+    </div>
+    <?php if ($this->pwrestebabled) { ?>
+        <p style="position:absolute; bottom: 8px; right: 5px;">
+            <a href="<?php echo APPLICATION_URL ?>login/recover"><?php echo $this->translate('loginPasswordRecoveryForgotPassword') ?></a>
+        </p>
+    <?php } ?>
+</div>

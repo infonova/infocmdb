@@ -1,0 +1,46 @@
+<phpunit
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    backupGlobals="true"
+    stderr="true"
+    colors="true">
+    <php>
+        <const name="TESTS_ZEND_MAIL_SERVER_TESTDIR" value="" />
+        <const name="TESTS_ZEND_MAIL_SERVER_FORMAT" value="mbox" />
+        <const name="TESTS_ZEND_MAIL_TEMPDIR" value="" />
+        <const name="TESTS_ZEND_MAIL_POP3_ENABLED" value="false" />
+        <const name="TESTS_ZEND_MAIL_POP3_HOST" value="localhost" />
+        <const name="TESTS_ZEND_MAIL_POP3_USER" value="test" />
+        <const name="TESTS_ZEND_MAIL_POP3_PASSWORD" value="" />
+        <const name="TESTS_ZEND_MAIL_POP3_SSL" value="true" />
+        <const name="TESTS_ZEND_MAIL_POP3_TLS" value="true" />
+        <const name="TESTS_ZEND_MAIL_POP3_WRONG_PORT" value="80" />
+        <const name="TESTS_ZEND_MAIL_POP3_INVALID_PORT" value="3141" />
+        <const name="TESTS_ZEND_MAIL_IMAP_ENABLED" value="false" />
+        <const name="TESTS_ZEND_MAIL_IMAP_HOST" value="localhost" />
+        <const name="TESTS_ZEND_MAIL_IMAP_USER" value="test" />
+        <const name="TESTS_ZEND_MAIL_IMAP_PASSWORD" value="" />
+        <const name="TESTS_ZEND_MAIL_IMAP_SSL" value="true" />
+        <const name="TESTS_ZEND_MAIL_IMAP_TLS" value="true" />
+        <const name="TESTS_ZEND_MAIL_IMAP_WRONG_PORT" value="80" />
+        <const name="TESTS_ZEND_MAIL_IMAP_INVALID_PORT" value="3141" />
+        <const name="TESTS_ZEND_MAIL_SMTP_ENABLED" value="false" />
+        <const name="TESTS_ZEND_MAIL_SMTP_HOST" value="localhost" />
+        <const name="TESTS_ZEND_MAIL_SMTP_PORT" value="25" />
+        <const name="TESTS_ZEND_MAIL_SMTP_USER" value="testuser" />
+        <const name="TESTS_ZEND_MAIL_SMTP_PASSWORD" value="testpassword" />
+        <const name="TESTS_ZEND_MAIL_SMTP_AUTH" value="false" />
+    </php>
+    <testsuites>
+        <testsuite name="default">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>

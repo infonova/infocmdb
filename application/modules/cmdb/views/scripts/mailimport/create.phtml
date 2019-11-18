@@ -1,0 +1,25 @@
+<script src="<?php echo APPLICATION_URL ?>js/combobox.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.attributeSelect').combobox({
+            source: "<?php echo APPLICATION_URL . 'attribute/autocompleteactive';?>"
+        });
+    });
+</script>
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>mailimport/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('mailimportCreate') ?></h1>
+
+<fieldset class="lordVader">
+    <?php echo $this->form ?>
+</fieldset>

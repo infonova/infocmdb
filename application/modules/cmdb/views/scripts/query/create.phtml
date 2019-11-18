@@ -1,0 +1,145 @@
+<script src="/js/ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    <!--
+
+    function cancelForm() {
+        location.href = '<?php echo APPLICATION_URL?>/query/index/';
+        return false;
+    }
+
+
+    $(document).ready(function () {
+        jQuery.ajaxSetup({
+            beforeSend: function () {
+                $('#loader').show();
+            },
+            complete: function () {
+                $('#loader').hide();
+            },
+            success: function () {
+            }
+        });
+
+
+        $("#testButton").click(function () {
+            $('#resultContent').html("");
+            var searchstring = $('#query').val();
+            var method = $('#method :selected').val();
+
+            var headerMap = {};
+            headerMap['test'] = searchstring;
+            headerMap['method'] = method;
+
+            var url = "<?php echo APPLICATION_URL?>/query/teststatement/queryId/<?php echo $this->queryId?>";
+            $.ajax({
+                type: "POST",
+                dataType: "text",
+                data: headerMap,
+                url: url,
+                success: function (result) {
+                    $('#resultContent').show();
+                    $('#resultContent').html(result);
+                }
+            });
+
+
+            return false;
+        });
+
+        //editor
+        var editor = initAceEditor('#query', 'mysql');
+    });
+    //-->
+</script>
+
+<?php
+$config = Zend_Registry::get('viewConfig');
+
+$class = "link";
+if ($config->ci->detail->buttons->button) {
+    $class .= " button";
+}
+
+?>
+<div class="button_row">
+    <a class="<?php echo $class; ?>" href="<?php echo APPLICATION_URL ?>query/index"><?php echo $this->translate('overview') ?></a>
+</div>
+<h1 class="pageName"><?php echo $this->translate('queryCreate'); ?></h1>
+
+
+<form name="<?php echo $this->escape($this->form->getName()) ?>" action="<?php echo $this->escape($this->form->getAction()) ?>"
+      method="<?php echo $this->escape($this->form->getMethod()) ?>">
+    <fieldset class="lordVader">
+        <table>
+            <tr>
+                <td width="90%">
+                    <table>
+                        <tr>
+                            <?php echo $this->form->name ?>
+                            <td class="query"><em><?php echo $this->translate('queryNameExample'); ?></em></td>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->description ?>
+                            <td class="query"><em><?php echo $this->translate('queryDescriptionExample'); ?></em></td>
+                        </tr>
+                        <tr>
+                            <?php echo $this->form->query ?>
+                            <td class="query"><em><?php echo $this->translate('queryQueryExample'); ?></em></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <div style="float: left;">
+                                    <select id="method" class="method">
+                                        <option value="json" selected="selected">json</option>
+                                        <option value="xml">xml</option>
+                                        <option value="plain">plain</option>
+                                    </select>
+                                    <input id="testButton" class="testButton" type="button" value="<?php echo $this->translate('queryButtonTest'); ?>" />
+                                </div>
+                            </td>
+                            <td class="query">
+                                <em><?php echo $this->translate('testButtonHint') ?></em>
+                            </td>
+                        </tr>
+                        <?php
+                        $formDesc = $this->form->getDescription();
+                        if (!empty($formDesc)) : ?>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="slidebox">
+                                        <h3 class="slidebox-header"><?php echo $this->translate('formHelp') ?></h3>
+                                        <div class="slidebox-content">
+                                            <?php echo $formDesc ?>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                        <tr>
+                            <td colspan=3>
+                                <?php echo $this->form->submit ?>
+                                <?php echo $this->form->cancle ?>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="padding-right:10px !important">
+                    <?php $icon = 'info_yellow.png'; ?>
+                    <?php echo $this->translate('queryStatus'); ?>:
+                    <img width="15" height="15" src="<?php echo APPLICATION_URL . '/images/icon/' . $icon; ?>" />
+                    <?php if (!$this->query[Db_StoredQuery::STATUS] && $this->query[Db_StoredQuery::STATUS_MESSAGE]) { ?>
+                        <div style="border: 1px dotted black; width: 180px;">
+                            <?php echo $this->query[Db_StoredQuery::STATUS_MESSAGE]; ?>
+                        </div>
+                    <?php } ?>
+                </td>
+            </tr>
+
+        </table>
+    </fieldset>
+</form>
+<div id="loader" class="loader" style="display:none;">
+    <img src="<?php echo APPLICATION_URL ?>images/icon/loading.gif" alt="loading" />
+</div>
+<div style="display:none" id="resultContent" class="resultContent"></div>

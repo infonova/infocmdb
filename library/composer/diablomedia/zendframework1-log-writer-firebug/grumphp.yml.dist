@@ -1,0 +1,16 @@
+# grumphp.yml
+parameters:
+    tasks:
+        composer:
+            strict: true
+        composer_require_checker:
+            config_file: require-checker-config.json
+        phpcsfixer2:
+            allow_risky: true
+            config: .php_cs
+        phpstan:
+            configuration: phpstan.neon
+        phpunit:
+            metadata:
+                priority: 100
+            always_execute: true

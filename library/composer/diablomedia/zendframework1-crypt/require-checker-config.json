@@ -1,0 +1,15 @@
+{
+  "symbol-whitelist" : [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "bcadd", "bccomp", "bcdiv", "bcmod", "bcmul", "bcpow", "bcpowmod", "bcsqrt", "bcsub",
+    "gmp_add", "gmp_cmp", "gmp_div", "gmp_mod", "gmp_mul", "gmp_pow", "gmp_powm", "gmp_sqrt", "gmp_strval", "gmp_sub",
+    "hash", "hash_algos", "hash_hmac",
+    "mcrypt_create_iv", "MCRYPT_DEV_URANDOM",
+    "mhash", "mhash_count", "mhash_get_hash_name",
+    "OPENSSL_ALGO_DSS1", "OPENSSL_ALGO_MD2", "OPENSSL_ALGO_MD4", "OPENSSL_ALGO_MD5", "OPENSSL_ALGO_SHA1",
+    "openssl_dh_compute_key", "openssl_digest", "openssl_get_privatekey", "openssl_get_publickey", "openssl_pkey_export",
+    "openssl_pkey_get_details", "openssl_pkey_new", "openssl_sign", "openssl_verify"
+  ]
+}
