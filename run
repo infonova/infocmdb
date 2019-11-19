@@ -1337,7 +1337,8 @@ Description:
     Get name of container of given docker compose service
 HEREDOC
 container_name() {
-    docker-compose ps "$1" | tail -n 1 | awk '{print $1}'
+    # shellcheck disable=SC2046
+    echo $(docker inspect -f '{{.Name}}' $(docker-compose ps -q $1) | cut -c2-)
 }
 
 desc "update_run" <<HEREDOC
