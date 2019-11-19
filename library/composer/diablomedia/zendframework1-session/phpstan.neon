@@ -1,0 +1,20 @@
+parameters:
+    level: 7
+    paths:
+        - ./
+    excludes_analyse:
+        - %rootDir%/../../../tests/*
+        - %rootDir%/../../../vendor/*
+    ignoreErrors:
+        # This isn't true, if session module isn't loaded, $_SESSION var won't be set
+        - '#Variable \$_SESSION in isset\(\) always exists and is not nullable\.#'
+        # Arrays can be callable
+        -
+            message: '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\(int, string, string, int, array\): bool\)\|null, array\(.Zend_Session…., .handleSessionStartE….\) given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Session.php
+        -
+            message: '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\(int, string, string, int, array\): bool\)\|null, array\(.Zend_Session…., .handleSilentWriteCl….\) given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Session.php
+        -
+            message: '#Parameter \#6 \$gc of function session_set_save_handler expects callable\(string\): bool, array\(Zend_Session_SaveHandler_Interface, .gc.\) given\.#'
+            path: %currentWorkingDirectory%/src/Zend/Session.php
