@@ -19,3 +19,6 @@ library/perl
 /docker/nginx/custom-conf/conf.d/ssl/*.crt
 /docker/nginx/custom-conf/conf.d/ssl/*.key
 /docker/nginx/custom-conf/conf.d/*.conf
+/.composer/
+.DS_Store
+/.cache_perl/
