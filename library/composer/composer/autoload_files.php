@@ -14,5 +14,5 @@ return array(
     '948ad5488880985ff1c06721a4e447fe' => $vendorDir . '/cakephp/utility/bootstrap.php',
     '6124b4c8570aa390c21fafd04a26c69f' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     '0ccdf99b8f62f02c52cba55802e0c2e7' => $vendorDir . '/zircote/swagger-php/src/functions.php',
-    '48ebfe97e2b60e1af040e770e878065b' => $vendorDir . '/PhinxExtend/AbstractPhinxMigration.php',
+    'e02b7f14dfa4f815b59e05421740da9e' => $vendorDir . '/PhinxExtend/AbstractPhinxMigration.php',
 );

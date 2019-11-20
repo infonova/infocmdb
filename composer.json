@@ -1,7 +1,10 @@
 {
+    "name": "infonova/infocmdb",
+    "description": "CMDB Solution based on PHP and MySQL, using a Workflow Engine based on GoLang and Perl",
+    "license": "Apache-2.0",
     "config": {
       "vendor-dir": "library/composer",
-      "cache-dir": "/tmp/composer"
+      "cache-dir": ".composer"
     },
     "require": {
         "robmorgan/phinx": "^0.10.0",
@@ -27,6 +30,6 @@
     },
     "scripts": {
         "minify": ["@minify-util-js"],
-        "minify-util-js": "library/composer/bin/minifyjs public/js/utils/util.js > public/js/utils/util.min.js"
+        "minify-util-js": "library/composer/matthiasmullie/minify/bin/minifyjs public/js/utils/util.js > public/js/utils/util.min.js"
     }
 }
