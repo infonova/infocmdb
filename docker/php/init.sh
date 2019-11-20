@@ -80,9 +80,12 @@ ln -sT ../data/uploads          /app/public/_uploads      || true
 
 echo "initialize with /_dist files"
 
-chown -R www-data:www-data /app/_dist
-cp -nr /app/_dist/* /app/
-cp -rf /app/_dist/data/languages/* /app/data/languages/
+chown -c www-data:www-data /app /app/data
+find /app/_dist /app/data -type d -not -user www-data -exec sh -c 'chmod -c 0775 "$1"; chown -c www-data:www-data "$1"' _ {} \;
+
+su www-data -s /bin/sh -c "chown -R www-data:www-data /app/_dist"
+su www-data -s /bin/sh -c "cp -nr /app/_dist/* /app/"
+su www-data -s /bin/sh -c "cp -rf /app/_dist/data/languages/* /app/data/languages/"
 
 echo "Copy default config for php"
 CONFIG_DIR=/usr/local/etc/php/conf.d/
@@ -101,8 +104,6 @@ echo "init infoCMDB"
 echo "... clean cache"
 find /app/data/tmp -type f -delete
 find /app/data/cache -type f -delete
-echo "... fix permissions"
-find /app/data -type d -not -user www-data -exec sh -c "chmod -c 0775 '{}'; chown -c www-data:www-data '{}'" \;
 
 # write database.ini
 echo "
