@@ -1,5 +1,6 @@
 # InfoCMDB - Highly Customizable Configuration Management Database
-
+ [![Build Status](https://travis-ci.com/infonova/infocmdb.svg?branch=master)](https://travis-ci.com/infonova/infocmdb)
+ 
  **Repository is still getting ready, information is being added daily**
 
 ## Overview
