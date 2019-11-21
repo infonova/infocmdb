@@ -1,4 +1,5 @@
-language: bash
+os: linux
+language: shell
 
 services:
   - docker
@@ -33,12 +34,10 @@ before_install:
   - docker version
   - docker-compose version
 
-matrix:
+jobs:
   fast_finish: true
   allow_failures:
     - env: COMPOSE_ENV_PHP_VERSION=7
-
-jobs:
   include:
     - stage: "testing"
       name: "PHP 7.3 Version"
@@ -49,39 +48,19 @@ jobs:
       env: COMPOSE_ENV_PHP_VERSION=7
 
     - stage: "publish image"
-      if: tag IS present
+      if: tag IS present AND branch = "master"
       env:
         - COMPOSE_ENV_PHP_VERSION=7.3
         - COMPOSE_ENV=prod
+        - IMAGE_TAG=release
       script:
         - set -e
-        - export IMAGE_TAG=`git describe --abbrev=0 --tags | sed -E 's/^v([0-9]+)\.([0-9]+)\.([0-9]+)$/\1.\2.\3/'`
-        - export MAJOR_IMAGE_TAG=`git describe --abbrev=0 --tags | sed -E 's/^v([0-9]+)\.([0-9]+)\.([0-9]+)$/\1/'`
-        - export MINOR_IMAGE_TAG=`git describe --abbrev=0 --tags | sed -E 's/^v([0-9]+)\.([0-9]+)\.([0-9]+)$/\1.\2/'`
         - git describe --tags --long --always > version_info.txt
         - echo -n "Cmdb Version "
         - cat version_info.txt
         - ./run setup
         - ./run build
-        - docker-compose push
-        - echo "Pushing ${IMAGE_TAG_MAJOR}"
-        - docker tag infocmdb/cmdb-php:${IMAGE_TAG} infocmdb/cmdb-php:${IMAGE_TAG_MAJOR}
-        - docker tag infocmdb/cmdb-cron:${IMAGE_TAG} infocmdb/cmdb-cron:${IMAGE_TAG_MAJOR}
-        - docker tag infocmdb/cmdb-db:${IMAGE_TAG} infocmdb/cmdb-db:${IMAGE_TAG_MAJOR}
-        - docker tag infocmdb/cmdb-web:${IMAGE_TAG} infocmdb/cmdb-web:${IMAGE_TAG_MAJOR}
-        - docker push infocmdb/cmdb-php:${IMAGE_TAG_MAJOR}
-        - docker push infocmdb/cmdb-cron:${IMAGE_TAG_MAJOR}
-        - docker push infocmdb/cmdb-db:${IMAGE_TAG_MAJOR}
-        - docker push infocmdb/cmdb-web:${IMAGE_TAG_MAJOR}
-        - echo "Pushing ${IMAGE_TAG_MINOR}"
-        - docker tag infocmdb/cmdb-php:${IMAGE_TAG} infocmdb/cmdb-php:${IMAGE_TAG_MINOR}
-        - docker tag infocmdb/cmdb-cron:${IMAGE_TAG} infocmdb/cmdb-cron:${IMAGE_TAG_MINOR}
-        - docker tag infocmdb/cmdb-db:${IMAGE_TAG} infocmdb/cmdb-db:${IMAGE_TAG_MINOR}
-        - docker tag infocmdb/cmdb-web:${IMAGE_TAG} infocmdb/cmdb-web:${IMAGE_TAG_MINOR}
-        - docker push infocmdb/cmdb-php:${IMAGE_TAG_MINOR}
-        - docker push infocmdb/cmdb-cron:${IMAGE_TAG_MINOR}
-        - docker push infocmdb/cmdb-db:${IMAGE_TAG_MINOR}
-        - docker push infocmdb/cmdb-web:${IMAGE_TAG_MINOR}
+        - ./deploy/publish_docker_images.sh ${IMAGE_TAG}
 
 #cache:
 #  timeout: 86400
@@ -108,22 +87,25 @@ after_script:
   - docker images
 
 before_deploy:
-  - mkdir -p releases
-  - tar -xzf releases/infocmdb_source.tar.gz
+  - mkdir -p /tmp/releases
+  - tar -xzf /tmp/releases/infocmdb_source.tar.gz .
+
 deploy:
   - provider: releases
-    github_token: $GITHUB_TOKEN
+    github_token: ${GITHUB_TOKEN}
     file:
-      - "releases/infocmdb_source.tar.gz"
-    skip_cleanup: true
+      - "/tmp/releases/infocmdb_source.tar.gz"
+    cleanup: true
     on:
       tags: true
-  - provider: pages
-    skip_cleanup: true
-    local_dir: docs
-    github_token: $GITHUB_TOKEN
-    on:
       branch: master
-      condition: -n "${HUGO_VERSION}"
+
+#  - provider: pages
+#    skip_cleanup: true
+#    local_dir: docs
+#    github_token: $GITHUB_TOKEN
+#    on:
+#      branch: master
+#      condition: -n "${HUGO_VERSION}"
 
 # vim:set et ts=2 sw=2:

@@ -133,7 +133,7 @@
         var script = $('#script').val();
         var scriptTest = $('#script_test').val();
 
-        var result;
+        var result = false;
 
         $.ajax({
             url: "<?php echo APPLICATION_URL?>workflow/validatescript",
@@ -146,6 +146,9 @@
             dataType: "json",
             type: "POST",
             success: function (data) {
+                result = data
+            },
+            error: function (data) {
                 result = data
             },
         });
@@ -173,7 +176,7 @@
         outputElem.text(output).show();
         checkButton.prop('disabled', false);
 
-        return result.success
+        return result.success === true;
     }
 
     $(document).ready(function () {
@@ -383,18 +386,6 @@
                                     <tbody>
                                     <tr><?php echo $this->form->script_lang ?></tr>
                                     <tr><?php echo $this->form->script; ?></tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <button id="script_validate" onclick="checkScript(); return false"><?php echo $this->translate("scriptValidate") ?></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <pre id="script_check_output" class="terminal-window"></pre>
-                                        </td>
-                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -408,7 +399,12 @@
                                     </table>
                                 </div>
                             </div>
+                            <div>
+                                <div><button id="script_validate" onclick="checkScript(); return false"><?php echo $this->translate("scriptValidate") ?></button></div>
+                                <div><pre id="script_check_output" class="terminal-window"></pre></div>
+                            </div>
                         </fieldset>
+                    </div>
                 </fieldset>
             </div>
 
