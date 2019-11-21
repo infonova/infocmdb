@@ -1338,7 +1338,7 @@ Description:
 HEREDOC
 container_name() {
     # shellcheck disable=SC2046
-    echo $(docker inspect -f '{{.Name}}' $(docker-compose ps -q $1) | cut -c2-)
+    echo $(docker inspect -f '{{.Name}}' $(docker-compose ps -q $1) | tail -n1 | cut -c2-)
 }
 
 desc "update_run" <<HEREDOC
