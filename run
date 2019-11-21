@@ -1029,22 +1029,6 @@ restart() {
     docker-compose restart
 }
 
-desc "destroy" <<HEREDOC
-Usage:
-    ${_ME} destroy
-
-Description:
-    stops and deletes docker data!!!!
-HEREDOC
-destroy() {
-    echo "THIS WILL DELETE ALL DATA IN DOCKER VOLUMES!"
-    echo "ARE YOU SURE? ctrl+c TO STOP!"
-    read -r
-    echo "ARE YOU REALLY SURE? ctrl+c TO STOP!"
-    read -r
-    docker-compose destroy -v
-}
-
 desc "gencert" <<HEREDOC
 Usage:
     ${_ME} gencert <hostname>
