@@ -3,7 +3,7 @@ version: '3.4'
 services:
 
   mariadb:
-    image: ${COMPOSE_DOCKER_REGISTRY}/cmdb-db:${IMAGE_TAG:-development}
+    image: ${COMPOSE_DOCKER_REGISTRY}/infocmdb-db:${IMAGE_TAG:-development}
     build:
       context: ./
       dockerfile: ./docker/mariadb/Dockerfile
@@ -27,7 +27,7 @@ services:
           - db
 
   php:
-    image: ${COMPOSE_DOCKER_REGISTRY}/cmdb-php:${IMAGE_TAG:-development}
+    image: ${COMPOSE_DOCKER_REGISTRY}/infocmdb-php:${IMAGE_TAG:-development}
     build:
       context: ./
       dockerfile: ./docker/php/Dockerfile
@@ -66,7 +66,7 @@ services:
       default:
 
   cron:
-    image: ${COMPOSE_DOCKER_REGISTRY}/cmdb-cron:${IMAGE_TAG:-development}
+    image: ${COMPOSE_DOCKER_REGISTRY}/infocmdb-cron:${IMAGE_TAG:-development}
     build:
       context: ./
       dockerfile: ./docker/cron/Dockerfile
@@ -84,7 +84,7 @@ services:
       - default
 
   web:
-    image: ${COMPOSE_DOCKER_REGISTRY}/cmdb-web:${IMAGE_TAG:-development}
+    image: ${COMPOSE_DOCKER_REGISTRY}/infocmdb-web:${IMAGE_TAG:-development}
     build:
       context: ./
       dockerfile: ./docker/nginx/Dockerfile
