@@ -20,7 +20,7 @@ if [[ ${GIVEN_IMAGE} == "" ]]; then
   exit 1
 fi
 
-REGISTRY_TARGET=${1:-}
+REGISTRY_TARGET=${2:-}
 if [[ ${REGISTRY_TARGET} == "" ]]; then
   usage
   exit 1
@@ -37,14 +37,16 @@ fi
 
 echo "Schemantic Version: v${IMAGE_TAG_PATCH}"
 
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
 SERVICES="php cron db web"
 for service in $SERVICES; do
-  docker tag  ${COMPOSE_DOCKER_REGISTRY}/infocmdb-${service}:${GIVEN_IMAGE} ${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MAJOR}
-  docker tag  ${COMPOSE_DOCKER_REGISTRY}/infocmdb-${service}:${GIVEN_IMAGE} ${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MINOR}
-  docker tag  ${COMPOSE_DOCKER_REGISTRY}/infocmdb-${service}:${GIVEN_IMAGE} ${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_PATCH}
+  docker tag  "${COMPOSE_DOCKER_REGISTRY}/infocmdb-${service}:${GIVEN_IMAGE}" "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MAJOR}"
+  docker tag  "${COMPOSE_DOCKER_REGISTRY}/infocmdb-${service}:${GIVEN_IMAGE}" "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MINOR}"
+  docker tag  "${COMPOSE_DOCKER_REGISTRY}/infocmdb-${service}:${GIVEN_IMAGE}" "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_PATCH}"
 
-  docker push ${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MAJOR}
-  docker push ${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MINOR}
-  docker push ${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_PATCH}
+  docker push "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MAJOR}"
+  docker push "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MINOR}"
+  docker push "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_PATCH}"
 done
 
