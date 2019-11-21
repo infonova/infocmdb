@@ -1252,6 +1252,7 @@ mysql_reset_passwords() {
     echo "Updating root and user passwords"
     docker exec -it "$(./run container_name mariadb)" mysql -uroot -e "
 use mysql;
+update mysql.user set authentication_string=PASSWORD('${DB_ROOT_PASSWORD}') WHERE User='${DB_ROOT_USERNAME}';
 update mysql.user set Password=PASSWORD('${DB_ROOT_PASSWORD}') where User='${DB_ROOT_USERNAME}';
 update mysql.user set Password=PASSWORD('${DB_PASSWORD}') where User='${DB_USERNAME}';
 flush privileges;
