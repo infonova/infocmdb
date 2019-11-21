@@ -1,9 +1,20 @@
+language: bash
+
 services:
   - docker
 
+addons:
+  apt:
+    packages:
+      - docker-ce
+
+git:
+  depth: false
+  quiet: true
+
 env:
   global:
-    - DOCKER_COMPOSE_VERSION=1.4.2
+    - DOCKER_COMPOSE_VERSION=1.24.1
     - BUILD_NPROC=8
     - BUILD_PERLPROC=20
     - COMPOSE_ENV=test
@@ -11,30 +22,108 @@ env:
     - COMPOSE_INTERACTIVE_NO_CLI=1
     - DOCKER_WEB_HOSTNAME=infocmdb.local
     - IMAGE_TAG=ci
-  jobs:
-    - COMPOSE_ENV_PHP_VERSION=7.1
-    - COMPOSE_ENV_PHP_VERSION=7.3
-    - COMPOSE_ENV_PHP_VERSION=7
 
 before_install:
+  - git fetch --all --tags
+  - echo "install specific docker-compose Version '${DOCKER_COMPOSE_VERSION}'."
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
+  - docker version
+  - docker-compose version
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: COMPOSE_ENV_PHP_VERSION=7
 
 jobs:
   include:
-    - script: ./run setup
-    - stage: "build images"
-      script: ./run build
-    - script: ./run up
-    - stage: "Run unit tests"
-      script: ./run execute_tests unit --steps
-    - stage: "Run apiV1 tests"
-      script: ./run execute_tests api --steps
-    - stage: "Run apiV2 tests"
-      script: ./run execute_tests apiV2 --steps
-    - stage: "Run functional tests"
-      script: ./run execute_tests functional --steps
-    - stage: "Run acceptance tests"
-      script: ./run execute_tests acceptance --steps
+    - stage: "testing"
+      name: "PHP 7.3 Version"
+      env: COMPOSE_ENV_PHP_VERSION=7.3
+    - name: "PHP 7.1 Version"
+      env: COMPOSE_ENV_PHP_VERSION=7.1
+    - name: "PHP 7 latest Version"
+      env: COMPOSE_ENV_PHP_VERSION=7
+
+    - stage: "publish image"
+      if: tag IS present
+      env:
+        - COMPOSE_ENV_PHP_VERSION=7.3
+        - COMPOSE_ENV=prod
+      script:
+        - set -e
+        - export IMAGE_TAG=`git describe --abbrev=0 --tags | sed -E 's/^v([0-9]+)\.([0-9]+)\.([0-9]+)$/\1.\2.\3/'`
+        - export MAJOR_IMAGE_TAG=`git describe --abbrev=0 --tags | sed -E 's/^v([0-9]+)\.([0-9]+)\.([0-9]+)$/\1/'`
+        - export MINOR_IMAGE_TAG=`git describe --abbrev=0 --tags | sed -E 's/^v([0-9]+)\.([0-9]+)\.([0-9]+)$/\1.\2/'`
+        - git describe --tags --long --always > version_info.txt
+        - echo -n "Cmdb Version "
+        - cat version_info.txt
+        - ./run setup
+        - ./run build
+        - docker-compose push
+        - echo "Pushing ${IMAGE_TAG_MAJOR}"
+        - docker tag infocmdb/cmdb-php:${IMAGE_TAG} infocmdb/cmdb-php:${IMAGE_TAG_MAJOR}
+        - docker tag infocmdb/cmdb-cron:${IMAGE_TAG} infocmdb/cmdb-cron:${IMAGE_TAG_MAJOR}
+        - docker tag infocmdb/cmdb-db:${IMAGE_TAG} infocmdb/cmdb-db:${IMAGE_TAG_MAJOR}
+        - docker tag infocmdb/cmdb-web:${IMAGE_TAG} infocmdb/cmdb-web:${IMAGE_TAG_MAJOR}
+        - docker push infocmdb/cmdb-php:${IMAGE_TAG_MAJOR}
+        - docker push infocmdb/cmdb-cron:${IMAGE_TAG_MAJOR}
+        - docker push infocmdb/cmdb-db:${IMAGE_TAG_MAJOR}
+        - docker push infocmdb/cmdb-web:${IMAGE_TAG_MAJOR}
+        - echo "Pushing ${IMAGE_TAG_MINOR}"
+        - docker tag infocmdb/cmdb-php:${IMAGE_TAG} infocmdb/cmdb-php:${IMAGE_TAG_MINOR}
+        - docker tag infocmdb/cmdb-cron:${IMAGE_TAG} infocmdb/cmdb-cron:${IMAGE_TAG_MINOR}
+        - docker tag infocmdb/cmdb-db:${IMAGE_TAG} infocmdb/cmdb-db:${IMAGE_TAG_MINOR}
+        - docker tag infocmdb/cmdb-web:${IMAGE_TAG} infocmdb/cmdb-web:${IMAGE_TAG_MINOR}
+        - docker push infocmdb/cmdb-php:${IMAGE_TAG_MINOR}
+        - docker push infocmdb/cmdb-cron:${IMAGE_TAG_MINOR}
+        - docker push infocmdb/cmdb-db:${IMAGE_TAG_MINOR}
+        - docker push infocmdb/cmdb-web:${IMAGE_TAG_MINOR}
+
+#cache:
+#  timeout: 86400
+#  directories:
+#    - .cache_perl
+
+script:
+  - set -e
+  - ./run setup
+  - ./run build
+#  - mkdir -p /tmp/.cache_perl/usr/local/lib/x86_64-linux-gnu/perl
+#  - docker-compose run --rm -v "$(PWD)/.cache_perl:/cache_perl" --entrypoint "cp -ur /usr/local/lib/x86_64-linux-gnu/perl /cache_perl/usr/local/lib/x86_64-linux-gnu/perl" php
+#  - mkdir -p /tmp/.cache_perl/usr/local/share/perl
+#  - docker-compose run --rm -v "$(PWD)/.cache_perl:/cache_perl" --entrypoint "cp -ur /usr/local/share/perl /cache_perl/usr/local/share/perl" php
+  - ./run up
+  - ./run execute_tests unit --steps
+  - ./run execute_tests api --steps
+  - ./run execute_tests apiV2 --steps
+  - ./run execute_tests functional --steps
+  - ./run execute_tests acceptance --steps
+  - docker-compose logs
+
+after_script:
+  - docker images
+
+before_deploy:
+  - mkdir -p releases
+  - tar -xzf releases/infocmdb_source.tar.gz
+deploy:
+  - provider: releases
+    github_token: $GITHUB_TOKEN
+    file:
+      - "releases/infocmdb_source.tar.gz"
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: pages
+    skip_cleanup: true
+    local_dir: docs
+    github_token: $GITHUB_TOKEN
+    on:
+      branch: master
+      condition: -n "${HUGO_VERSION}"
+
+# vim:set et ts=2 sw=2:

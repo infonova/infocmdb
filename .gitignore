@@ -5,6 +5,9 @@
 .buildpath
 .settings
 .env
+.composer
+.cache_perl
+.DS_Store
 docker-compose.override.yml
 /data/**
 /public/_uploads
@@ -19,5 +22,3 @@ library/perl
 /docker/nginx/custom-conf/conf.d/ssl/*.crt
 /docker/nginx/custom-conf/conf.d/ssl/*.key
 /docker/nginx/custom-conf/conf.d/*.conf
-/.cache_perl/usr/local/
-/.composer/
