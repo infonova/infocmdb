@@ -37,16 +37,16 @@ fi
 
 echo "Schemantic Version: v${IMAGE_TAG_PATCH}"
 
-echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
 SERVICES="php cron db web"
 for service in $SERVICES; do
   docker tag  "${COMPOSE_DOCKER_REGISTRY}/infocmdb-${service}:${GIVEN_IMAGE}" "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MAJOR}"
   docker tag  "${COMPOSE_DOCKER_REGISTRY}/infocmdb-${service}:${GIVEN_IMAGE}" "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MINOR}"
   docker tag  "${COMPOSE_DOCKER_REGISTRY}/infocmdb-${service}:${GIVEN_IMAGE}" "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_PATCH}"
+  docker tag  "${COMPOSE_DOCKER_REGISTRY}/infocmdb-${service}:${GIVEN_IMAGE}" "${REGISTRY_TARGET}/infocmdb-${service}:latest"
 
   docker push "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MAJOR}"
   docker push "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_MINOR}"
   docker push "${REGISTRY_TARGET}/infocmdb-${service}:${IMAGE_TAG_PATCH}"
+  docker push "${REGISTRY_TARGET}/infocmdb-${service}:latest"
 done
 
