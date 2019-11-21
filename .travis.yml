@@ -64,6 +64,7 @@ after_script:
 
 before_deploy:
   - set -e
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - git describe --tags --long --always > version_info.txt
   - echo -n "Cmdb Version "
   - cat version_info.txt
@@ -82,5 +83,15 @@ deploy:
       - IMAGE_TAG=release
       - REGISTRY_TARGET=infonova
     script: ./deploy/publish_docker_images.sh ${IMAGE_TAG} ${REGISTRY_TARGET}
+  - provider: script
+    cleanup: true
+    on:
+      branch: develop
+    env:
+      - COMPOSE_ENV_PHP_VERSION=7.3
+      - COMPOSE_ENV=prod
+      - IMAGE_TAG=nightly
+      - COMPOSE_DOCKER_REGISTRY=infonova
+    script: docker-compose push
 
 # vim:set et ts=2 sw=2:
