@@ -260,6 +260,16 @@ for v in ${CLEAN_ENV}; do
     unset ${v}
 done
 
+change_www_data_userid=${APP_WWW_DATA_USERID:-}
+
+if [[ "${change_www_data_userid}" != "" ]]; then
+  echo "Changing /app permissions to belong to user id ${change_www_data_userid}"
+  usermod -u ${change_www_data_userid} www-data
+  groupmod -g ${change_www_data_userid} www-data
+
+  chown -R www-data:www-data /app
+fi
+
 echo "Starting PHP-FPM:"
 # starting fpm and filter output to not show child process errors
 #   cron.php starts processes in background which leads fpm to print messages like:
