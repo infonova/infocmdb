@@ -47,34 +47,10 @@ jobs:
     - name: "PHP 7 latest Version"
       env: COMPOSE_ENV_PHP_VERSION=7
 
-    - stage: "publish image"
-      if: tag IS present AND branch = "master"
-      env:
-        - COMPOSE_ENV_PHP_VERSION=7.3
-        - COMPOSE_ENV=prod
-        - IMAGE_TAG=release
-      script:
-        - set -e
-        - git describe --tags --long --always > version_info.txt
-        - echo -n "Cmdb Version "
-        - cat version_info.txt
-        - ./run setup
-        - ./run build
-        - ./deploy/publish_docker_images.sh ${IMAGE_TAG}
-
-#cache:
-#  timeout: 86400
-#  directories:
-#    - .cache_perl
-
 script:
   - set -e
   - ./run setup
   - ./run build
-#  - mkdir -p /tmp/.cache_perl/usr/local/lib/x86_64-linux-gnu/perl
-#  - docker-compose run --rm -v "$(PWD)/.cache_perl:/cache_perl" --entrypoint "cp -ur /usr/local/lib/x86_64-linux-gnu/perl /cache_perl/usr/local/lib/x86_64-linux-gnu/perl" php
-#  - mkdir -p /tmp/.cache_perl/usr/local/share/perl
-#  - docker-compose run --rm -v "$(PWD)/.cache_perl:/cache_perl" --entrypoint "cp -ur /usr/local/share/perl /cache_perl/usr/local/share/perl" php
   - ./run up
   - ./run execute_tests unit --steps
   - ./run execute_tests api --steps
@@ -87,25 +63,24 @@ after_script:
   - docker images
 
 before_deploy:
-  - mkdir -p /tmp/releases
-  - tar -xzf /tmp/releases/infocmdb_source.tar.gz .
+  - set -e
+  - git describe --tags --long --always > version_info.txt
+  - echo -n "Cmdb Version "
+  - cat version_info.txt
+  - ./run setup
+  - ./run build
 
 deploy:
-  - provider: releases
-    github_token: ${GITHUB_TOKEN}
-    file:
-      - "/tmp/releases/infocmdb_source.tar.gz"
+  - provider: script
     cleanup: true
     on:
       tags: true
       branch: master
-
-#  - provider: pages
-#    skip_cleanup: true
-#    local_dir: docs
-#    github_token: $GITHUB_TOKEN
-#    on:
-#      branch: master
-#      condition: -n "${HUGO_VERSION}"
+    env:
+      - COMPOSE_ENV_PHP_VERSION=7.3
+      - COMPOSE_ENV=prod
+      - IMAGE_TAG=release
+      - REGISTRY_TARGET=infonova
+    script: ./deploy/publish_docker_images.sh ${IMAGE_TAG} ${REGISTRY_TARGET}
 
 # vim:set et ts=2 sw=2:
