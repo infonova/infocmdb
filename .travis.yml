@@ -19,10 +19,12 @@ env:
     - BUILD_NPROC=8
     - BUILD_PERLPROC=20
     - COMPOSE_ENV=test
+    - COMPOSE_ENV_PHP_VERSION=7.3
     - COMPOSE_HTTP_TIMEOUT=120
     - COMPOSE_INTERACTIVE_NO_CLI=1
     - DOCKER_WEB_HOSTNAME=infocmdb.local
     - IMAGE_TAG=ci
+    - REGISTRY_TARGET=infonova
 
 before_install:
   - git fetch --all --tags
@@ -33,19 +35,7 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - docker version
   - docker-compose version
-
-jobs:
-  fast_finish: true
-  allow_failures:
-    - env: COMPOSE_ENV_PHP_VERSION=7
-  include:
-    - stage: "testing"
-      name: "PHP 7.3 Version"
-      env: COMPOSE_ENV_PHP_VERSION=7.3
-    - name: "PHP 7.1 Version"
-      env: COMPOSE_ENV_PHP_VERSION=7.1
-    - name: "PHP 7 latest Version"
-      env: COMPOSE_ENV_PHP_VERSION=7
+  - export APP_WWW_DATA_USERID=$(id -u)
 
 script:
   - set -e
@@ -64,23 +54,63 @@ after_script:
 
 before_deploy:
   - set -e
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - find ./ -not -user $USER -exec sh -c 'sudo chown $USER "$1"' _ {} \;
   - git describe --tags --long --always > version_info.txt
   - echo -n "Cmdb Version "
   - cat version_info.txt
   - ./run setup
   - ./run build
 
-deploy:
-  - provider: script
-    cleanup: true
-    on:
-      tags: true
-      branch: master
-    env:
-      - COMPOSE_ENV_PHP_VERSION=7.3
-      - COMPOSE_ENV=prod
-      - IMAGE_TAG=release
-      - REGISTRY_TARGET=infonova
-    script: ./deploy/publish_docker_images.sh ${IMAGE_TAG} ${REGISTRY_TARGET}
+branches:
+  only:
+    - master
+    - develop
+
+jobs:
+  fast_finish: true
+  allow_failures:
+    - env: COMPOSE_ENV_PHP_VERSION=7
+  include:
+    - stage: "testing old-stable php"
+      name: "PHP 7.1 Version"
+      env: COMPOSE_ENV_PHP_VERSION=7.1
+
+    - stage: "testing stable php"
+      name: "PHP 7.3 Version"
+      env: COMPOSE_ENV_PHP_VERSION=7.3
+
+    - name: "PHP 7 latest Version versus develop"
+      env: COMPOSE_ENV_PHP_VERSION=7
+      if: branch = develop AND TRAVIS_EVENT_TYPE = cron
+
+    - stage: "publishing"
+      name: "publish release images"
+      script: skip
+      if: branch = master AND tag IS present AND type != pull_request
+      deploy:
+        - provider: script
+          cleanup: true
+          on:
+            tags: true
+            branch: master
+          env:
+            - COMPOSE_ENV=prod
+            - IMAGE_TAG=release
+          script: bash deploy/publish_docker_images.sh ${IMAGE_TAG} ${REGISTRY_TARGET}
+
+    - stage: "publishing"
+      name: "publish nightly image"
+      script: skip
+      if: branch = develop AND type != pull_request
+      deploy:
+        provider: script
+        cleanup: true
+        on:
+          branch: develop
+        env:
+          - COMPOSE_ENV=prod
+          - IMAGE_TAG=nightly
+        script: docker-compose push
 
 # vim:set et ts=2 sw=2:

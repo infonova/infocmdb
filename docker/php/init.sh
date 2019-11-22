@@ -80,6 +80,16 @@ ln -sT ../data/uploads          /app/public/_uploads      || true
 
 echo "initialize with /_dist files"
 
+change_www_data_userid=${APP_WWW_DATA_USERID:-}
+
+if [[ "${change_www_data_userid}" != "" ]]; then
+  echo "Changing /app permissions to belong to user id ${change_www_data_userid}"
+  usermod -u ${change_www_data_userid} www-data
+  groupmod -g ${change_www_data_userid} www-data
+
+  chown -R www-data:www-data /app
+fi
+
 chown -c www-data:www-data /app /app/data
 find /app/_dist /app/data -type d -not -user www-data -exec sh -c 'chmod -c 0775 "$1"; chown -c www-data:www-data "$1"' _ {} \;
 
@@ -259,16 +269,6 @@ CLEAN_ENV="DB_HOST DB_PORT DB_USERNAME DB_PASSWORD DB_ROOT_USERNAME DB_ROOT_PASS
 for v in ${CLEAN_ENV}; do
     unset ${v}
 done
-
-change_www_data_userid=${APP_WWW_DATA_USERID:-}
-
-if [[ "${change_www_data_userid}" != "" ]]; then
-  echo "Changing /app permissions to belong to user id ${change_www_data_userid}"
-  usermod -u ${change_www_data_userid} www-data
-  groupmod -g ${change_www_data_userid} www-data
-
-  chown -R www-data:www-data /app
-fi
 
 echo "Starting PHP-FPM:"
 # starting fpm and filter output to not show child process errors

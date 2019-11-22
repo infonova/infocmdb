@@ -58,6 +58,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_ROOT_USERNAME=${DB_ROOT_USERNAME}
       - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - APP_WWW_DATA_USERID=${APP_WWW_DATA_USERID:-}
     restart: always
     depends_on:
       - mariadb
