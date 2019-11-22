@@ -66,6 +66,7 @@ branches:
   only:
     - master
     - develop
+    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 jobs:
   fast_finish: true
@@ -87,7 +88,7 @@ jobs:
     - stage: "publishing"
       name: "publish release images"
       script: skip
-      if: branch = master AND tag IS present AND type != pull_request
+      if: branch = master AND type != pull_request
       deploy:
         - provider: script
           cleanup: true
