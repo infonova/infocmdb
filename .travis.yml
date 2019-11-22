@@ -67,12 +67,13 @@ jobs:
   allow_failures:
     - env: COMPOSE_ENV_PHP_VERSION=7
   include:
-    - stage: "testing"
+    - stage: "testing old-stable php"
+      name: "PHP 7.1 Version"
+      env: COMPOSE_ENV_PHP_VERSION=7.1
+
+    - stage: "testing stable php"
       name: "PHP 7.3 Version"
       env: COMPOSE_ENV_PHP_VERSION=7.3
-
-    - name: "PHP 7.1 Version"
-      env: COMPOSE_ENV_PHP_VERSION=7.1
 
     - name: "PHP 7 latest Version versus develop"
       env: COMPOSE_ENV_PHP_VERSION=7

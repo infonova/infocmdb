@@ -38,7 +38,6 @@ services:
       - DB_SEEDING_ENABLED=1
       - APPLICATION_ENV=development
       - DB_DATABASE_TESTING=${DB_DATABASE_TESTING}
-      - APP_WWW_DATA_USERID=${APP_WWW_DATA_USERID}
     depends_on:
       - secret-simulator
 
