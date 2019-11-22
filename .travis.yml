@@ -81,7 +81,7 @@ jobs:
     - stage: "publishing"
       name: "publish release images"
       script: skip
-      if: branch = master AND tag IS present
+      if: branch = master AND tag IS present AND type != pull_request
       deploy:
         - provider: script
           cleanup: true
@@ -96,7 +96,7 @@ jobs:
     - stage: "publishing"
       name: "publish nightly image"
       script: skip
-      if: branch = develop
+      if: branch = develop AND type != pull_request
       deploy:
         provider: script
         cleanup: true
