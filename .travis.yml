@@ -35,6 +35,7 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - docker version
   - docker-compose version
+  - export APP_WWW_DATA_USERID=$(id -u)
 
 script:
   - set -e
