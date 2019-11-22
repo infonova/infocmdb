@@ -126,8 +126,8 @@ RUN set -e \
         cd /app \
         && rm -rf .composer /app/public/js/utils/util.min.js \
         && chmod +x ./composer.phar \
-        && ./composer.phar run-script minify \
-        && ./composer.phar clear-cache \
+        && su -s /bin/bash www-data -c "./composer.phar run-script minify" \
+        && su -s /bin/bash www-data -c "./composer.phar clear-cache" \
     ) \
     \
     && echo -e '\e[44mInstall Golang\e[0m' \
