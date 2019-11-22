@@ -3,6 +3,14 @@
  
  **Repository is still getting ready, information is being added daily**
 
+![InfoCMDB Slideshow](/public/assets/images/gh_images.gif)
+
+### Screenshots
+* [Login](/public/assets/images/001_Login.png)
+* [Ci Index](/public/assets/images/002_CI_Index.png)
+* [Ci Detail](/public/assets/images/003_CI_Detail.png)
+* [Ci Relations](/public/assets/images/004_CI_Relations.png) 
+
 ## Overview
 
 * Granular AccessControl (RBAC)
