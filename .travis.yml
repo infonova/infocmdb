@@ -88,7 +88,7 @@ jobs:
     - stage: "publishing"
       name: "publish release images"
       script: skip
-      if: branch = master AND type != pull_request
+      if: branch =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/
       deploy:
         - provider: script
           cleanup: true
