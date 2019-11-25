@@ -26,6 +26,13 @@ if [[ ${REGISTRY_TARGET} == "" ]]; then
   exit 1
 fi
 
+given_docker_username=${DOCKER_USERNAME:-}
+given_docker_password=${DOCKER_PASSWORD:-}
+if [[ ${given_docker_password} != "" && ${given_docker_username} != "" ]]; then
+  echo "Logging into docker registry..."
+  echo "${given_docker_password}" | docker login -u "${given_docker_username}" --password-stdin
+fi
+
 IMAGE_TAG_MAJOR=$(git describe --abbrev=0 --tags --always | sed -E 's/(^v([0-9]+)\.([0-9]+)\.([0-9]+)$)|^().*$/\2/') || 0
 IMAGE_TAG_MINOR=$(git describe --abbrev=0 --tags --always | sed -E 's/(^v([0-9]+)\.([0-9]+)\.([0-9]+)$)|^().*$/\2.\3/') || 0
 IMAGE_TAG_PATCH=$(git describe --abbrev=0 --tags --always | sed -E 's/(^v([0-9]+)\.([0-9]+)\.([0-9]+)$)|^().*$/\2.\3.\4/') || 0
