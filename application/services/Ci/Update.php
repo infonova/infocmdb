@@ -219,7 +219,7 @@ class Service_Ci_Update extends Service_Abstract
     /**
      * this method is used to create the ci update form.
      */
-    public function getUpdateCiForm(int $ciId, bool $isValidate, string $sessionID, int $tabIndex = null, int $attributeAttach = null, int $userId = null)
+    public function getUpdateCiForm(int $ciId, bool $isValidate, string $sessionID, string $tabIndex = null, int $attributeAttach = null, int $userId = null)
     {
         $form = new Form_Ci_Update($this->translator, $ciId, $sessionID, null, $tabIndex);
 

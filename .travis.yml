@@ -37,35 +37,28 @@ before_install:
   - docker-compose version
   - export APP_WWW_DATA_USERID=$(id -u)
 
-script:
+before_script:
   - set -e
-  - ./run setup
-  - ./run build
-  - ./run up
-  - ./run execute_tests unit --steps
-  - ./run execute_tests api --steps
-  - ./run execute_tests apiV2 --steps
-  - ./run execute_tests functional --steps
-  - ./run execute_tests acceptance --steps
-  - docker-compose logs
-
-after_script:
-  - docker images
-
-before_deploy:
-  - set -e
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - find ./ -not -user $USER -exec sh -c 'sudo chown $USER "$1"' _ {} \;
   - git describe --tags --long --always > version_info.txt
   - echo -n "Cmdb Version "
   - cat version_info.txt
   - ./run setup
   - ./run build
 
+script:
+  - ./run up
+  - ./run execute_tests unit --steps
+  - ./run execute_tests api --steps
+  - ./run execute_tests apiV2 --steps
+  - ./run execute_tests functional --steps
+  - ./run execute_tests acceptance --steps
+
+after_script:
+  - docker-compose logs
+  - docker images
+
 branches:
   only:
-    - master
-    - develop
     - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 jobs:
@@ -87,31 +80,22 @@ jobs:
 
     - stage: "publishing"
       name: "publish release images"
-      script: skip
-      if: branch =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/
-      deploy:
-        - provider: script
-          cleanup: true
-          on:
-            tags: true
-            branch: master
-          env:
-            - COMPOSE_ENV=prod
-            - IMAGE_TAG=release
-          script: bash deploy/publish_docker_images.sh ${IMAGE_TAG} ${REGISTRY_TARGET}
+      if: branch =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/ AND type != pull_request
+      env:
+        - COMPOSE_ENV=prod
+        - IMAGE_TAG=release
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - bash deploy/publish_docker_images.sh ${IMAGE_TAG} ${REGISTRY_TARGET}
 
     - stage: "publishing"
       name: "publish nightly image"
-      script: skip
-      if: branch = develop AND type != pull_request
-      deploy:
-        provider: script
-        cleanup: true
-        on:
-          branch: develop
-        env:
-          - COMPOSE_ENV=prod
-          - IMAGE_TAG=nightly
-        script: docker-compose push
+      if: branch = develop AND type != pull_request AND TRAVIS_EVENT_TYPE = cron
+      env:
+        - COMPOSE_ENV=prod
+        - IMAGE_TAG=nightly
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker-compose push
 
 # vim:set et ts=2 sw=2:
