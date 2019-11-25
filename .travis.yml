@@ -82,7 +82,7 @@ jobs:
 
     - stage: "publishing"
       name: "publish release images"
-      if: branch =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+      if: branch =~ /^v\d+\.\d+(\.\d+)?(-\S*)?$/ AND type != pull_request
       env:
         - COMPOSE_ENV=prod
         - IMAGE_TAG=release
@@ -92,7 +92,7 @@ jobs:
 
     - stage: "publishing"
       name: "publish nightly image"
-      if: branch = develop AND type != pull_request
+      if: branch = develop AND type != pull_request AND TRAVIS_EVENT_TYPE = cron
       env:
         - COMPOSE_ENV=prod
         - IMAGE_TAG=nightly
