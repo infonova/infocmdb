@@ -33,9 +33,9 @@ if [[ ${given_docker_password} != "" && ${given_docker_username} != "" ]]; then
   echo "${given_docker_password}" | docker login -u "${given_docker_username}" --password-stdin
 fi
 
-IMAGE_TAG_MAJOR=$(git describe --abbrev=0 --tags --always | sed -E 's/(^v([0-9]+)\.([0-9]+)\.([0-9]+)$)|^().*$/\2/') || 0
-IMAGE_TAG_MINOR=$(git describe --abbrev=0 --tags --always | sed -E 's/(^v([0-9]+)\.([0-9]+)\.([0-9]+)$)|^().*$/\2.\3/') || 0
-IMAGE_TAG_PATCH=$(git describe --abbrev=0 --tags --always | sed -E 's/(^v([0-9]+)\.([0-9]+)\.([0-9]+)$)|^().*$/\2.\3.\4/') || 0
+IMAGE_TAG_MAJOR=$(git describe --abbrev=0 --tags --always | sed -E 's/(^v([0-9]+)\.([0-9]+)\.([0-9]+)(-.*?)?$)|^().*$/\2\5/') || 0
+IMAGE_TAG_MINOR=$(git describe --abbrev=0 --tags --always | sed -E 's/(^v([0-9]+)\.([0-9]+)\.([0-9]+)(-.*?)?$)|^().*$/\2.\3\5/') || 0
+IMAGE_TAG_PATCH=$(git describe --abbrev=0 --tags --always | sed -E 's/(^v([0-9]+)\.([0-9]+)\.([0-9]+)(-.*?)?$)|^().*$/\2.\3.\4\5/') || 0
 
 if [[ ! "${IMAGE_TAG_MAJOR}" -gt "0" ]]; then
   echo "Failed to parse Version from Git-Tag: $(git describe --abbrev=0 --tags --always)"
