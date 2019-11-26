@@ -7,6 +7,7 @@ queryId;				"ID"
 name;					"Name"
 active;					"active"
 
+cqlDefault;				"Default Webservices"
 cqlIndividual;			"Individual Webservices"
 
 edit;					"Edit"
