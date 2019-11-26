@@ -59,6 +59,7 @@ after_script:
 
 branches:
   only:
+    - develop
     - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 jobs:
