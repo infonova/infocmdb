@@ -17,13 +17,17 @@ class Service_Queue_Listener_Workflow implements Service_Queue_Listener
             $data[Db_Cron::MAPPING_ID] = $workflow[Db_Workflow::ID];
             $data[Db_Cron::VAR_DUMP]   = time();
 
+            $contextArray = array('triggerType' => 'time');
+            $workflowType = Util_Workflow_TypeFactory::create($workflow[Db_Workflow::SCRIPT_LANG], $workflow);
+            $envVariables = $workflowType->getEnvironmentVariables();
+            $contextArray = array_merge(array("Environment" => $envVariables), $contextArray);
 
             if (!$workflow['cronId']) {
                 // insert instead of update
                 $workflowDaoImpl->insertWorkflowImportsForCronjob($data);
 
                 try {
-                    $this->insertQueueMessage($workflow, array('triggerType' => 'time'));
+                    $this->insertQueueMessage($workflow, $contextArray);
                 } catch (Exception $e) {
                     $logger->log($e, Zend_Log::ERR);
                     // TODO
@@ -33,7 +37,7 @@ class Service_Queue_Listener_Workflow implements Service_Queue_Listener
                 $workflowDaoImpl->updateWorkflowImportsForCronjob($data, $workflow['cronId']);
 
                 try {
-                    $this->insertQueueMessage($workflow, array('triggerType' => 'time'));
+                    $this->insertQueueMessage($workflow, $contextArray);
                 } catch (Exception $e) {
                     $logger->log($e, Zend_Log::ERR);
                     // TODO
