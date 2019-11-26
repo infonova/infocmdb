@@ -1,7 +1,15 @@
 package main
 
-import "testing"
+import (
+    "github.com/infonova/infocmdb-sdk-go/infocmdb"
+    "testing"
+)
 
-func TestRun(t *testing.T) {
-
+func TestPreconditions(t *testing.T) {
+    w := infocmdb.NewWorkflow()
+    w.TestPreconditions(t, infocmdb.Preconditions{
+        //{infocmdb.TYPE_CI_TYPE, "required_ci_typ"},
+        //{infocmdb.TYPE_ATTRIBUTE, "required_attribute"},
+        //{infocmdb.TYPE_RELATION, "required_relation"},
+    })
 }
