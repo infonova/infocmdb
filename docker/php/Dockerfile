@@ -137,6 +137,7 @@ RUN set -e \
         && tar -C /usr/local -xzf /tmp/go.tgz \
         && export PATH="/usr/local/go/bin:$PATH" \
         && go version \
+        && go get -u github.com/infonova/infocmdb-sdk-go/infocmdb \
         ) \
     && mkdir -p "$GOPATH/src" "$GOPATH/bin" "$GOCACHE" && chmod -R 777 "$GOPATH" "$GOCACHE" \
     && echo -e '\e[44mInstall Library PERL\e[0m' \

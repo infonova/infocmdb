@@ -958,28 +958,6 @@ up() {
     exit 1
 }
 
-desc "down" <<HEREDOC
-Usage:
-    ${_ME} down
-
-Description:
-    stops the docker-compose
-HEREDOC
-down() {
-    docker-compose down
-}
-
-desc "restart" <<HEREDOC
-Usage:
-    ${_ME} restart
-
-Description:
-    restart the docker-compose
-HEREDOC
-restart() {
-    docker-compose restart
-}
-
 desc "destroy" <<HEREDOC
 Usage:
     ${_ME} destroy
@@ -1004,7 +982,7 @@ Description:
     stops the docker-compose
 HEREDOC
 build() {
-    docker-compose build
+    docker-compose build "$*"
 }
 
 desc "down" <<HEREDOC
@@ -1015,7 +993,7 @@ Description:
     stops the docker-compose
 HEREDOC
 down() {
-    docker-compose down
+    docker-compose down "$*"
 }
 
 desc "restart" <<HEREDOC

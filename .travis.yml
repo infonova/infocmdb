@@ -36,14 +36,14 @@ before_install:
   - docker version
   - docker-compose version
   - export APP_WWW_DATA_USERID=$(id -u)
-
-before_script:
-  - set -e
   - git describe --tags --long --always > version_info.txt
   - echo -n "Cmdb Version "
   - cat version_info.txt
+
+before_script:
+  - set -e
   - ./run setup
-  - ./run build
+  - ./run build --parallel
 
 script:
   - ./run up
@@ -59,6 +59,7 @@ after_script:
 
 branches:
   only:
+    - develop
     - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 jobs:
@@ -66,14 +67,11 @@ jobs:
   allow_failures:
     - env: COMPOSE_ENV_PHP_VERSION=7
   include:
-    - stage: "testing stable version"
+    - stage: "testing"
       name: "PHP 7.3 Version"
       env: COMPOSE_ENV_PHP_VERSION=7.1
-
-    - stage: "testing old stable version"
-      name: "PHP 7.1 Version"
+    - name: "PHP 7.1 Version"
       env: COMPOSE_ENV_PHP_VERSION=7.3
-
     - name: "PHP 7 latest Version versus develop"
       env: COMPOSE_ENV_PHP_VERSION=7
       if: branch = develop AND TRAVIS_EVENT_TYPE = cron
@@ -88,8 +86,7 @@ jobs:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - bash deploy/publish_docker_images.sh ${IMAGE_TAG} ${REGISTRY_TARGET}
 
-    - stage: "publishing"
-      name: "publish nightly image"
+    - name: "publish nightly image"
       if: branch = develop AND type != pull_request AND TRAVIS_EVENT_TYPE = cron
       env:
         - COMPOSE_ENV=prod
