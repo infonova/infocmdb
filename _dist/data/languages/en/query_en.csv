@@ -7,11 +7,13 @@ queryId;				"ID"
 name;					"Name"
 active;					"active"
 
+cqlDefault;				"Default Webservices"
 cqlIndividual;			"Individual Webservices"
 
 edit;					"Edit"
 
 noEntriesFound;			"No entries found!"
+noQueryFound;			"No entries found!"
 
 queryCreateSuccess;		"Webservice created successfully!"
 queryCreateFailed;		"Couldn't create Query!"
@@ -21,11 +23,15 @@ queryDeleteFailed;		"Couldn't delete Query!"
 
 queryDetail;			"Webservice Detail"
 
+queryQuery;				"Query"
 queryNameExample;		"Example: create_ci_by_ciTypeName"
 queryDescriptionExample; "Example: Creates a CI of a specific ci_typeName(argv1)"
 queryQueryExample;		"Example: insert into ci(ci_type_id) values (select id from ci_type where name = ':argv1:')"
 queryQueryHelp;         "Placeholders"
 testButtonHint;			"It is possible to test Select-Querys (without argv) straight away"
+
+queryApiUrl;			"Api Url"
+queryApiUrlTitle;		"Api Url"
 
 queryUpdateSuccess;		"Webservice edited successfully!"
 queryUpdateFailed;		"Couldn't edit Webservice!"
@@ -34,7 +40,7 @@ queryEdit;				"Edit Webservice"
 queryButtonTest;		"Test"
 
 testButtonHintExtended;	" The URL can be used for the Webservice Call (copy). When using ARGVs the Questionmark "?" must be replaced by the ARGV value. Instead of using "json" it is also possible to use "plain" or "xml". "
-
+testQueryException;		"Beim Ausführen der Query ist ein Fehler aufgetreten. Bitte die mitgegebenen Argumente überprüfen."
 queryStatus;			"Status"
 queryDescription;		"Description"
 queryName;				"Name"
@@ -44,3 +50,4 @@ cancle;					"Cancel"
 
 
 xmlinfo; If the Query contains a coulumn "ci_id" in the resultset and the methode XML is used all CIs with their CI-Type hierachy are returned in XML Style e.g. select ci_id, max(case cia.attribute_id when (select id from attribute where name = 'ma_lastname') then cia.value_text else null end) as ma_lastname... 
+areYouSureDelete; "Do you really want to delete this Project?"

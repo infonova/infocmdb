@@ -50,8 +50,8 @@ script:
   - ./run execute_tests unit --steps
   - ./run execute_tests api --steps
   - ./run execute_tests apiV2 --steps
-  - ./run execute_tests functional --steps
-  - ./run execute_tests acceptance --steps
+  - travis_retry ./run execute_tests functional --steps
+  - travis_retry ./run execute_tests acceptance --steps
 
 after_script:
   - docker-compose logs
