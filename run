@@ -996,7 +996,11 @@ Description:
     stops the docker-compose
 HEREDOC
 down() {
-    docker-compose down "$*"
+    if [ "$*" == "" ]; then
+        docker-compose down
+    else
+        docker-compose down "$*"
+    fi
 }
 
 desc "restart" <<HEREDOC
