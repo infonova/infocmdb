@@ -21,7 +21,7 @@
     };
 
     $(document).ready(function () {
-        $('.attributeSelect').combobox({
+        $('.attributeSelect[value!=""]').combobox({
             source: "<?php echo APPLICATION_URL . 'attribute/autocompleteactive';?>"
         });
 

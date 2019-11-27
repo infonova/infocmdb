@@ -24,7 +24,7 @@
                     $('#CreateForm').submit();
                 } else {
                     $('#infocmdb-dialog').html(content);
-                    $('.attributeSelect').combobox({
+                    $('.attributeSelect[value!=""]').combobox({
                         source: "<?php echo APPLICATION_URL . 'attribute/autocompleteactive/attributeGroupId/' . $this->attributegroupId?>",
                     });
                 }

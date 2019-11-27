@@ -72,7 +72,7 @@
         })
             .done(function (result) {
                 showInfocmdbDialog("&nbsp;", result, {height: 600, width: 540});
-                $('.attributeSelect').combobox({
+                $('.attributeSelect[value!=""]').combobox({
                     source: "<?php echo APPLICATION_URL ?>attribute/autocompleteactive/attributeGroupId/" + attributeGroupId,
                 })
             })
