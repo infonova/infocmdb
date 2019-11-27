@@ -20,19 +20,20 @@ abstract class Import_File_Method_Update extends Import_File_Method_Abstract imp
 
         } else {
 
-            $attributeId = $attributeList[0]['value'];
-            $isUnique    = $attributeList[0]['is_mandatory'];
+            $uniqueAttributeName = $attributeList[0]['name'];
+            $uniqueAttributeId   = $attributeList[0]['value'];
+            $isUnique            = $attributeList[0]['is_mandatory'];
 
-            if (!$attributeId) {
+            if (!$uniqueAttributeId) {
                 // attribute not found
-                $logger->log('[ERROR] Code ' . Import_File_Code::ERROR_UPDATE_MISSING_ATTRIBUTE_ID . '. Unique Identifier is invalid on line ' . $parameter['line'], Zend_Log::CRIT);
+                $logger->log('[ERROR] Code ' . Import_File_Code::ERROR_UPDATE_MISSING_ATTRIBUTE_ID . '. Unique Identifier ' . $uniqueAttributeName . ' is invalid on line ' . $parameter['line'], Zend_Log::CRIT);
                 $status['errors'][0] = Import_File_Code::ERROR_UPDATE_MISSING_ATTRIBUTE_ID;
                 $hasError            = true;
             }
 
             if (!$isUnique) {
                 // attribute is not unique!
-                $logger->log('[ERROR] Code ' . Import_File_Code::ERROR_UPDATE_ATTRIBUTE_NOT_UNIQUE . '. Unique Identifier is not Unique on line ' . $parameter['line'], Zend_Log::CRIT);
+                $logger->log('[ERROR] Code ' . Import_File_Code::ERROR_UPDATE_ATTRIBUTE_NOT_UNIQUE . '. Unique Identifier ' . $uniqueAttributeName . ' is not Unique on line ' . $parameter['line'], Zend_Log::CRIT);
                 $status['errors'][0] = Import_File_Code::ERROR_UPDATE_ATTRIBUTE_NOT_UNIQUE;
                 $hasError            = true;
             }
@@ -53,7 +54,7 @@ abstract class Import_File_Method_Update extends Import_File_Method_Abstract imp
 
 
             // get current db entry
-            $res = $importDaoImpl->getCiIdByAttributeValue($data[0], $attributeId);
+            $res = $importDaoImpl->getCiIdByAttributeValue($data[0], $uniqueAttributeId);
             if (!$res) {
                 // attribute not found
                 $logger->log('[ERROR] Code ' . Import_File_Code::ERROR_UPDATE_INVALID_ATTRIBUTE_VALUE . '. Ci not found by given unique Identifier on line ' . $parameter['line'], Zend_Log::CRIT);

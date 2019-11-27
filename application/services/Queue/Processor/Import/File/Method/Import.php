@@ -32,8 +32,9 @@ abstract class Import_File_Method_Import extends Import_File_Method_Abstract imp
                 unset($attributeList[1]);
 
 
-                $attributeId = $attributeList[2]['value'];
-                $isUnique    = $attributeList[2]['is_mandatory'];
+                $uniqueAttributeName = $attributeList[2]['name'];
+                $uniqueAttributeId   = $attributeList[2]['value'];
+                $isUnique            = $attributeList[2]['is_mandatory'];
 
                 if (empty($ciType)) {
                     $logger->log('line: ' . $parameter['line'] . '=> given citype does not exist in database', Zend_Log::ERR);
@@ -48,9 +49,9 @@ abstract class Import_File_Method_Import extends Import_File_Method_Abstract imp
                 }
 
 
-                if (!$attributeId) {
+                if (!$uniqueAttributeId) {
                     // attribute not found
-                    $logger->log('line: ' . $parameter['line'] . '=> [ERROR] Code ' . Import_File_Code::ERROR_UPDATE_MISSING_ATTRIBUTE_ID . '. Unique Identifier is invalid not found in Database', Zend_Log::CRIT);
+                    $logger->log('line: ' . $parameter['line'] . '=> [ERROR] Code ' . Import_File_Code::ERROR_UPDATE_MISSING_ATTRIBUTE_ID . '. Unique Identifier ' . $uniqueAttributeName . ' is invalid not found in Database', Zend_Log::CRIT);
                     $status['errors'][0] = Import_File_Code::ERROR_UPDATE_MISSING_ATTRIBUTE_ID;
                     $hasError            = true;
                 }
@@ -58,7 +59,7 @@ abstract class Import_File_Method_Import extends Import_File_Method_Abstract imp
 
                 if (!$isUnique) {
                     // attribute is not unique!
-                    $logger->log('line: ' . $parameter['line'] . '=> [ERROR] Code ' . Import_File_Code::ERROR_UPDATE_ATTRIBUTE_NOT_UNIQUE . '. Unique Identifier is not Unique', Zend_Log::CRIT);
+                    $logger->log('line: ' . $parameter['line'] . '=> [ERROR] Code ' . Import_File_Code::ERROR_UPDATE_ATTRIBUTE_NOT_UNIQUE . '. Unique Identifier ' . $uniqueAttributeName . ' is not Unique', Zend_Log::CRIT);
                     $status['errors'][0] = Import_File_Code::ERROR_UPDATE_ATTRIBUTE_NOT_UNIQUE;
                     $hasError            = true;
                 }
@@ -86,7 +87,7 @@ abstract class Import_File_Method_Import extends Import_File_Method_Abstract imp
 
             //Import via unique attribute: fetch CIID
             if ($ciId === null) {
-                $res = $importDaoImpl->getCiIdByAttributeValue($data[2], $attributeId);
+                $res = $importDaoImpl->getCiIdByAttributeValue($data[2], $uniqueAttributeId);
             } else { //Import via ciid
                 $res = array(Db_CiAttribute::CI_ID => $ciId);
                 unset($attributeList[0]); //exclude ciid from update --> identifier doesn't change
