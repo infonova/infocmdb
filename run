@@ -976,13 +976,16 @@ destroy() {
 
 desc "build" <<HEREDOC
 Usage:
-    ${_ME} build
+    ${_ME} build <service-name>
 
 Description:
-    stops the docker-compose
+    Rebuilds the service container.
+
+    service-name   Name of the service in docker-compose (optional, default: php)
 HEREDOC
 build() {
-    docker-compose build "$*"
+    CONTAINER=${1:-php}
+    docker-compose build "${CONTAINER}"
 }
 
 desc "down" <<HEREDOC
