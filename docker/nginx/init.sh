@@ -34,13 +34,25 @@ if [[ "${DOCKER_WEB_HOSTALIAS}" != "web" ]]; then
   export DOCKER_INTERNAL_HOSTALIAS="web"
 fi
 
-echo "Add default vhost for ${DOCKER_WEB_HOSTNAME}[Alias: ${DOCKER_WEB_HOSTALIAS} ${DOCKER_INTERNAL_HOSTALIAS}]: ${CONFIG_DIR}/conf.d/default.conf"
-cp ${CONFIG_DIR}/conf.d/default.conf.dist ${CONFIG_DIR}/conf.d/default.conf
-sed -i -e "s|#DOCKER_WEB_HOSTNAME#|${DOCKER_WEB_HOSTNAME}|"       "${CONFIG_DIR}/conf.d/default.conf"
-sed -i -e "s|#DOCKER_WEB_HOSTALIAS#|${DOCKER_WEB_HOSTALIAS}|"     "${CONFIG_DIR}/conf.d/default.conf"
-sed -i -e "s|#APPLICATION_ENV#|${APPLICATION_ENV}|"               "${CONFIG_DIR}/conf.d/default.conf"
-sed -i -e "s|#PHP_DISABLE_FUNCTIONS#|${PHP_DISABLE_FUNCTIONS}|"   "${CONFIG_DIR}/conf.d/default.conf"
-sed -i -e "s|#DOCKER_INTERNAL_HOSTALIAS#|${DOCKER_INTERNAL_HOSTALIAS}|" "${CONFIG_DIR}/conf.d/default.conf"
+
+CONFD_PATH=/etc/nginx/conf.d/
+DOCKER_WEB_HOSTNAME_CLEAN="${DOCKER_WEB_HOSTNAME//\./_}"
+CERT_CONF_FULL_PATH=${CONFD_PATH}ssl_${DOCKER_WEB_HOSTNAME_CLEAN}.conf
+
+if [[ ! -e ${CERT_CONF_FULL_PATH} ]]; then
+  echo "Add default vhost for ${DOCKER_WEB_HOSTNAME}[Alias: ${DOCKER_WEB_HOSTALIAS} ${DOCKER_INTERNAL_HOSTALIAS}]: ${CONFIG_DIR}/conf.d/default.conf"
+  cp ${CONFIG_DIR}/conf.d/default.conf.dist ${CONFIG_DIR}/conf.d/default.conf
+  sed -i -e "s|#DOCKER_WEB_HOSTNAME#|${DOCKER_WEB_HOSTNAME}|"       "${CONFIG_DIR}/conf.d/default.conf"
+  sed -i -e "s|#DOCKER_WEB_HOSTALIAS#|${DOCKER_WEB_HOSTALIAS}|"     "${CONFIG_DIR}/conf.d/default.conf"
+  sed -i -e "s|#APPLICATION_ENV#|${APPLICATION_ENV}|"               "${CONFIG_DIR}/conf.d/default.conf"
+  sed -i -e "s|#PHP_DISABLE_FUNCTIONS#|${PHP_DISABLE_FUNCTIONS}|"   "${CONFIG_DIR}/conf.d/default.conf"
+  sed -i -e "s|#DOCKER_INTERNAL_HOSTALIAS#|${DOCKER_INTERNAL_HOSTALIAS}|" "${CONFIG_DIR}/conf.d/default.conf"
+else
+  echo "[NOTICE] Found SSL Configuration, skipping vhost-default configuration. [Config: ${CERT_CONF_FULL_PATH}]"
+
+  # get rid of the file inside the docker instance if it exists
+  rm -f "${CONFIG_DIR}/conf.d/default.conf"
+fi
 
 echo
 
