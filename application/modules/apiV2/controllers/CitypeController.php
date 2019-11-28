@@ -2,7 +2,7 @@
 
 require_once 'V2BaseController.php';
 
-class ApiV2_CiTypeController extends V2BaseController
+class ApiV2_CitypeController extends V2BaseController
 {
     /**
      * @OA\Get(
