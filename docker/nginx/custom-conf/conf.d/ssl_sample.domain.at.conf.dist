@@ -14,7 +14,7 @@ server {
     ssl_certificate #CERT_CRT_FILE#;
     ssl_certificate_key #CERT_KEY_FILE#;
 
-    ssl_dhparam /etc/nginx/conf.d/ssl/dhparam.pem;
+    #DHPARAM#
     ssl_ecdh_curve secp384r1; # Requires nginx >= 1.1.0
 
     root /app/public;
