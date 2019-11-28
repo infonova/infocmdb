@@ -14,9 +14,9 @@ class Util_Trigger
     }
 
     // CI handling
-    public function createCi($ciId, $userId)
+    public function createCi($ciId, $userId, $ciInfo = null)
     {
-        $this->handleCi($ciId, $userId, 'create');
+        $this->handleCi($ciId, $userId, 'create', $ciInfo);
     }
 
     public function updateCi($ciId, $userId, $ciInfo = null)
