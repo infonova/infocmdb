@@ -35,13 +35,13 @@ if [[ "${DOCKER_WEB_HOSTALIAS}" != "web" ]]; then
 fi
 
 echo "Add default vhost for ${DOCKER_WEB_HOSTNAME}[Alias: ${DOCKER_WEB_HOSTALIAS} ${DOCKER_INTERNAL_HOSTALIAS}]: ${CONFIG_DIR}/conf.d/default.conf"
-envsubst '
-${DOCKER_WEB_HOSTNAME}
-${DOCKER_WEB_HOSTALIAS}
-${APPLICATION_ENV}
-${PHP_DISABLE_FUNCTIONS}
-${DOCKER_INTERNAL_HOSTALIAS}
-'< ${CONFIG_DIR}/conf.d/default.conf.dist > ${CONFIG_DIR}/conf.d/default.conf
+cp ${CONFIG_DIR}/conf.d/default.conf.dist ${CONFIG_DIR}/conf.d/default.conf
+sed -i -e "s|#DOCKER_WEB_HOSTNAME#|${DOCKER_WEB_HOSTNAME}|"       "${CONFIG_DIR}/conf.d/default.conf"
+sed -i -e "s|#DOCKER_WEB_HOSTALIAS#|${DOCKER_WEB_HOSTALIAS}|"     "${CONFIG_DIR}/conf.d/default.conf"
+sed -i -e "s|#APPLICATION_ENV#|${APPLICATION_ENV}|"               "${CONFIG_DIR}/conf.d/default.conf"
+sed -i -e "s|#PHP_DISABLE_FUNCTIONS#|${PHP_DISABLE_FUNCTIONS}|"   "${CONFIG_DIR}/conf.d/default.conf"
+sed -i -e "s|#DOCKER_INTERNAL_HOSTALIAS#|${DOCKER_INTERNAL_HOSTALIAS}|" "${CONFIG_DIR}/conf.d/default.conf"
+
 echo
 
 if [[ -e /bootstrap/custom-conf ]]; then
@@ -51,14 +51,16 @@ fi
 if [ "${APPLICATION_ENV}" = "testing" ] || [ "${APPLICATION_ENV}" = "development" ] ; then
     echo "Add vhost config for cmdb.test.local"
     DOCKER_WEB_HOSTALIAS=""
+    DOCKER_INTERNAL_HOSTALIAS=""
     DOCKER_WEB_HOSTNAME="cmdb.test.local"
     APPLICATION_ENV="testing"
-    envsubst '
-${DOCKER_WEB_HOSTNAME}
-${DOCKER_WEB_HOSTALIAS}
-${APPLICATION_ENV}
-${PHP_DISABLE_FUNCTIONS}
-'< ${CONFIG_DIR}/conf.d/default.conf.dist > ${CONFIG_DIR}conf.d/testing.conf
+
+    cp ${CONFIG_DIR}/conf.d/default.conf.dist ${CONFIG_DIR}conf.d/testing.conf
+    sed -i -e "s|#DOCKER_INTERNAL_HOSTALIAS#|${DOCKER_INTERNAL_HOSTALIAS}|" "${CONFIG_DIR}conf.d/testing.conf"
+    sed -i -e "s|#DOCKER_WEB_HOSTNAME#|${DOCKER_WEB_HOSTNAME}|"     "${CONFIG_DIR}conf.d/testing.conf"
+    sed -i -e "s|#DOCKER_WEB_HOSTALIAS#|${DOCKER_WEB_HOSTALIAS}|"   "${CONFIG_DIR}conf.d/testing.conf"
+    sed -i -e "s|#APPLICATION_ENV#|${APPLICATION_ENV}|"             "${CONFIG_DIR}conf.d/testing.conf"
+    sed -i -e "s|#PHP_DISABLE_FUNCTIONS#|${PHP_DISABLE_FUNCTIONS}|" "${CONFIG_DIR}conf.d/testing.conf"
     echo
 fi
 

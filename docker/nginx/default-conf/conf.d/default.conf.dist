@@ -5,7 +5,7 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name ${DOCKER_WEB_HOSTNAME} ${DOCKER_WEB_HOSTALIAS} ${DOCKER_INTERNAL_HOSTALIAS};
+    server_name #DOCKER_WEB_HOSTNAME# #DOCKER_WEB_HOSTALIAS# #DOCKER_INTERNAL_HOSTALIAS#;
     root /app/public;
     index index.php index.html index.htm;
 
@@ -35,10 +35,10 @@ server {
         fastcgi_pass php:9000;
         fastcgi_index index.php;
         include fastcgi_params;
-        fastcgi_param APPLICATION_ENV  ${APPLICATION_ENV};
+        fastcgi_param APPLICATION_ENV  #APPLICATION_ENV#;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param PATH_INFO $fastcgi_path_info;
-        ${PHP_DISABLE_FUNCTIONS}
+        #PHP_DISABLE_FUNCTIONS#
     }
 
     location / {

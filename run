@@ -774,19 +774,26 @@ Description:
     Possible environment values: prod / dev / test
 HEREDOC
 setup_docker() {
+    config_file="docker-compose-prod.yml"
+    override_file="docker-compose.override.yml"
 
     check_env_exists
 
-    echo "Running setup_docker..."
+    echo "Running setup_docker...."
 
-    if [ -e docker-compose.override.yml ]; then
-        echo "docker-compose.override.yml  Already exists."
+    if [[ -e "${override_file}" ]]; then
+        echo "${override_file} Already exists."
+        return
+    fi
+
+    if [[ ! -e ${config_file} ]]; then
+        # Since the "docker-compose-prod.yml" doesn't exist we assume this is a infocmdb-compose setup
+        # exit quietly since this is not unexpected
         return
     fi
 
     echo "Setting up docker override per environment."
 
-    config_file="docker-compose-prod.yml"
     given_env=${COMPOSE_ENV:-""}
     if [[ ${given_env} == '' && "${_INTERACTIVE}" == 1 ]]; then
         read -rp "Choose Environment [Env: COMPOSE_ENV] (prod/dev/test) [prod]: " given_env
@@ -807,8 +814,8 @@ setup_docker() {
         exit 1
     esac
 
-    echo "  Creating symlink: ${config_file} --> docker-compose.override.yml"
-    ln -sf "${config_file}" docker-compose.override.yml
+    echo "  Creating symlink: ${config_file} --> ${override_file}"
+    ln -sf "${config_file}" "${override_file}"
 }
 
 desc "setup_lib" <<HEREDOC
@@ -884,10 +891,12 @@ generate_dhparam() {
         return
     fi
 
+    mkdir -p docker/nginx/custom-conf/conf.d/ssl/
     echo "Create Diffie Hellman param for nginx"
-    docker build -t "${OPENSSL_IMAGE_NAME}" docker/openssl
-    docker run -it --rm -v "$(pwd):/app" "${OPENSSL_IMAGE_NAME}" \
-      openssl dhparam -out /app/${DHPARAM_FILE} 4096
+
+    docker run -i --rm -v "$(pwd):/app" alpine \
+    sh -c "apk update && apk add --no-cache openssl &&
+    openssl dhparam -out /app/${DHPARAM_FILE} 4096"
 }
 
 desc "setup" <<HEREDOC
@@ -976,16 +985,20 @@ destroy() {
 
 desc "build" <<HEREDOC
 Usage:
-    ${_ME} build <service-name>
+    ${_ME} build [arguments...]
+
+Example:
+    ${_ME} build --parallel php web
 
 Description:
-    Rebuilds the service container.
-
-    service-name   Name of the service in docker-compose (optional, default: php)
+    Runs the docker-compose build command, with given arguments
 HEREDOC
 build() {
-    CONTAINER=${1:-php}
-    docker-compose build "${CONTAINER}"
+    if [ "$*" == "" ]; then
+        docker-compose build
+    else
+        docker-compose build "$*"
+    fi
 }
 
 desc "down" <<HEREDOC
@@ -1028,6 +1041,7 @@ gencert() {
     if [[ -z ${CERT_HOSTNAME} ]]; then
         echo "You must specify a hostname!"
         help gencert
+        exit 1
     fi
 
     generate_dhparam
@@ -1042,12 +1056,20 @@ gencert() {
       exit 1
     fi
 
+    if [[ -e ${CERT_CONF_FULL_PATH} ]]; then
+      echo "ERROR: configuration already exists: '${CERT_CONF_FULL_PATH}', exiting."
+      exit 1
+    fi
+
+    mkdir -p ${CERT_PATH}
     echo "Generating certificate for ${CERT_HOSTNAME}"
-    docker run -it --rm -v "$(pwd):/app" "${OPENSSL_IMAGE_NAME}" \
+
+    docker run -i --rm -v "$(pwd):/app" alpine \
+    sh -c "set -x; apk update -q && apk add -q --no-cache openssl &&
       openssl req -x509 -newkey rsa:4096 \
-      -days 1825 -nodes -subj "/CN=${CERT_HOSTNAME}" -addext "subjectAltName=DNS:${CERT_HOSTNAME}" \
-      -out    /app/"${CERT_PATH}"/"${CERT_HOSTNAME_CLEAN}".crt \
-      -keyout /app/"${CERT_PATH}"/"${CERT_HOSTNAME_CLEAN}".key
+      -days 1825 -nodes -subj '/CN=${CERT_HOSTNAME}' -addext 'subjectAltName=DNS:${CERT_HOSTNAME}' \
+      -out    /app/'${CERT_PATH}'/'${CERT_HOSTNAME_CLEAN}'.crt \
+      -keyout /app/'${CERT_PATH}'/'${CERT_HOSTNAME_CLEAN}'.key"
 
     echo "Saved certificate to ${CERT_PATH}/${CERT_HOSTNAME_CLEAN}... key/crt"
 
@@ -1062,7 +1084,8 @@ gencert() {
         export PHP_DISABLE_FUNCTIONS=""
     fi
 
-    cp ${CONFD_PATH}/ssl_sample.domain.at.conf.dist     "${CERT_CONF_FULL_PATH}"
+    docker-compose exec php cat ${CONFD_PATH}/ssl_sample.domain.at.conf.dist > "${CERT_CONF_FULL_PATH}"
+#    cp ${CONFD_PATH}/ssl_sample.domain.at.conf.dist     "${CERT_CONF_FULL_PATH}"
     sed -i -e "s|#APPLICATION_ENV#|${APPLICATION_ENV}|" "${CERT_CONF_FULL_PATH}"
     sed -i -e "s|#CERT_HOSTNAME#|${CERT_HOSTNAME}|"     "${CERT_CONF_FULL_PATH}"
     sed -i -e "s|#PHP_DISABLE_FUNCTIONS#|${PHP_DISABLE_FUNCTIONS}|" "${CERT_CONF_FULL_PATH}"
@@ -1308,7 +1331,8 @@ Description:
 HEREDOC
 container_name() {
     # shellcheck disable=SC2046
-    echo $(docker inspect -f '{{.Name}}' $(docker-compose ps -q $1) | tail -n1 | cut -c2-)
+    # shellcheck disable=SC2005
+    echo $(docker inspect -f '{{.Name}}' $(docker-compose ps -q "$1") | tail -n1 | cut -c2-)
 }
 
 desc "update_run" <<HEREDOC
@@ -1373,6 +1397,29 @@ execute_tests() {
     esac
 
     docker-compose exec -T php ./codecept.phar run "tests/${TEST_GROUP}" "${@:3}"
+}
+
+desc "seed_database" <<HEREDOC
+Usage:
+    ${_ME} seed_database
+
+Description:
+    will seed the database with testing data.
+
+HEREDOC
+seed_database() {
+  source .env
+  if [[ ! "${APPLICATION_ENV}" == "production" ]]; then
+    echo "This is a PRODUCTION instance, are you sure? ctrl+c TO STOP!"
+  fi
+
+  DB_HAS_DATA=$(mysql -s -N -e "select count(*)>1 from ${DB_DATABASE:-infoCMDB}.ci")
+  if [[ "${DB_HAS_DATA}" == "0" ]]; then
+      echo "[NOTICE] DB-Seeding started!"
+      docker-compose exec php sh -c "/app/deploy; ./phinx seed:run"
+  else
+      echo "[NOTICE] DB-Seeding: looks already seeded or used!"
+  fi
 }
 
 check_env_exists() {
