@@ -883,6 +883,12 @@ Description:
     Create dhparam for nginx
 HEREDOC
 generate_dhparam() {
+
+    if [[ ! ${DHPARAM_SKIP:-} == "" ]]; then
+        echo "[WARNING] DHPARAM_SKIP is set, SKIPPING dhparam generation."
+        return
+    fi
+
     echo "Running generate_dhparam..."
     DHPARAM_FILE="docker/nginx/custom-conf/conf.d/ssl/dhparam.pem"
 
@@ -1091,6 +1097,12 @@ gencert() {
     sed -i -e "s|#PHP_DISABLE_FUNCTIONS#|${PHP_DISABLE_FUNCTIONS}|" "${CERT_CONF_FULL_PATH}"
     sed -i -e "s|#CERT_KEY_FILE#|/etc/nginx/conf.d/ssl/${CERT_HOSTNAME_CLEAN}.key|" "${CERT_CONF_FULL_PATH}"
     sed -i -e "s|#CERT_CRT_FILE#|/etc/nginx/conf.d/ssl/${CERT_HOSTNAME_CLEAN}.crt|" "${CERT_CONF_FULL_PATH}"
+
+    if [[ -e "/etc/nginx/conf.d/ssl/dhparam.pem" ]]; then
+      DHPARAM_CONFIG="ssl_dhparam /etc/nginx/conf.d/ssl/dhparam.pem;"
+    fi
+    sed -i -e "s|#DHPARAM#|${DHPARAM_CONFIG}}|" "${CERT_CONF_FULL_PATH}"
+
     rm -f "${CERT_CONF_FULL_PATH}-e"
 
     echo "Created ${CERT_CONF_FULL_PATH}"
