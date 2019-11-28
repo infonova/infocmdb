@@ -40,7 +40,6 @@ class Service_Ci_Delete extends Service_Abstract
         try {
             $ci_info        = [];
             $ci_info['old'] = $ciServiceGet->getContextInfoForCi($ciId);
-            $ci_info['new'] = [];
 
             // customization handling
             $triggerUtil = new Util_Trigger($this->logger);

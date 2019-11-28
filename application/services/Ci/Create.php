@@ -402,8 +402,13 @@ class Service_Ci_Create extends Service_Abstract
             $ciProjectDaoImpl = new Dao_CiProject();
             $ciProjectDaoImpl->insertCiProject($ciId, $projectId);
 
+            $ciServiceGet = new Service_Ci_Get($this->translator, $this->logger, parent::getThemeId());
+
+            $ci_info        = [];
+            $ci_info['new'] = $ciServiceGet->getContextInfoForCi($ciId);
+
             // handle customization
-            $triggerUtil->createCi($ciId, $userId);
+            $triggerUtil->createCi($ciId, $userId, $ci_info);
 
 
             //update query persistent
