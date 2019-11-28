@@ -1042,8 +1042,8 @@ Description:
 HEREDOC
 gencert() {
     check_env_exists
-
     source .env
+
     given_cert_hostname=${DOCKER_WEB_HOSTNAME:-}
 
     CERT_HOSTNAME=${1:-"${given_cert_hostname}"}
@@ -1440,7 +1440,7 @@ seed_database() {
 
 check_env_exists() {
     if [[ ! -e .env ]]; then
-      echo ".env not found, you must run ./run setup_env prior to setup_nginx"
+      echo ".env not found, you should run \"./run setup\" first"
       exit 1
     fi
 }
