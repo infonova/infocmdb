@@ -976,16 +976,20 @@ destroy() {
 
 desc "build" <<HEREDOC
 Usage:
-    ${_ME} build <service-name>
+    ${_ME} build [arguments...]
+
+Example:
+    ${_ME} build --parallel php web
 
 Description:
-    Rebuilds the service container.
-
-    service-name   Name of the service in docker-compose (optional, default: php)
+    Runs the docker-compose build command, with given arguments
 HEREDOC
 build() {
-    CONTAINER=${1:-php}
-    docker-compose build "${CONTAINER}"
+    if [ "$*" == "" ]; then
+        docker-compose build
+    else
+        docker-compose build "$*"
+    fi
 }
 
 desc "down" <<HEREDOC
