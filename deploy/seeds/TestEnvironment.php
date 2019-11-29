@@ -1528,6 +1528,17 @@ GOLANG;
         $data[] = $attribute;
         $attributeOrderNr++;
 
+        $attribute = $attributeTemplate;
+        $attribute['name']                  = 'site_identifier';
+        $attribute['description']           = 'Identifier';
+        $attribute['note']                  = 'Site Identifier with regex';
+        $attribute['attribute_type_id']     = 1;
+        $attribute['regex']                 = '/^sn.*?$/';
+        $attribute['order_number']          = $attributeOrderNr;
+
+        $data[] = $attribute;
+        $attributeOrderNr++;
+
 
 
         foreach($data as $row) {
