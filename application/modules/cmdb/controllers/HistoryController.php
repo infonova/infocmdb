@@ -179,6 +179,11 @@ class HistoryController extends AbstractAppAction
         ### OPTIONAL PARAMS ###
         $historyId = $this->_getParam('historyId');
 
+        $filteredHistoryIds = null;
+        if(strlen($historyId) > 0){
+            $filteredHistoryIds = explode(',', $historyId);
+        }
+
         ### FILTER PARAMS ###
         $relationChanged = $this->_getParam('relationChange');
         $projectChanged  = $this->_getParam('projectChanged');
@@ -223,7 +228,7 @@ class HistoryController extends AbstractAppAction
         $historyServiceGet = new Service_History_Get($this->translator, $this->logger, parent::getUserInformation()->getThemeId());
 
         ### GET HISTORY LIST ###
-        $getHistoryListResult = $historyServiceGet->getHistoryList($historyId, $ciId, $page, $fromDate, $toDate, parent::getUserInformation()->getRoot(), parent::getUserInformation()->getId(), null, $selectedAttributeOptions, $relationChanged, $ciTypeChanged, $projectChanged, $options, $filterSet, $onlyDateFilter);
+        $getHistoryListResult = $historyServiceGet->getHistoryList($historyId, $ciId, $page, $fromDate, $toDate, parent::getUserInformation()->getRoot(), parent::getUserInformation()->getId(), $filteredHistoryIds, $selectedAttributeOptions, $relationChanged, $ciTypeChanged, $projectChanged, $options, $filterSet, $onlyDateFilter);
         $historyList          = $getHistoryListResult['historyList'];
 
         ### getAttributes from History Service ###

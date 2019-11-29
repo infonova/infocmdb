@@ -52,7 +52,7 @@
             ?>
             <tr>
                 <td>
-                    <a class="link" href="<?php echo APPLICATION_URL ?>history/ci/historyId/<?php echo $item[Db_History::ID]; ?>/"><?php echo $item['ci_id']; ?></a>
+                    <a class="link" href="<?php echo APPLICATION_URL ?>/history/ci/ciid/<?php echo $item['ci_id']; ?>/historyId/<?php echo $item[Db_History::ID]; ?>"><?php echo $item['ci_id']; ?></a>
                 </td>
                 <td><?php echo $item[Db_History::DATESTAMP]; ?></td>
                 <td><?php echo $item['default_attribute'][Db_CiAttribute::VALUE_TEXT]; ?></td>

@@ -333,7 +333,7 @@ class Dao_History extends Dao_Abstract
             ->where('date(' . Db_History::TABLE_NAME . '.' . Db_History::DATESTAMP . ") <= ?", date('Y-m-d', strtotime($endDate)) . ' 00:00:00');
 
         if ($filteredHistoryIds) {
-            $select->where(Db_History::TABLE_NAME . '.' . Db_History::ID . ' IN ' . '(' . $filteredHistoryIds . ')');
+            $select->where(Db_History::TABLE_NAME . '.' . Db_History::ID . ' IN ' . '(' . implode(',', $filteredHistoryIds) . ')');
         }
         if (is_null($filterSet) || $onlyDateFilter) {
             $select->limitPage($page, $rowcount);
