@@ -2184,13 +2184,13 @@ table.list span.deleted {
 }
 
 /* New History List */
-#history_list {
+.history_list {
     border: 1px solid #999999;
     display: block;
     padding-bottom: 10px;
 }
 
-#history_list_header {
+.history_list_header {
     text-align: center;
     width: 100%;
     padding-top: 2px;
@@ -2200,17 +2200,17 @@ table.list span.deleted {
     padding: 0px;
 }
 
-#history_list_header span.left {
+.history_list_header span.left {
     padding-left: 10px;
     float: left;
 }
 
-#history_list_header span.right {
+.history_list_header span.right {
     float: right;
     padding-right: 10px;
 }
 
-#history_list_header span.center {
+.history_list_header span.center {
 }
 
 #history_list_content {
