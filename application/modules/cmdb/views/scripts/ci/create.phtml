@@ -321,11 +321,11 @@
         <div class="submit_table">
             <?php
             if ($this->isCiAttachAllowed && $this->currentCiTypeId) {
-                $this->form->cancel->removeDecorator('Label');
-                echo $this->form->cancel->setDecorators(array('ViewHelper'));
-
                 $this->form->create->removeDecorator('Label');
                 echo $this->form->create->setDecorators(array('ViewHelper'));
+
+                $this->form->cancel->removeDecorator('Label');
+                echo $this->form->cancel->setDecorators(array('ViewHelper'));
             }
             ?>
         </div>
