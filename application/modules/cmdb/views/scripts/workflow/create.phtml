@@ -297,7 +297,7 @@
         <form widgetid="create" id="create" enctype="multipart/form-data" method="post" action="<?php echo APPLICATION_URL; ?>/workflow/create" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
 
             <div id="fragment-1">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table>
                         <tbody>
                         <tr>
@@ -330,7 +330,7 @@
             </div>
 
             <div id="fragment-2">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table>
                     </table>
                 </fieldset>
@@ -411,9 +411,9 @@
 
         </form>
         <div class="buttonCon">
-            <input type="submit" class="standard_button" id="back" value="<?php echo $this->translate('back') ?>" onClick="javacript:back()">
-            <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:reset()">
             <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javacript:submit()">
+            <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:reset(); return false;">
+            <input type="submit" class="standard_button" id="back" value="<?php echo $this->translate('back') ?>" onClick="javacript:back()">
             <input type="submit" class="standard_button" id="next" value="<?php echo $this->translate('next') ?>" onClick="javacript:next()">
         </div>
     </fieldset>

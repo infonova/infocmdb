@@ -7,7 +7,7 @@
  * @param configFile the configuration Item where the config information are stored
  *
  */
-class Form_Attribute_IndividualText extends Zend_Form_SubForm
+class Form_Attribute_IndividualText extends Form_AbstractAppSubForm
 {
     public function __construct($translator, $options = null)
     {
@@ -70,6 +70,8 @@ class Form_Attribute_IndividualText extends Zend_Form_SubForm
         $regex->setLabel('regex');
         $regex->setAttrib('maxlength', 200);
         $regex->setAttrib('title', $translator->translate('attributeRegexTitle'));
+        $regex->addValidator($this->createValidateRegexValidator($attributeGroupConfig, 'attribute', 'regex'), true);
+
         $this->addElement($regex);
 
         // is numeric

@@ -601,4 +601,56 @@ class CiControllerCest extends AbstractApiV2Test
             'note'   => 'detective.png',
         ));
     }
+
+    public function updateAttributeWithRegex(ApiTester $I)
+    {
+        $ciId        = $this->createNewCi($I);
+        $attributeId = $I->grabColumnFromDatabase("attribute", "id", array("name" => "site_identifier"))[0];
+        $I->updateInDatabase('attribute',
+            array('regex' => '/^sn.*?$/'),
+            array('id' => $attributeId)
+        );
+
+        $data = array(
+            'ci' => array(
+                'attributes' => array(
+                    array(
+                        'mode'  => 'set',
+                        'name'  => 'site_identifier',
+                        'value' => 'sn1234',
+                    ),
+                ),
+            ),
+        );
+
+        $I->wantTo("Update a ci with an attribute regex and valid input");
+        $I->sendPUT('/apiV2/ci/id/' . $ciId, json_encode($data));
+        $I->seeResponseContainsJson(array(
+            'success' => true,
+            'message' => 'CI saved successfully',
+        ));
+
+        $I->wantTo("Update a ci with an attribute regex and invalid input");
+
+        $data['ci']['attributes'][0]['value'] = '123456';
+        $I->sendPUT('/apiV2/ci/id/' . $ciId, json_encode($data));
+        $I->seeResponseContainsJson(array(
+            'success' => false,
+            'message' => 'Validation failed',
+        ));
+
+
+        $I->wantTo("Update a ci with an attribute regex and invalid input");
+        $I->updateInDatabase('attribute',
+            array('regex' => '^sn.*?$'),
+            array('id' => $attributeId)
+        );
+
+        $data['ci']['attributes'][0]['value'] = 'sn123456';
+        $I->sendPUT('/apiV2/ci/id/' . $ciId, json_encode($data));
+        $I->seeResponseContainsJson(array(
+            'success' => false,
+            'message' => 'Internal Server Error',
+        ));
+    }
 }

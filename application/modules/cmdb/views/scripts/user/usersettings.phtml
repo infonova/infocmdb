@@ -77,7 +77,7 @@
     <fieldset class="create_form steps">
         <!-- # Fragment 1 - General User Info !-->
         <div id="fragment-1">
-            <fieldset class="lordVader">
+            <fieldset class="formContainer">
                 <form id="userSettings" enctype="<?php echo $this->form->getEnctype() ?>" method="<?php echo $this->form->getMethod() ?>">
                     <table>
                         <tbody>
@@ -96,8 +96,8 @@
                     <a class="bold" href="<?php echo APPLICATION_URL ?>/login/logout/allDevices/1"><?php echo $this->translate("logoutFromAllDevices") ?></a>
                     <br><br>
                     <div class="buttonCon">
-                        <button type="reset" class="cancel_button" onClick="cancel(); return false;"><?php echo $this->translate('abort') ?></button>
                         <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                        <button type="reset" class="cancel_button" onClick="cancel(); return false;"><?php echo $this->translate('abort') ?></button>
                     </div>
                 </form>
             </fieldset>
@@ -106,7 +106,7 @@
 
         <!-- # Fragment 2 - Two Factor Auth !-->
         <div id="fragment-2">
-            <fieldset class="lordVader">
+            <fieldset class="formContainer">
                 <table>
                     <tbody>
                     <tr>

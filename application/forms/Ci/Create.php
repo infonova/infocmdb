@@ -157,13 +157,13 @@ class Form_Ci_Create extends Form_AbstractAppForm
         $submit->setAttrib('class', 'standard_button');
 
 
-        $cancle = new Zend_Form_Element_Button('cancle');
-        $cancle->setLabel('cancle');
-        $cancle->setAttrib('class', 'cancel_button');
-        $cancle->setAttrib('onClick', "reset_create()");
+        $cancel = new Zend_Form_Element_Button('cancel');
+        $cancel->setLabel('cancel');
+        $cancel->setAttrib('class', 'cancel_button');
+        $cancel->setAttrib('onClick', "reset_create()");
 
 
-        $this->addElements(array($submit, $cancle));
+        $this->addElements(array($submit, $cancel));
 
         $this->setElementDecorators(array(
             'ViewHelper',

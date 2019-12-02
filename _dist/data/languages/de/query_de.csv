@@ -50,7 +50,7 @@ numberOfResults;		"Anzahl der Ergebnisse:"
 query;					"Query"
 save;					"Speichern"
 edit;					"Bearbeiten"
-cancle;					"Abbrechen"
+cancel;					"Abbrechen"
 noQueryFound;			"Keine Ergebnisse"
 
 

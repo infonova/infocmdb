@@ -92,7 +92,7 @@
         <form widgetid="create" id="create" enctype="multipart/form-data" method="post" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
 
             <div id="fragment-1">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table>
                         <?php echo $this->form->name ?>
                         <?php echo $this->form->description ?>
@@ -100,14 +100,14 @@
                     </table>
                 </fieldset>
                 <div class="buttonCon">
-                    <input type="button" class="cancel_button" value="<?php echo $this->translate('cancel') ?>">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javacript:submit()">
+                    <input type="button" class="cancel_button" value="<?php echo $this->translate('cancel') ?>">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javacript:next(); return false;">
                 </div>
             </div>
 
             <div id="fragment-2">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <div id="userFilter">
                         <?php echo $this->partial('templates/_user_filter.phtml',
                             array('dropdown_options_user' => $this->filterOptionsUser,
@@ -141,14 +141,14 @@
                     </div>
                 </fieldset>
                 <div class="buttonCon">
-                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back(); return false;">
-                    <input type="button" class="cancel_button" value="<?php echo $this->translate('cancel') ?>">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javacript:submit()">
+                    <input type="button" class="cancel_button" value="<?php echo $this->translate('cancel') ?>">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back(); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javacript:next(); return false;">
                 </div>
             </div>
             <div id="fragment-3">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <div id="permissionFilter">
                         <?php echo $this->partial('templates/_permission_filter.phtml',
                             array('dropdown_options_permission' => $this->filterOptionsPermission,
@@ -188,9 +188,9 @@
                     </div>
                 </fieldset>
                 <div class="buttonCon">
-                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back(); return false;">
-                    <input type="button" class="cancel_button" value="<?php echo $this->translate('cancel') ?>">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javacript:submit()">
+                    <input type="button" class="cancel_button" value="<?php echo $this->translate('cancel') ?>">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back(); return false;">
                 </div>
             </div>
 

@@ -88,9 +88,9 @@
             </form>
             <div class="break"></div>
             <div class="buttonCon">
-                <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:reset();">
-                <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back()">
                 <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:submit()">
+                <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:reset(); return false;">
+                <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back()">
             </div>
         </div>
 

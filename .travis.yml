@@ -87,7 +87,7 @@ jobs:
         - bash deploy/publish_docker_images.sh ${IMAGE_TAG} ${REGISTRY_TARGET}
 
     - name: "publish nightly image"
-      if: branch = develop AND type != pull_request AND TRAVIS_EVENT_TYPE = cron
+      if: branch = develop AND ( type = cron ||  type = api )
       env:
         - COMPOSE_ENV=prod
         - IMAGE_TAG=nightly

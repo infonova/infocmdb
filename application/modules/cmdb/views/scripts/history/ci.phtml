@@ -490,8 +490,8 @@ if ($config->ci->detail->buttons->button) {
 
 
             ?>
-            <div id="history_list">
-                <div id="history_list_header">
+            <div id="history_list_<?php $history[Db_History::ID]; ?>" class="history_list">
+                <div id="history_list_header_<?php $history[Db_History::ID]; ?>" class="history_list_header">
                     <span class="left"><?php echo $restore;
                         echo $history_view; ?><strong><?php echo $history[Db_History::DATESTAMP]; ?></strong></span>
                     <span class="center"><strong><?php echo $history[Db_History::NOTE] ?></strong></span>

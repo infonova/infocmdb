@@ -198,8 +198,8 @@ if ($config->ci->detail->buttons->button) {
             <div id="fragment-1" class="import_wizard_step">
                 <?php echo $this->form->modus; ?>
                 <div class="buttonCon">
-                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel();return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:next();return false;">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel();return false;">
                 </div>
             </div>
             <div id="fragment-2" class="import_wizard_step">
@@ -229,9 +229,9 @@ if ($config->ci->detail->buttons->button) {
                 <?php echo $this->translate('File') ?>: <?php echo $this->filename; ?><br>
                 <?php echo $this->translate('Filetyp') ?>: <b><?php echo $this->filetype; ?></b><br>
                 <div class="buttonCon">
+                    <input type="submit" class="standard_button start" value="<?php echo $this->translate('start') ?>" onClick="javascript:importFile(<?php echo $this->fileId; ?>,'<?php echo $this->modus; ?>');return false;">
                     <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel();return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:back();return false;">
-                    <input type="submit" class="standard_button start" value="<?php echo $this->translate('start') ?>" onClick="javascript:importFile(<?php echo $this->fileId; ?>,'<?php echo $this->modus; ?>');return false;">
                 </div>
             </div>
             <div id="fragment-4" class="import_wizard_step">

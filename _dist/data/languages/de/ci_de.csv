@@ -43,7 +43,7 @@ color;					"Einfärben"
 functions;				"Funktionen"
 
 
-cancle;					"Abbrechen"
+cancel;					"Abbrechen"
 inputClear;             "leeren"
 inputShowAllOptions;    "alle Optionen anzeigen"
 filterattribute;		"Attribut-Filter"

@@ -516,6 +516,13 @@ class MenuResources
             'apiV2/ci::put'    => array(301, 303),
             'apiV2/ci::delete' => array(301, 304),
 
+            'apiV2/citype::index'  => array(401),
+            // 'apiV2/citype::head'           => array(), // not implemented
+            'apiV2/citype::get'    => array(401),
+            'apiV2/citype::post'   => array(401, 402),
+            'apiV2/citype::put'    => array(401, 403),
+            'apiV2/citype::delete' => array(401, 404),
+
             'apiV2/index::index'     => array(), // swagger
             'apiV2/doc::index'       => array(), // json for swagger
 
