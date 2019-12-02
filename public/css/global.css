@@ -1057,7 +1057,7 @@ fieldset.relationContainer {
     margin-left: 0%;
 }
 
-fieldset.lordVader {
+fieldset.formContainer {
     background-color: #F8F8F8;
     width: 96%;
     margin-left: 0%;
@@ -1080,7 +1080,7 @@ div.partition {
     font-size: 50px;
 }
 
-.lordVader dd {
+.formContainer dd {
     border-bottom: 0px dotted #9d9c9c;
 }
 
@@ -1134,43 +1134,43 @@ input.ui-autocomplete-input {
     padding: 3px !important;
 }
 
-.lordVader div.standardField, .standardForm div.standardField {
+.formContainer div.standardField, .standardForm div.standardField {
     text-align: left;
     clear: both;
 }
 
-.lordVader div.standardField label.required, .standardForm div.standardField label.required {
+.formContainer div.standardField label.required, .standardForm div.standardField label.required {
     width: 65px;
     float: left;
 }
 
-.lordVader div.standardField label, .standardForm div.standardField label {
+.formContainer div.standardField label, .standardForm div.standardField label {
     width: 80px;
     float: left;
 }
 
-.lordVader div.standardField select, .standardForm div.standardField select {
+.formContainer div.standardField select, .standardForm div.standardField select {
     width: 150px;
     float: left;
     text-align: left;
 }
 
-.lordVader div.standardField input[type=checkbox], .standardForm div.standardField input[type=checkbox] {
+.formContainer div.standardField input[type=checkbox], .standardForm div.standardField input[type=checkbox] {
     width: 20px;
     margin-left: 20px;
 }
 
-.lordVader div.standardField input[type=radio], .standardForm div.standardField input[type=radio] {
+.formContainer div.standardField input[type=radio], .standardForm div.standardField input[type=radio] {
     width: 20px;
 }
 
-.lordVader div.standardField input, .standardForm div.standardField input {
+.formContainer div.standardField input, .standardForm div.standardField input {
     width: 150px;
     float: left;
     text-align: left;
 }
 
-.lordVader div.standardField textarea, .standardForm div.standardField textarea {
+.formContainer div.standardField textarea, .standardForm div.standardField textarea {
     width: 150px;
     height: 100px;
     float: left;
@@ -1183,11 +1183,11 @@ input.ui-autocomplete-input {
     padding-bottom: 5px;
 }
 
-.lordVader input {
+.formContainer input {
     position: relative;
 }
 
-.lordVader label {
+.formContainer label {
     text-align: left;
 }
 
