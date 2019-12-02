@@ -32,10 +32,10 @@ class FileimportController extends AbstractAppAction
         $serviceCreate = new Service_Fileimport_Create($this->translator, $this->logger, parent::getUserInformation()->getThemeId());
         $form          = $serviceCreate->getWizardFunctionForm();
         $uploadform    = $serviceCreate->getWizardUploadForm();
-        $cancle        = $this->_getParam('cancle');
+        $cancel        = $this->_getParam('cancel');
         $upload        = $this->_getParam('upload');
 
-        if (isset($cancle)) {
+        if (isset($cancel)) {
             $fileId = $this->_getParam('fileId');
             if (isset ($fileId)) {
                 $importService = new Dao_Import();

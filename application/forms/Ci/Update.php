@@ -148,16 +148,16 @@ class Form_Ci_Update extends Form_AbstractAppForm
         $submit->setAttrib('class', 'standard_button');
 
 
-        $cancel = new Zend_Form_Element_Submit('cancle');
-        $cancel->setLabel('cancle');
+        $cancel = new Zend_Form_Element_Submit('cancel');
+        $cancel->setLabel('cancel');
         $cancel->setAttrib('class', 'cancel_button');
         $cancel->setAttrib('name', 'cancel');
 
 
-        $cancel_top = new Zend_Form_Element_Button('cancle_top');
-        $cancel_top->setLabel('cancle');
+        $cancel_top = new Zend_Form_Element_Button('cancel_top');
+        $cancel_top->setLabel('cancel');
         $cancel_top->setAttrib('class', 'cancel_button');
-        $cancel_top->setAttrib('onClick', "$('#cancle').click()");
+        $cancel_top->setAttrib('onClick', "$('#cancel').click()");
 
         $submit_top = new Zend_Form_Element_Button('create_top');
         $submit_top->setLabel('create');
