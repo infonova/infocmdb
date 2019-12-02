@@ -233,9 +233,10 @@
 
         <?php
         $this->form->cancle_top->removeDecorator('Label');
+        echo $this->form->cancle_top->setDecorators(array('ViewHelper'));
+
         $this->form->create_top->removeDecorator('Label');
         echo $this->form->create_top->setDecorators(array('ViewHelper'));
-        echo $this->form->cancle_top->setDecorators(array('ViewHelper'));
         ?>
     </div>
 
@@ -289,10 +290,11 @@
         <input type="hidden" name="sessionID" value="<?php echo $this->sessionID; ?>" />
         <div class="submit_table">
             <?php
-            $this->form->create->removeDecorator('Label');
             $this->form->cancle->removeDecorator('Label');
-            echo $this->form->create->setDecorators(array('ViewHelper'));
             echo $this->form->cancle->setDecorators(array('ViewHelper'));
+
+            $this->form->create->removeDecorator('Label');
+            echo $this->form->create->setDecorators(array('ViewHelper'));
             ?>
         </div>
 

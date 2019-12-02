@@ -475,15 +475,17 @@ if ($errors) {
 
         </form>
         <div class="buttonCon">
+            <input type="submit"
+                   class="standard_button"
+                   value="<?php echo $this->translate('save') ?>"
+                   onClick="javacript:submit()">
+            <input type="submit"
+                   class="cancel_button"
+                   value="<?php echo $this->translate('abort') ?>"
+                   onClick="javascript:reset(); return false;">
             <input type="button" class="standard_button" id="back"
                    value="<?php echo $this->translate('back') ?>"
-                   onClick="javascript:back()"> <input type="submit"
-                                                       class="cancel_button"
-                                                       value="<?php echo $this->translate('abort') ?>"
-                                                       onClick="javascript:reset()"> <input type="submit"
-                                                                                            class="standard_button"
-                                                                                            value="<?php echo $this->translate('save') ?>"
-                                                                                            onClick="javacript:submit()">
+                   onClick="javascript:back()">
             <input type="button"
                    class="standard_button" id="next"
                    value="<?php echo $this->translate('next') ?>"

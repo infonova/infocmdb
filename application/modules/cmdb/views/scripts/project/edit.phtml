@@ -113,8 +113,8 @@ if ($config->ci->detail->buttons->button) {
 
         </form>
         <div class="buttonCon">
-            <input type="submit" class="cancel_button" value="<?php echo $this->translate('cancel') ?>" onClick="javascript:reset()">
             <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javacript:submit()">
+            <input type="submit" class="cancel_button" value="<?php echo $this->translate('cancel') ?>" onClick="javascript:reset(); return false;">
         </div>
     </fieldset>
 
