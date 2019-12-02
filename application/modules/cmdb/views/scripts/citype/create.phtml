@@ -165,7 +165,7 @@ if ($config->ci->detail->buttons->button) {
     <fieldset class="create_form steps">
         <form widgetid="create" id="create" enctype="multipart/form-data" method="post" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
             <div id="fragment-1">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table>
                         <?php
                         echo $this->form->parentCiType;
@@ -189,13 +189,13 @@ if ($config->ci->detail->buttons->button) {
                     </table>
                 </fieldset>
                 <div class="buttonCon">
-                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
                 </div>
             </div>
             <div id="fragment-2">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table>
                         <tbody>
                         <?php
@@ -223,14 +223,14 @@ if ($config->ci->detail->buttons->button) {
                     </table>
                 </fieldset>
                 <div class="buttonCon">
-                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-1'); return false;">
-                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-1'); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-3'); return false;">
                 </div>
             </div>
             <div id="fragment-3">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;table-layout:fixed;">
                         <tr>
                             <td>
@@ -325,14 +325,14 @@ if ($config->ci->detail->buttons->button) {
                     </table>
                 </fieldset>
                 <div class="buttonCon">
-                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
-                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-4'); return false;">
                 </div>
             </div>
             <div id="fragment-4">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <div style="position:absolute; right:20%;">
                         <label><?php echo $this->translate('scrollable') ?>
                             :&nbsp;&nbsp;&nbsp;</label><?php echo $this->form->scrollable ?>
@@ -364,14 +364,14 @@ if ($config->ci->detail->buttons->button) {
                     </table>
                 </fieldset>
                 <div class="buttonCon">
-                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-3'); return false;">
-                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-3'); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-5'); return false;">
                 </div>
             </div>
             <div id="fragment-5">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table style="padding-right:0px;width:70%">
                         <tr>
                             <th style="text-align:left;">
@@ -404,9 +404,9 @@ if ($config->ci->detail->buttons->button) {
                     </table>
                 </fieldset>
                 <div class="buttonCon">
-                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-4'); return false;">
-                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="submit" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="submit" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-4'); return false;">
                 </div>
             </div>
         </form>

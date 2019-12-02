@@ -78,7 +78,7 @@
     <fieldset class="create_form steps">
         <form widgetid="create" id="create" enctype="<?php echo $this->form->getEnctype() ?>" method="<?php echo $this->form->getMethod() ?>">
             <div id="fragment-1">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table>
                         <tbody>
                         <?php
@@ -104,13 +104,13 @@
                     <br><br>
                 </fieldset>
                 <div class="buttonCon">
-                    <input type="button" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="button" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="button" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
                 </div>
             </div>
             <div id="fragment-2">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table style="padding-right:0px;">
                         <tr>
                             <th width="25px">
@@ -157,15 +157,15 @@
                 </fieldset>
                 <br><br>
                 <div class="buttonCon">
-                    <input type="button" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-1'); return false;">
-                    <input type="button" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="button" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="button" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-1'); return false;">
                     <input type="button" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-3'); return false;">
                 </div>
 
             </div>
             <div id="fragment-3">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table style="padding-right:0px;">
                         <tr>
                             <th width="25px">
@@ -212,9 +212,9 @@
                 </fieldset>
                 <br><br>
                 <div class="buttonCon">
-                    <input type="button" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
-                    <input type="button" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <input type="button" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
+                    <input type="button" class="standard_button" value="<?php echo $this->translate('back') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
                 </div>
 
             </div>
@@ -222,7 +222,7 @@
         <?php if ($this->twoFactorAuth): ?>
             <!-- USER has twoFactorAuth enabled => provide admin option for disabling  -->
             <div id="fragment-4">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                             <span class="disableParagraph">
                                 <?php echo $this->translate('2FAenabled'); ?>
                                 <p>

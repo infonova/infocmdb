@@ -46,7 +46,7 @@ queryDescription;		"Description"
 queryName;				"Name"
 query;					"SQL Query"
 save;					"Save"
-cancle;					"Cancel"
+cancel;					"Cancel"
 
 
 xmlinfo; If the Query contains a coulumn "ci_id" in the resultset and the methode XML is used all CIs with their CI-Type hierachy are returned in XML Style e.g. select ci_id, max(case cia.attribute_id when (select id from attribute where name = 'ma_lastname') then cia.value_text else null end) as ma_lastname... 

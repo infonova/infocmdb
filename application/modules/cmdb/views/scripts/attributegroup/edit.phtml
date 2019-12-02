@@ -88,7 +88,7 @@
               dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
 
             <div id="fragment-1">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table>
                         <tbody>
                         <?php
@@ -131,13 +131,13 @@
 
         <div class="buttonCon">
             <input type="submit"
-                   class="cancel_button"
-                   value="<?php echo $this->translate('abort') ?>"
-                   onClick="javascript:reset()">
-            <input type="submit"
                    class="standard_button"
                    value="<?php echo $this->translate('save') ?>"
                    onClick="javacript:submit()">
+            <input type="submit"
+                   class="cancel_button"
+                   value="<?php echo $this->translate('abort') ?>"
+                   onClick="javascript:reset(); return false;">
         </div>
     </fieldset>
 </div>

@@ -53,7 +53,7 @@ if ($config->ci->detail->buttons->button) {
         <form widgetid="create" id="create" enctype="multipart/form-data" method="post" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
 
             <div id="fragment-1">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table>
                         <?php echo $this->form->name ?>
                         <?php echo $this->form->description ?>
@@ -65,7 +65,7 @@ if ($config->ci->detail->buttons->button) {
             </div>
 
             <div id="fragment-2">
-                <fieldset class="lordVader">
+                <fieldset class="formContainer">
                     <table style="padding-right:0px;">
                         <tr>
                             <th width="25px">
@@ -113,8 +113,8 @@ if ($config->ci->detail->buttons->button) {
 
         </form>
         <div class="buttonCon">
-            <input type="submit" class="cancel_button" value="<?php echo $this->translate('cancel') ?>" onClick="javascript:reset()">
             <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javacript:submit()">
+            <input type="submit" class="cancel_button" value="<?php echo $this->translate('cancel') ?>" onClick="javascript:reset(); return false;">
         </div>
     </fieldset>
 

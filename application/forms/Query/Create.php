@@ -61,13 +61,13 @@ class Form_Query_Create extends Form_AbstractAppForm
         $submit->setLabel('save');
         $submit->setAttrib('class', 'standard_button');
 
-        $cancle = new Zend_Form_Element_Submit('cancle');
-        $cancle->setLabel('cancle');
-        $cancle->setAttrib('onClick', 'return cancelForm();');
-        $cancle->setAttrib('class', 'standard_button');
+        $cancel = new Zend_Form_Element_Submit('cancel');
+        $cancel->setLabel('cancel');
+        $cancel->setAttrib('onClick', 'return cancelForm();');
+        $cancel->setAttrib('class', 'standard_button');
 
 
-        $this->addElements(array($name, $note, $query, $submit, $cancle));
+        $this->addElements(array($name, $note, $query, $submit, $cancel));
 
         $this->setElementDecorators(array(
             'ViewHelper',
@@ -80,7 +80,7 @@ class Form_Query_Create extends Form_AbstractAppForm
 
         $this->getElement('submit')->removeDecorator('Label');
         $this->getElement('submit')->removeDecorator('data');
-        $this->getElement('cancle')->removeDecorator('Label');
-        $this->getElement('cancle')->removeDecorator('data');
+        $this->getElement('cancel')->removeDecorator('Label');
+        $this->getElement('cancel')->removeDecorator('data');
     }
 }

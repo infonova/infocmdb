@@ -38,7 +38,7 @@ time;					"Time:"
 currentDocument;		"Current Document"
 color;					"color"
 
-cancle;					"Cancel"
+cancel;					"Cancel"
 inputClear;             "Clear Input"
 inputShowAllOptions;    "Show all options"
 ciCreateCiAttachNotAllowed;	"The selected CI Type does not allow assigned CIs!"
