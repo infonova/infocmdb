@@ -75,7 +75,7 @@ ciId;					"CI Id"
 update;					"Update: "
 projectOrProjects;		"Project(s): "
 created;				"Created"
-user;					"User: "
+user;					"User"
 relations;				"Relations:"
 relationAdd;			"Add Relations"
 

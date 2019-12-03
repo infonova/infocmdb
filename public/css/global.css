@@ -1538,8 +1538,8 @@ tr.headline_tr {
 #headline .search-box {
     height: 22px;
     position: absolute;
-    width: 230px;
-    right: 0;
+    width: 250px;
+    right: 20px;
     margin: -9px 0 0 0;
     border: 0;
 }

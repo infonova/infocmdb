@@ -232,11 +232,11 @@
         <?php } ?>
 
         <?php
-        $this->form->cancel_top->removeDecorator('Label');
-        echo $this->form->cancel_top->setDecorators(array('ViewHelper'));
-
         $this->form->create_top->removeDecorator('Label');
         echo $this->form->create_top->setDecorators(array('ViewHelper'));
+
+        $this->form->cancel_top->removeDecorator('Label');
+        echo $this->form->cancel_top->setDecorators(array('ViewHelper'));
         ?>
     </div>
 
@@ -290,11 +290,11 @@
         <input type="hidden" name="sessionID" value="<?php echo $this->sessionID; ?>" />
         <div class="submit_table">
             <?php
-            $this->form->cancel->removeDecorator('Label');
-            echo $this->form->cancel->setDecorators(array('ViewHelper'));
-
             $this->form->create->removeDecorator('Label');
             echo $this->form->create->setDecorators(array('ViewHelper'));
+
+            $this->form->cancel->removeDecorator('Label');
+            echo $this->form->cancel->setDecorators(array('ViewHelper'));
             ?>
         </div>
 
