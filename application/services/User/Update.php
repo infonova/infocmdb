@@ -170,7 +170,7 @@ class Service_User_Update extends Service_Abstract
         if (is_dir($dir)) {
             if ($dh = opendir($dir)) {
                 while (($file = readdir($dh)) !== false) {
-                    if (is_file($dir .'/'. $file) && substr($file, 0, 1) != '.') {
+                    if (is_file($dir .'/'. $file) && substr($file, 0, 1) != '.' && substr($file, 0, 1) != '_') {
                         $fileType = explode(".", $file);
                         if ($fileType[1] == "phtml") {
                             $layouts[$fileType[0]] = $fileType[0];
