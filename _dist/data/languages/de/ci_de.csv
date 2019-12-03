@@ -85,7 +85,7 @@ update;					"Update: "
 projectOrProjects;		"Projekt(e): "
 created;				"Erstellt"
 changed;				"Geändert"
-user;					"Benutzer: "
+user;					"Benutzer"
 relations;				"Relationen"
 relationAdd;			"Relationen hinzufügen"
 
