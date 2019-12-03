@@ -13,4 +13,3 @@ fileuploadTypeNotEnabled;			"Das Hochladen dieses Typs ist nicht erlaubt"
 fileuploadRenamingFailed;			"Umbenennen der Datei fehlgeschlagen"
 
 globalFileNotFound;					"Datei wurde nicht gefunden!"
-projectDeleteFailed;				"Es sind diesem Projekt CI's zugeordnet!"
