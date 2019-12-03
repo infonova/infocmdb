@@ -11,8 +11,10 @@
 
     $(document).ready(function () {
         // submit when hitting enter key
-        $(document).keypress(function (e) {
-            if (e.which == 13) {
+        $(document).on('keydown', function(event) {
+            if (event.key === "Escape") {
+                location.reload();
+            } else if (event.key === "Enter") {
                 var refreshSuccess = refreshLock(lock_id, refresh_rate, LOCK_LANG_STRINGS);
                 invalidLocks[lock_id] = lock_id;
 
