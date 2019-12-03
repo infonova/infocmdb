@@ -1539,7 +1539,7 @@ tr.headline_tr {
     height: 22px;
     position: absolute;
     width: 250px;
-    right: 0;
+    right: 20px;
     margin: -9px 0 0 0;
     border: 0;
 }
