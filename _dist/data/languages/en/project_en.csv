@@ -34,3 +34,4 @@ projectActivateSuccess;	"Project activated successfully!"
 projectUpdateSuccess; "Project edited successfully!"
 
 noProjectFound;   "No entries found!"
+projectDeleteFailed;				"Es sind diesem Projekt CI's zugeordnet!"
