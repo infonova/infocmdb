@@ -98,7 +98,7 @@
         </a>
     </div>
 
-    <div class="search-box" style="position:fixed;">
+    <div class="search-box" style="position:fixed; white-space: nowrap;">
         <form
                 name="<?php echo $this->escape($this->headerSearchForm->getName()) ?>"
                 action="<?php echo $this->escape($this->headerSearchForm->getAction()) ?>"
@@ -106,6 +106,8 @@
 
             <?php
             echo $this->headerSearchForm->searchstring->setDecorators(array('Errors', array('ViewHelper', array('tag' => '<div>'))));
+            ?>
+            <?php
             echo $this->headerSearchForm->searchShortButton;
             ?>
         </form>
