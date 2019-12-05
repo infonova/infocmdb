@@ -36,15 +36,17 @@ class Dao_Menu extends Dao_Abstract
         }
 
         if ($orderBy) {
-            if ($direction)
+            if ($direction) {
                 $orderBy = $orderBy . ' ' . $direction;
+            }
 
             $select->order($orderBy);
         } else {
-            $orderBy = Db_Menu::TABLE_NAME . '.' . Db_Menu::ID . ' desc';
+            $orderBy = array(Db_Menu::ORDER_NUMBER, Db_Menu::NAME);
 
             $select->order($orderBy);
         }
+
         return $select;
     }
 
@@ -56,7 +58,7 @@ class Dao_Menu extends Dao_Abstract
         $select->setIntegrityCheck(false)
             ->joinLeft(Db_ThemeMenu::TABLE_NAME, Db_ThemeMenu::TABLE_NAME . '.' . Db_ThemeMenu::MENU_ID . ' = ' . Db_Menu::TABLE_NAME . '.' . Db_Menu::ID)
             ->where(Db_ThemeMenu::TABLE_NAME . '.' . Db_ThemeMenu::THEME_ID . ' = ?', $themeId)
-            ->order(Db_Menu::ORDER_NUMBER);
+            ->order(array(Db_Menu::ORDER_NUMBER, Db_Menu::NAME));
 
         return $table->fetchAll($select);
     }
@@ -71,7 +73,7 @@ class Dao_Menu extends Dao_Abstract
                 Db_ThemeMenu::TABLE_NAME . '.' . Db_ThemeMenu::MENU_ID . ' = ' . Db_Menu::TABLE_NAME . '.' . Db_Menu::ID)
             ->where(Db_ThemeMenu::TABLE_NAME . '.' . Db_ThemeMenu::THEME_ID . ' = ?', $themeId)
             ->where(Db_Menu::IS_ACTIVE . ' =?', '1')
-            ->order(Db_Menu::ORDER_NUMBER);
+            ->order(array(Db_Menu::ORDER_NUMBER, Db_Menu::NAME));
 
         return $table->fetchAll($select);
     }
