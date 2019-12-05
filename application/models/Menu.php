@@ -58,7 +58,7 @@ class Dao_Menu extends Dao_Abstract
             ->where(Db_ThemeMenu::TABLE_NAME . '.' . Db_ThemeMenu::THEME_ID . ' = ?', $themeId)
             ->order(Db_Menu::ORDER_NUMBER);
 
-        return $table->fetchAll($select);;
+        return $table->fetchAll($select);
     }
 
     public function getActiveMenusByThemeId($themeId)
@@ -73,7 +73,7 @@ class Dao_Menu extends Dao_Abstract
             ->where(Db_Menu::IS_ACTIVE . ' =?', '1')
             ->order(Db_Menu::ORDER_NUMBER);
 
-        return $table->fetchAll($select);;
+        return $table->fetchAll($select);
     }
 
     public function getStartpageMenusByThemeId($themeId)
