@@ -7,19 +7,19 @@ class Announcement extends AbstractPhinxMigration
     /**
      * Menue_id must be 41 because of hardcoded array index in MenuResources
      * @see MenuResources::getResourceIds()
-     * 
+     *
      * admin theme_id is '1'
      */
     public function up()
     {
         $this->down();
-        
+
         /*
          * Add Announcements to Menu
          */
         $this->execute("
                     INSERT INTO `" . $this->dbName . "` . `menu` (id, name, description, note, function, order_number, is_active)
-                    VALUES('41', 'announcement', 'Ankündigungen', null, 'announcement/index', '140', '1')
+                    VALUES('41', 'announcement', 'Ankündigungen', null, 'announcement/index', '44', '1')
         ");
 
         $this->execute("
@@ -35,7 +35,7 @@ class Announcement extends AbstractPhinxMigration
                     INSERT INTO `" . $this->dbName . "` . `theme_menu` (theme_id, menue_id)
                     VALUES ('1', '41')
         ");
-        
+
         /*
          * Announcement
          * History
@@ -122,7 +122,7 @@ class Announcement extends AbstractPhinxMigration
                       PRIMARY KEY (`id`)
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='announcement message definition' AUTO_INCREMENT=1
                 ");
-        
+
         /*
          * create view for Announcement
          */
@@ -180,8 +180,8 @@ class Announcement extends AbstractPhinxMigration
                     REFERENCES `announcement` (`id`)
                     ON DELETE CASCADE
                     ");
-        
-        
+
+
         /*
          * Trigger for Announcement
          */
@@ -203,7 +203,7 @@ class Announcement extends AbstractPhinxMigration
             SET NEW.valid_from = NOW();
             END;
             ");
-        
+
         $this->execute("
             CREATE DEFINER = 'root'@localhost TRIGGER `" . $this->dbName . "_tables`.announcement_delete BEFORE DELETE ON announcement
             FOR EACH ROW BEGIN
@@ -270,7 +270,7 @@ class Announcement extends AbstractPhinxMigration
         $this->execute("DROP TRIGGER IF EXISTS `" . $this->dbName . "_tables`.`announcement_message_insert`");
         $this->execute("DROP TRIGGER IF EXISTS `" . $this->dbName . "_tables`.`announcement_message_update`");
         $this->execute("DROP TRIGGER IF EXISTS `" . $this->dbName . "_tables`.`announcement_message_delete`");
-        
+
         $this->execute("DROP TABLE IF EXISTS " . $this->dbName . "_tables.announcement");
         $this->execute("DROP TABLE IF EXISTS " . $this->dbName . "_history.announcement");
         $this->execute("DROP VIEW IF EXISTS " . $this->dbName . ".announcement");

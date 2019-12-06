@@ -25,8 +25,6 @@ class Service_Menu_Get extends Service_Abstract
     {
         $this->logger->log("Service_Menu: getMenuList('$page', '$orderBy', '$direction', '$filter') has been invoked", Zend_Log::DEBUG);
 
-        if (!$orderBy)
-            $orderBy = Db_Menu::ORDER_NUMBER;
         $config            = new Zend_Config_Ini(APPLICATION_PATH . '/configs/pagination/menu.ini', APPLICATION_ENV);
         $itemsCountPerPage = $config->pagination->itemsCountPerPage;
         $itemsPerPage      = $config->pagination->itemsPerPage;
@@ -40,7 +38,6 @@ class Service_Menu_Get extends Service_Abstract
 
         $menuDaoImpl = new Dao_Menu();
 
-        $select = array();
         $select = $menuDaoImpl->getMenuPagination($orderBy, $direction, $filter);
 
         unset($menuDaoImpl);
