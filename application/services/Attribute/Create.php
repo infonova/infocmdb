@@ -192,7 +192,7 @@ class Service_Attribute_Create extends Service_Abstract
                             !strpos($id, 'ordernumber')) {
                             $attributeDaoImpl->insertAttributeDefaultValuesById(
                                 substr($id, strlen('option_')), $attributeId,
-                                $mapping[$id . 'ordernumber']);
+                                intval($mapping[$id . 'ordernumber']));
                         }
                     }
 
@@ -203,7 +203,7 @@ class Service_Attribute_Create extends Service_Abstract
                                 !strpos($id, 'ordernumber')) {
                                 $attributeDaoImpl->insertAttributeDefaultValuesById(
                                     $value, $attributeId,
-                                    $options[$id . 'ordernumber']);
+                                    intval($options[$id . 'ordernumber']));
                             }
                         }
                     }

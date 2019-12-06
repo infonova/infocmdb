@@ -1397,17 +1397,14 @@ class Dao_Attribute extends Dao_Abstract
         return $table->update($data, $where);
     }
 
-    public function insertAttributeDefaultValuesById(string $attributeDefaultValue, int $attributeId, int $orderNumber = null)
+    public function insertAttributeDefaultValuesById(string $attributeDefaultValue, int $attributeId, int $orderNumber = 0)
     {
         $table = new Db_AttributeDefaultValues();
 
         $data                                          = array();
         $data[Db_AttributeDefaultValues::VALUE]        = $attributeDefaultValue;
         $data[Db_AttributeDefaultValues::ATTRIBUTE_ID] = $attributeId;
-
-        if (isset($orderNumber))
-            $data[Db_AttributeDefaultValues::ORDER_NUMBER] = $orderNumber;
-
+        $data[Db_AttributeDefaultValues::ORDER_NUMBER] = $orderNumber;
         $data[Db_AttributeDefaultValues::IS_ACTIVE] = '1';
 
         return $table->insert($data);
