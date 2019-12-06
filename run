@@ -1100,7 +1100,7 @@ gencert() {
     sed -i -e "s|#CERT_KEY_FILE#|/etc/nginx/conf.d/ssl/${CERT_HOSTNAME_CLEAN}.key|" "${CERT_CONF_FULL_PATH}"
     sed -i -e "s|#CERT_CRT_FILE#|/etc/nginx/conf.d/ssl/${CERT_HOSTNAME_CLEAN}.crt|" "${CERT_CONF_FULL_PATH}"
 
-    if [[ -e "/etc/nginx/conf.d/ssl/dhparam.pem" ]]; then
+    if [[ -e "docker/nginx/custom-conf/conf.d/ssl/dhparam.pem" ]]; then
       DHPARAM_CONFIG="ssl_dhparam /etc/nginx/conf.d/ssl/dhparam.pem;"
     else
       echo "[WARNING] No DHPARAM File found."
