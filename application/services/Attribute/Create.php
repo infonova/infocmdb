@@ -43,7 +43,7 @@ class Service_Attribute_Create extends Service_Abstract
             $attribute[Db_Attribute::IS_UNIQUE]          = ($formData['text']['uniqueConstraint']) ? '1' : '0';
             $attribute[Db_Attribute::IS_NUMERIC]         = ($formData['text']['isNumeric']) ? '1' : '0';
             $attribute[Db_Attribute::IS_BOLD]            = ($formData['highlightAttribute']) ? '1' : '0';
-            $attribute[Db_Attribute::IS_EVENT]           = ($formData['script']['isevent']) ? '1' : '0';
+            $attribute[Db_Attribute::IS_EVENT]           = ($formData['isevent']) ? '1' : '0';
             $attribute[Db_Attribute::IS_UNIQUE_CHECK]    = ($formData['text']['uniqueCheck']) ? '1' : '0';
             $attribute[Db_Attribute::WORKFLOW_ID]        = $formData['workflow_id'];
 
@@ -105,7 +105,8 @@ class Service_Attribute_Create extends Service_Abstract
                 }
             }
 
-            $attribute[Db_Attribute::IS_EVENT] = ($formData['query']['isLight']) ? '1' : '0';
+            if ($formData['query']['isLight'] !== null)
+                $attribute[Db_Attribute::IS_EVENT] = $formData['query']['isLight'];
 
             $attribute[Db_Attribute::IS_ACTIVE] = '1';
             $attribute[Db_Attribute::USER_ID]   = $userId;
