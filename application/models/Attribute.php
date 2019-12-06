@@ -869,9 +869,10 @@ class Dao_Attribute extends Dao_Abstract
 
         if ($userId > 0) {
             $select->join(Db_AttributeRole::TABLE_NAME, Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::ATTRIBUTE_ID . ' = ' . Db_Attribute::TABLE_NAME . '.' . Db_Attribute::ID, array())
-                ->join(Db_UserRole::TABLE_NAME, Db_UserRole::TABLE_NAME . '.' . Db_UserRole::ROLE_ID . ' = ' . Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::ROLE_ID, array(Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::PERMISSION_WRITE))
+                ->join(Db_UserRole::TABLE_NAME, Db_UserRole::TABLE_NAME . '.' . Db_UserRole::ROLE_ID . ' = ' . Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::ROLE_ID, array(Db_AttributeRole::PERMISSION_WRITE => 'MAX(' . Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::PERMISSION_WRITE . ')'))
                 ->where(Db_UserRole::TABLE_NAME . '.' . Db_UserRole::USER_ID . '=?', $userId)
-                ->where(Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::PERMISSION_READ . ' =?', '1');
+                ->where(Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::PERMISSION_READ . ' =?', '1')
+                ->group(Db_Attribute::TABLE_NAME . '.' . Db_Attribute::ID);
         }
 
         $rowset = $this->db->fetchAll($select);
