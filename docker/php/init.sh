@@ -83,11 +83,11 @@ echo "initialize with /_dist files"
 change_www_data_userid=${APP_WWW_DATA_USERID:-}
 
 if [[ "${change_www_data_userid}" != "" ]]; then
-  echo "Changing /app permissions to belong to user id ${change_www_data_userid}"
+  echo "Changing /app and /bootstrap permissions to belong to user id ${change_www_data_userid}"
   usermod -u ${change_www_data_userid} www-data
   groupmod -g ${change_www_data_userid} www-data
 
-  chown -R www-data:www-data /app
+  chown -R www-data:www-data /app /bootstrap
 fi
 
 chown -c www-data:www-data /app /app/data
@@ -262,8 +262,10 @@ ln -s /app/application/configs/workflows/infocmdb.yml /app/library/perl/etc/info
 # TODO: Remove once installations have been migrated to docker
 mkdir -p /opt/infoCMDB && ln -sf /app/library/perl /opt/infoCMDB/
 
-chmod -R 0775 /bootstrap /usr/local/etc/php
-chown -R root. /bootstrap /usr/local/etc/php
+if [[ "${change_www_data_userid}" == "" ]]; then
+    chmod -R 0775 /bootstrap /usr/local/etc/php
+    chown -R root. /bootstrap /usr/local/etc/php
+fi
 
 CLEAN_ENV="DB_HOST DB_PORT DB_USERNAME DB_PASSWORD DB_ROOT_USERNAME DB_ROOT_PASSWORD DB_PASSWORD_FILE DB_ROOT_PASSWORD_FILE DB_DATABASE"
 for v in ${CLEAN_ENV}; do
