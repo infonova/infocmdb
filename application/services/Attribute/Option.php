@@ -35,7 +35,7 @@ class Service_Attribute_Option extends Service_Abstract
     {
         try {
             $attributeDaoImpl = new Dao_Attribute();
-            $attributeDaoImpl->insertAttributeDefaultValuesById($values['optionName'], $attributeId, $values['ordernumber']);
+            return $attributeDaoImpl->insertAttributeDefaultValuesById($values['optionName'], $attributeId, intval($values['ordernumber']));
         } catch (Exception $e) {
             throw new Exception_Attribute_InsertOptionFailed($e);
         }
