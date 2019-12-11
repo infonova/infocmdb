@@ -725,6 +725,7 @@ class Service_Ci_Get extends Service_Abstract
         $tickets      = $ciTypeDao->getCiTickets($ciId);
         $ticketurl    = $configTicket->url;
 
+        Util_AttributeType_Type_Executeable::insertMissingAttributes($ciId, null);
 
         // alle attribute selektieren, in gruppen nach ci typ
         $attributeDao  = new Dao_Attribute();

@@ -83,11 +83,11 @@ echo "initialize with /_dist files"
 change_www_data_userid=${APP_WWW_DATA_USERID:-}
 
 if [[ "${change_www_data_userid}" != "" ]]; then
-  echo "Changing /app permissions to belong to user id ${change_www_data_userid}"
-  usermod -u ${change_www_data_userid} www-data
-  groupmod -g ${change_www_data_userid} www-data
+  echo "Changing /app and /bootstrap permissions to belong to user id ${change_www_data_userid}"
+  usermod  -u "${change_www_data_userid}" www-data
+  groupmod -g "${change_www_data_userid}" www-data
 
-  chown -R www-data:www-data /app
+  chown -R www-data:www-data /app /bootstrap
 fi
 
 chown -c www-data:www-data /app /app/data
@@ -145,8 +145,8 @@ echo "
 [client]
 host=${DB_HOST}
 port=${DB_PORT}
-user="root"
-password="${DB_ROOT_PASSWORD}"
+user=\"root\"
+password=\"${DB_ROOT_PASSWORD}\"
 " > /root/.my.cnf
 
 if [[ -f /app/deploy/phinx.yml ]]; then
@@ -183,7 +183,7 @@ fi
 if ! [[ "${APPLICATION_ENV}" == "production" ]]; then
 
     if [[ "${DB_SEEDING_ENABLED}" -eq "1"  ]]; then
-        DB_IS_SEEDED=`mysql -s -N -e "select count(*)>1 from ${DB_DATABASE}.theme"`
+        DB_IS_SEEDED=$(mysql -s -N -e "select count(*)>1 from ${DB_DATABASE}.theme")
         if [[ "$DB_IS_SEEDED" == "0" ]]; then
             echo "[NOTICE] DB-Seeding started!"
             cd /app/deploy && sh ./phinx seed:run
@@ -219,16 +219,16 @@ modules:
 fi
 
 
-API_USER_ID=$(mysql ${DB_DATABASE} -se "select ifnull(max(id), 0) from user where username = 'ext_webservice';" | cut -f1)
+API_USER_ID=$(mysql "${DB_DATABASE}" -se "select ifnull(max(id), 0) from user where username = 'ext_webservice';" | cut -f1)
 if [[ "${API_USER_ID}" == "0" ]] ; then
     API_PASSWORD=$(date +%s | sha256sum | base64 | head -c 40 ; echo)
 
     echo "creating the 'webservice' theme"
-    API_THEME=$(mysql ${DB_DATABASE} -se "INSERT INTO theme (name, description, note, menu_id)
+    API_THEME=$(mysql "${DB_DATABASE}" -se "INSERT INTO theme (name, description, note, menu_id)
       VALUES ('webservice', 'Webservices', 'Used for API Accounts only needing access to the api(v2)', 0); select last_insert_id()" | cut -f1)
 
     # add CQL permissions
-    mysql ${DB_DATABASE} -se "INSERT INTO theme_privilege (resource_id, theme_id)
+    mysql "${DB_DATABASE}" -se "INSERT INTO theme_privilege (resource_id, theme_id)
     VALUES
     (101, ${API_THEME}),
 (102, ${API_THEME}), (103, ${API_THEME}), (104, ${API_THEME}), (105, ${API_THEME}), (106, ${API_THEME}), (107, ${API_THEME}),
@@ -242,7 +242,7 @@ if [[ "${API_USER_ID}" == "0" ]] ; then
 (3002, ${API_THEME}),(3003, ${API_THEME}),(3004, ${API_THEME}),(4101, ${API_THEME}),(4102, ${API_THEME}),(4104, ${API_THEME})"
 
     echo "creating the 'webservice' default user"
-    mysql ${DB_DATABASE} -se "INSERT INTO user \
+    mysql "${DB_DATABASE}" -se "INSERT INTO user \
     (username, password, email, firstname, lastname, description, note, theme_id) \
     VALUES('ext_webservice', '${API_PASSWORD}', 'infoCMDB-team@bearingpoint.com', 'External', 'Webservice', 'Webservice User', '', ${API_THEME})"
 
@@ -257,17 +257,19 @@ CmdbBasePath: /app/
 " > /app/application/configs/workflows/infocmdb.yml
 fi
 
-ln -s /app/application/configs/workflows/infocmdb.yml /app/library/perl/etc/infocmdb.yml &>/dev/null || true
+ln -sT /app/application/configs/workflows/infocmdb.yml /app/library/perl/etc/infocmdb.yml &>/dev/null || true
 # This is to support legacy installation
 # TODO: Remove once installations have been migrated to docker
-mkdir -p /opt/infoCMDB && ln -sf /app/library/perl /opt/infoCMDB/
+ln -sT /app/library/perl /opt/infoCMDB || true
 
-chmod -R 0775 /bootstrap /usr/local/etc/php
-chown -R root. /bootstrap /usr/local/etc/php
+if [[ "${change_www_data_userid}" == "" ]]; then
+    chmod -R 0775 /bootstrap /usr/local/etc/php
+    chown -R root. /bootstrap /usr/local/etc/php
+fi
 
 CLEAN_ENV="DB_HOST DB_PORT DB_USERNAME DB_PASSWORD DB_ROOT_USERNAME DB_ROOT_PASSWORD DB_PASSWORD_FILE DB_ROOT_PASSWORD_FILE DB_DATABASE"
 for v in ${CLEAN_ENV}; do
-    unset ${v}
+    unset "${v}"
 done
 
 echo "Starting PHP-FPM:"

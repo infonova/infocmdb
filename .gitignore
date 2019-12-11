@@ -22,6 +22,7 @@ library/perl
 /docker/nginx/custom-conf/conf.d/ssl/*.crt
 /docker/nginx/custom-conf/conf.d/ssl/*.key
 /docker/nginx/custom-conf/conf.d/*.conf
+/docker/php/custom-conf/**
 backup/**
 *data*.tar.gz
 *dump*.sql.gz

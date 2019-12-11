@@ -869,9 +869,10 @@ class Dao_Attribute extends Dao_Abstract
 
         if ($userId > 0) {
             $select->join(Db_AttributeRole::TABLE_NAME, Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::ATTRIBUTE_ID . ' = ' . Db_Attribute::TABLE_NAME . '.' . Db_Attribute::ID, array())
-                ->join(Db_UserRole::TABLE_NAME, Db_UserRole::TABLE_NAME . '.' . Db_UserRole::ROLE_ID . ' = ' . Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::ROLE_ID, array(Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::PERMISSION_WRITE))
+                ->join(Db_UserRole::TABLE_NAME, Db_UserRole::TABLE_NAME . '.' . Db_UserRole::ROLE_ID . ' = ' . Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::ROLE_ID, array(Db_AttributeRole::PERMISSION_WRITE => 'MAX(' . Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::PERMISSION_WRITE . ')'))
                 ->where(Db_UserRole::TABLE_NAME . '.' . Db_UserRole::USER_ID . '=?', $userId)
-                ->where(Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::PERMISSION_READ . ' =?', '1');
+                ->where(Db_AttributeRole::TABLE_NAME . '.' . Db_AttributeRole::PERMISSION_READ . ' =?', '1')
+                ->group(Db_Attribute::TABLE_NAME . '.' . Db_Attribute::ID);
         }
 
         $rowset = $this->db->fetchAll($select);
@@ -1396,17 +1397,14 @@ class Dao_Attribute extends Dao_Abstract
         return $table->update($data, $where);
     }
 
-    public function insertAttributeDefaultValuesById(string $attributeDefaultValue, int $attributeId, int $orderNumber = null)
+    public function insertAttributeDefaultValuesById(string $attributeDefaultValue, int $attributeId, int $orderNumber = 0)
     {
         $table = new Db_AttributeDefaultValues();
 
         $data                                          = array();
         $data[Db_AttributeDefaultValues::VALUE]        = $attributeDefaultValue;
         $data[Db_AttributeDefaultValues::ATTRIBUTE_ID] = $attributeId;
-
-        if (isset($orderNumber))
-            $data[Db_AttributeDefaultValues::ORDER_NUMBER] = $orderNumber;
-
+        $data[Db_AttributeDefaultValues::ORDER_NUMBER] = $orderNumber;
         $data[Db_AttributeDefaultValues::IS_ACTIVE] = '1';
 
         return $table->insert($data);
