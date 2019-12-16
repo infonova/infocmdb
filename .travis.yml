@@ -68,10 +68,12 @@ jobs:
     - env: COMPOSE_ENV_PHP_VERSION=7
   include:
     - stage: "testing"
-      name: "PHP 7.3 Version"
+      name: "PHP 7.1 Version"
       env: COMPOSE_ENV_PHP_VERSION=7.1
-    - name: "PHP 7.1 Version"
+
+    - name: "PHP 7.3 Version"
       env: COMPOSE_ENV_PHP_VERSION=7.3
+
     - name: "PHP 7 latest Version versus develop"
       env: COMPOSE_ENV_PHP_VERSION=7
       if: branch = develop AND TRAVIS_EVENT_TYPE = cron
