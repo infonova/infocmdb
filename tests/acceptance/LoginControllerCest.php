@@ -49,14 +49,13 @@ class LoginControllerCest
         $I->see('Einstellungen');
 
         // test sidebar navigation
-        $I->click('//span[contains(@class, \'fancytree-title\') and contains(string(), \'Durchsuchen\')]');
-        $I->waitForPageLoad();
-        $I->see('Sites');
+        $I->click('//span[contains(@class, \'fancytree-title\') and text()=\'Durchsuchen\']');
+        $I->waitForElement('//span[contains(@class, \'fancytree-title\')]/a[contains(string(), \'Sites\')]');
+        $I->See('Sites');
         $I->dontSee('Austria');
         $I->click('//span[contains(@class, \'fancytree-title\')]/a[contains(string(), \'Employee\')]/../../span[contains(@class, \'fancytree-expander\')]');
-        $I->see('Austria');
+        $I->waitForElement('//span[contains(@class, \'fancytree-title\')]/a[contains(string(), \'Austria\')]');
         $I->click('Sites');
-        $I->waitForPageLoad();
         $I->see('Austria');
     }
 
