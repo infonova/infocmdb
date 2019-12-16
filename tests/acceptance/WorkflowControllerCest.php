@@ -239,8 +239,6 @@ JSON;
 
         $I->amOnPage('/workflow/instance/instanceId/' . $instanceId);
 
-        $I->cantSeeJsError();
-
         $contextContainer = $I->findElement(WebDriverBy::id("context_container"));
         $contextContainerHtml = $contextContainer->getAttribute('innerHTML');
         $I->assertNotEmpty($contextContainerHtml, "context should be displayed");
