@@ -6,7 +6,7 @@ class MenuResources
     {
         $menu_resources     = array();
         $menu_resources[0]  = array(601, 1001, 1003, 4101, 4104); // abstract
-        $menu_resources[1]  = array(2001, 2002, 2003, 2004); // create ci (incl relation)
+        $menu_resources[1]  = array(303, 311, 2001, 2002, 2003, 2004); // create ci (incl relation)
         $menu_resources[2]  = array(2301); // search
         $menu_resources[3]  = array(2601, 2602, 2603, 2604, 2605, 2606); // user
         $menu_resources[4]  = array(1901, 1902, 1903, 1904, 1905); //project
@@ -17,7 +17,7 @@ class MenuResources
         $menu_resources[9]  = array(2801, 2802, 2803, 2804, 2001, 2002, 2003, 2004); // relation type + relation edit
         $menu_resources[10] = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111); // attributes
         $menu_resources[18] = array(); // history
-        $menu_resources[19] = array(301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 2001); // browse ci
+        $menu_resources[19] = array(301, 302, 304, 305, 306, 307, 308, 309, 310, 2001); // browse ci
         $menu_resources[20] = array(201, 202, 203); // auto discovery
         $menu_resources[21] = array(2401, 2402, 2403); // searchlist
         $menu_resources[22] = array(2901, 2902, 2904); //favourites

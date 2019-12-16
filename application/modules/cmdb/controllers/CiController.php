@@ -687,16 +687,14 @@ class CiController extends AbstractAppAction
         if ($ciType) {
 
             //get ci_type_id
-            if (is_numeric($ciType)) {
-                $typeId = $ciType;
-                $type   = $ciTypeDaoImpl->getCiType($typeId);//resolve ci_type to be sure that it's a valid ci_type_id
-            } else { //ci_type as name given
-                $type   = $ciTypeDaoImpl->getCiTypeByName($ciType);
+            $typeId = $ciType;
+            if (!is_numeric($typeId)) {
+                $type   = $ciTypeDaoImpl->getCiTypeByName($typeId);
                 $typeId = $type[Db_CiType::ID];
             }
 
             //throw error if typeId can't be resolved
-            if (!$typeId) {
+            if (!is_numeric($typeId)) {
                 $notification          = array();
                 $notification['error'] = $this->translator->translate('ciCreateLinkFailed');
                 $this->_helper->FlashMessenger($notification);
@@ -1441,6 +1439,8 @@ class CiController extends AbstractAppAction
         $ciTypeDaoImpl = new Dao_CiType();
         $select        = $ciTypeDaoImpl->getRootCiTypeRowset();
 
+        $ciServiceUpdate = new Service_Ci_Update($this->translator, $this->logger, parent::getUserInformation()->getThemeId());
+
         // put the root ci data in useable content
         $rootCiTypes       = array();
         $rootCiTypes[null] = ' ';
@@ -1516,15 +1516,9 @@ class CiController extends AbstractAppAction
 
                 //don't do anything, if nothing changes
                 if ($ci[Db_Ci::CI_TYPE_ID] != $ciType) {
-                    $historyDao = new Dao_History();
-                    $historyId  = $historyDao->createHistory(parent::getUserInformation()->getId(), Enum_History::CI_TYPE_CHANGE);
-
-                    $ciDaoImpl = new Dao_Ci();
-                    $ciDaoImpl->updateCiType($ciId, $ciType, $historyId);
-
-                    $triggerUtil = new Util_Trigger($this->logger);
-                    $triggerUtil->handleCiTypeChange($ciId, parent::getUserInformation()->getId(), 'update');//will be triggered from and to ci_type
+                    $ciServiceUpdate->updateCiType(parent::getUserInformation()->getId(), $ciId, $ciType);
                 }
+
                 $notification['success'] = $this->translator->translate('ciTypeChangeSuccess');
                 //for recreating the navigation tree
                 parent::clearNavigationCache();
