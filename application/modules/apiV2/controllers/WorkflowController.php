@@ -2,20 +2,20 @@
 
 require_once 'V2BaseController.php';
 
-class ApiV2_QueryController extends V2BaseController
+class ApiV2_WorkflowController extends V2BaseController
 {
 
     /**
-     * @OA\Put(
-     *     path="/query",
-     *     tags={"query"},
-     *     summary="Execute query",
-     *     description="Execute a predefined query managed in admin backend",
+     * @OA\Post(
+     *     path="/workflow",
+     *     tags={"workflow"},
+     *     summary="Execute workflow",
+     *     description="Execute a workflow",
      *     operationId="execute",
      *     @OA\Parameter(
      *         name="execute",
      *         in="query",
-     *         description="name of query",
+     *         description="name of workflow",
      *         required=true,
      *         @OA\Schema(
      *             type="string",
@@ -30,16 +30,28 @@ class ApiV2_QueryController extends V2BaseController
      *                  required={},
      *                  @OA\Property(
      *                      type="object",
-     *                      property="query",
-     *                      description="query data",
+     *                      property="workflow",
+     *                      description="workflow name",
      *                      @OA\Property(
      *                          type="object",
      *                          property="params",
-     *                          description="query parameters (key=name of parameter, value=value of parameter)",
-     *                          example={ "ci_id": 12, "argv1": 1234 },
+     *                          description="workflow params",
+     *                              example={ "ci_id": 12 }
+     *                      ),
+     *                      @OA\Property(
+     *                          type="string",
+     *                          property="startAt",
+     *                          description="start at ISO8601",
+ *                              example="2004-02-12T15:19:21+00:00"
+     *                      ),
+     *                      @OA\Property(
+     *                          type="bool",
+     *                          property="forceAsync",
+     *                          description="start the workflow always async. _false_ can't override async workflows to be run sync",
+ *                              example=false
      *                      ),
      *                  ),
-     *              )
+     *              ),
      *          ),
      *     ),
      *     @OA\Response(
@@ -54,7 +66,7 @@ class ApiV2_QueryController extends V2BaseController
      *                  @OA\Property(
      *                      property="message",
      *                      type="string",
-     *                      example="Query executed successfully",
+     *                      example="Workflow executed successfully",
      *                  ),
      *                  @OA\Property(
      *                      property="data",
@@ -66,7 +78,7 @@ class ApiV2_QueryController extends V2BaseController
      *     ),
      *     @OA\Response(
      *          response=400,
-     *          description="Query failed",
+     *          description="Workflow failed",
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema(
@@ -81,7 +93,7 @@ class ApiV2_QueryController extends V2BaseController
      *                  @OA\Property(
      *                      property="message",
      *                      type="string",
-     *                      example="Executing query failed",
+     *                      example="Executing workflow failed",
      *                  ),
      *                  @OA\Property(
      *                      property="data",
@@ -93,7 +105,7 @@ class ApiV2_QueryController extends V2BaseController
      *     ),
      *     @OA\Response(
      *          response=404,
-     *          description="Query with name does not exist",
+     *          description="Workflow with name does not exist",
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema(
@@ -135,7 +147,7 @@ class ApiV2_QueryController extends V2BaseController
      *                  @OA\Property(
      *                      property="message",
      *                      type="string",
-     *                      example="Query is inactive",
+     *                      example="Workflow is inactive",
      *                  ),
      *                  @OA\Property(
      *                      property="data",
@@ -154,51 +166,45 @@ class ApiV2_QueryController extends V2BaseController
      * @throws Zend_Controller_Response_Exception
      * @throws Zend_Log_Exception
      */
-    public function putAction()
+    public function postAction()
     {
-        $queryName = $this->getParam('execute', '');
-        $queryData = $this->getJsonParam('query', array());
+        $workflowName = $this->getParam('execute', '');
+        $workflowData = $this->getJsonParam('workflow', array());
         $userId    = $this->getUserInformation()->getId();
 
-        $queryDao = new Dao_Query();
-        $queryRow = $queryDao->getQueryByName($queryName);
+        $workflowDao = new Dao_Workflow();
+        $workflowRow = $workflowDao->getWorkflowByName($workflowName);
 
-        if ($queryRow === false) {
+        if ($workflowRow === false) {
             $this->outputHttpStatusNotFound();
             return;
         }
 
-        if ($queryRow[Db_StoredQuery::IS_ACTIVE] == 0) {
-            $this->outputValidationError('Query is inactive');
+        if ($workflowRow[Db_Workflow::IS_ACTIVE] == 0) {
+            $this->outputValidationError('Workflow is inactive');
             return;
         }
 
-        $query = $queryRow[Db_StoredQuery::QUERY];
-        $query = trim($query);
-
-        if ($query === '') {
-            $this->outputValidationError('Query is empty');
-            return;
-        }
-
-        $this->logger->logf("apiV2 -  executing Webservice: %s", Zend_Log::INFO, $queryName);
-        $this->logger->logf("apiV2 - Query: %s", Zend_Log::DEBUG, $query);
+        $this->logger->logf("apiV2 -  executing Workflow: %s", Zend_Log::INFO, $workflowName);
 
         try {
-            $params            = (array)$queryData->params;
+            $params            = (array)$workflowData->params;
+            $startAt           = (string)$workflowData->startAt;
+            $forceAsync        = (bool)$workflowData->forceAsync;
             $params['user_id'] = $userId;
 
-            $result = $queryDao->executeQuery($query, $params, $generatedQuery);
+            $workflowService = new Util_Workflow($this->logger);
+            $result = $workflowService->startWorkflow($workflowRow[Db_Workflow::ID], $userId, $params, false, $forceAsync, $startAt);
+            unset($result['log']);
+
+            //TODO Return also the instance id
         } catch (Exception $e) {
-            $this->logger->logf('Webservice failed: %s', Zend_Log::CRIT, $queryName);
-            $this->logger->logf('Query: %s', Zend_Log::CRIT, $generatedQuery);
+            $this->logger->logf('Workflow failed: %s', Zend_Log::CRIT, $workflowName);
             $this->logger->log($e, Zend_Log::CRIT);
-            $queryDao->updateQueryStatus($queryRow[Db_StoredQuery::ID], 0);
-            $this->outputError('Executing query failed', null, 400);
+            $this->outputError('Executing workflow failed', null, 400);
             return;
         }
 
-        $queryDao->updateQueryStatus($queryRow[Db_StoredQuery::ID], 1);
-        $this->outputContent('Query executed successfully', $result);
+        $this->outputContent('Workflow executed successfully', $result);
     }
 }
