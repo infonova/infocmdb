@@ -50,6 +50,7 @@ class LoginControllerCest
 
         // test sidebar navigation
         $I->click('//span[contains(@class, \'fancytree-title\') and contains(string(), \'Durchsuchen\')]');
+        $I->waitForPageLoad();
         $I->see('Sites');
         $I->dontSee('Austria');
         $I->click('//span[contains(@class, \'fancytree-title\')]/a[contains(string(), \'Employee\')]/../../span[contains(@class, \'fancytree-expander\')]');
