@@ -1232,6 +1232,20 @@ class Service_Ci_Get extends Service_Abstract
         $ciList_filter = array();
         $remove        = array();
 
+        // This is intended to prevent infinite loops in-case a ciType
+        // doesn't have the filter attribute (session) anymore.
+        $seenAttributes = array();
+        foreach($attributeList as $attribute) {
+            array_push($seenAttributes, $attribute[Db_Attribute::NAME]);
+        }
+
+        foreach($filter as $f => $fv) {
+            if(!in_array($f, $seenAttributes)) {
+                unset($filter[$f]);
+            }
+        }
+        //
+
         foreach ($ciList as $list) {
 
             $found = false;
@@ -1239,10 +1253,10 @@ class Service_Ci_Get extends Service_Abstract
             foreach ($attributeList as $attribute) {
 
                 if ($filter[$attribute[Db_Attribute::NAME]] != null && (in_array($attribute[Db_Attribute::NAME], $remove) || count($remove) == 0)) {
-                    if (substr_count(mb_strtolower($list[$attribute[Db_Attribute::NAME]], 'UTF-8'), mb_strtolower($filter[$attribute[Db_Attribute::NAME]], 'UTF-8'))) {
+                    if (substr_count(mb_strtolower(html_entity_decode($list[$attribute[Db_Attribute::NAME]]), 'UTF-8'), mb_strtolower(html_entity_decode($filter[$attribute[Db_Attribute::NAME]]), 'UTF-8'))) {
                         $found = true;
                         array_push($remove, $attribute[Db_Attribute::NAME]);
-
+                        break;
                     }
                 }
             }
