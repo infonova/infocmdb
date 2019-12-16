@@ -78,8 +78,8 @@
                 <td>
                     <span id="context_data" style="display:none;"><?php
                     $workflow_context = $this->instance[Db_WorkflowCase::CONTEXT];
-                    $workflow_context = preg_replace('#//[\w-]+?(?:\:[\w-]+)?@#','//<credentials>@', stripslashes($workflow_context));
-                    echo htmlspecialchars(addcslashes($workflow_context,"\\"));
+                    $workflow_context = preg_replace('#//[\w-]+?(?:\:[\w-]+)?@#','//<credentials>@', $workflow_context);
+                    echo htmlspecialchars($workflow_context);
                     // uses https://github.com/abodelot/jquery.json-viewer
                     ?></span>
                     <div id="context_container" style="padding-left: 1em;"></div>
