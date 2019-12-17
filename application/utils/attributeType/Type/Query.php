@@ -86,6 +86,7 @@ class Util_AttributeType_Type_Query extends Util_AttributeType_Type_Abstract
         return array(
             'value'      => " ",
             'allowEmpty' => self::ALLOW_EMPTY,
+            'skipUpdate' => true,
         );
     }
 
