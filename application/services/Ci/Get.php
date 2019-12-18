@@ -1355,7 +1355,6 @@ class Service_Ci_Get extends Service_Abstract
 
         $projectDaoImpl   = new Dao_Project();
         $attributeDaoImpl = new Dao_Attribute();
-        $relDaoImpl       = new Dao_CiRelation();
         $ciTypeDaoImpl    = new Dao_CiType();
         $relService       = new Service_Relation_Get($this->translator, $this->logger, parent::getThemeId());
 
@@ -1366,18 +1365,22 @@ class Service_Ci_Get extends Service_Abstract
         $ci_type    = $ciTypeDaoImpl->getCiType($ci['ci_type_id']);
         $rel        = $relService->getMinimalRelationInfo($ciId);
 
-        $output = array();
-//        $old_info = $rel;
+        $output              = array();
         $output['relations'] = $rel;
-        $output['projects']  = array();
+        $output['projects']  = new stdClass();
         foreach ($projects as $project) {
-            $output['projects'][$project['id']] = $project;
+            $projectId                      = $project['id'];
+            $output['projects']->$projectId = $project;
         }
         $output['ciTypeId']   = $ci_type['id'];
         $output['ciTypeName'] = $ci_type['name'];
-        $output['attributes'] = array();
+        $output['attributes'] = new stdClass();
         foreach ($attributes as $attribute) {
-            $output['attributes'][$attribute['id']][$attribute['ciAttributeId']] = $attribute;
+            $attributeId                        = $attribute['id'];
+            $ciAttributeId                      = $attribute['ciAttributeId'];
+            $attributeObject                    = new stdClass();
+            $attributeObject->$ciAttributeId    = $attribute;
+            $output['attributes']->$attributeId = $attributeObject;
         }
         return $output;
     }

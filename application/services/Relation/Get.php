@@ -206,25 +206,27 @@ class Service_Relation_Get extends Service_Abstract
 
     /**
      * @param $ciID
+     * @return stdClass relations object ready for json formatting
      */
     public function getMinimalRelationInfo($ciID)
     {
         $relDaoImpl = new Dao_CiRelation();
 
-        $info = array();
+        $relationsObject = new stdClass();
 
         $relations  = $relDaoImpl->getRelationsForCi($ciID);
         $directions = $relDaoImpl->getDirections(Db_CiRelationDirection::ID);
         foreach ($relations as $relation) {
-            $identifier                              = $relation['id'];
-            $info[$identifier]                       = array();
-            $info[$identifier]['ci_id_1']            = $relation['ci_id_1'];
-            $info[$identifier]['ci_id_2']            = $relation['ci_id_2'];
-            $info[$identifier]['relation_type_id']   = $relation['ci_relation_type_id'];
-            $info[$identifier]['direction']          = $relation['direction'];
-            $info[$identifier]['relation_type_name'] = $relDaoImpl->getRelationTypeById($relation['ci_relation_type_id'])['name'];
-            $info[$identifier]['direction_name']     = $directions[$relation['direction']]['name'];
+            $relationId                         = $relation['id'];
+            $relationObject                     = new stdClass();
+            $relationObject->ci_id_1            = $relation['ci_id_1'];
+            $relationObject->ci_id_2            = $relation['ci_id_2'];
+            $relationObject->relation_type_id   = $relation['ci_relation_type_id'];
+            $relationObject->direction          = $relation['direction'];
+            $relationObject->relation_type_name = $relDaoImpl->getRelationTypeById($relation['ci_relation_type_id'])['name'];
+            $relationObject->direction_name     = $directions[$relation['direction']]['name'];
+            $relationsObject->$relationId       = $relationObject;
         }
-        return $info;
+        return $relationsObject;
     }
 }
