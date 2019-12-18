@@ -173,8 +173,8 @@ class Service_Relation_Get extends Service_Abstract
         if (is_dir($dir)) {
             if ($dh = opendir($dir)) {
                 while (($file = readdir($dh)) !== false) {
-                    if (is_file($dir .'/'. $file) && substr($file, 0, 1) != '.') {
-                        $mod = date("Y-m-d, H:i:s", filemtime($dir .'/'. $file));
+                    if (is_file($dir . '/' . $file) && substr($file, 0, 1) != '.') {
+                        $mod = date("Y-m-d, H:i:s", filemtime($dir . '/' . $file));
                         array_push($fileList,
                             array(
                                 'name' => $file,
