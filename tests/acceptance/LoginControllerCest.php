@@ -39,7 +39,12 @@ class LoginControllerCest
         $I->fillField(LoginControllerCest::inputPassword, $password);
         $I->click(LoginControllerCest::inputLoginSubmit);
 
+        // setup menu to only show top navigation points
         $I->waitForElement('#fancytree');
+        $I->executeJS('$.ui.fancytree.getTree().visit(function(node) {
+            node.setExpanded(false);
+        });');
+        $I->executeJS('$.ui.fancytree.getTree().getRootNode().getFirstChild().setExpanded(true);');
 
         // test if all navigation points are visible
         $I->see('Administration');
@@ -49,11 +54,11 @@ class LoginControllerCest
         $I->see('Einstellungen');
 
         // test sidebar navigation
-        $I->click('//span[contains(@class, \'fancytree-title\') and text()=\'Durchsuchen\']');
+        $I->executeJS('$.ui.fancytree.getNode($("span.fancytree-title:contains(\'Durchsuchen\')")).setExpanded(true);');
         $I->waitForElement('//span[contains(@class, \'fancytree-title\')]/a[contains(string(), \'Sites\')]');
         $I->See('Sites');
         $I->dontSee('Austria');
-        $I->click('//span[contains(@class, \'fancytree-title\')]/a[contains(string(), \'Employee\')]/../../span[contains(@class, \'fancytree-expander\')]');
+        $I->executeJS('$.ui.fancytree.getNode($("span.fancytree-title:contains(\'Employee\')")).setExpanded(true);');
         $I->waitForElement('//span[contains(@class, \'fancytree-title\')]/a[contains(string(), \'Austria\')]');
         $I->click('Sites');
         $I->see('Austria');
