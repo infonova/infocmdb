@@ -39,8 +39,12 @@ class LoginControllerCest
         $I->fillField(LoginControllerCest::inputPassword, $password);
         $I->click(LoginControllerCest::inputLoginSubmit);
 
+        // setup menu to only show top navigation points
         $I->waitForElement('#fancytree');
-        $I->seeInSource('<div id="fancytree" class="fancytree-connectors"><ul class="ui-fancytree fancytree-container fancytree-plain" tabindex="0" role="tree" aria-multiselectable="true"><li role="treeitem" aria-expanded="true" aria-selected="false" class="fancytree-lastsib"><span class="fancytree-node fancytree-expanded fancytree-folder fancytree-has-children fancytree-lastsib root fancytree-exp-el fancytree-ico-ef"><span role="button" class="fancytree-expander hide"></span><span role="presentation" class="fancytree-custom-icon rootSprite"></span></span><ul role="group"><li role="treeitem" aria-expanded="false" aria-selected="false"><span class="fancytree-node fancytree-folder fancytree-has-children menu-action fancytree-exp-c fancytree-ico-cf"><span role="button" class="fancytree-expander"></span><span role="presentation" class="fancytree-custom-icon spriteCi"></span><span class="fancytree-title" title="browse_ci">Durchsuchen</span></span></li><li role="treeitem" aria-selected="false"><span class="fancytree-node fancytree-folder favourites fancytree-exp-n fancytree-ico-cf"><span class="fancytree-expander"></span><span role="presentation" class="fancytree-custom-icon spriteNavUser"></span><span class="fancytree-title" title="Lesezeichen"><a href="http://cmdb.test.local/favourites/index" title="Lesezeichen">Lesezeichen</a></span></span></li><li role="treeitem" aria-selected="false"><span class="fancytree-node fancytree-folder search fancytree-exp-n fancytree-ico-cf"><span class="fancytree-expander"></span><span role="presentation" class="fancytree-custom-icon spriteNavUser"></span><span class="fancytree-title" title="Suche"><a href="http://cmdb.test.local/search/index" title="Suche">Suche</a></span></span></li><li role="treeitem" aria-selected="false"><span class="fancytree-node fancytree-folder createCi fancytree-exp-n fancytree-ico-cf"><span class="fancytree-expander"></span><span role="presentation" class="fancytree-custom-icon spriteNavUser"></span><span class="fancytree-title" title="CI anlegen"><a href="http://cmdb.test.local/ci/create" title="CI anlegen">CI anlegen</a></span></span></li><li role="treeitem" aria-selected="false"><span class="fancytree-node fancytree-folder history fancytree-exp-n fancytree-ico-cf"><span class="fancytree-expander"></span><span role="presentation" class="fancytree-custom-icon spriteNavUser"></span><span class="fancytree-title" title="History"><a href="http://cmdb.test.local/history/index" title="History">History</a></span></span></li><li role="treeitem" aria-expanded="false" aria-selected="false"><span class="fancytree-node fancytree-folder fancytree-has-children closed2 menu-action fancytree-exp-c fancytree-ico-cf"><span role="button" class="fancytree-expander"></span><span role="presentation" class="fancytree-custom-icon spriteNavUser"></span><span class="fancytree-title" title="Administration">Administration</span></span></li><li role="treeitem" aria-expanded="false" aria-selected="false"><span class="fancytree-node fancytree-folder fancytree-has-children closed1 menu-action fancytree-exp-c fancytree-ico-cf"><span role="button" class="fancytree-expander"></span><span role="presentation" class="fancytree-custom-icon spriteNavUser"></span><span class="fancytree-title" title="Benutzerverwaltung">Benutzerverwaltung</span></span></li><li role="treeitem" aria-expanded="false" aria-selected="false"><span class="fancytree-node fancytree-folder fancytree-has-children closed3 menu-action fancytree-exp-c fancytree-ico-cf"><span role="button" class="fancytree-expander"></span><span role="presentation" class="fancytree-custom-icon spriteNavUser"></span><span class="fancytree-title" title="Automatisierung">Automatisierung</span></span></li><li role="treeitem" aria-expanded="false" aria-selected="false"><span class="fancytree-node fancytree-folder fancytree-has-children closed4 menu-action fancytree-exp-c fancytree-ico-cf"><span role="button" class="fancytree-expander"></span><span role="presentation" class="fancytree-custom-icon spriteNavUser"></span><span class="fancytree-title" title="Schnittstellen">Schnittstellen</span></span></li><li role="treeitem" aria-expanded="false" aria-selected="false" class="fancytree-lastsib"><span class="fancytree-node fancytree-folder fancytree-has-children fancytree-lastsib closed5 menu-action fancytree-exp-cl fancytree-ico-cf"><span role="button" class="fancytree-expander"></span><span role="presentation" class="fancytree-custom-icon spriteNavUser"></span><span class="fancytree-title" title="Einstellungen">Einstellungen</span></span></li></ul></li></ul></div>');
+        $I->executeJS('$.ui.fancytree.getTree().visit(function(node) {
+            node.setExpanded(false);
+        });');
+        $I->executeJS('$.ui.fancytree.getTree().getRootNode().getFirstChild().setExpanded(true);');
 
         // test if all navigation points are visible
         $I->see('Administration');
@@ -50,13 +54,13 @@ class LoginControllerCest
         $I->see('Einstellungen');
 
         // test sidebar navigation
-        $I->click('//span[contains(@class, \'fancytree-title\') and contains(string(), \'Durchsuchen\')]');
-        $I->see('Sites');
+        $I->executeJS('$.ui.fancytree.getNode($("span.fancytree-title:contains(\'Durchsuchen\')")).setExpanded(true);');
+        $I->waitForElement('//span[contains(@class, \'fancytree-title\')]/a[contains(string(), \'Sites\')]');
+        $I->See('Sites');
         $I->dontSee('Austria');
-        $I->click('//span[contains(@class, \'fancytree-title\')]/a[contains(string(), \'Employee\')]/../../span[contains(@class, \'fancytree-expander\')]');
-        $I->see('Austria');
+        $I->executeJS('$.ui.fancytree.getNode($("span.fancytree-title:contains(\'Employee\')")).setExpanded(true);');
+        $I->waitForElement('//span[contains(@class, \'fancytree-title\')]/a[contains(string(), \'Austria\')]');
         $I->click('Sites');
-        $I->waitForPageLoad();
         $I->see('Austria');
     }
 
