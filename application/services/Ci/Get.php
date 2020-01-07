@@ -793,7 +793,12 @@ class Service_Ci_Get extends Service_Abstract
 
         // remove duplicate values
         $newAttributeList = array();
+        $attributeIds = array();
         foreach ($attributeList as $attribute) {
+            if (in_array($attribute["id"], $attributeIds) && $attribute["attributeTypeName"] == "query") {
+                continue;
+            }
+            $attributeIds[] = $attribute["id"];
             $newAttributeList[$attribute['ciAttributeId']] = $attribute;
         }
 
