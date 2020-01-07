@@ -106,6 +106,7 @@ class Dao_Workflow extends Dao_Abstract
             Db_Workflow::TRIGGER_PROJECT,
             Db_Workflow::TRIGGER_RELATION,
             Db_Workflow::TRIGGER_TIME,
+            Db_Workflow::TRIGGER_FILEIMPORT,
             Db_Workflow::EXECUTION_TIME,
             Db_Workflow::STATUS,
             Db_Workflow::STATUS_MESSAGE,
@@ -117,6 +118,7 @@ class Dao_Workflow extends Dao_Abstract
 						WHEN trigger_attribute = "1" THEN "activity"
 						WHEN trigger_project = "1" THEN "activity"
 						WHEN trigger_relation = "1" THEN "activity"
+						WHEN trigger_fileimport = "1" THEN "activity"
 						WHEN trigger_time = "1" THEN "time"
 						ELSE "manual" END'
             ),
