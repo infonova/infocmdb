@@ -1906,7 +1906,7 @@ GOLANG;
                 'row' => array(
                     'name'                      => 'site',
                     'description'               => 'Sites',
-                    'note'                      => '',
+                    'note'                      => 'Sites',
                     'parent_ci_type_id'         => 0,
                     'order_number'              => '19',
                     'default_project_id'        => $this->store['project']['springfield'],
@@ -1940,7 +1940,7 @@ GOLANG;
                 'row' => array(
                     'name'                      => 'emp',
                     'description'               => 'Employee',
-                    'note'                      => '',
+                    'note'                      => 'Employee',
                     'parent_ci_type_id'         => 0,
                     'order_number'              => '20',
                     'default_project_id'        => $this->store['project']['springfield'],

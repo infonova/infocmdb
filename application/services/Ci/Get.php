@@ -793,7 +793,12 @@ class Service_Ci_Get extends Service_Abstract
 
         // remove duplicate values
         $newAttributeList = array();
+        $attributeIds = array();
         foreach ($attributeList as $attribute) {
+            if (in_array($attribute["id"], $attributeIds) && $attribute["attributeTypeName"] == "query") {
+                continue;
+            }
+            $attributeIds[] = $attribute["id"];
             $newAttributeList[$attribute['ciAttributeId']] = $attribute;
         }
 
@@ -1232,6 +1237,20 @@ class Service_Ci_Get extends Service_Abstract
         $ciList_filter = array();
         $remove        = array();
 
+        // This is intended to prevent infinite loops in-case a ciType
+        // doesn't have the filter attribute (session) anymore.
+        $seenAttributes = array();
+        foreach($attributeList as $attribute) {
+            array_push($seenAttributes, $attribute[Db_Attribute::NAME]);
+        }
+
+        foreach($filter as $f => $fv) {
+            if(!in_array($f, $seenAttributes)) {
+                unset($filter[$f]);
+            }
+        }
+        //
+
         foreach ($ciList as $list) {
 
             $found = false;
@@ -1239,10 +1258,10 @@ class Service_Ci_Get extends Service_Abstract
             foreach ($attributeList as $attribute) {
 
                 if ($filter[$attribute[Db_Attribute::NAME]] != null && (in_array($attribute[Db_Attribute::NAME], $remove) || count($remove) == 0)) {
-                    if (substr_count(mb_strtolower($list[$attribute[Db_Attribute::NAME]], 'UTF-8'), mb_strtolower($filter[$attribute[Db_Attribute::NAME]], 'UTF-8'))) {
+                    if (substr_count(mb_strtolower(html_entity_decode($list[$attribute[Db_Attribute::NAME]]), 'UTF-8'), mb_strtolower(html_entity_decode($filter[$attribute[Db_Attribute::NAME]]), 'UTF-8'))) {
                         $found = true;
                         array_push($remove, $attribute[Db_Attribute::NAME]);
-
+                        break;
                     }
                 }
             }
@@ -1356,7 +1375,6 @@ class Service_Ci_Get extends Service_Abstract
 
         $projectDaoImpl   = new Dao_Project();
         $attributeDaoImpl = new Dao_Attribute();
-        $relDaoImpl       = new Dao_CiRelation();
         $ciTypeDaoImpl    = new Dao_CiType();
         $relService       = new Service_Relation_Get($this->translator, $this->logger, parent::getThemeId());
 
@@ -1367,18 +1385,22 @@ class Service_Ci_Get extends Service_Abstract
         $ci_type    = $ciTypeDaoImpl->getCiType($ci['ci_type_id']);
         $rel        = $relService->getMinimalRelationInfo($ciId);
 
-        $output = array();
-//        $old_info = $rel;
+        $output              = array();
         $output['relations'] = $rel;
-        $output['projects']  = array();
+        $output['projects']  = new stdClass();
         foreach ($projects as $project) {
-            $output['projects'][$project['id']] = $project;
+            $projectId                      = $project['id'];
+            $output['projects']->$projectId = $project;
         }
         $output['ciTypeId']   = $ci_type['id'];
         $output['ciTypeName'] = $ci_type['name'];
-        $output['attributes'] = array();
+        $output['attributes'] = new stdClass();
         foreach ($attributes as $attribute) {
-            $output['attributes'][$attribute['id']][$attribute['ciAttributeId']] = $attribute;
+            $attributeId                        = $attribute['id'];
+            $ciAttributeId                      = $attribute['ciAttributeId'];
+            $attributeObject                    = new stdClass();
+            $attributeObject->$ciAttributeId    = $attribute;
+            $output['attributes']->$attributeId = $attributeObject;
         }
         return $output;
     }

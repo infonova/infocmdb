@@ -144,7 +144,12 @@ class WorkflowController extends AbstractAppAction
         foreach ($result as $item) {
             if ($item[Db_Workflow::TRIGGER_TIME]) {
                 $trigger = 'time';
-            } else if ($item[Db_Workflow::TRIGGER_CI] || $item[Db_Workflow::TRIGGER_CI_TYPE_CHANGE] || $item[Db_Workflow::TRIGGER_ATTRIBUTE] || $item[Db_Workflow::TRIGGER_RELATION] || $item[Db_Workflow::TRIGGER_PROJECT] || $item[Db_Workflow::TRIGGER_FILEIMPORT]) {
+            } else if ($item[Db_Workflow::TRIGGER_CI]
+                       || $item[Db_Workflow::TRIGGER_CI_TYPE_CHANGE]
+                       || $item[Db_Workflow::TRIGGER_ATTRIBUTE]
+                       || $item[Db_Workflow::TRIGGER_RELATION]
+                       || $item[Db_Workflow::TRIGGER_PROJECT]
+                       || $item[Db_Workflow::TRIGGER_FILEIMPORT]) {
                 $trigger = 'activity';
             } else {
                 $trigger = 'manual';
