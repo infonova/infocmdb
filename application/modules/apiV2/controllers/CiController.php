@@ -413,8 +413,10 @@ class ApiV2_CiController extends V2BaseController
                         $this->outputError('attributes: failed to save attribute', $updateRowData);
                     }
                 } elseif ($mode == 'delete') {
-                    // delete later: we need to fire delete triggers before deletion
-                    $attributesToDelete[$ciAttributeId] = $ciAttribute;
+                    if (isset($ciAttributeId) && !empty($ciAttributeId)) {
+                        // delete later: we need to fire delete triggers before deletion
+                        $attributesToDelete[$ciAttributeId] = $ciAttribute;
+                    }
                 }
             }
 
