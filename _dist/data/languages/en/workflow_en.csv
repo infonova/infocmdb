@@ -169,3 +169,6 @@ trigger_desc;				"Trigger which calls this workflows"
 asynch_desc;				"Workflow will be queued and start in background"
 active_desc;				"Worklows can be disabled"
 responseFormat_desc;        "Return format of this worklow when using the api"
+
+invalidWorkflowName;               "Name is invalid"
+workflowNameCannotEndWithTest;     "Name cannot end end with _test"
