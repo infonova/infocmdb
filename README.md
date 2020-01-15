@@ -1,11 +1,12 @@
-# InfoCMDB - Highly Customizable Configuration Management Database
+# InfoCMDB
  [![Build Status](https://travis-ci.com/infonova/infocmdb.svg?branch=master)](https://travis-ci.com/infonova/infocmdb)
  
- **Repository is still getting ready, information is being added daily**
-
+ **Highly Customizable Configuration Management Database**
+ 
 ![InfoCMDB Slideshow](/public/assets/images/gh_images.gif)
 
-### Screenshots
+## Screenshots
+
 * [Login](/public/assets/images/001_Login.png)
 * [Ci Index](/public/assets/images/002_CI_Index.png)
 * [Ci Detail](/public/assets/images/003_CI_Detail.png)
@@ -33,18 +34,19 @@ To setup a new instance follow these steps for either production or development.
 
 Clone the infocmdb repository
 
-```
+```sh
 git clone https://github.com/infonova/infocmdb
 ```
 
-Start the infocmdb using the provided run commands
+Start the infocmdb using the provided run command 
 
-```./run up```
+```sh
+./run up
+```
 
 This will perform all setup steps required to configure the Docker-Environment.
 
-```
-$ ./run up
+```log
 Running setup_env...
 Create .env file...
 Choose an IMAGE_TAG you want to use [Env: IMAGE_TAG][latest]: 
@@ -68,9 +70,7 @@ Login at: http://infocmdb.prod.local || https://infocmdb.prod.local
 
 ## SSL Certificate
 
-Inside the ``web`` container you can add additional configuration in this directory:
-
-``/bootstrap/custom-conf``
+Inside the `web` container you can add additional configuration in the `/bootstrap/custom-conf` directory.
 
 Using the docker-compose for example:
 
@@ -83,8 +83,8 @@ Using the docker-compose for example:
 
 To use ssl we generate a dhparam file to enable forward secrecy. 
 
-```
-$ ./run generate_dhparam                             
+```sh
+./run generate_dhparam                             
 Running generate_dhparam...
 Create Diffie Hellman param for nginx
 Sending build context to Docker daemon  2.048kB
@@ -102,7 +102,7 @@ This is going to take a long time
 
 ### Generate self-signed-certificate and vhost configuration
 
-```
+```sh
 ./run gencert infocmdb.local                                    
 Running generate_dhparam...
   Already exists 'docker/nginx/custom-conf/conf.d/ssl/dhparam.pem'.
@@ -176,32 +176,34 @@ For creating backups of a running infoCMDB instance mysql and data can be dumped
 ### Database (mysql)
 
 THIS WILL DESTROY ALL EXISTING DATA!
-```bash
-$ ./run mysql_backup
+
+```sh
+./run mysql_backup
 Completed mysqldump: dump-2019-10-30_152732.sql.gz
-$ ./run mysql_import dump-2019-10-30_152732.sql.gz
+./run mysql_import dump-2019-10-30_152732.sql.gz
 ```
 
 ### Volume Data (`/app/data`)
 
 THIS WILL DESTROY ALL EXISTING DATA!
-```bash
-$ ./run data_backup
+```sh
+./run data_backup
 Completed databackup: data-2019-10-30_152819.tar.gz
-$ ./run data_import data-2019-10-30_152819.tar.gz
+./run data_import data-2019-10-30_152819.tar.gz
 ```
 
 ## Optional
 
 ### Mountpoints / Directories
 
-* ``/app/data`` all working files are stored in this directory.
-* ``/app/data/configs`` is used to store all configuration files. 
+* `/app/data` all working files are stored in this directory.
+* `/app/data/configs` is used to store all configuration files. 
 
 In case you want to directly interact with the cmdb data, for development
 or testing you can modify the mount point.
 
 `docker-compose.yml`:
+
 ```yaml
 services:
 ...
@@ -220,7 +222,8 @@ permission or performance issues on windows.
 
 If required it is possible to add an export for the mysql ports.
 
-either enable the option in the `docker-compose.yml` or add it to the `docker-compose.override.yml`:
+Either enable the option in the `docker-compose.yml` or add it to the `docker-compose.override.yml`:
+
 ```yaml
 version: "3.4"
 
@@ -231,10 +234,11 @@ services:
 ```
 
 Set the `DB_PORT` in the `.env` file: 
+
 ```ini
 DB_PORT=3306
 ```
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the LICENSE.md file for details
+This project is licensed under the Apache License 2.0 - see LICENSE file for details.
