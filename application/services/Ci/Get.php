@@ -1290,35 +1290,28 @@ class Service_Ci_Get extends Service_Abstract
 
     public function filterciList($ciList, $attributeList, $filter)
     {
-
         $ciList_filter = array();
 
-
-        if ($filter['search'] == null)
+        if ($filter['search'] == null) {
             return $ciList;
+        }
 
         foreach ($ciList as $list) {
-
             $found = false;
 
             foreach ($attributeList as $attribute) {
-
-                if (substr_count(mb_strtolower($list[$attribute[Db_Attribute::NAME]], 'UTF-8'), mb_strtolower($filter['search'], 'UTF-8')))
+                if (substr_count(mb_strtolower(html_entity_decode($list[$attribute[Db_Attribute::NAME]]), 'UTF-8'), mb_strtolower(html_entity_decode($filter['search']), 'UTF-8'))) {
                     $found = true;
-
-
+                    break;
+                }
             }
 
-            if ($found)
+            if ($found) {
                 array_push($ciList_filter, $list);
-
-
+            }
         }
 
-
         return $ciList_filter;
-
-
     }
 
     public static function convertColumnNameString($string, $type = "encode")

@@ -391,6 +391,24 @@ class CiControllerCest extends AbstractAcceptanceTest
         ]);
     }
 
+    public function ciIndexSearch(AcceptanceTester $I)
+    {
+        // Employee > Austria > Vienna
+        $I->amOnPage('/ci/index/typeid/10/');
+
+        $I->wantTo('Search in ci/index');
+        $I->fillField('#search', 'Karina');
+        $I->click('Filtern');
+        $I->see('(Anzahl der Ergebnisse: 1)', '.numberResult');
+        $I->click('Filter löschen');
+
+        $I->wantTo('Search in ci/index with Umlauts');
+        $I->fillField('#search', 'Jürgen');
+        $I->click('Filtern');
+        $I->see('(Anzahl der Ergebnisse: 2)', '.numberResult');
+        $I->click('Filter löschen');
+    }
+
     public function ciIndexAttributeFilter(AcceptanceTester $I)
     {
         // Employee > Austria > Vienna
@@ -400,14 +418,14 @@ class CiControllerCest extends AbstractAcceptanceTest
         $I->click('Attributfilter ein');
         $I->fillField('#emp_firstname', 'Karina');
         $I->click('Filtern');
-        $I->see('(Anzahl der Ergebnisse: 1)');
+        $I->see('(Anzahl der Ergebnisse: 1)', '.numberResult');
         $I->click('Filter löschen');
 
         $I->wantTo('Filter for attributes in ci/index with Umlauts');
         $I->click('Attributfilter ein');
         $I->fillField('#emp_firstname', 'Jürgen');
         $I->click('Filtern');
-        $I->see('(Anzahl der Ergebnisse: 1)');
+        $I->see('(Anzahl der Ergebnisse: 1)', '.numberResult');
         $I->click('Filter löschen');
 
     }
