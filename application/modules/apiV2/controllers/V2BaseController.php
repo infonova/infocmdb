@@ -459,6 +459,18 @@ abstract class V2BaseController extends Zend_Rest_Controller
     }
 
     /**
+     * Output request validation error
+     *
+     * @param      $data
+     * @param null $debug
+     * @throws Zend_Controller_Response_Exception
+     */
+    protected function outputBadRequestError($data, $debug = null)
+    {
+        $this->outputError('Validation failed', $data, 400, $debug);
+    }
+
+    /**
      * Output form validator errors
      *
      * @param      $data

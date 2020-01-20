@@ -537,7 +537,7 @@ class MenuResources
             // 'apiV2/workflow::index'       => array(), // not implemented
             // 'apiV2/workflow::head'        => array(), // not implemented
             // 'apiV2/workflow::get'         => array(), // not implemented
-            // 'apiV2/workflow::put'        => array(), // not implemented
+            'apiV2/workflow::put'  => array(3001),
             // 'apiV2/workflow::delete'      => array(), // not implemented
 
             'apiV2/query::put' => array(3001),
