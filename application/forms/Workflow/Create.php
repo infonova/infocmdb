@@ -25,8 +25,10 @@ class Form_Workflow_Create extends Form_AbstractAppForm
         $name->addValidator(new Form_Validator_UniqueConstraintWorkflows($isupdate = true));
         $name->setAttrib('size', '30');
         $name->setDescription($translator->translate('name_desc'));
-        if ($config->name->validators->notempty->enabled)
+        if ($config->name->validators->notempty->enabled) {
             $name->setRequired();
+        }
+        $name->addValidator(new Form_Validator_WorkflowName($translator));
 
         // description
         $description = new Zend_Form_Element_Text('description');
@@ -34,8 +36,9 @@ class Form_Workflow_Create extends Form_AbstractAppForm
         $description->setAttrib('title', $translator->translate('workflowDescriptionTitle'));
         $description->setAttrib('size', '30');
         $description->setDescription($translator->translate('description_desc'));
-        if ($config->description->validators->notempty->enabled)
+        if ($config->description->validators->notempty->enabled) {
             $description->setRequired();
+        }
 
         // note
         $note = new Zend_Form_Element_Text('note');
@@ -43,8 +46,9 @@ class Form_Workflow_Create extends Form_AbstractAppForm
         $note->setAttrib('title', $translator->translate('workflowNoteTitle'));
         $note->setAttrib('size', '30');
         $note->setDescription($translator->translate('note_desc'));
-        if ($config->note->validators->notempty->enabled)
+        if ($config->note->validators->notempty->enabled) {
             $note->setRequired();
+        }
 
         $user = new Zend_Form_Element_Select('user');
         $user->setLabel('user');
@@ -53,8 +57,9 @@ class Form_Workflow_Create extends Form_AbstractAppForm
         $user->setAttrib('style', 'width:230px');
         $user->setDescription($translator->translate('user_desc'));
 
-        if ($config->user->validators->notempty->enabled)
+        if ($config->user->validators->notempty->enabled) {
             $user->setRequired();
+        }
 
         $trigger = new Zend_Form_Element_Select('trigger');
         $trigger->setLabel('trigger');

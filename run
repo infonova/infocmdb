@@ -1412,7 +1412,7 @@ execute_tests() {
         exit 1
     esac
 
-    docker-compose exec -T php ./codecept.phar run "tests/${TEST_GROUP}" "${@:3}"
+    docker-compose exec -T php ./codecept.phar run --steps --fail-fast "tests/${TEST_GROUP}" "${@:3}"
 }
 
 desc "seed_database" <<HEREDOC

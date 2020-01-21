@@ -187,3 +187,6 @@ workflowSolveStatusNoError;         "Keine Fehler"
 workflowSolveStatusUnsolvedError;   "Fehler ungelöst"
 workflowSolveStatusSolvedError;     "Fehler gelöst"
 workflowMarkAsSolvedError;          "Als gelöst markieren"
+
+invalidWorkflowName;               "Name ist nicht gültig"
+workflowNameCannotEndWithTest;     "Name darf nicht mit _test enden"
