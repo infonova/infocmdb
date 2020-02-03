@@ -564,6 +564,48 @@ _piped_input() {
   ! _interactive_input
 }
 
+# _is_mintty()
+#
+# A regular invocation of docker-compose inside a mintty terminal fails:
+# ```shell
+# $ docker-compose exec php bash
+# the input device is not a TTY.  If you are using mintty, try prefixing the command with 'winpty'
+# ```
+# So this function provides a way to detect if the terminal type is mintty,
+# to be able to execute the command prefixed with winpty when necessary.
+#
+# Documenation about the implemenation:
+# https://github.com/mintty/mintty/wiki/Tips#terminal-type-detection--check-if-running-inside-mintty
+#
+# Usage:
+#   _is_mintty
+#
+# Returns:
+#   0  If the current terminal reports to be mintty.
+#   1  If the current terminal does not seem to be mintty.
+_is_mintty() {
+  read -r -s -dc -p $'\E[>c' device_attributes < /dev/tty
+  device_attributes=${device_attributes##$'\E'[>}
+  terminal_type="$(echo "$device_attributes" | cut -f1 -d ';')"
+
+  [[ "$terminal_type" == "77" ]]
+}
+
+# docker_compose_exec()
+#
+# Calls `docker-compose exec` or if the current terminal type is mintty
+# `winpty -Xallow-non-tty docker-compose exec` instead.
+#
+# Usage:
+#   docker_compose_exec "${CONTAINER}" "$commandArgument1" "$commandArgument2"
+docker_compose_exec() {
+  if _is_mintty; then
+    winpty -Xallow-non-tty docker-compose exec "${@}"
+  else
+    docker-compose exec "${@}"
+  fi
+}
+
 ###############################################################################
 # desc
 ###############################################################################
@@ -1123,7 +1165,7 @@ Description:
 HEREDOC
 bash() {
     CONTAINER=${1:-php}
-    docker-compose exec "${CONTAINER}" bash
+    docker_compose_exec "${CONTAINER}" bash
 }
 
 desc "cron" <<HEREDOC
@@ -1179,7 +1221,7 @@ Description:
 HEREDOC
 mysql() {
     source .env
-    docker-compose exec mariadb mysql -uroot -p"${DB_ROOT_PASSWORD}" "$@"
+    docker_compose_exec mariadb mysql -uroot -p"${DB_ROOT_PASSWORD}" "$@"
 }
 
 desc "mysql_dump" <<HEREDOC
@@ -1192,7 +1234,7 @@ HEREDOC
 mysql_dump() {
     source .env
 
-    docker-compose exec mariadb mysqldump -uroot -p"${DB_ROOT_PASSWORD}" "$@"
+    docker_compose_exec mariadb mysqldump -uroot -p"${DB_ROOT_PASSWORD}" "$@"
 }
 
 desc "mysql_import" <<HEREDOC
@@ -1231,7 +1273,7 @@ mysql_backup() {
     DATE=$(date +%Y-%m-%d_%H%M%S)
     FILE=${1:-dump-${DATE}.sql.gz}
 
-    docker-compose exec -T mariadb su -c "mysqldump -uroot -p\"${DB_ROOT_PASSWORD}\" --opt --allow-keywords --complete-insert --create-options --single-transaction --events --all-databases --routines --comments | gzip" > "${FILE}"
+    docker_compose_exec -T mariadb su -c "mysqldump -uroot -p\"${DB_ROOT_PASSWORD}\" --opt --allow-keywords --complete-insert --create-options --single-transaction --events --all-databases --routines --comments | gzip" > "${FILE}"
     echo "Completed mysql_dump: ${FILE}"
 }
 
@@ -1285,7 +1327,7 @@ data_backup() {
     DATE=$(date +%Y-%m-%d_%H%M%S)
     FILE=${1:-data-${DATE}.tar.gz}
 
-    docker-compose exec -T php su -c "cd /app; tar -czf - --exclude=data/library/golang/pkg/mod/cache --exclude=data/cache/* --exclude=data/tmp/* data  | cat "  > "${FILE}"
+    docker_compose_exec -T php su -c "cd /app; tar -czf - --exclude=data/library/golang/pkg/mod/cache --exclude=data/cache/* --exclude=data/tmp/* data  | cat "  > "${FILE}"
 
     echo "Completed data_backup: ${FILE}"
 }
@@ -1360,7 +1402,7 @@ Description:
 
 HEREDOC
 update_run() {
-    docker-compose exec -T php su -c "cat /app/run" > run.new
+    docker_compose_exec -T php su -c "cat /app/run" > run.new
     cp run.new run && rm run.new
 }
 
@@ -1425,14 +1467,20 @@ Description:
 HEREDOC
 seed_database() {
   source .env
-  if [[ ! "${APPLICATION_ENV}" == "production" ]]; then
+  if [[ "${APPLICATION_ENV:-}" == "" ]]; then
+    echo "[WARNING] no APPLICATION_ENV set, falling back to 'production'"
+    APPLICATION_ENV="production"
+  fi
+
+  if [[ "${APPLICATION_ENV}" == "production" ]]; then
     echo "This is a PRODUCTION instance, are you sure? ctrl+c TO STOP!"
+    read -r
   fi
 
   DB_HAS_DATA=$(mysql -s -N -e "select count(*)>1 from ${DB_DATABASE:-infoCMDB}.ci")
   if [[ "${DB_HAS_DATA}" == "0" ]]; then
       echo "[NOTICE] DB-Seeding started!"
-      docker-compose exec php sh -c "/app/deploy; ./phinx seed:run"
+      docker_compose_exec php sh -c "/app/deploy; ./phinx seed:run"
   else
       echo "[NOTICE] DB-Seeding: looks already seeded or used!"
   fi
