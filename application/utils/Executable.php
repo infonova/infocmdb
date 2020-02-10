@@ -63,10 +63,10 @@ class Util_Executable
         $this->logger->log($logMessage, Zend_Log::INFO);
 
         $workflowContext = array(
-            "ciid"          => $ciId,
-            "userId"        => $user->getId(),
-            "ciAttributeId" => $ciAttributeId,
-            "attributeId"   => $attributeId,
+            "ciid"          => (int) $ciId,
+            "userId"        => (int) $user->getId(),
+            "ciAttributeId" => (int) $ciAttributeId,
+            "attributeId"   => (int) $attributeId,
             "triggerType"   => $triggerType,
         );
 
