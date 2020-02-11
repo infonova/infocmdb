@@ -242,3 +242,8 @@ DB_PORT=3306
 ## License
 
 This project is licensed under the Apache License 2.0 - see LICENSE file for details.
+
+## Contact / Support
+
+If you have any questions and prefer email, feel free to contact us at:
+infocmdb@bearingpoint.com
