@@ -46,10 +46,6 @@
 <?php endif; ?>
 
 <script type="text/javascript">
-    function changePassword() {
-        window.location.href = "<?php echo APPLICATION_URL . '/user/change-password/userId/' . $this->userId; ?>";
-    }
-
     function cancel() {
         window.location.href = '<?php echo APPLICATION_URL . 'index/index'; ?>';
     }
@@ -89,24 +85,21 @@
                         echo $this->form->lastname;
                         echo $this->form->language;
                         ?>
-                        <?php if ($this->userDb['ldapAuth']) : ?>
-                            <tr class="passwordChangeDeactivatedNotice">
-                                <td colspan="3">
-                                    <img src="<?php echo APPLICATION_URL ?>images/icon/info_add.gif" alt="info" align="absmiddle">
-                                    <span><?php echo $this->translate('passwordChangeDeactivatedNotice') ?></span>
-                                </td>
-                            </tr>
-                        <?php endif; ?>
                         </tbody>
                     </table>
-                    <br />
-                    <a class="bold" href="<?php echo APPLICATION_URL ?>/login/logout/allDevices/1"><?php echo $this->translate("logoutFromAllDevices") ?></a>
-                    <br><br>
+                    <div class="actionLinksContainer">
+                        <?php if ($this->userDb['ldapAuth']) : ?>
+                            <div class="notice">
+                                <img src="<?php echo APPLICATION_URL ?>images/icon/info_add.gif" alt="info" align="absmiddle">
+                                <span><?php echo $this->translate('passwordChangeDeactivatedNotice') ?></span>
+                            </div>
+                        <?php else: ?>
+                            <a class="bold" href="<?php echo APPLICATION_URL . '/user/change-password/userId/' . $this->userId; ?>"><?php echo $this->translate('changePassword') ?></a><br>
+                        <?php endif; ?>
+                        <a class="bold" href="<?php echo APPLICATION_URL ?>/login/logout/allDevices/1"><?php echo $this->translate("logoutFromAllDevices") ?></a><br>
+                    </div>
                     <div class="buttonCon">
                         <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
-                        <?php if (!$this->userDb['ldapAuth']) : ?>
-                        <input type="submit" class="standard_button" value="<?php echo $this->translate('changePassword') ?>" onClick="javascript:changePassword(); return false;">
-                        <?php endif; ?>
                         <button type="reset" class="cancel_button" onClick="cancel(); return false;"><?php echo $this->translate('abort') ?></button>
                     </div>
                 </form>
