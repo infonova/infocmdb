@@ -46,10 +46,12 @@
 <?php endif; ?>
 
 <script type="text/javascript">
+    function changePassword() {
+        window.location.href = "<?php echo APPLICATION_URL . '/user/change-password/userId/' . $this->userId; ?>";
+    }
+
     function cancel() {
-
         window.location.href = '<?php echo APPLICATION_URL . 'index/index'; ?>';
-
     }
 
     function submitForm() {
@@ -83,13 +85,10 @@
                         <tbody>
                         <?php
                         echo $this->form->email;
-                        echo $this->form->password;
-                        echo $this->form->password_confirm;
                         echo $this->form->firstname;
                         echo $this->form->lastname;
                         echo $this->form->language;
                         ?>
-
                         </tbody>
                     </table>
                     <br />
@@ -97,6 +96,7 @@
                     <br><br>
                     <div class="buttonCon">
                         <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                        <input type="submit" class="standard_button" value="<?php echo $this->translate('changePassword') ?>" onClick="javascript:changePassword(); return false;">
                         <button type="reset" class="cancel_button" onClick="cancel(); return false;"><?php echo $this->translate('abort') ?></button>
                     </div>
                 </form>
@@ -125,7 +125,7 @@
                                         <li><i><?php echo $this->translate("2FASecret"); ?>
                                                 : </i><b><?php echo $this->tfaData['secret']; ?></b></li>
                                     </ol>
-                                
+
                                 </li>
                                 <li><?php echo $this->translate("2FAFinishSetup"); ?>
                                     <p>
@@ -135,7 +135,7 @@
                                         </form>
                                     </p>
                                 </li>
-                               
+
                             </ol></span>
 
                                 <p class="serverMessage">

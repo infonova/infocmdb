@@ -20,6 +20,7 @@ class Form_User_OwnUserUpdate extends Form_AbstractAppForm
         $email = new Zend_Form_Element_Text('email');
         $email->setLabel('mailaddress');
         $email->setAttrib('size', '30');
+        $email->setAttrib('autocomplete', 'off');
         $email->setDescription($translator->translate('email_desc'));
         $email->setAttrib('title', $translator->translate('userEmailTitle'));
         if ($config->user->email->validators->notempty->enabled) {
@@ -27,29 +28,6 @@ class Form_User_OwnUserUpdate extends Form_AbstractAppForm
             $email->autoInsertNotEmptyValidator(true);
         }
         $this->addElement($email);
-
-
-        // Password
-        $password = new Zend_Form_Element_Password('password');
-        $password->setLabel('password');
-        $password->setAttrib('title', $translator->translate('userPasswordTitle'));
-        $password->setAttrib('autocomplete', 'off');
-        $password->setAttrib('size', '30');
-        $password->setDescription($translator->translate('password_desc'));
-
-        $password->addValidator($this->createStringLengthValidator($config, 'user', 'password'), true);
-        $password->addValidator($this->createRegexValidator($config, 'user', 'password'), true);
-        $password->addValidator(new Form_Validator_PasswordConfirmation($translator));
-        $password->addValidator(new Form_Validator_PasswordStrength($translator));
-        $this->addElement($password);
-
-
-        $passwordConfirm = new Zend_Form_Element_Password('password_confirm');
-        $passwordConfirm->setLabel('passwordConfirm');
-        $passwordConfirm->setAttrib('size', '30');
-        $passwordConfirm->setDescription($translator->translate('password_confirm_desc'));
-        $passwordConfirm->setAttrib('title', $translator->translate('userPasswordConfirmTitle'));
-        $this->addElement($passwordConfirm);
 
         // FirstName
         $firstname = new Zend_Form_Element_Text('firstname');
