@@ -33,10 +33,7 @@ class Service_User_Update extends Service_Abstract
      */
     public function updateUser($userId, $formData, $dbData, $currentUserId, $skipMapping = false)
     {
-        $crypt = new Util_Crypt();
         try {
-            $dbUpdate = false;
-
             foreach ($formData as $key => $value) {
                 if ($formData[$key] !== $dbData[$key])
                     $updateData[$key] = $value;
@@ -111,7 +108,6 @@ class Service_User_Update extends Service_Abstract
 
                 }
                 $userDaoImpl->updateUser($user, $userId);
-                $dbUpdate = true;
             }
 
             if ($skipMapping === false) {
@@ -130,13 +126,11 @@ class Service_User_Update extends Service_Abstract
                             if ($value === '1') {
                                 $this->logger->log('add project mapping for user: ' . $userId . ', project: ' . substr($id, strlen('projectId_')), Zend_Log::INFO);
                                 $projectDaoImpl->addProjectMapping($userId, substr($id, strlen('projectId_')));
-                                $dbUpdate = true;
                             }
                         } elseif (strpos($id, 'roleId_') === 0) {
                             if ($value === '1') {
                                 $this->logger->log('add role mapping for user: ' . $userId . ', role: ' . substr($id, strlen('roleId_')), Zend_Log::INFO);
                                 $roleDaoImpl->addRoleMapping($userId, substr($id, strlen('roleId_')));
-                                $dbUpdate = true;
                             }
                         }
                     }

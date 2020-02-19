@@ -65,7 +65,7 @@ class Form_User_Create extends Form_AbstractAppForm
         $password = new Zend_Form_Element_Password('password');
         $password->setLabel('password');
         $password->setAttrib('size', '30');
-        $password->setAttrib('autocomplete', 'off');
+        $password->setAttrib('autocomplete', 'new-password');
         $password->setAttrib('title', $translator->translate('userPasswordTitle'));
         $password->setDescription($translator->translate('password_desc'));
 
@@ -84,6 +84,7 @@ class Form_User_Create extends Form_AbstractAppForm
         $passwordConfirm = new Zend_Form_Element_Password('password_confirm');
         $passwordConfirm->setLabel('passwordConfirm');
         $passwordConfirm->setAttrib('size', '30');
+        $passwordConfirm->setAttrib('autocomplete', 'new-password');
         $passwordConfirm->setAttrib('title', $translator->translate('userPasswordConfirmTitle'));
         $passwordConfirm->setDescription($translator->translate('password_confirm_desc'));
         $this->addElement($passwordConfirm);

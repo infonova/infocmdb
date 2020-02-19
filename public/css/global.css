@@ -1068,6 +1068,30 @@ fieldset.formContainer {
     margin-top: 10px;
 }
 
+fieldset.formContainer .actionLinksContainer {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 2px;
+}
+
+fieldset.formContainer .actionLinksContainer a {
+    display: inline-block;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+fieldset.formContainer .actionLinksContainer .notice {
+    display: flex;
+    font-style: italic;
+    font-size: 11px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+fieldset.formContainer .actionLinksContainer .notice img {
+    margin-right: 5px;
+}
+
 div.partition {
     border-top: 2px solid white;
     width: 100%;
