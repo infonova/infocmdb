@@ -1451,6 +1451,12 @@ td.query {
     padding-right: 10px;
 }
 
+.passwordChangeDeactivatedNotice td {
+    padding-top: 20px;
+    padding-bottom: 0;
+    font-style: italic;
+}
+
 .success_message {
     color: #fff;
     width: 96.5%;

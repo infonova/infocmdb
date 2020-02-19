@@ -115,10 +115,11 @@ areYouSureActivate;			"Wollen Sie den Benutzer wirklich aktivieren?"
 areYouSureDelete;			"Wollen Sie den Benutzer wirklich löschen?"
 areYouSureReset;			"Wollen Sie den CI Typen wirklich zurücksetzen?"
 
-changePassword;         "Passwort ändern"
-newPasswordDesc;        "Neues Passwort"
-passwordChangeSuccess;	"Passwort erfolgreich geändert!"
-passwordChangeFailed;	"Passwort konnte nicht gespeichert werden!"
+changePassword;                  "Passwort ändern"
+newPasswordDesc;                 "Neues Passwort"
+passwordChangeDeactivatedNotice; "Passwort Änderung ist nicht möglich, da bei dem Benutzer die Authentifizierung über LDAP aktiviert ist."
+passwordChangeSuccess;	         "Passwort erfolgreich geändert!"
+passwordChangeFailed;	         "Passwort konnte nicht gespeichert werden!"
 
 # view messages 2 Factor Auth
 is_two_factor_auth;             "2-Faktoren Authentifizierung nutzen"

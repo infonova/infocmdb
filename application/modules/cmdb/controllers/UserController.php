@@ -241,6 +241,7 @@ class UserController extends AbstractAppAction
         $this->view->form          = $form;
         $this->view->twoFactorAuth = $twoFactorAuth;
         $this->view->userId        = $userId;
+        $this->view->userDb        = $dbData;
     }
 
     public function detailAction()
@@ -464,6 +465,7 @@ class UserController extends AbstractAppAction
         $this->view->tfaData = $tfaData;
         $this->view->form    = $form;
         $this->view->userId  = $userId;
+        $this->view->userDb  = $dbData;
     }
 
     /**

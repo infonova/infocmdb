@@ -89,6 +89,14 @@
                         echo $this->form->lastname;
                         echo $this->form->language;
                         ?>
+                        <?php if ($this->userDb['ldapAuth']) : ?>
+                            <tr class="passwordChangeDeactivatedNotice">
+                                <td colspan="3">
+                                    <img src="<?php echo APPLICATION_URL ?>images/icon/info_add.gif" alt="info" align="absmiddle">
+                                    <span><?php echo $this->translate('passwordChangeDeactivatedNotice') ?></span>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
                         </tbody>
                     </table>
                     <br />
@@ -96,7 +104,9 @@
                     <br><br>
                     <div class="buttonCon">
                         <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                        <?php if (!$this->userDb['ldapAuth']) : ?>
                         <input type="submit" class="standard_button" value="<?php echo $this->translate('changePassword') ?>" onClick="javascript:changePassword(); return false;">
+                        <?php endif; ?>
                         <button type="reset" class="cancel_button" onClick="cancel(); return false;"><?php echo $this->translate('abort') ?></button>
                     </div>
                 </form>

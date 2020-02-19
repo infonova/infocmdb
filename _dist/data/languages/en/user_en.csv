@@ -87,10 +87,11 @@ isRoot_desc;                "User is allowed to enable Admin-Mode. If Admin-Mode
 userLdapAuthTitle;			"LDAP Auth"
 ldapAuth; "LDAP"
 
-changePassword;         "Change password"
-newPasswordDesc;        "New password"
-passwordChangeSuccess;	"Password changed successfully!"
-passwordChangeFailed;	"Couldn't save password!"
+changePassword;                  "Change password"
+newPasswordDesc;                 "New password"
+passwordChangeDeactivatedNotice; "Password change is not possible, because LDAP authentication is enabled for this user."
+passwordChangeSuccess;	         "Password changed successfully!"
+passwordChangeFailed;	         "Couldn't save password!"
 
 # view messages
 is_two_factor_auth;             "Use 2 Factor Authentication"

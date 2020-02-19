@@ -98,13 +98,23 @@
                         echo $this->form->ldapAuth;
                         echo $this->form->isRoot;
                         ?>
+                        <?php if ($this->userDb['ldapAuth']) : ?>
+                        <tr class="passwordChangeDeactivatedNotice">
+                            <td colspan="3">
+                                <img src="<?php echo APPLICATION_URL ?>images/icon/info_add.gif" alt="info" align="absmiddle">
+                                <span><?php echo $this->translate('passwordChangeDeactivatedNotice') ?></span>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
                         </tbody>
                     </table>
                     <br><br>
                 </fieldset>
                 <div class="buttonCon">
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
+                    <?php if (!$this->userDb['ldapAuth']) : ?>
                     <input type="submit" class="standard_button" value="<?php echo $this->translate('changePassword') ?>" onClick="javascript:changePassword(); return false;">
+                    <?php endif; ?>
                     <input type="button" class="cancel_button" value="<?php echo $this->translate('abort') ?>" onClick="javascript:cancel(); return false;">
                     <input type="button" class="standard_button" value="<?php echo $this->translate('next') ?>" onClick="javascript:changeDIVElement('#fragment-2'); return false;">
                 </div>
