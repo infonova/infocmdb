@@ -567,6 +567,7 @@ class CiController extends AbstractAppAction
         $view->attribute = $singleRet['ciAttribute'];
         $view->tabIndex  = $tabIndex;
         $view->lockId    = $lock->getId();
+        $view->language  = $this->translator->getLocale();
 
         if (isset($type)) {
             $html = $view->render('_singleEditIndex.phtml');
