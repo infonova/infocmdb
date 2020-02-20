@@ -120,10 +120,7 @@ $width  = $config->form->desc->width;
                                                 <?php echo htmlspecialchars($attribute[0][Db_Attribute::DESCRIPTION]); ?>
                                             </a>
                                         <?php } else { // show label ?>
-
-                                            <label title="<?php echo htmlspecialchars($attribute[0][Db_Attribute::NOTE]) ?>">
-                                                <?php echo htmlspecialchars($attribute[0][Db_Attribute::DESCRIPTION]); ?>
-                                            </label>
+                                            <label title="<?php echo htmlspecialchars($attribute[0][Db_Attribute::NOTE]) ?>"><?php echo htmlspecialchars($attribute[0][Db_Attribute::DESCRIPTION]); ?></label>
                                         <?php } ?>
                                     </td>
 

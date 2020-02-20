@@ -241,6 +241,7 @@ class UserController extends AbstractAppAction
         $this->view->form          = $form;
         $this->view->twoFactorAuth = $twoFactorAuth;
         $this->view->userId        = $userId;
+        $this->view->userDb        = $dbData;
     }
 
     public function detailAction()
@@ -463,7 +464,94 @@ class UserController extends AbstractAppAction
 
         $this->view->tfaData = $tfaData;
         $this->view->form    = $form;
+        $this->view->userId  = $userId;
+        $this->view->userDb  = $dbData;
+    }
 
+    /**
+     * change password of a user
+     */
+    public function changePasswordAction()
+    {
+        $userServiceGet    = new Service_User_Get($this->translator, $this->logger, 0);
+        $userServiceUpdate = new Service_User_Update($this->translator, $this->logger, 0);
+        $userId            = $this->_getParam('userId');
+
+        $editAllUsersAllowed = false;
+        $menuDao             = new Dao_Menu();
+        $menuList            = $menuDao->getActiveMenusByThemeId(parent::getUserInformation()->getThemeId());
+
+        foreach ($menuList as $menu) {
+            if ($menu[Db_Menu::NAME] === 'user') {
+                $editAllUsersAllowed = true;
+                break;
+            }
+        }
+
+        if ($userId === parent::getUserInformation()->getId() || $editAllUsersAllowed) {
+            $changePasswordAllowed = true;
+        } else {
+            $changePasswordAllowed = false;
+        }
+
+        if (!$changePasswordAllowed) {
+            throw new Exception_AccessDenied();
+        }
+
+        try {
+            $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/forms.ini', APPLICATION_ENV);
+        } catch (Exception $ex) {
+            $this->_helper->FlashMessenger("ERROR");
+            $this->logger->log("changePassword error loading config file! " . $ex, Zend_Log::ERR);
+            exit;
+        }
+
+
+        $form = new Form_User_ChangePassword($this->translator, $config);
+        #var_dump($form); die;
+        // get session handler
+        $session = Zend_Registry::get('session');
+
+        $dbData = $userServiceGet->getUserData($userId);
+        $formDb = array(
+            "name"      => $dbData["name"],
+            "password"  => $dbData["password"],
+            "firstname" => $dbData["firstname"],
+            "lastname"  => $dbData["lastname"],
+        );
+
+        if ($this->_request->isPost()) {
+            $formData = $this->_request->getPost();
+            if ($form->isValid($formData)) {
+
+                $notification = array();
+                try {
+                    $userServiceUpdate->updateUser($userId, $formData, $dbData, $userId, true);
+                    $notification['success'] = $this->translator->translate('passwordChangeSuccess');
+                } catch (Exception_User_UpdateFailed $e) {
+                    $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to update user password. No items where inserted!', Zend_Log::ERR);
+                    $notification['error'] = $this->translator->translate('passwordChangeFailed');
+                } catch (Exception_User_Unknown $e) {
+                    $this->logger->log('User "' . parent::getUserInformation()->getId() . '" encountered an unknownen error while updating user password', Zend_Log::ERR);
+                    $notification['error'] = $this->translator->translate('passwordChangeFailed');
+                }
+
+                $this->_helper->FlashMessenger($notification);
+            } else {
+                $form->populate($formData);
+            }
+        } else {
+            $form->populate($formDb);
+        }
+
+        $this->view->form   = $form;
+        $this->view->userDb = $dbData;
+        $this->view->userId = $userId;
+        if ($editAllUsersAllowed) {
+            $this->view->cancelUrl = APPLICATION_URL . '/user/edit/userId/' . $userId;
+        } else {
+            $this->view->cancelUrl = APPLICATION_URL . '/user/usersettings/';
+        }
     }
 
     /** AJAX function!

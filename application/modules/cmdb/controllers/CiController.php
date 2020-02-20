@@ -356,22 +356,60 @@ class CiController extends AbstractAppAction
                 }
                 $lock->acquireForUser(parent::getUserInformation()->getId());
 
-                if ($form->isValid($formdata, array('ciid' => $ciId))) {
+                if (count($formdata) == 0 && $ciAttribute['type'] == 'selectQuery') {
+                    $deleteAttribute = true;
+
+                    $citypeDaoImpl = new Dao_CiType();
+                    $ciType = $ciResult['ciType'];
+                    $ciTypeAttributes = $citypeDaoImpl->getCitypeslinkedtoAttributes($ciType['id'], $ciAttribute['attribute_id']);
+                    $ciTypeAttribute = $ciTypeAttributes[0];
+                    $mandatory = $ciTypeAttribute['is_mandatory'];
+                    $valid = !$mandatory;
+
+                    if (!$valid) {
+                        // editing selectQuery doesn't work after validation error
+                        // redirect to detail page with error notification
+                        $notification['error'] = $this->translator->translate('ciUpdateFailed');
+
+                        $lock->release();
+                        $this->_helper->FlashMessenger($notification);
+
+                        if (isset($type)) {
+                            $this->_redirect('ci/index/typeid/' . $type . '/page/' . $page);
+                        } else {
+                            $this->_redirect('ci/detail/ciid/' . $ciId . '/tab_index/' . $tabIndex);
+                        }
+                    }
+                } else {
+                    $valid = $form->isValid($formdata, array('ciid' => $ciId));
+                    $deleteAttribute = false;
+                }
+
+                if ($valid) {
                     $notification = array();
-                    try {
-                        $ciServiceUpdate->updateSingleAttribute(parent::getUserInformation()->getId(), $ciId, $ciAttribute, $formdata);
+
+                    if ($deleteAttribute) {
+                        $historyDaoImpl = new Dao_History();
+                        $historyId      = $historyDaoImpl->createHistory(parent::getUserInformation()->getId(), Enum_History::CI_SINGLE_EDIT);
+
+                        $ciServiceDelete = new Service_Ci_Delete($this->translator, $this->logger, parent::getUserInformation()->getThemeId());
+                        $ciServiceDelete->deleteSingleCiAttribute($ciAttribute['id'], $historyId);
+
                         $notification['success'] = $this->translator->translate('ciUpdateSuccess');
-                    } catch (Exception_Ci_Unknown $e) {
-                        $this->logger->log('User "' . parent::getUserInformation()->getId() . '" encountered an unknown error while updating Ci "' . $ciId . '" ', Zend_Log::ERR);
-                        $notification['error'] = $this->translator->translate('ciUpdateFailed');
-
-                    } catch (Exception_Ci_UpdateFailed $e) {
-                        $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to update Ci "' . $ciId . '" ', Zend_Log::ERR);
-                        $notification['error'] = $this->translator->translate('ciUpdateFailed');
-
-                    } catch (Exception_Ci_UpdateItemNotFound $e) {
-                        $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to update Ci "' . $ciId . '". No items were updated!', Zend_Log::ERR);
-                        $notification['error'] = $this->translator->translate('ciUpdateFailed');
+                    } else {
+                        try {
+                            $ciServiceUpdate->updateSingleAttribute(parent::getUserInformation()->getId(), $ciId, $ciAttribute, $formdata);
+                            $notification['success'] = $this->translator->translate('ciUpdateSuccess');
+                        } catch (Exception_Ci_Unknown $e) {
+                            $this->logger->log('User "' . parent::getUserInformation()->getId() . '" encountered an unknown error while updating Ci "' . $ciId . '" ', Zend_Log::ERR);
+                            $notification['error'] = $this->translator->translate('ciUpdateFailed');
+                        } catch (Exception_Ci_UpdateFailed $e) {
+                            $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to update Ci "' . $ciId . '" ', Zend_Log::ERR);
+                            $notification['error'] = $this->translator->translate('ciUpdateFailed');
+                        } catch (Exception_Ci_UpdateItemNotFound $e) {
+                            $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to update Ci "' . $ciId . '". No items were updated!', Zend_Log::ERR);
+                            $notification['error'] = $this->translator->translate('ciUpdateFailed');
+                        }
                     }
 
                     $lock->release();
@@ -529,6 +567,7 @@ class CiController extends AbstractAppAction
         $view->attribute = $singleRet['ciAttribute'];
         $view->tabIndex  = $tabIndex;
         $view->lockId    = $lock->getId();
+        $view->language  = $this->translator->getLocale();
 
         if (isset($type)) {
             $html = $view->render('_singleEditIndex.phtml');

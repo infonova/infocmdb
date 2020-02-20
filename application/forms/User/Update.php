@@ -62,29 +62,6 @@ class Form_User_Update extends Form_AbstractAppForm
         $this->addElement($email);
 
 
-        // Password
-        $password = new Zend_Form_Element_Password('password');
-        $password->setLabel('password');
-        $password->setAttrib('title', $translator->translate('userPasswordTitle'));
-        $password->setAttrib('autocomplete', 'off');
-        $password->setAttrib('size', '30');
-        $password->setDescription($translator->translate('password_desc'));
-
-        $password->addValidator($this->createStringLengthValidator($config, 'user', 'password'), true);
-        $password->addValidator($this->createRegexValidator($config, 'user', 'password'), true);
-        $password->addValidator(new Form_Validator_PasswordConfirmation($translator));
-        $password->addValidator(new Form_Validator_PasswordStrength($translator));
-        $this->addElement($password);
-
-
-        $passwordConfirm = new Zend_Form_Element_Password('password_confirm');
-        $passwordConfirm->setLabel('passwordConfirm');
-        $passwordConfirm->setAttrib('size', '30');
-        $passwordConfirm->setDescription($translator->translate('password_confirm_desc'));
-        $passwordConfirm->setAttrib('title', $translator->translate('userPasswordConfirmTitle'));
-        $this->addElement($passwordConfirm);
-
-
         // CI delete
         $ciDelete = new Zend_Form_Element_Checkbox('ciDelete');
         $ciDelete->setLabel('ciDeleteAllowed');
@@ -99,13 +76,6 @@ class Form_User_Update extends Form_AbstractAppForm
         $relationDelete->setAttrib('title', $translator->translate('userRelationDeleteTitle'));
         $relationDelete->setDescription($translator->translate('relationDelete_desc'));
         $this->addElement($relationDelete);
-
-        // Password expiration
-        $password_expire_off = new Zend_Form_Element_Checkbox('password_expire_off');
-        $password_expire_off->setLabel($translator->translate('noPassExpireLabel'));
-        $password_expire_off->setAttrib('title', $translator->translate('noPassExpireTitle'));
-        $password_expire_off->setDescription($translator->translate('noPassExpireDesc'));
-        $this->addElement($password_expire_off);
 
         // LDAP-Auth
         $ldapAuth = new Zend_Form_Element_Checkbox('ldapAuth');

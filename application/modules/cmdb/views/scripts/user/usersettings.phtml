@@ -47,9 +47,7 @@
 
 <script type="text/javascript">
     function cancel() {
-
         window.location.href = '<?php echo APPLICATION_URL . 'index/index'; ?>';
-
     }
 
     function submitForm() {
@@ -83,18 +81,23 @@
                         <tbody>
                         <?php
                         echo $this->form->email;
-                        echo $this->form->password;
-                        echo $this->form->password_confirm;
                         echo $this->form->firstname;
                         echo $this->form->lastname;
                         echo $this->form->language;
                         ?>
-
                         </tbody>
                     </table>
-                    <br />
-                    <a class="bold" href="<?php echo APPLICATION_URL ?>/login/logout/allDevices/1"><?php echo $this->translate("logoutFromAllDevices") ?></a>
-                    <br><br>
+                    <div class="actionLinksContainer">
+                        <?php if ($this->userDb['ldapAuth']) : ?>
+                            <div class="notice">
+                                <img src="<?php echo APPLICATION_URL ?>images/icon/info_add.gif" alt="info" align="absmiddle">
+                                <span><?php echo $this->translate('passwordChangeDeactivatedNotice') ?></span>
+                            </div>
+                        <?php else: ?>
+                            <a class="bold" href="<?php echo APPLICATION_URL . '/user/change-password/userId/' . $this->userId; ?>"><?php echo $this->translate('changePassword') ?></a><br>
+                        <?php endif; ?>
+                        <a class="bold" href="<?php echo APPLICATION_URL ?>/login/logout/allDevices/1"><?php echo $this->translate("logoutFromAllDevices") ?></a><br>
+                    </div>
                     <div class="buttonCon">
                         <input type="submit" class="standard_button" value="<?php echo $this->translate('save') ?>" onClick="javascript:submitForm(); return false;">
                         <button type="reset" class="cancel_button" onClick="cancel(); return false;"><?php echo $this->translate('abort') ?></button>
@@ -125,7 +128,7 @@
                                         <li><i><?php echo $this->translate("2FASecret"); ?>
                                                 : </i><b><?php echo $this->tfaData['secret']; ?></b></li>
                                     </ol>
-                                
+
                                 </li>
                                 <li><?php echo $this->translate("2FAFinishSetup"); ?>
                                     <p>
@@ -135,7 +138,7 @@
                                         </form>
                                     </p>
                                 </li>
-                               
+
                             </ol></span>
 
                                 <p class="serverMessage">
