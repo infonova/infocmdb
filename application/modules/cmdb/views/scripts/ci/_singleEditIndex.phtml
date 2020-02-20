@@ -30,7 +30,7 @@
             $.when(
                 $.getScript( "<?php echo APPLICATION_URL ?>js/multiselect/plugins/tmpl/jquery.tmpl.1.1.1.js" ),
                 $.getScript( "<?php echo APPLICATION_URL ?>/js/multiselect/ui.multiselect.js" ),
-                $.getScript( "<?php echo APPLICATION_URL ?>/js/multiselect/ui-multiselect-<?php echo ($this->language === 'de' ? 'de' : 'en'); ?>.js" ),
+                $.getScript( "<?php echo APPLICATION_URL ?>/js/multiselect/locale/ui-multiselect-<?php echo ($this->language === 'de' ? 'de' : 'en'); ?>.js" ),
 
                 $.getScript( "<?php echo APPLICATION_URL ?>/js/multiselect/plugins/localisation/jquery.localisation-min.js" ),
                 $.Deferred(function( deferred ){
