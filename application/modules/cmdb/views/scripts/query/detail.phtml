@@ -73,7 +73,9 @@ if ($config->ci->detail->buttons->button) {
                     <tr>
                         <td><strong><?php echo $this->translate('queryDescription'); ?></strong></td>
                         <td>
-                            <div style="border: 1px dotted black; width: 382px; min-height: 50px;"><?php echo $this->query[Db_StoredQuery::NOTE] ?></div>
+                            <div style="border: 1px dotted black; width: 382px; min-height: 50px;">
+                                <?php echo nl2br($this->query[Db_StoredQuery::NOTE]); ?>
+                            </div>
                         </td>
                         <td width="50%"></td>
                     </tr>
