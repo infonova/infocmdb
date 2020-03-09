@@ -1190,11 +1190,12 @@ class Dao_Attribute extends Dao_Abstract
     }
 
 
-    public function insertDefaultQuery(int $attributeId, string $query)
+    public function insertDefaultQuery(int $attributeId, string $query, string $listQuery = null)
     {
         $data                                           = array();
         $data[Db_AttributeDefaultQueries::ATTRIBUTE_ID] = $attributeId;
         $data[Db_AttributeDefaultQueries::QUERY]        = $query;
+        $data[Db_AttributeDefaultQueries::LIST_QUERY]   = $listQuery;
 
         $table = new Db_AttributeDefaultQueries();
         return $table->insert($data);

@@ -127,9 +127,9 @@ class Service_Attribute_Create extends Service_Abstract
                             $attributeId);
                     }
 
-                    if ($formData['query']['query']) {
+                    if ($formData['query']['query'] || $formData['query']['listQuery']) {
                         $attributeDaoImpl->insertDefaultQuery($attributeId,
-                            $formData['query']['query']);
+                            $formData['query']['query'], $formData['query']['listQuery']);
                     }
 
                     if ($formData['filter']['filter']) {

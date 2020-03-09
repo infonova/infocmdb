@@ -121,8 +121,9 @@ class Service_Attribute_Get extends Service_Abstract
                 $query                          = $attributeDaoImpl->getDefaultQuery($attributeId);
                 $dbFormData['filter']['filter'] = $query[Db_AttributeDefaultQueries::QUERY];
             } elseif ($attribute[Db_Attribute::ATTRIBUTE_TYPE_ID] == Util_AttributeType_Type_SelectQuery::ATTRIBUTE_TYPE_ID) {
-                $query                        = $attributeDaoImpl->getDefaultQuery($attributeId);
-                $dbFormData['query']['query'] = $query[Db_AttributeDefaultQueries::QUERY];
+                $query                            = $attributeDaoImpl->getDefaultQuery($attributeId);
+                $dbFormData['query']['query']     = $query[Db_AttributeDefaultQueries::QUERY];
+                $dbFormData['query']['listQuery'] = $query[Db_AttributeDefaultQueries::LIST_QUERY];
             } elseif ($attribute[Db_Attribute::ATTRIBUTE_TYPE_ID] == Util_AttributeType_Type_SelectPopup::ATTRIBUTE_TYPE_ID) {
                 $query                          = $attributeDaoImpl->getDefaultQuery($attributeId);
                 $dbFormData['filter']['filter'] = $query[Db_AttributeDefaultQueries::QUERY];
