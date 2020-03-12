@@ -122,7 +122,11 @@ class Util_AttributeType_Type_CiType extends Util_AttributeType_Type_Abstract
             $select = new Zend_Form_Element_Select($attributeName);
             $select->addMultiOptions($selection);
             $select->setRegisterInArrayValidator(false);
-            $jscripts = Zend_Registry::get('jsScripts');
+            try {
+                $jscripts = Zend_Registry::get('jsScripts');
+            } catch (Zend_Exception $e) {
+                $jscripts = array();
+            }
 
             if (!$jscripts)
                 $jscripts = array();
