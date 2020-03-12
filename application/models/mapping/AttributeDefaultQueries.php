@@ -18,5 +18,6 @@ class Db_AttributeDefaultQueries extends Zend_Db_Table_Abstract
     const ID           = 'id';
     const ATTRIBUTE_ID = 'attribute_id';
     const QUERY        = 'query';
+    const LIST_QUERY   = 'list_query';
 
 }

@@ -162,19 +162,9 @@ class Util_AttributeType_Type_SelectQuery extends Util_AttributeType_Type_Abstra
      */
     public static function getIndividualWizardFormParts($translator, $options = null)
     {
-        $placeholders = array(
-            ':id:'    => $translator->translate('attributeHintIndividualQueryCurrentCiId'),
-            ':value:' => $translator->translate('attributeHintIndividualQueryCurrentValue'),
-        );
+        $form = new Form_Attribute_IndividualSelectQuery($translator);
 
-        $queryForm = new Form_Attribute_IndividualQuery($translator, array(
-            'onlyQuery'    => true,
-            'placeholders' => $placeholders,
-        ));
-
-        $form = new Form_Attribute_IndividualMultiselect($translator);
-        $queryForm->addElements($form->getElements());
-        return $queryForm;
+        return $form;
     }
 
 
@@ -446,13 +436,19 @@ class Util_AttributeType_Type_SelectQuery extends Util_AttributeType_Type_Abstra
 
                     $attributeDaoImpl = new Dao_Attribute();
                     $query            = $attributeDaoImpl->getDefaultQuery($attribute[Db_CiAttribute::ID]);
-                    $query            = $query[Db_AttributeDefaultQueries::QUERY];
+                    $listQuery        = $query[Db_AttributeDefaultQueries::LIST_QUERY];
+
+                    if ($list && !empty(trim($listQuery))) {
+                        $query = $listQuery;
+                    } else {
+                        $query = $query[Db_AttributeDefaultQueries::QUERY];
+
+                        if ($ciId) {
+                            $query = str_replace(':id:', $ciId, $query);
+                        }
+                    }
 
                     $selection = array();
-
-                    if ($ciId) {
-                        $query = str_replace(':id:', $ciId, $query);
-                    }
 
                     $query        = str_replace(':id:', '', $query);
                     $query        = str_replace(':value:', '', $query);

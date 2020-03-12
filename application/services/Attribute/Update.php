@@ -180,11 +180,10 @@ class Service_Attribute_Update extends Service_Abstract
                     $dbUpdate = true;
                 }
 
-                if ($updateData['query']['query']) {
-                    $attributeDaoImpl->deleteDefaultQueryByAttributeId(
-                        $attributeId);
+                if ($updateData['query']['query'] || $updateData['query']['listQuery']) {
+                    $attributeDaoImpl->deleteDefaultQueryByAttributeId($attributeId);
                     $attributeDaoImpl->insertDefaultQuery($attributeId,
-                        $updateData['query']['query']);
+                        $updateData['query']['query'], $updateData['query']['listQuery']);
                     $dbUpdate = true;
                 }
 
