@@ -5,20 +5,14 @@ class Util_AttributeType_Type_Query extends Util_AttributeType_Type_Abstract
 
 
     const ATTRIBUTE_TYPE_ID = 15;
-    const ALLOW_EMPTY = true;
+    const ALLOW_EMPTY       = true;
 
     /**
      * returns individual parts for create and update attribute wizard
      */
     public static function getIndividualWizardFormParts($translator, $options = null)
     {
-        $placeholders = array(
-            ':id:' => $translator->translate('attributeHintIndividualQueryCurrentCiId'),
-        );
-
-        $form = new Form_Attribute_IndividualQuery($translator, array(
-            'placeholders' => $placeholders,
-        ));
+        $form = new Form_Attribute_IndividualQuery($translator);
 
         return $form;
     }

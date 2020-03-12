@@ -73,7 +73,7 @@
     $(function () {
 
         $("#tabs").tabs({active: <?php echo $this->tab; ?> , activate: hideUselessButtons});
-    })
+    });
 
     function getContent(id) {
         $.post("<?php echo $this->url(array('action' => 'assigncitypeattribute')); ?>/id/" + id,
@@ -146,25 +146,25 @@
         });
 
         hideUselessButtons();
-        getAttributeTypeHint($("select#attributeType").get(0).value);
+        var $selectAttributeType = $("select#attributeType");
+        getAttributeTypeHint($selectAttributeType.get(0).value);
 
         <?php if (!$this->individualform) { ?>
         getOptionWizard();
         <?php } ?>
 
         //editor for script
-        var scriptEditor = initAceEditor('#script-script_text', 'perl');
-
+        initAceEditor('#script-script_text', 'perl');
         //editor for sql
-        var queryEditor = initAceEditor('#query-query', 'mysql');
-
+        initAceEditor('#query-query', 'mysql');
+        initAceEditor('#query-listQuery', 'mysql');
         //editor for sql persistent
-        var queryPersistentEditor = initAceEditor('#queryPersist-query', 'mysql');
+        initAceEditor('#queryPersist-query', 'mysql');
 
-        $("select#attributeType").change(function () {
-            getAttributeTypeHint($("select#attributeType").get(0).value);
-            var type = $("select#attributeType").get(0).value;
-            if (type == 4 || type == 5 || type == 6) {
+        $selectAttributeType.change(function () {
+            getAttributeTypeHint($selectAttributeType.get(0).value);
+            var type = parseInt($selectAttributeType.get(0).value, 10);
+            if (type === 4 || type === 5 || type === 6) {
                 getOptionWizard();
             } else {
                 $.post("<?php echo $this->url(array('action' => 'individualwizardtab')); ?>/attributeTypeId/" + $(this).get(0).value,
