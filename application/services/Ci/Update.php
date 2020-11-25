@@ -511,6 +511,32 @@ class Service_Ci_Update extends Service_Abstract
         }
     }
 
+    /**
+     * updates a ci
+     *
+     * @param int $userId
+     * @param int $ciId
+     * @param int $newCiTypeId
+     *
+     * @throws Exception_Ci_Unknown
+     */
+    public function updateCiType(int $userId, int $ciId, int $newCiTypeId)
+    {
+        try {
+            $historyDao = new Dao_History();
+            $historyId  = $historyDao->createHistory($userId, Enum_History::CI_TYPE_CHANGE);
+
+            $ciDaoImpl = new Dao_Ci();
+            $ciDaoImpl->updateCiType($ciId, $newCiTypeId, $historyId);
+
+            $triggerUtil = new Util_Trigger($this->logger);
+            $triggerUtil->handleCiTypeChange($ciId, $userId, 'update');//will be triggered from and to ci_type
+        } catch (Exception $e) {
+            $this->logger->log($e, Zend_Log::CRIT);
+            throw new Exception_Ci_Unknown($e);
+        }
+    }
+
 
     /**
      * retrieve all attributes mapped to the current ci update logic
