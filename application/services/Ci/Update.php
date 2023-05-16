@@ -467,16 +467,32 @@ class Service_Ci_Update extends Service_Abstract
                 $iconChanged = true;
             } elseif (!empty($values['ciicon'])) { // new icon
                 $icon        = $values['ciicon'];
-                $date        = date("YmdHms\_");
-                $newFilename = $date . $icon;
+                $date        = date("YmdHms");
 
                 $tmpUploadPath   = Util_FileUpload::getUploadPath('tmp');
                 $destinationPath = Util_FileUpload::getUploadPath('icon');
+
+                $fileinfo = finfo_open(FILEINFO_MIME_TYPE);
+                $filetype = finfo_file($fileinfo, $tmpUploadPath .'/'. $icon);
+
+                //check icon mime type
+                $allowedTypes = [
+                    'image/png' => 'png',
+                    'image/jpeg' => 'jpg'
+                ];
+
+                $extension = $allowedTypes[$filetype];
+                $newFilename = htmlspecialchars($date .'-'. $ciId . '-icon.' . $extension);
+
+                if (!in_array($filetype, array_keys($allowedTypes))) {
+                    throw new Exception_Ci_WrongIconType();
+                }
 
                 // rename icon
                 if (!rename($tmpUploadPath .'/'. $icon, $destinationPath .'/'. $newFilename)) {
                     throw new Exception_File_RenamingFailed();
                 }
+
                 $iconChanged = true;
             }
 
@@ -506,6 +522,9 @@ class Service_Ci_Update extends Service_Abstract
             Util_AttributeType_Type_QueryPersist::execute_query($ciId, $queryPersistentAttributes, $historyId);
 
         } catch (Exception $e) {
+            if ($e instanceof Exception_Ci_WrongIconType)
+                throw $e;
+
             $this->logger->log($e, Zend_Log::CRIT);
             throw new Exception_Ci_Unknown($e);
         }

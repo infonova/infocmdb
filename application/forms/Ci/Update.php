@@ -179,6 +179,8 @@ class Form_Ci_Update extends Form_AbstractAppForm
         $icon       = new Zend_Form_Element_File('ciicon');
         $icon->setAttrib('class', 'hidden');
         $icon->setAttrib('onChange', 'changeCiIcon(this)');
+        $icon->addValidator('Extension', false, 'jpg,jpeg,png');
+        $icon->addValidator('ImageSize', false, array(10, 10, 30, 30));
         $icon->setDestination($uploadPath);
         $this->addElement($icon);
 

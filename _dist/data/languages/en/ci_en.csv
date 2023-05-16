@@ -93,6 +93,7 @@ ciCreateDatestamp;		"Datestamp"
 ciInsertSuccess;		"CI created successfully!"
 ciInsertFailed;			"Couldn't create CI!"
 
+ciWrongIconType;        "Icon must be JPG or PNG!"
 
 ciDeleteSuccess;		"CI deleted successfully!"
 ciDeleteFailed;			"Couldn't delete CI!"

@@ -1522,6 +1522,13 @@ ul.errors {
 
 }
 
+.pillar_icon dd ul.errors {
+    float:none;
+}
+.pillar_icon dd ul.errors li {
+    word-wrap: break-word;
+    width:auto;
+}
 ul.errors li {
     color: black;
     background-color: #fff;
