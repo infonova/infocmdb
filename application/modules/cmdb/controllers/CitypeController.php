@@ -163,6 +163,9 @@ class CitypeController extends AbstractAppAction
                 } catch (Exception_Citype_UpdateFailed $e) {
                     $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to update CiType "' . $attributeGroupId . '" ', Zend_Log::ERR);
                     $notification['error'] = $this->translator->translate('ciTypeUpdateFailed');
+                } catch (Exception_Citype_WrongIconType $e) {
+                    $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to update CiType "' . $attributeGroupId . '", icon file type wrong!', Zend_Log::ERR);
+                    $notification['error'] = $this->translator->translate('citypeWrongIconType');
                 } catch (Exception_Citype_UpdateItemNotFound $e) {
                     $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to update CiType "' . $attributeGroupId . '". No items where updated!', Zend_Log::ERR);
                     $notification['error'] = $this->translator->translate('ciTypeUpdateFailed');
@@ -302,6 +305,9 @@ class CitypeController extends AbstractAppAction
                 } catch (Exception_Citype_Unknown $e) {
                     $this->logger->log('User "' . parent::getUserInformation()->getId() . '" encountered an unknownen error while adding Citype to session ', Zend_Log::ERR);
                     $notification['error'] = $this->translator->translate('citypeCreateFailed');
+                } catch (Exception_Citype_WrongIconType $e) {
+                    $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to add CI type to session, icon file type wrong!', Zend_Log::ERR);
+                    $notification['error'] = $this->translator->translate('citypeWrongIconType');
                 } catch (Exception_Citype_InsertFailed $e) {
                     $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to add CI type to session!', Zend_Log::ERR);
                     $notification['error'] = $this->translator->translate('citypeCreateFailed');

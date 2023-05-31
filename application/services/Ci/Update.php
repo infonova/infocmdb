@@ -478,7 +478,8 @@ class Service_Ci_Update extends Service_Abstract
                 //check icon mime type
                 $allowedTypes = [
                     'image/png' => 'png',
-                    'image/jpeg' => 'jpg'
+                    'image/jpeg' => 'jpg',
+                    'image/gif' => 'gif'
                 ];
 
                 $extension = $allowedTypes[$filetype];

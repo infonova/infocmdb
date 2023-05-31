@@ -178,7 +178,7 @@ class Form_Ci_Create extends Form_AbstractAppForm
         $icon->setAttrib('class', 'hidden');
         $icon->setAttrib('onChange', 'changeCiIcon(this)');
         $icon->setDestination($uploadPath);
-        $icon->addValidator('Extension', false, 'jpg,jpeg,png');
+        $icon->addValidator('Extension', false, 'jpg,jpeg,png,gif');
         $icon->addValidator('ImageSize', false, array(10, 10, 30, 30));
         $this->addElement($icon);
 

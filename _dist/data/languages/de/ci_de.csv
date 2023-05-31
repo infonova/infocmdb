@@ -118,7 +118,7 @@ ciUpdateFailed;			"CI konnte nicht geändert werden!"
 
 ciTypeChangeSuccess;		"CI Typ erfolgreich geändert"
 
-ciWrongIconType;        "Icon muss JPG oder PNG sein!"
+ciWrongIconType;        "Icon muss JPG,PNG oder GIF sein!"
 
 # USER CI MAPPING
 overview;				"Zurück"
