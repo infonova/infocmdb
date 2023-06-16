@@ -33,15 +33,15 @@
     <table>
         <tr>
             <td><strong><?php echo $this->translate('name'); ?></strong></td>
-            <td><?php echo $this->reporting['name']; ?></td>
+            <td><?php echo  Bootstrap::xssCleanView($this->reporting['name']); ?></td>
         </tr>
         <tr>
             <td><strong><?php echo $this->translate('description'); ?></strong></td>
-            <td><?php echo $this->reporting['description']; ?></td>
+            <td><?php echo  Bootstrap::xssCleanView($this->reporting['description']); ?></td>
         </tr>
         <tr>
             <td><strong><?php echo $this->translate('note'); ?></strong></td>
-            <td><?php echo $this->reporting['note']; ?></td>
+            <td><?php echo Bootstrap::xssCleanView($this->reporting['note']); ?></td>
         </tr>
         <tr>
             <td><strong><?php echo $this->translate('input'); ?></strong></td>
@@ -75,11 +75,11 @@
                 <tr>
                     <th>
                     <?php echo $this->translate('archiveCreated'); ?></td>
-                    <th>
+                    </th>
                     <?php echo $this->translate('archiveUser'); ?></td>
                     <th>
                     <?php echo $this->translate('archiveFilename'); ?></td>
-                    <th>
+                    </th>
                     <?php echo $this->translate('archiveNote'); ?></td>
                     <th></th>
                 </tr>

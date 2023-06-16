@@ -61,11 +61,11 @@ if ($config->ci->detail->buttons->button) {
             ?>
             <tr>
                 <td>
-                    <a class="link" href="<?php echo APPLICATION_URL ?>mail/edit/mailId/<?php echo $item[Db_Mail::ID]; ?>"><?php echo $item[Db_Mail::NAME]; ?></a>
+                    <a class="link" href="<?php echo APPLICATION_URL ?>mail/edit/mailId/<?php echo $item[Db_Mail::ID]; ?>"><?php echo Bootstrap::xssCleanView($item[Db_Mail::NAME]); ?></a>
                 </td>
-                <td><?php echo $item[Db_Mail::DESCRIPTION]; ?></td>
-                <td><?php echo $item[Db_Mail::NOTE]; ?> </td>
-                <td><?php echo $item[Db_Mail::SUBJECT]; ?></td>
+                <td><?php echo Bootstrap::xssCleanView($item[Db_Mail::DESCRIPTION]); ?></td>
+                <td><?php echo Bootstrap::xssCleanView($item[Db_Mail::NOTE]); ?> </td>
+                <td><?php echo Bootstrap::xssCleanView($item[Db_Mail::SUBJECT]); ?></td>
                 <td><?php echo Service_Mail_Get::getMimeTranslation($item[Db_Mail::MIME_TYPE]); ?></td>
                 <td>
                     <div class="rfloater">

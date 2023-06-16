@@ -164,7 +164,7 @@
 </div>
 
 <!-- Attribute-Groups and Attributes -->
-<div id="ci_detail" class="ciType<?php echo ucfirst($this->ciType[Db_CiType::NAME]) ?>" data-ciid="<?php echo $this->ciId; ?>" data-citype="<?php echo $this->ciType[Db_CiType::NAME] ?>">
+<div id="ci_detail" class="ciType<?php echo ucfirst($this->ciType[Db_CiType::NAME]) ?>" data-ciid="<?php echo $this->ciId; ?>" data-citype="<?php echo Bootstrap::xssClean($this->ciType[Db_CiType::NAME]) ?>">
 
     <?php if ($this->ciType[Db_CiType::IS_TAB_ENABLED]) : ?>
     <div id="tabs">

@@ -135,7 +135,7 @@
                                             <?php echo $this->form->$formfield ?>
                                         </label>
                                     </div>
-                                    <span class="userTitle" title="<?php echo $user[Db_User::NOTE] ?>"><?php echo $user[Db_User::USERNAME] ?></span>
+                                    <span class="userTitle" title="<?php echo $user[Db_User::NOTE] ?>"><?php echo Bootstrap::xssCleanView($user[Db_User::USERNAME]) ?></span>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -182,7 +182,7 @@
                                 <?php $formfield = 'attributeId_' . $attribute[Db_Attribute::ID]; ?>
                                 <div class="child">
                                     <?php echo $this->form->$formfield ?>
-                                    <span class="attributeTitle" style="width:76%" id="<?php echo $attribute[Db_Attribute::DESCRIPTION] ?>" ;title="<?php echo $attribute[Db_Attribute::DESCRIPTION] ?>"><?php echo $attribute[Db_Attribute::NAME] ?></span>
+                                    <span class="attributeTitle" style="width:76%" id="<?php echo Bootstrap::xssCleanView($attribute[Db_Attribute::DESCRIPTION]) ?>" ;title="<?php echo $attribute[Db_Attribute::DESCRIPTION] ?>"><?php echo Bootstrap::xssCleanView($attribute[Db_Attribute::NAME]) ?></span>
                                 </div>
                             <?php endforeach; ?>
                         </div>

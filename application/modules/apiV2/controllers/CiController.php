@@ -398,6 +398,12 @@ class ApiV2_CiController extends V2BaseController
 
                     if ((int)$attribute[Db_Attribute::ATTRIBUTE_TYPE_ID] === Util_AttributeType_Type_Attachment::ATTRIBUTE_TYPE_ID) {
                         $rawFilename = $updateRowData->value;
+
+                        //Filename should only include alphanummeric characters and is limited to 50 characters
+                        $rawFilename_parts = pathinfo($rawFilename);
+                        $cleanedFilename = substr(preg_replace("/[^a-zA-Z0-9]+/", "", $rawFilename_parts['filename']), 0, 50);
+                        $rawFilename = $cleanedFilename + $rawFilename_parts["extension"];
+
                         $filename    = Util_FileUpload::processTmpFile($updateRowData->uploadId, $rawFilename, 'attachment', array('ci_id' => $id, 'prefix_date' => true));
                         $formData    = array(
                             $attributeId . 'filename'    => $filename,

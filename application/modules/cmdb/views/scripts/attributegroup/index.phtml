@@ -108,9 +108,9 @@ if ($config->ci->detail->buttons->button) {
             }
             ?>
             <td>
-                <a class="link" href="<?php echo APPLICATION_URL ?>attributegroup/detail/attributeGroupId/<?php echo $item[Db_AttributeGroup::ID]; ?>"><?php echo $item[Db_AttributeGroup::NAME]; ?></a>
+                <a class="link" href="<?php echo APPLICATION_URL ?>attributegroup/detail/attributeGroupId/<?php echo $item[Db_AttributeGroup::ID]; ?>"><?php echo Bootstrap::xssCleanView($item[Db_AttributeGroup::NAME]); ?></a>
             </td>
-            <td><?php echo $item[Db_AttributeGroup::DESCRIPTION]; ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_AttributeGroup::DESCRIPTION]); ?></td>
             <td><?php echo $item['parent']; ?></td>
             <td><?php echo $item[Db_AttributeGroup::ORDER_NUMBER]; ?></td>
             <td><?php if ($item[Db_AttributeGroup::IS_ACTIVE]) {

@@ -117,12 +117,12 @@ if ($config->ci->detail->buttons->button) {
             }
             ?>
             <td>
-                <a class="link" href="<?php echo APPLICATION_URL; ?>user/edit/userId/<?php echo $item[Db_User::ID]; ?>"><?php echo $item[Db_User::USERNAME]; ?></a>
+                <a class="link" href="<?php echo APPLICATION_URL; ?>user/edit/userId/<?php echo $item[Db_User::ID]; ?>"><?php echo Bootstrap::xssCleanView($item[Db_User::USERNAME]); ?></a>
             </td>
-            <td><?php echo $item[Db_User::FIRSTNAME]; ?></td>
-            <td><?php echo $item[Db_User::LASTNAME]; ?></td>
-            <td><?php echo $item[Db_User::DESCRIPTION]; ?></td>
-            <td><?php echo $item['themeName']; ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_User::FIRSTNAME]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_User::LASTNAME]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_User::DESCRIPTION]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item['themeName']); ?></td>
             <td><?php echo(($item[Db_User::IS_TWO_FACTOR_AUTH] == 1) ? $this->translate('active') : $this->translate('inactive')); ?></td>
             <td><?php echo(($item[Db_User::IS_ACTIVE]) ? $this->translate('active') : $this->translate('inactive')); ?></td>
             <td>

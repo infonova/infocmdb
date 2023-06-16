@@ -108,8 +108,8 @@ if ($config->ci->detail->buttons->button) {
             <td>
                 <a class="link" href='<?php echo APPLICATION_URL . "citype/edit/citypeId/" . $item[Db_CiType::ID]; ?>'><?php echo $item[Db_CiType::NAME]; ?></a>
             </td>
-            <td><?php echo $item[Db_CiType::DESCRIPTION]; ?></td>
-            <td><?php echo $item[Db_CiType::NOTE]; ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_CiType::DESCRIPTION]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_CiType::NOTE]); ?></td>
             <td><?php echo $item[Db_CiType::ORDER_NUMBER]; ?></td>
             <td><?php if ($item[Db_CiType::IS_ACTIVE]) {
                     echo $this->translate('active');

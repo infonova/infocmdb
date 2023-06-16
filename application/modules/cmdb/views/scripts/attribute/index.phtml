@@ -126,10 +126,10 @@ if ($config->ci->detail->buttons->button) {
             }
             ?>
             <td><a class="link"
-                   href="<?php echo APPLICATION_URL . 'attribute/edit/attributeId/' . $item[Db_Attribute::ID]; ?>"><?php echo $item[Db_Attribute::NAME]; ?></a>
+                   href="<?php echo APPLICATION_URL . 'attribute/edit/attributeId/' . $item[Db_Attribute::ID]; ?>"><?php echo Bootstrap::xssCleanView($item[Db_Attribute::NAME]); ?></a>
             </td>
-            <td><?php echo $item[Db_Attribute::DESCRIPTION]; ?></td>
-            <td><?php echo $item['attributeGroup']; ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Attribute::DESCRIPTION]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item['attributeGroup']); ?></td>
             <td><?php echo $this->translate('name_' . $item['attributeTypeName']); ?></td>
             <td><?php echo(($item[Db_Attribute::IS_UNIQUE]) ? $this->translate('yes') : $this->translate('no')); ?></td>
             <td><?php echo $item[Db_Attribute::ORDER_NUMBER]; ?></td>

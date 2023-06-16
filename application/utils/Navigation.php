@@ -487,7 +487,7 @@ class Util_Navigation
         if ($ciTypes && count($ciTypes) > 0) {
             foreach ($ciTypes as $ciType) {
                 $current_node = array();
-                $current_node = self::createMenuNode($ciType[Db_CiType::DESCRIPTION], APPLICATION_URL . 'ci/index/typeid/' .
+                $current_node = self::createMenuNode(Bootstrap::xssCleanView($ciType[Db_CiType::DESCRIPTION]), APPLICATION_URL . 'ci/index/typeid/' .
                     $ciType[Db_CiType::ID] . '/', $ciType[Db_CiType::NOTE], "spriteCi",
                     self::generateNodeArrayRecursive($ciType['childs']), "menu-element", $ciType[Db_CiType::ID]);
                 array_push($nodes, $current_node);

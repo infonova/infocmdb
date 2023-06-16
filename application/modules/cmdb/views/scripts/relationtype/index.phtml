@@ -108,11 +108,11 @@ if ($config->ci->detail->buttons->button) {
             }
             ?>
             <td>
-                <a class="link" href="<?php echo APPLICATION_URL . "relationtype/edit/relationTypeId/" . $item[Db_CiRelationType::ID]; ?>"><?php echo $item[Db_CiRelationType::NAME]; ?></a>
+                <a class="link" href="<?php echo APPLICATION_URL . "relationtype/edit/relationTypeId/" . $item[Db_CiRelationType::ID]; ?>"><?php echo Bootstrap::xssCleanView($item[Db_CiRelationType::NAME]); ?></a>
             </td>
-            <td><?php echo $item[Db_CiRelationType::DESCRIPTION]; ?></td>
-            <td><?php echo $item[Db_CiRelationType::DESCRIPTION_OPTIONAL]; ?></td>
-            <td><?php echo $item[Db_CiRelationType::NOTE]; ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_CiRelationType::DESCRIPTION]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_CiRelationType::DESCRIPTION_OPTIONAL]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_CiRelationType::NOTE]); ?></td>
             <td><?php if ($item[Db_CiRelationType::IS_ACTIVE]) {
                     echo $this->translate('active');
                 } else {

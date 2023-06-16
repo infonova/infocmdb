@@ -1,6 +1,7 @@
 <?php
 $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/forms/ci.ini', APPLICATION_ENV);
-$width  = $config->form->desc->width;
+$width = $config->form->desc->width;
+$appConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
 ?>
 
 <?php foreach ($this->attributeList as $attributeGroup) : ?>
@@ -12,7 +13,8 @@ $width  = $config->form->desc->width;
         <div class="legend">
             <b><?php echo htmlspecialchars($attributeGroup['description']) ?></b>
             <div class="printControl">
-                <img height="16px" title="<?php echo $this->translate('fadeOut') ?>" src="<?php echo APPLICATION_URL ?>images/icon/delete.png" class="fadeout" />
+                <img height="16px" title="<?php echo $this->translate('fadeOut') ?>"
+                     src="<?php echo APPLICATION_URL ?>images/icon/delete.png" class="fadeout"/>
             </div>
         </div>
 
@@ -25,7 +27,8 @@ $width  = $config->form->desc->width;
                 $tableClass .= " attributeGroup" . ucfirst($attributeGroup['name']);
                 ?>
 
-                <table class="<?php echo $tableClass ?>" cellpadding="0" cellspacing="0" width="100%" style="border-bottom: none" data-attributegroup="<?php echo $attributeGroup['name'] ?>">
+                <table class="<?php echo $tableClass ?>" cellpadding="0" cellspacing="0" width="100%"
+                       style="border-bottom: none" data-attributegroup="<?php echo $attributeGroup['name'] ?>">
 
                     <tr>
                         <?php if (isset($attributeGroup['columns']) && $attributeGroup['columns'] > 1) : ?>
@@ -95,8 +98,12 @@ $width  = $config->form->desc->width;
 
                                     <?php if ($attribute[0]['permission_write']) : ?>
                                         <div class="rfloater">
-                                            <a class="buttonLink cancel_list" title="<?php echo $this->translate('cancel'); ?>" href="<?php echo APPLICATION_URL . 'ci/detail/ciid/' . $this->ciid; ?>">&nbsp;</a>
-                                            <a class="buttonLink save_list" title="<?php echo $this->translate('save'); ?>" href="javascript:document.forms['CreateForm'].submit();">&nbsp;</a>
+                                            <a class="buttonLink cancel_list"
+                                               title="<?php echo $this->translate('cancel'); ?>"
+                                               href="<?php echo APPLICATION_URL . 'ci/detail/ciid/' . $this->ciid; ?>">&nbsp;</a>
+                                            <a class="buttonLink save_list"
+                                               title="<?php echo $this->translate('save'); ?>"
+                                               href="javascript:document.forms['CreateForm'].submit();">&nbsp;</a>
                                         </div>
                                     <?php endif; ?>
                                     </td>
@@ -104,19 +111,32 @@ $width  = $config->form->desc->width;
                                     // no single edit - normal view
                                     $class = Util_AttributeType_Factory::get($attribute[0]['attributeTypeName']);
                                     $preparedOutput = $class->getValueByCiAttribute($attribute[0], true);
+
+                                    if (
+                                        (int)$attribute[Db_Attribute::ATTRIBUTE_TYPE_ID] === Util_AttributeType_Type_TextEdit::ATTRIBUTE_TYPE_ID
+                                        || (int)$attribute[Db_Attribute::ATTRIBUTE_TYPE_ID] === Util_AttributeType_Type_Textarea::ATTRIBUTE_TYPE_ID
+                                        && $appConfig->executeScriptsInAttributes == 0) {
+                                        $preparedOutput = Bootstrap::xssCleanView($preparedOutput);
+                                    }
+
                                     ?>
 
 
                                     <td width="<?php echo $width; ?>" class="column_left">
                                         <?php if ($this->isAdmin) : ?>
-                                            <a class="settingsLink" title="<?php echo $this->translate('editAttribute'); ?>" href='<?php echo APPLICATION_URL ?>attribute/edit/attributeId/<?php echo $attribute[0][Db_Attribute::ID] ?>'>
-                                                <img class='image' src='<?php echo APPLICATION_URL ?>images/navigation/settings.png'>
+                                            <a class="settingsLink"
+                                               title="<?php echo $this->translate('editAttribute'); ?>"
+                                               href='<?php echo APPLICATION_URL ?>attribute/edit/attributeId/<?php echo $attribute[0][Db_Attribute::ID] ?>'>
+                                                <img class='image'
+                                                     src='<?php echo APPLICATION_URL ?>images/navigation/settings.png'>
                                             </a>
                                         <?php endif; ?>
 
 
                                         <?php if ($attribute[0]['attributeTypeName'] == Enum_AttributeType::EXECUTEABLE) { // label of executable is clickable?>
-                                            <a class="link" title="<?php echo htmlspecialchars($attribute[0][Db_Attribute::NOTE]) ?>" href="javascript:executeScript(<?php echo $this->ciid ?>, <?php echo $attribute[0]['id'] ?>, <?php echo $attribute[0]['ciAttributeId'] ?>, <?php echo (is_null($preparedOutput)) ? 0 : 1 ?>)">
+                                            <a class="link"
+                                               title="<?php echo htmlspecialchars($attribute[0][Db_Attribute::NOTE]) ?>"
+                                               href="javascript:executeScript(<?php echo $this->ciid ?>, <?php echo $attribute[0]['id'] ?>, <?php echo $attribute[0]['ciAttributeId'] ?>, <?php echo (is_null($preparedOutput)) ? 0 : 1 ?>)">
                                                 <?php echo htmlspecialchars($attribute[0][Db_Attribute::DESCRIPTION]); ?>
                                             </a>
                                         <?php } else { // show label ?>
@@ -125,7 +145,8 @@ $width  = $config->form->desc->width;
                                     </td>
 
                                     <td>
-                                        <div class="attributeValue attributeType<?php echo ucfirst($attribute[0]['attributeTypeName']) ?>" data-attributetype="<?php echo $attribute[0]['attributeTypeName'] ?>"><?php
+                                        <div class="attributeValue attributeType<?php echo ucfirst($attribute[0]['attributeTypeName']) ?>"
+                                             data-attributetype="<?php echo $attribute[0]['attributeTypeName'] ?>"><?php
                                             if ($attribute[0][Db_Attribute::IS_BOLD]) {
                                                 echo "<b>";
                                             }
@@ -156,7 +177,10 @@ $width  = $config->form->desc->width;
                                     $attribute[0]['attributeTypeName'] != Enum_AttributeType::FILTER &&
                                     !$this->historyView
                                 ) : ?>
-                                    <a style="float:right; padding-left: 10px;" title="<?php echo $this->translate('edit'); ?>" class="edit_list" id="<?php echo $attribute[0]['ciAttributeId'] ?>" href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->ciid ?>/ciAttributeId/<?php echo $attribute[0]['ciAttributeId'] ?>/">&nbsp;</a>
+                                    <a style="float:right; padding-left: 10px;"
+                                       title="<?php echo $this->translate('edit'); ?>"
+                                       class="edit_list" id="<?php echo $attribute[0]['ciAttributeId'] ?>"
+                                       href="<?php echo APPLICATION_URL ?>ci/detail/ciid/<?php echo $this->ciid ?>/ciAttributeId/<?php echo $attribute[0]['ciAttributeId'] ?>/">&nbsp;</a>
                                 <?php endif; ?>
                                     </td>
                                 <?php endif; ?>
@@ -170,12 +194,12 @@ $width  = $config->form->desc->width;
             if (isset($attributeGroup['children']) && is_array($attributeGroup['children'])) {
                 echo $this->partial('ci/_detailAttributeGroup.phtml', array(
                     'attributeList' => $attributeGroup['children'],
-                    'form'          => $this->form,
-                    'isAdmin'       => $this->isAdmin,
-                    'ciid'          => $this->ciid,
+                    'form' => $this->form,
+                    'isAdmin' => $this->isAdmin,
+                    'ciid' => $this->ciid,
                     'ciAttributeId' => $this->ciAttributeId,
-                    'historyView'   => $this->historyView,
-                    'tabs'          => false,
+                    'historyView' => $this->historyView,
+                    'tabs' => false,
                 ));
             }
             ?>

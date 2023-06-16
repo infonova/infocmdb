@@ -127,15 +127,15 @@
                             <tr>
                                 <td>
                                     <div style="float:left; width:25px; text-align:center;"><?php if ($this->form->{$firstList[$i]}) echo $this->form->{$firstList[$i]}->setDecorators(array('ViewHelper')) ?></div>
-                                    <span><?php if ($this->form->{$firstList[$i]}) echo $this->form->{$firstList[$i]}->getLabel() ?></span>
+                                    <span><?php if ($this->form->{$firstList[$i]}) echo Bootstrap::xssCleanView($this->form->{$firstList[$i]}->getLabel()) ?></span>
                                 </td>
                                 <td>
                                     <div style="float:left; width:25px; text-align:center;"><?php if ($this->form->{$secondList[$i]}) echo $this->form->{$secondList[$i]}->setDecorators(array('ViewHelper')) ?></div>
-                                    <span><?php if ($this->form->{$secondList[$i]}) echo $this->form->{$secondList[$i]}->getLabel() ?></span>
+                                    <span><?php if ($this->form->{$secondList[$i]}) echo Bootstrap::xssCleanView($this->form->{$secondList[$i]}->getLabel()) ?></span>
                                 </td>
                                 <td>
                                     <div style="float:left; width:25px; text-align:center;"><?php if ($this->form->{$thirdList[$i]}) echo $this->form->{$thirdList[$i]}->setDecorators(array('ViewHelper')) ?></div>
-                                    <span><?php if ($this->form->{$thirdList[$i]}) echo $this->form->{$thirdList[$i]}->getLabel() ?></span>
+                                    <span><?php if ($this->form->{$thirdList[$i]}) echo Bootstrap::xssCleanView($this->form->{$thirdList[$i]}->getLabel()) ?></span>
                                 </td>
                             </tr>
                         <?php } ?>

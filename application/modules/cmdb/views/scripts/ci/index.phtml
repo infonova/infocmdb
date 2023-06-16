@@ -381,9 +381,9 @@
                             <a title="<?php echo htmlspecialchars($att[Db_Attribute::NOTE]) ?>" href="<?php echo $this->url(array('page' => APPLICATION_URL . 'ci/index/', 'typeid' => $this->typeId, 'page' => 1, 'orderBy' => rawurlencode(serialize($orderBy)), 'filter' => $this->filter['search'])); ?>">
                                 <?php
                                 if ($this->adminMode) {
-                                    echo $att[Db_Attribute::NAME];
+                                    echo Bootstrap::xssCleanView($att[Db_Attribute::NAME]);
                                 } else {
-                                    echo $att[Db_Attribute::DESCRIPTION];
+                                    echo Bootstrap::xssCleanView($att[Db_Attribute::DESCRIPTION]);
                                 } ?>
                             </a>
                         </td>
@@ -459,10 +459,10 @@
                                    id="<?php echo $item[$att[Db_Attribute::NAME] . 'ID'] ?>"
                                    coords="<?php echo $item[Db_Ci::ID] ?>"
                                    href="<?php echo APPLICATION_URL ?>ci/index/typeid/<?php echo $this->typeId ?>/"><?php
-                                echo $item[$att[Db_Attribute::NAME]];
+                                echo Bootstrap::xssCleanView($item[$att[Db_Attribute::NAME]]);
                                 ?></a><?php
                             } else {
-                                echo $item[$att[Db_Attribute::NAME]];
+                                echo Bootstrap::xssCleanView($item[$att[Db_Attribute::NAME]]);
                             }
                             $i++;
                         }

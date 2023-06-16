@@ -121,7 +121,7 @@
                             ?>
                             <td width="20px" style="padding-right:0px;"><?php echo $this->form->$fieldname ?></td>
                             <td>
-                                <label for="projectId_<?php echo $project[Db_Project::ID] ?>" title="<?php echo $project[Db_Project::NOTE] ?>"><?php echo $project[Db_Project::NAME] ?></label>
+                                <label for="projectId_<?php echo $project[Db_Project::ID] ?>" title="<?php echo $project[Db_Project::NOTE] ?>"><?php echo Bootstrap::xssCleanView($project[Db_Project::NAME]) ?></label>
                             </td>
                             <?php
                             $count++;

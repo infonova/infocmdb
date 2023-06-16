@@ -92,11 +92,11 @@ if ($config->ci->detail->buttons->button) {
             }
             ?>
             <td>
-                <a class="link" href="<?php echo APPLICATION_URL ?>project/edit/projectId/<?php echo $item[Db_Project::ID]; ?>"><?php echo $item[Db_Project::NAME]; ?></a>
+                <a class="link" href="<?php echo APPLICATION_URL ?>project/edit/projectId/<?php echo $item[Db_Project::ID]; ?>"><?php echo Bootstrap::xssCleanView($item[Db_Project::NAME]); ?></a>
             </td>
-            <td><?php echo $item[Db_Project::DESCRIPTION]; ?> </td>
-            <td><?php echo $item[Db_Project::NOTE]; ?> </td>
-            <td><?php echo $item[Db_Project::ORDER_NUMBER]; ?> </td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Project::DESCRIPTION]); ?> </td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Project::NOTE]); ?> </td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Project::ORDER_NUMBER]); ?> </td>
             <td><?php if ($item[Db_Project::IS_ACTIVE]) {
                     echo $this->translate('active');
                 } else {
