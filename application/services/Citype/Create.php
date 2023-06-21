@@ -203,6 +203,9 @@ class Service_Citype_Create extends Service_Abstract
                 }
             }
         } catch (Exception $e) {
+            if ($e instanceof Exception_Citype_WrongIconType)
+                throw $e;
+
             $this->logger->log($e, Zend_Log::CRIT);
             throw new Exception_Citype_InsertFailed($e);
         }
@@ -210,14 +213,33 @@ class Service_Citype_Create extends Service_Abstract
 
     public function handleIconUpload($iconData)
     {
-        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/fileupload.ini', APPLICATION_ENV);
+        $date        = date("YmdHms");
 
-        $finaldestination = APPLICATION_PUBLIC . $config->file->upload->path->folder . $config->file->upload->icon->folder;
-        $date             = date("YmdHms\_");
-        $newFile          = $date . $iconData;
-        if (!rename($finaldestination .'/'. $iconData, $finaldestination .'/'. $newFile)) {
+        $tmpUploadPath   = Util_FileUpload::getUploadPath('tmp');
+        $destinationPath = Util_FileUpload::getUploadPath('icon');
+
+        $fileinfo = finfo_open(FILEINFO_MIME_TYPE);
+        $filetype = finfo_file($fileinfo, $tmpUploadPath .'/'. $iconData);
+
+        //check icon mime type
+        $allowedTypes = [
+            'image/png' => 'png',
+            'image/jpeg' => 'jpg',
+            'image/gif' => 'gif'
+        ];
+
+        $extension = $allowedTypes[$filetype];
+        $newFilename = $date .'-citype-icon.' . $extension;
+
+        if (!in_array($filetype, array_keys($allowedTypes))) {
+            throw new Exception_Citype_WrongIconType();
+            //throw new Exception_Ci_InsertFailed();
+        }
+        // rename icon
+        if (!rename($tmpUploadPath .'/'. $iconData, $destinationPath .'/'. $newFilename)) {
             throw new Exception_File_RenamingFailed();
         }
-        return $newFile;
+
+        return $newFilename;
     }
 }

@@ -830,6 +830,9 @@ class CiController extends AbstractAppAction
                     } catch (Exception_Ci_InsertFailed $e) {
                         $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to create CI. No items where inserted!', Zend_Log::ERR);
                         $notification['error'] = $this->translator->translate('ciInsertFailed');
+                    } catch (Exception_Ci_WrongIconType $e) {
+                        $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to create CI. Icon FileType isn´t PNG or JPG!', Zend_Log::ERR);
+                        $notification['error'] = $this->translator->translate('ciWrongIconType');
                     } catch (Exception $e) {
                         throw new Exception_Ci($e);
                     }
@@ -1025,15 +1028,18 @@ class CiController extends AbstractAppAction
                     $ciServiceUpdate->updateCi(parent::getUserInformation()->getId(), $ciId, $val, $attributes, $sessionID);
                     $this->destroyCiSession($sessionID);
                     $notification['success'] = $this->translator->translate('ciUpdateSuccess');
-                } catch (Exception $e) {
-                    $lock->release();
-                    throw new Exception_Ci($e);
                 } catch (Exception_Ci_Unknown $e) {
                     $this->logger->log('User "' . parent::getUserInformation()->getId() . '" encountered an unknown error while creating new CI', Zend_Log::ERR);
                     $notification['error'] = $this->translator->translate('ciInsertFailed');
                 } catch (Exception_Ci_UpdateFailed $e) {
                     $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to update CI.', Zend_Log::ERR);
                     $notification['error'] = $this->translator->translate('ciUpdateFailed');
+                }  catch (Exception_Ci_WrongIconType $e) {
+                    $this->logger->log('User "' . parent::getUserInformation()->getId() . '" failed to create CI. Icon FileType isn´t PNG or JPG!', Zend_Log::ERR);
+                    $notification['error'] = $this->translator->translate('ciWrongIconType');
+                } catch (Exception $e) {
+                    $lock->release();
+                    throw new Exception_Ci($e);
                 }
                 $lock->release();
                 $this->_helper->FlashMessenger($notification);

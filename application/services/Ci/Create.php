@@ -332,17 +332,35 @@ class Service_Ci_Create extends Service_Abstract
             $this->logger->log('created ci with id ' . $ciId, Zend_Log::DEBUG);
 
             if ($icon && $icon != '' && $icon != ' ') {
-                $date        = date("YmdHms\_");
-                $newFilename = $date . $icon;
+
+                $date        = date("YmdHms");
 
                 $tmpUploadPath   = Util_FileUpload::getUploadPath('tmp');
                 $destinationPath = Util_FileUpload::getUploadPath('icon');
 
+                $fileinfo = finfo_open(FILEINFO_MIME_TYPE);
+                $filetype = finfo_file($fileinfo, $tmpUploadPath .'/'. $icon);
+
+                //check icon mime type
+                $allowedTypes = [
+                    'image/png' => 'png',
+                    'image/jpeg' => 'jpg',
+                    'image/gif' => 'gif'
+                ];
+
+                $extension = $allowedTypes[$filetype];
+                $newFilename = $date .'-'. $ciId . '-icon.' . $extension;
+
+                if (!in_array($filetype, array_keys($allowedTypes))) {
+                    throw new Exception_Ci_WrongIconType();
+                    //throw new Exception_Ci_InsertFailed();
+                }
                 // rename icon
                 if (!rename($tmpUploadPath .'/'. $icon, $destinationPath .'/'. $newFilename)) {
-                    throw new Exception_File_RenamingFailed();
+                      throw new Exception_File_RenamingFailed();
                 }
                 $ciDaoImpl->updateCiIcon($ciId, $newFilename);
+
             }
 
 
@@ -422,6 +440,9 @@ class Service_Ci_Create extends Service_Abstract
                 throw $e;
 
             if ($e instanceof Exception_File_RenamingFailed)
+                throw $e;
+
+            if ($e instanceof Exception_Ci_WrongIconType)
                 throw $e;
 
             if ($e instanceof Exception_InvalidParameter)

@@ -244,10 +244,6 @@ class Form_Citype_Update extends Form_AbstractAppForm
             $icon->setLabel('icon');
             $icon->setAttrib('title', $this->translator->translate('citypeIconTitle'));
 
-            $path        = $fileUploadConfig->file->upload->path->folder;
-            $path        = APPLICATION_PUBLIC . $path;
-            $destination = $fileUploadConfig->file->upload->icon->folder;
-
             $minwidth  = $fileUploadConfig->file->upload->icon->minwidth;
             $minheight = $fileUploadConfig->file->upload->icon->minheight;
             $maxwidth  = $fileUploadConfig->file->upload->icon->maxwidth;
@@ -267,7 +263,8 @@ class Form_Citype_Update extends Form_AbstractAppForm
             }
 
             $icon->setMaxFileSize($fileUploadConfig->file->upload->icon->maxfilesize);
-            $icon->setDestination($path . $destination);
+            $uploadPath = Util_FileUpload::getUploadPath('tmp');
+            $icon->setDestination($uploadPath);
             $icon->addValidator('Extension', false, 'jpg,jpeg,png,gif');
             $icon->addValidator('ImageSize', false, array($minwidth, $minheight, $maxwidth, $maxheight));
             $icon->setDescription($this->translator->translate('icon_desc'));

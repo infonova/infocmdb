@@ -119,6 +119,7 @@ citypeActivateSuccess;		"CI Typ wurde erfolgreich aktiviert!"
 
 ciTypeUpdateSuccess;		"CI Typ erfolgreich bearbeitet!"
 ciTypeUpdateFailed;			"CI Typ konnte nicht aktualisiert werden!"
+citypeWrongIconType;        "Icon muss JPG,PNG oder GIF sein!"
 
 # Form Titles
 citypeParentCiTypeTitle;			"Der Übergeordnete CI-Typ"
@@ -134,7 +135,7 @@ citypeXMLTitle;						"XML Tag"
 citypeOrderNumberTitle;		        "Gibt die Reihung des CI-Typen im Baum an"
 citypeIconTitle;					"Anzeigebild hinzufügen"
 citypeAllowAttributeAttachTitle;	"Attribut Anhang erlauben"
-citypeCreateButtonDescriptionTitle;	"Welche �berschrift im Menüpunkt CI anlegen beim Befüllen dieses Datensatzes angezeigt werden soll "
+citypeCreateButtonDescriptionTitle;	"Welche �berschrift im Menüpunkt CI anlegen beim Befüllen dieses Datensatzes angezeigt werden soll "
 citypeTicketEnabledTitle;			"Ticket enabled"
 citypeEventEnabledTitle;			"Event enabled"
 summary;							"Zusammenfassung"
