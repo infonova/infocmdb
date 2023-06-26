@@ -98,8 +98,17 @@ class Api_AdapterController extends BaseController
                 $query = substr($query, strlen('sql#'));
             }
 
-            $result = $queryDao->executeQuery($query, $parameter);
+            //check default query
+            $isDefaultQuery = $queryDao->isQueryDefaultQuery($scriptName);
+            $this->logger->log("IsDefaultQuery: " . $isDefaultQuery, Zend_Log::INFO);
 
+            if ($isDefaultQuery == 1){
+              $this->logger->log("Executing new logic! ", Zend_Log::INFO);
+              $result = $queryDao->executeDefaultQuery($scriptName,$query, $parameter);
+            }else {
+               $this->logger->log("Executing old logic! ", Zend_Log::INFO);
+               $result = $queryDao->executeQuery($query, $parameter);
+            }
             // update status
             $queryDao->updateQueryStatus($queryId, 1);
 
