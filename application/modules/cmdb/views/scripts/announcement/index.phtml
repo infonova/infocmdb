@@ -104,10 +104,10 @@ if ($config->ci->detail->buttons->button) {
                 <a class="link" href="<?php echo APPLICATION_URL ?>announcement/edit/announcementId/<?php echo $item[Db_Announcement::ID]; ?>"><?php echo $item[Db_Announcement::ID]; ?></a>
             </td>
             <td>
-                <a class="link" href="<?php echo APPLICATION_URL ?>announcement/edit/announcementId/<?php echo $item[Db_Announcement::ID]; ?>"><?php echo $item[Db_Announcement::NAME]; ?></a>
+                <a class="link" href="<?php echo APPLICATION_URL ?>announcement/edit/announcementId/<?php echo $item[Db_Announcement::ID]; ?>"><?php echo Bootstrap::xssCleanView($item[Db_Announcement::NAME]); ?></a>
             </td>
-            <td><?php echo $item[Db_Announcement::TITLE_DE]; ?></td>
-            <td><?php echo $item[Db_Announcement::TITLE_EN]; ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Announcement::TITLE_DE]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Announcement::TITLE_EN]); ?></td>
             <td><?php echo substr($item[Db_Announcement::SHOW_FROM_DATE], 0, 10); ?></td>
             <td><?php echo substr($item[Db_Announcement::SHOW_TO_DATE], 0, 10); ?></td>
             <td><?php echo $this->translate($item[Db_Announcement::TYPE]) ?></td>

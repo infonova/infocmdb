@@ -87,10 +87,10 @@ if ($config->ci->detail->buttons->button) {
             }
             ?>
             <td>
-                <a class="link" href="<?php echo APPLICATION_URL ?>role/edit/roleId/<?php echo $item[Db_Role::ID]; ?>"><?php echo $item[Db_Project::NAME]; ?></a>
+                <a class="link" href="<?php echo APPLICATION_URL ?>role/edit/roleId/<?php echo $item[Db_Role::ID]; ?>"><?php echo Bootstrap::xssCleanView($item[Db_Project::NAME]); ?></a>
             </td>
-            <td><?php echo $item[Db_Role::DESCRIPTION]; ?></td>
-            <td><?php echo $item[Db_Role::NOTE]; ?> </td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Role::DESCRIPTION]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Role::NOTE]); ?> </td>
             <td><?php if ($item[Db_Role::IS_ACTIVE]) {
                     echo $this->translate('active');
                 } else {

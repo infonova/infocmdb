@@ -62,8 +62,8 @@
 <div id=login_background></div>
 <div class="announcement_wrapper">
     <div class="announcement_content">
-        <div class="announcement_title"><?php echo $this->result['title']; ?></div>
-        <div class="announcement_text"><?php echo $this->result['message']; ?></div>
+        <div class="announcement_title"><?php echo Bootstrap::xssCleanView($this->result['title']); ?></div>
+        <div class="announcement_text"><?php echo Bootstrap::xssCleanView(strip_tags($this->result['message'])); ?></div>
     </div>
     <div class="announcement_bottom">
         <form id="announcementButtonrow" method="POST">

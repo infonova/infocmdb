@@ -162,7 +162,7 @@ if ($config->ci->detail->buttons->button) {
         </li>
     </ul>
 
-    <fieldset class="create_form steps">
+    <fieldset class="create_form steps"/>
         <form widgetid="create" id="create" enctype="multipart/form-data" method="post" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
             <div id="fragment-1">
                 <fieldset class="formContainer">
@@ -238,7 +238,7 @@ if ($config->ci->detail->buttons->button) {
                                     <tr>
                                         <th>
                                         <?php echo $this->translate('attribute') ?></td>
-                                        <th>
+                                        <th/>
                                         <?php echo $this->translate('ismandatory'); ?></td>
                                     </tr>
 
@@ -267,7 +267,7 @@ if ($config->ci->detail->buttons->button) {
                                         <tr>
                                             <th>
                                             <?php echo $this->translate('attribute') ?></td>
-                                            <th>
+                                            <th/>
                                             <?php echo $this->translate('ismandatory'); ?></td>
                                         </tr>
 
@@ -297,7 +297,7 @@ if ($config->ci->detail->buttons->button) {
                                         <tr>
                                             <th>
                                             <?php echo $this->translate('attribute') ?></td>
-                                            <th>
+                                            <th/>
                                             <?php echo $this->translate('ismandatory'); ?></td>
                                         </tr>
 
@@ -391,7 +391,7 @@ if ($config->ci->detail->buttons->button) {
                             ?>
                             <tr>
                                 <td>
-                                    <span title="<?php echo $relation[Db_CiRelationType::DESCRIPTION] ?>"><?php echo $relation[Db_CiRelationType::NAME] ?></span>
+                                    <span title="<?php echo $relation[Db_CiRelationType::DESCRIPTION] ?>"><?php echo Bootstrap::xssCleanView($relation[Db_CiRelationType::NAME]) ?></span>
                                 </td>
                                 <td><?php $checkField = 'relationId_' . $relation[Db_CiRelationType::ID];
                                     echo $this->form->$checkField ?></td>

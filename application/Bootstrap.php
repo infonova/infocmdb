@@ -309,6 +309,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
     }
 
+
+    public static function xssCleanView($data)
+    {
+        $data = htmlspecialchars($data, ENT_QUOTES);
+        return $data;
+    }
+
+
     /**
      * Logs an exception
      *

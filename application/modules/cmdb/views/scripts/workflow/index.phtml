@@ -163,7 +163,7 @@ if ($config->ci->detail->buttons->button) {
             $workflowType = Util_Workflow_TypeFactory::create($item[Db_Workflow::SCRIPT_LANG], $item);
             ?>
             <span id="workflow_tooltip_id_<?php echo $item[Db_Workflow::ID] ?>" class="hidden">
-            <?php echo nl2br($item[Db_Workflow::STATUS_MESSAGE]) ?>
+            <?php echo Bootstrap::xssCleanView(nl2br($item[Db_Workflow::STATUS_MESSAGE])) ?>
         </span>
 
             <?php if (!$item[Db_Workflow::IS_ACTIVE]) {
@@ -177,12 +177,12 @@ if ($config->ci->detail->buttons->button) {
         }
             ?>
             <td>
-                <a href='<?php echo APPLICATION_URL ?>workflow/detail/workflowId/<?php echo $item[Db_Workflow::ID] ?>'><?php echo $item[Db_Workflow::NAME]; ?></a>
+                <a href='<?php echo APPLICATION_URL ?>workflow/detail/workflowId/<?php echo Bootstrap::xssCleanView($item[Db_Workflow::ID]) ?>'><?php echo Bootstrap::xssCleanView($item[Db_Workflow::NAME]); ?></a>
             </td>
-            <td><?php echo $item[Db_Workflow::DESCRIPTION]; ?></td>
-            <td><?php echo $this->translate($this->triggerTypes[$item[Db_Workflow::ID]]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Workflow::DESCRIPTION]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($this->translate($this->triggerTypes[$item[Db_Workflow::ID]])); ?></td>
             <td><?php echo $item[Db_Workflow::EXECUTION_TIME]; ?></td>
-            <td><?php echo $item[Db_Workflow::NOTE]; ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Workflow::NOTE]); ?></td>
             <td><?php if ($item[Db_Workflow::IS_ASYNC]) {
                     echo $this->translate('yes');
                 } else {

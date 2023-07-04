@@ -17,27 +17,27 @@
         <table>
             <tr>
                 <td><b><?php echo $this->translate('name') ?>:</b></td>
-                <td><?php echo $this->mail[Db_Mail::NAME]; ?></td>
+                <td><?php echo Bootstrap::xssCleanView($this->mail[Db_Mail::NAME]); ?></td>
             </tr>
             <tr>
                 <td><b><?php echo $this->translate('description') ?>:</b></td>
-                <td> <?php echo $this->mail[Db_Mail::DESCRIPTION]; ?></td>
+                <td> <?php echo Bootstrap::xssCleanView($this->mail[Db_Mail::DESCRIPTION]); ?></td>
             </tr>
             <tr>
                 <td><b><?php echo $this->translate('note') ?>:</b></td>
-                <td> <?php echo $this->mail[Db_Mail::NOTE]; ?></td>
+                <td> <?php echo Bootstrap::xssCleanView($this->mail[Db_Mail::NOTE]); ?></td>
             </tr>
             <tr>
                 <td><b><?php echo $this->translate('recipients'); ?>:</b></td>
                 <td>
                     <?php foreach ($this->recipients as $recipient): ?>
-                        <i><?php echo $recipient[Db_Notification::ADDRESS]; ?> </i>
+                        <i><?php echo Bootstrap::xssCleanView($recipient[Db_Notification::ADDRESS]); ?> </i>
                     <?php endforeach; ?>
                 </td>
             </tr>
             <tr>
                 <td><b><?php echo $this->translate('subject') ?>:</b></td>
-                <td> <?php echo $this->mail[Db_Mail::SUBJECT]; ?></td>
+                <td> <?php echo Bootstrap::xssCleanView($this->mail[Db_Mail::SUBJECT]); ?></td>
             </tr>
             <tr>
                 <td><b><?php echo $this->translate('body') ?>:</b></td>

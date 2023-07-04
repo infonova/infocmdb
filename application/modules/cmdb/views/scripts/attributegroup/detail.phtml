@@ -47,15 +47,15 @@ if ($config->ci->detail->buttons->button) {
         </tr>
         <tr>
             <td><strong><?php echo $this->translate('name'); ?></strong></td>
-            <td><?php echo $this->attributeGroup[Db_AttributeGroup::NAME] ?></td>
+            <td><?php echo Bootstrap::xssCleanView($this->attributeGroup[Db_AttributeGroup::NAME]) ?></td>
         </tr>
         <tr>
             <td><strong><?php echo $this->translate('description'); ?></strong></td>
-            <td><?php echo $this->attributeGroup[Db_AttributeGroup::DESCRIPTION] ?></td>
+            <td><?php echo Bootstrap::xssCleanView($this->attributeGroup[Db_AttributeGroup::DESCRIPTION]) ?></td>
         </tr>
         <tr>
             <td><strong><?php echo $this->translate('note'); ?></strong></td>
-            <td><?php echo $this->attributeGroup[Db_AttributeGroup::NOTE] ?></td>
+            <td><?php echo Bootstrap::xssCleanView($this->attributeGroup[Db_AttributeGroup::NOTE]) ?></td>
         </tr>
         <?php if ($this->parent): ?>
             <tr>

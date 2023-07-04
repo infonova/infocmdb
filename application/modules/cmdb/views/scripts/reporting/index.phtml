@@ -103,9 +103,9 @@ if ($config->ci->detail->buttons->button) {
             }
             ?>
             <td>
-                <a class="link" href="<?php echo APPLICATION_URL ?>reporting/detail/reportingId/<?php echo $item[Db_Reporting::ID]; ?>"><?php echo $item[Db_Reporting::NAME]; ?></a>
+                <a class="link" href="<?php echo APPLICATION_URL ?>reporting/detail/reportingId/<?php echo $item[Db_Reporting::ID]; ?>"><?php echo  Bootstrap::xssCleanView($item[Db_Reporting::NAME]); ?></a>
             </td>
-            <td><?php echo $item[Db_Reporting::DESCRIPTION]; ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Reporting::DESCRIPTION]); ?></td>
             <td><?php echo $item[Db_Reporting::INPUT]; ?></td>
             <td><?php echo $item[Db_Reporting::OUTPUT]; ?></td>
             <td><?php echo $item[Db_Reporting::TRANSPORT]; ?></td>

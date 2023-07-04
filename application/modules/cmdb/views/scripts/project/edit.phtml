@@ -97,7 +97,7 @@ if ($config->ci->detail->buttons->button) {
                             ?>
                             <td width="20px" style="padding-right:0px;"><?php echo $this->form->{$user[Db_User::ID]} ?></td>
                             <td>
-                                <span title="<?php echo $user[Db_User::NOTE] ?>"><?php echo $user[Db_User::USERNAME] ?></span>
+                                <span title="<?php echo $user[Db_User::NOTE] ?>"><?php echo Bootstrap::xssCleanView($user[Db_User::USERNAME]) ?></span>
                             </td>
                             <?php
                             $count++;

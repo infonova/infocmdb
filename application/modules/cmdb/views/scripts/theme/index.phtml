@@ -85,10 +85,10 @@ if ($config->ci->detail->buttons->button) {
             }
             ?>
             <td>
-                <a class="link" href="<?php echo APPLICATION_URL ?>theme/edit/themeId/<?php echo $item[Db_Theme::ID]; ?>"><?php echo $item[Db_Theme::NAME]; ?></a>
+                <a class="link" href="<?php echo APPLICATION_URL ?>theme/edit/themeId/<?php echo $item[Db_Theme::ID]; ?>"><?php echo Bootstrap::xssCleanView($item[Db_Theme::NAME]); ?></a>
             </td>
-            <td><?php echo $item[Db_Theme::DESCRIPTION]; ?></td>
-            <td><?php echo $item[Db_Theme::NOTE]; ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Theme::DESCRIPTION]); ?></td>
+            <td><?php echo Bootstrap::xssCleanView($item[Db_Theme::NOTE]); ?></td>
             <td><?php if ($item[Db_Theme::IS_ACTIVE]) {
                     echo $this->translate('active');
                 } else {
