@@ -516,11 +516,11 @@ if ($config->ci->detail->buttons->button) {
                             foreach ($history['attributes'] as $attribute):
 
                                 if ($attribute['noEscape']) {
-                                    $value    = $attribute['value'];
-                                    $valueOld = $attribute['value_old'];
+                                    $value    = Bootstrap::xssCleanView($attribute['value']);
+                                    $valueOld = Bootstrap::xssCleanView($attribute['value_old']);
                                 } else {
-                                    $value    = $this->escape($attribute['value']);
-                                    $valueOld = $this->escape($attribute['value_old']);
+                                    $value    = Bootstrap::xssCleanView($this->escape($attribute['value']));
+                                    $valueOld = Bootstrap::xssCleanView($this->escape($attribute['value_old']));
                                 }
 
                                 if (!$valueOld)

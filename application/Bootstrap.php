@@ -312,9 +312,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     public static function xssCleanView($data)
     {
-        $data = preg_replace('#\'#','&apos;',$data);    // Change [ ' ] To [ &apos; ]
-        $data = preg_replace('#\\\\#','',$data);   // To remove [ / ]
-        $data = htmlspecialchars($data);
+        $data = htmlspecialchars($data, ENT_QUOTES);
         return $data;
     }
 

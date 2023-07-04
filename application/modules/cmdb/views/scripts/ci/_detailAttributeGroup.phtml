@@ -111,11 +111,11 @@ $appConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', 
                                     // no single edit - normal view
                                     $class = Util_AttributeType_Factory::get($attribute[0]['attributeTypeName']);
                                     $preparedOutput = $class->getValueByCiAttribute($attribute[0], true);
-
                                     if (
-                                        (int)$attribute[Db_Attribute::ATTRIBUTE_TYPE_ID] === Util_AttributeType_Type_TextEdit::ATTRIBUTE_TYPE_ID
-                                        || (int)$attribute[Db_Attribute::ATTRIBUTE_TYPE_ID] === Util_AttributeType_Type_Textarea::ATTRIBUTE_TYPE_ID
-                                        && $appConfig->executeScriptsInAttributes == 0) {
+                                        ((int)$attribute[0][Db_Attribute::ATTRIBUTE_TYPE_ID] === Util_AttributeType_Type_TextEdit::ATTRIBUTE_TYPE_ID
+                                        || (int)$attribute[0][Db_Attribute::ATTRIBUTE_TYPE_ID] === Util_AttributeType_Type_Textarea::ATTRIBUTE_TYPE_ID)
+                                        && $appConfig->executeScriptsInAttributes == "0") {
+
                                         $preparedOutput = Bootstrap::xssCleanView($preparedOutput);
                                     }
 

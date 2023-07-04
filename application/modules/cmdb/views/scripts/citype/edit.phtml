@@ -180,7 +180,7 @@ if ($config->ci->detail->buttons->button) {
     </ul>
 
     <fieldset class="create_form steps"/>
-        <form widgetid="create" id="create" enctype="multipart/form-data" method="post" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit"/>
+        <form widgetid="create" id="create" enctype="multipart/form-data" method="post" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit">
             <div id="fragment-1">
                 <fieldset class="formContainer">
                     <table><?php
@@ -247,7 +247,7 @@ if ($config->ci->detail->buttons->button) {
                 </div>
             </div>
             <div id="fragment-3">
-                <fieldset class="formContainer"/>
+                <fieldset class="formContainer">
                     <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;table-layout:fixed;">
                         <tr>
                             <td>
@@ -255,7 +255,7 @@ if ($config->ci->detail->buttons->button) {
                                     <tr>
                                         <th>
                                         <?php echo $this->translate('attribute') ?></td>
-                                        <th/>
+                                        <th>
                                         <?php echo $this->translate('ismandatory'); ?></td>
                                     </tr>
 
@@ -314,7 +314,7 @@ if ($config->ci->detail->buttons->button) {
                                         <tr>
                                             <th>
                                             <?php echo $this->translate('attribute') ?></td>
-                                            <th/>
+                                            <th>
                                             <?php echo $this->translate('ismandatory'); ?></td>
                                         </tr>
 
@@ -356,11 +356,11 @@ if ($config->ci->detail->buttons->button) {
                     </div>
                     <table border="0" cellpadding="0" cellspacing="0" style="width:70%;">
                         <tr>
-                            <th style="text-align:left;"/>
+                            <th style="text-align:left;">
                             <?php echo $this->translate('position') ?></td>
-                            <th style="text-align:left;"/>
+                            <th style="text-align:left;">
                             <?php echo $this->translate('attribute') ?></td>
-                            <th style="text-align:left;"/>
+                            <th style="text-align:left;">
                             <?php echo $this->translate('width'); ?></td>
                         </tr>
                         <?php

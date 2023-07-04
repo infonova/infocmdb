@@ -459,10 +459,22 @@
                                    id="<?php echo $item[$att[Db_Attribute::NAME] . 'ID'] ?>"
                                    coords="<?php echo $item[Db_Ci::ID] ?>"
                                    href="<?php echo APPLICATION_URL ?>ci/index/typeid/<?php echo $this->typeId ?>/"><?php
-                                echo Bootstrap::xssCleanView($item[$att[Db_Attribute::NAME]]);
+
+                                if ($att[Db_Attribute::ATTRIBUTE_TYPE_ID] == 11) {
+                                    echo $item[$att[Db_Attribute::NAME]];
+                                }
+                                else{
+                                    echo Bootstrap::xssCleanView($item[$att[Db_Attribute::NAME]]);
+                                }
+
                                 ?></a><?php
                             } else {
-                                echo Bootstrap::xssCleanView($item[$att[Db_Attribute::NAME]]);
+                                if ($att[Db_Attribute::ATTRIBUTE_TYPE_ID] == 11) {
+                                    echo $item[$att[Db_Attribute::NAME]];
+                                }
+                                else{
+                                    echo Bootstrap::xssCleanView($item[$att[Db_Attribute::NAME]]);
+                                }
                             }
                             $i++;
                         }
