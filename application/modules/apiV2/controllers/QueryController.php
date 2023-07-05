@@ -36,7 +36,7 @@ class ApiV2_QueryController extends V2BaseController
      *                          type="object",
      *                          property="params",
      *                          description="query parameters (key=name of parameter, value=value of parameter)",
-     *                          example="{ ""ci_id"": 12 }",
+     *                          example={ "ci_id": 12, "argv1": 1234 },
      *                      ),
      *                  ),
      *              )
