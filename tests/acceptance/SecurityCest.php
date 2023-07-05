@@ -59,4 +59,40 @@ class SecurityCest extends AbstractAcceptanceTest
         $I->loggingOut($I);
     }
 
+    public function accessDeniedChangeCiTypeOrProjectAsReader(AcceptanceTester $I)
+    {
+        $I->loggingIn($I, "reader", "reader");
+
+        $I->wantTo('Not be able to access changeCiType as reader');
+        $I->amOnPage('/ci/changecitype/ciid/2/');
+        $I->see("Zugriff verweigert");
+        $I->wantTo('Not be able to access changeCiProject as reader');
+        $I->amOnPage('/ci/project/ciid/2/');
+        $I->see("Zugriff verweigert");
+
+        $I->loggingOut($I);
+    }
+    public function accessChangeCiTypeOrProjectAsAdmin(AcceptanceTester $I)
+    {
+        $I->loggingIn($I, "admin", "admin");
+
+        $ciId = $this->createNewCi($I);
+
+        $I->wantTo('Not be able to access changeCiType as admin');
+        $I->amOnPage('/ci/changecitype/ciid/2/');
+        $I->dontSee("Zugriff verweigert");
+
+        $I->wantTo('Change the CiType');
+        $I->amOnPage('/ci/project/ciid/2/');
+        $I->selectOption('project', '1');
+
+        $I->wantTo('Not be able to access changeCiProject as admin');
+        $I->amOnPage('/ci/project/ciid/2/');
+        $I->dontSee("Zugriff verweigert");
+
+
+
+        $I->loggingOut($I);
+    }
+
 }
