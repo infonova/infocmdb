@@ -121,7 +121,7 @@
                             ?>
                             <td width="20px" style="padding-right:0px;"><?php echo $this->form->$fieldname ?></td>
                             <td>
-                                <label for="projectId_<?php echo $project[Db_Project::ID] ?>" title="<?php echo $project[Db_Project::NOTE] ?>"><?php echo Bootstrap::xssCleanView($project[Db_Project::NAME]) ?></label>
+                                <label for="projectId_<?php echo Bootstrap::xssCleanView($project[Db_Project::ID]) ?>" title="<?php echo Bootstrap::xssCleanView($project[Db_Project::NOTE]) ?>"><?php echo Bootstrap::xssCleanView($project[Db_Project::NAME]) ?></label>
                             </td>
                             <?php
                             $count++;
@@ -176,7 +176,7 @@
                             ?>
                             <td width="20px" style="padding-right:0px;"><?php echo $this->form->$fieldname ?></td>
                             <td>
-                                <label for="roleId_<?php echo $role[Db_Role::ID] ?>" title="<?php echo $role[Db_Role::NOTE] ?>"><?php echo $role[Db_Role::NAME] ?></label>
+                                <label for="roleId_<?php echo Bootstrap::xssCleanView($role[Db_Role::ID]) ?>" title="<?php echo Bootstrap::xssCleanView($role[Db_Role::NOTE]) ?>"><?php echo Bootstrap::xssCleanView($role[Db_Role::NAME]) ?></label>
                             </td>
                             <?php
                             $count++;

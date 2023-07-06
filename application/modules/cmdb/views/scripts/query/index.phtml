@@ -105,9 +105,9 @@ if ($config->ci->detail->buttons->button) {
 
                     <tr>
                         <td>
-                            <a href='<?php echo APPLICATION_URL ?>query/detail/queryId/<?php echo $item[Db_StoredQuery::ID] ?>'><?php echo $item[Db_StoredQuery::NAME]; ?></a>
+                            <a href='<?php echo APPLICATION_URL ?>query/detail/queryId/<?php echo $item[Db_StoredQuery::ID] ?>'><?php echo Bootstrap::xssCleanView($item[Db_StoredQuery::NAME]); ?></a>
                         </td>
-                        <td style="width: 50%"><?php echo nl2br($item[Db_StoredQuery::NOTE]); ?></td>
+                        <td style="width: 50%"><?php echo nl2br(Bootstrap::xssCleanView($item[Db_StoredQuery::NOTE])); ?></td>
                         <td><img width="15" height="15" src="<?php echo APPLICATION_URL . '/images/icon/';
                             if ($item[Db_StoredQuery::STATUS]) {
                                 echo 'accept_16.png';
@@ -173,9 +173,9 @@ if ($config->ci->detail->buttons->button) {
 
                     <tr>
                         <td>
-                            <a href='<?php echo APPLICATION_URL ?>query/detail/queryId/<?php echo $item[Db_StoredQuery::ID] ?>'><?php echo $item[Db_StoredQuery::NAME]; ?></a>
+                            <a href='<?php echo APPLICATION_URL ?>query/detail/queryId/<?php echo $item[Db_StoredQuery::ID] ?>'><?php echo Bootstrap::xssCleanView($item[Db_StoredQuery::NAME]); ?></a>
                         </td>
-                        <td><?php echo nl2br($item[Db_StoredQuery::NOTE]); ?></td>
+                        <td><?php echo nl2br(Bootstrap::xssCleanView($item[Db_StoredQuery::NOTE])); ?></td>
                         <td><img width="15" height="15" src="<?php echo APPLICATION_URL . '/images/icon/';
                             if ($item[Db_StoredQuery::STATUS]) {
                                 echo 'accept_16.png';

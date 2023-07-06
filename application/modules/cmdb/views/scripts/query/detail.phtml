@@ -67,14 +67,14 @@ if ($config->ci->detail->buttons->button) {
                 <table>
                     <tr>
                         <td><strong><?php echo $this->translate('queryName'); ?></strong></td>
-                        <td><?php echo $this->query[Db_StoredQuery::NAME] ?></td>
+                        <td><?php echo Bootstrap::xssCleanView($this->query[Db_StoredQuery::NAME]) ?></td>
                         <td width="50%"></td>
                     </tr>
                     <tr>
-                        <td><strong><?php echo $this->translate('queryDescription'); ?></strong></td>
+                        <td><strong><?php echo Bootstrap::xssCleanView($this->translate('queryDescription')); ?></strong></td>
                         <td>
                             <div style="border: 1px dotted black; width: 382px; min-height: 50px;">
-                                <?php echo nl2br($this->query[Db_StoredQuery::NOTE]); ?>
+                                <?php echo nl2br(Bootstrap::xssCleanView($this->query[Db_StoredQuery::NOTE])); ?>
                             </div>
                         </td>
                         <td width="50%"></td>
@@ -89,7 +89,7 @@ if ($config->ci->detail->buttons->button) {
                     <tr>
                         <td><strong><?php echo $this->translate('queryApiUrl'); ?></strong></td>
                         <td>
-                            <input id="value" type="text" value="<?php echo $this->apiCall ?>" size="60"></input>
+                            <input id="value" type="text" value="<?php echo Bootstrap::xssCleanView($this->apiCall) ?>" size="60"></input>
                             <input id="testButton" class="testButton" type="button" value="<?php echo $this->translate('queryButtonTest'); ?>" />
                             <br /><em><?php echo $this->translate('testButtonHintExtended') ?></em>
                         </td>

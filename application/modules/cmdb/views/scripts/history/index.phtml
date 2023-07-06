@@ -55,14 +55,14 @@
                     <a class="link" href="<?php echo APPLICATION_URL ?>/history/ci/ciid/<?php echo $item['ci_id']; ?>/historyId/<?php echo $item[Db_History::ID]; ?>"><?php echo $item['ci_id']; ?></a>
                 </td>
                 <td><?php echo $item[Db_History::DATESTAMP]; ?></td>
-                <td><?php echo $item['default_attribute'][Db_CiAttribute::VALUE_TEXT]; ?></td>
-                <td><?php echo $item['citype']; ?></td>
+                <td><?php echo Bootstrap::xssCleanView($item['default_attribute'][Db_CiAttribute::VALUE_TEXT]); ?></td>
+                <td><?php echo Bootstrap::xssCleanView($item['citype']); ?></td>
                 <td><?php if ($item[Db_User::USERNAME]) {
-                        echo $item[Db_User::USERNAME];
+                        echo Bootstrap::xssCleanView($item[Db_User::USERNAME]);
                     } else {
                         echo 'system';
                     }; ?></td>
-                <td><?php echo $item[Db_History::NOTE]; ?></td>
+                <td><?php echo Bootstrap::xssCleanView($item[Db_History::NOTE]); ?></td>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>

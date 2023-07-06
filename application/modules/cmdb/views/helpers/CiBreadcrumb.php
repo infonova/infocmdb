@@ -52,7 +52,7 @@ class Zend_View_Helper_CiBreadcrumb extends Zend_View_Helper_Abstract
 
     protected function getCrumb($crumb, $type)
     {
-        $crumbText = $crumb['description'];
+        $crumbText = Bootstrap::xssCleanView($crumb['description']);
 
         if ($type === 'text') {
             return $crumbText;
