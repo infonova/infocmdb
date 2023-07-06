@@ -107,6 +107,7 @@ citypeActivateSuccess;		"CI Type activated successfully!"
 ciTypeUpdateSuccess;		"CI Typ edited successfully!"
 ciTypeUpdateFailed;			"Couldn't update CI Typ!"
 citypeCreateSuccess;		"CI Type created successfully!"
+citypeWrongIconType;        "Icon must be JPG,PNG or GIF!"
 
 
 # Form Titles
