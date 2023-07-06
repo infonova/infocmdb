@@ -111,7 +111,7 @@
                     <div id="userFilter">
                         <?php echo $this->partial('templates/_user_filter.phtml',
                             array('dropdown_options_user' => $this->filterOptionsUser,
-                                  'default_option_user'   => $this->defaultOptionUser)) ?>
+                                'default_option_user'   => $this->defaultOptionUser)) ?>
                     </div>
 
                     <!-- dynamic header section -->
@@ -134,7 +134,7 @@
                                             <?php echo $this->form->$formfield ?>
                                         </label>
                                     </div>
-                                    <span class="userTitle" title="<?php echo $user[Db_User::NOTE] ?>"><?php echo Bootstrap::xssCleanView($user[Db_User::USERNAME]) ?></span>
+                                    <span class="userTitle" title="<?php echo Bootstrap::xssCleanView($user[Db_User::NOTE]) ?>"><?php echo Bootstrap::xssCleanView($user[Db_User::USERNAME]) ?></span>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -152,7 +152,7 @@
                     <div id="permissionFilter">
                         <?php echo $this->partial('templates/_permission_filter.phtml',
                             array('dropdown_options_permission' => $this->filterOptionsPermission,
-                                  'default_option_permission'   => $this->defaultOptionPermission)) ?>
+                                'default_option_permission'   => $this->defaultOptionPermission)) ?>
                     </div>
 
                     <!-- dynamic header section -->
@@ -181,7 +181,7 @@
                                 <?php $formfield = 'attributeId_' . $attribute[Db_Attribute::ID]; ?>
                                 <div class="child">
                                     <?php echo $this->form->$formfield ?>
-                                    <span class="attributeTitle" style="width:76%" id="<?php echo $attribute[Db_Attribute::DESCRIPTION] ?>" ;title="<?php echo $attribute[Db_Attribute::DESCRIPTION] ?>"><?php echo Bootstrap::xssCleanView($attribute[Db_Attribute::NAME]) ?></span>
+                                    <span class="attributeTitle" style="width:76%" id="<?php echo Bootstrap::xssCleanView($attribute[Db_Attribute::DESCRIPTION]) ?>" ;title="<?php echo Bootstrap::xssCleanView($attribute[Db_Attribute::DESCRIPTION]) ?>"><?php echo Bootstrap::xssCleanView($attribute[Db_Attribute::NAME]) ?></span>
                                 </div>
                             <?php endforeach; ?>
                         </div>

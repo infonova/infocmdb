@@ -45,8 +45,8 @@ if ($config->ci->detail->buttons->button) {
             ?>
             <tr>
                 <td><?php echo $item[Db_MailImport::ID]; ?></td>
-                <td><?php echo $item[Db_MailImport::USER]; ?></td>
-                <td><?php echo $item[Db_MailImport::HOST]; ?></td>
+                <td><?php echo Bootstrap::xssCleanView($item[Db_MailImport::USER]); ?></td>
+                <td><?php echo Bootstrap::xssCleanView($item[Db_MailImport::HOST]); ?></td>
                 <td>
                     <a class='delete_list' href='<?php echo APPLICATION_URL ?>mailimport/delete/mailImportId/<?php echo $item[Db_MailImport::ID] ?>'></a>
                     <div class="rfloater">

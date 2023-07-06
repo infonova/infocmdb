@@ -40,7 +40,7 @@ class MailController extends AbstractAppAction
             $output .= $recipient["userId"] . "=" . $recipient["email"] . "\n";
         }
 
-        print $output;
+        print Bootstrap::xssCleanView($output);
         exit();
     }
 

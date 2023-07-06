@@ -124,7 +124,7 @@
                             ?>
                             <td width="20px" style="padding-right:0px;"><?php echo $this->form->{$citype[Db_CiType::ID]} ?></td>
                             <td>
-                                <span title="<?php echo $citype[Db_CiType::NOTE] ?>"><?php echo $citype[Db_CiType::NAME] ?></span>
+                                <span title="<?php echo Bootstrap::xssCleanView($citype[Db_CiType::NOTE]) ?>"><?php echo Bootstrap::xssCleanView($citype[Db_CiType::NAME]) ?></span>
                             </td>
                             <?php
                             $count++;

@@ -354,7 +354,7 @@ if ($errors) {
                     <div id="permissionFilter">
                         <?php echo $this->partial('templates/_permission_filter.phtml',
                             array('dropdown_options_permission' => $this->filterOptionsPermission,
-                                  'default_option_permission'   => $this->defaultOptionPermission)) ?>
+                                'default_option_permission'   => $this->defaultOptionPermission)) ?>
                     </div>
 
                     <!-- dynamic header section -->
@@ -459,7 +459,7 @@ if ($errors) {
                             <td style="padding-right: 0px;">
                                 <?php echo $this->form->$formfield ?>
                                 <span style="width: 76%;"
-                                      title="<?php echo $role[Db_Role::DESCRIPTION] ?>"><?php echo $role[Db_Role::NAME] ?></span>
+                                      title="<?php echo Bootstrap::xssCleanView($role[Db_Role::DESCRIPTION]) ?>"><?php echo Bootstrap::xssCleanView($role[Db_Role::NAME]) ?></span>
                             </td>
                             <?php
                             $count++;
