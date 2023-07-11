@@ -188,7 +188,16 @@ class ApiV2_QueryController extends V2BaseController
             $params            = (array)$queryData->params;
             $params['user_id'] = $userId;
 
-            $result = $queryDao->executeQuery($query, $params, $generatedQuery);
+            $isDefaultQuery = $queryDao->isQueryDefaultQuery($queryName);
+
+            if ($isDefaultQuery == 1){
+                $this->logger->log("Executing new logic! ", Zend_Log::INFO);
+                $result = $queryDao->executeDefaultQuery($queryName,$query, $params);
+            }  else{
+                $this->logger->log("Executing old logic! ", Zend_Log::INFO);
+                $result = $queryDao->executeQuery($query, $params, $generatedQuery);
+            }
+
         } catch (Exception $e) {
             $this->logger->logf('Webservice failed: %s', Zend_Log::CRIT, $queryName);
             $this->logger->logf('Query: %s', Zend_Log::CRIT, $generatedQuery);
